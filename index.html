@@ -188,6 +188,11 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
   .proj.wide .details{border-left:1px solid var(--line)}
   .proj.wide .details .acc:first-child{border-top:0}
 }
+
+/* 프로젝트 ↔ 인사이트 연결 */
+section.pair-top{padding-bottom:0}
+section.pair-bottom{padding-top:0}
+.bridge{width:2px;height:56px;margin:0 0 20px 40px;background:linear-gradient(var(--line),var(--blue))}
 </style>
 </head>
 <body>
@@ -197,8 +202,8 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
     <a class="brand" href="#top"><i aria-hidden="true"></i>유운식 · Game Designer</a>
     <ul>
       <li><a href="#about">소개</a></li>
-      <li><a href="#projects">프로젝트</a></li>
       <li><a href="#portfolio">포트폴리오</a></li>
+      <li><a href="#projects">프로젝트</a></li>
       <li><a href="#insight">인사이트</a></li>
       <li><a href="#letter">자기소개서</a></li>
       <li><a href="#contact">연락처</a></li>
@@ -213,7 +218,7 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
       <h1>플레이어의 <em>감동</em>을<br>설계하는 게임 기획자,<br>유운식입니다.</h1>
       <p>느낌을 구조로 바꾸는 것이 기획이라고 믿습니다. 공간의 배치만으로 유저의 다음 행동을 알려 주는 레벨, 판을 뒤집는 한 방이 있는 규칙을 만듭니다.</p>
       <div class="cta">
-        <a class="btn btn-blue" href="#projects">프로젝트 보기</a>
+        <a class="btn btn-blue" href="#portfolio">포트폴리오 보기</a>
         <a class="btn btn-ghost" href="#contact">연락하기</a>
       </div>
     </div>
@@ -257,68 +262,9 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
   </div>
 </section>
 
-<section id="projects" style="background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section id="portfolio" style="background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="wrap">
-    <div class="head"><div class="mono">02 — Projects</div><h2>프로젝트</h2><p>팀으로 참여한 프로젝트와 맡은 역할입니다.</p></div>
-    <div class="projects">
-
-      <article class="proj wide">
-        <div class="main">
-        <div class="vis ramp-vis">
-          <span class="badge live">TEAM · 진행 중</span>
-          <div class="logo">R.A.M.P</div>
-          <div class="path" aria-label="로비 동선"><span>의상실</span><span>마법 수련장</span><span>포탈 관문</span><span>마법진 · 게임 시작</span></div>
-        </div>
-        <div class="body">
-          <h3>R.A.M.P</h3>
-          <div class="meta"><span>파티 플레이 · PC</span><span>2026.10 — 진행 중</span></div>
-          <p class="one">마법을 테마로 한 파티 게임. 로비와 레이스 맵의 레벨 디자인, 캐릭터 디자인을 맡았습니다.</p>
-          <dl class="facts">
-            <div><dt>TEAM</dt><dd>기획 3 · 개발 2</dd></div>
-            <div><dt>TOOLS</dt><dd>Unity · Claude Code</dd></div>
-            <div><dt>ROLE</dt><dd>레벨 디자인 · 캐릭터 디자인</dd></div>
-            <div><dt>OUTPUT</dt><dd>로비 · 레이스 맵 · 캐릭터</dd></div>
-          </dl>
-        </div>
-        </div>
-        <div class="details">
-        <div class="acc static">
-          <div class="acc-btn">로비 레벨 디자인: 마법사의 저택</div>
-          <div class="acc-body"><div><div class="acc-in">
-            <h4>과제</h4>
-            <p>처음 접속한 유저가 커스터마이징 → 조작 학습 → 게임 시작을 별도의 안내 없이 이어 가게 만들 것. 팀의 요청은 “PEAK의 공항 같은 느낌”이었습니다.</p>
-            <h4>설계: 공간의 배치가 순서를 알려 준다</h4>
-            <ol class="flow">
-              <li>1층 의상실에서 첫 스폰과 커스터마이징. 끝내야 바깥 문이 열려 다음 단계로 넘어가는 시점이 정해집니다.</li>
-              <li>문 밖 마당의 원형 마법 수련장. 지나가며 자연스럽게 조작을 익힙니다.</li>
-              <li>수련장 뒤 멀리서도 보이는 거대한 포탈 관문이 다음 목적지를 알려 줍니다.</li>
-              <li>관문 앞 마법진에 올라서면 게임이 시작됩니다.</li>
-            </ol>
-            <h4>결과</h4>
-            <p>유저의 행동이 한 방향으로 이어지는 로비를 완성해 팀원 모두의 만족을 얻었습니다.</p>
-          </div></div></div>
-        </div>
-        <div class="acc static">
-          <div class="acc-btn">레이스 맵 · 전투 시스템 기여</div>
-          <div class="acc-body"><div><div class="acc-in">
-            <h4>2라운드 레이스 맵</h4>
-            <p>기획부터 개발까지 맡아, 합의한 방향대로 단계마다 팀장 컨펌을 받으며 완성했습니다. 완성 후 “난이도가 높고 난투가 잘 일어나지 않는다”는 의견이 나와 다시 만들었습니다.</p>
-            <h4>배운 점</h4>
-            <p>같은 기준에 합의해도 ‘적당한 난이도’, ‘충분한 난투’를 받아들이는 정도는 사람마다 다릅니다. 이후에는 플레이 테스트, 수치, 레퍼런스 영상처럼 모두가 같은 그림을 볼 수 있는 형태로 기준을 확인한 뒤 작업합니다.</p>
-            <h4>전투 시스템 제안</h4>
-            <p>엇갈리는 팀 의견을 엮어 ‘기절 수치’ 전투 시스템과 물바가지 점령지 기믹을 제안했고, 실제 게임에 들어갔습니다.</p>
-          </div></div></div>
-        </div>
-        </div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<section id="portfolio">
-  <div class="wrap">
-    <div class="head"><div class="mono">03 — Portfolio</div><h2>포트폴리오</h2><p>혼자 기획하고 소개 사이트까지 만든 개인 기획서입니다. 버튼을 누르면 각 기획 사이트가 열립니다.</p></div>
+    <div class="head"><div class="mono">02 — Portfolio</div><h2>포트폴리오</h2><p>혼자 기획하고 소개 사이트까지 만든 개인 기획서입니다. 버튼을 누르면 각 기획 사이트가 열립니다.</p></div>
     <div class="projects">
 
       <article class="proj">
@@ -389,9 +335,68 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
   </div>
 </section>
 
-<section id="insight" style="background:var(--paper);border-top:1px solid var(--line)">
+<section id="projects" class="pair-top">
   <div class="wrap">
-    <div class="head"><div class="mono">04 — Team Project Insight</div><h2>팀 프로젝트에서 배운 것</h2></div>
+    <div class="head"><div class="mono">03 — Projects</div><h2>프로젝트</h2><p>팀으로 참여한 프로젝트와 맡은 역할입니다.</p></div>
+    <div class="projects">
+
+      <article class="proj wide">
+        <div class="main">
+        <div class="vis ramp-vis">
+          <span class="badge live">TEAM · 진행 중</span>
+          <div class="logo">R.A.M.P</div>
+          <div class="path" aria-label="로비 동선"><span>의상실</span><span>마법 수련장</span><span>포탈 관문</span><span>마법진 · 게임 시작</span></div>
+        </div>
+        <div class="body">
+          <h3>R.A.M.P</h3>
+          <div class="meta"><span>파티 플레이 · PC</span><span>2026.10 — 진행 중</span></div>
+          <p class="one">마법을 테마로 한 파티 게임. 로비와 레이스 맵의 레벨 디자인, 캐릭터 디자인을 맡았습니다.</p>
+          <dl class="facts">
+            <div><dt>TEAM</dt><dd>기획 3 · 개발 2</dd></div>
+            <div><dt>TOOLS</dt><dd>Unity · Claude Code</dd></div>
+            <div><dt>ROLE</dt><dd>레벨 디자인 · 캐릭터 디자인</dd></div>
+            <div><dt>OUTPUT</dt><dd>로비 · 레이스 맵 · 캐릭터</dd></div>
+          </dl>
+        </div>
+        </div>
+        <div class="details">
+        <div class="acc static">
+          <div class="acc-btn">로비 레벨 디자인: 마법사의 저택</div>
+          <div class="acc-body"><div><div class="acc-in">
+            <h4>과제</h4>
+            <p>처음 접속한 유저가 커스터마이징 → 조작 학습 → 게임 시작을 별도의 안내 없이 이어 가게 만들 것. 팀의 요청은 “PEAK의 공항 같은 느낌”이었습니다.</p>
+            <h4>설계: 공간의 배치가 순서를 알려 준다</h4>
+            <ol class="flow">
+              <li>1층 의상실에서 첫 스폰과 커스터마이징. 끝내야 바깥 문이 열려 다음 단계로 넘어가는 시점이 정해집니다.</li>
+              <li>문 밖 마당의 원형 마법 수련장. 지나가며 자연스럽게 조작을 익힙니다.</li>
+              <li>수련장 뒤 멀리서도 보이는 거대한 포탈 관문이 다음 목적지를 알려 줍니다.</li>
+              <li>관문 앞 마법진에 올라서면 게임이 시작됩니다.</li>
+            </ol>
+            <h4>결과</h4>
+            <p>유저의 행동이 한 방향으로 이어지는 로비를 완성해 팀원 모두의 만족을 얻었습니다.</p>
+          </div></div></div>
+        </div>
+        <div class="acc static">
+          <div class="acc-btn">레이스 맵 · 전투 시스템 기여</div>
+          <div class="acc-body"><div><div class="acc-in">
+            <h4>2라운드 레이스 맵</h4>
+            <p>기획부터 개발까지 맡아, 합의한 방향대로 단계마다 팀장 컨펌을 받으며 완성했습니다. 완성 후 “난이도가 높고 난투가 잘 일어나지 않는다”는 의견이 나와 다시 만들었습니다.</p>
+            <h4>배운 점</h4>
+            <p>같은 기준에 합의해도 ‘적당한 난이도’, ‘충분한 난투’를 받아들이는 정도는 사람마다 다릅니다. 이후에는 플레이 테스트, 수치, 레퍼런스 영상처럼 모두가 같은 그림을 볼 수 있는 형태로 기준을 확인한 뒤 작업합니다.</p>
+            <h4>전투 시스템 제안</h4>
+            <p>엇갈리는 팀 의견을 엮어 ‘기절 수치’ 전투 시스템과 물바가지 점령지 기믹을 제안했고, 실제 게임에 들어갔습니다.</p>
+          </div></div></div>
+        </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="insight" class="pair-bottom">
+  <div class="wrap">
+    <div class="head"><div class="bridge" aria-hidden="true"></div><div class="mono">04 — Team Project Insight · R.A.M.P</div><h2>이 프로젝트에서 배운 것</h2></div>
     <div class="ins">
       <div class="panel">
         <span class="mono">Strength · 강점</span>
@@ -412,7 +417,7 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
   </div>
 </section>
 
-<section id="letter" class="letter" style="border-top:1px solid var(--line)">
+<section id="letter" class="letter" style="background:var(--paper);border-top:1px solid var(--line)">
   <div class="wrap">
     <div class="head"><div class="mono">05 — Cover Letter</div><h2>자기소개서</h2></div>
     <div class="acc static">
