@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>포트폴리오 편집기</title>
+<style>
+:root{--ink:#141B2D;--muted:#5E6A82;--blue:#3B5BFD;--blue-soft:#E8EDFF;--line:#E2E7F1;--bg:#F6F8FC;--sun:#FFB020;--ok:#16A36A;--warn:#C27C00}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font:14px/1.5 'Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif}
+button,input,label.btn{font:inherit}
+.bar{background:#fff;border-bottom:1px solid var(--line);padding:10px 16px;display:flex;flex-direction:column;gap:8px;z-index:2}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.brand{font-weight:800;margin-right:6px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:7px 12px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--blue)}
+.btn[aria-pressed="true"]{background:var(--blue-soft);border-color:var(--blue);color:var(--blue);font-weight:700}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}
+.btn.primary:disabled{opacity:.45;cursor:default}
+.btn.quiet{border-color:transparent;color:var(--muted)}
+.spacer{flex:1}
+.switch{display:inline-flex;align-items:center;gap:6px;font-weight:700;cursor:pointer;padding:7px 4px}
+.switch input{width:18px;height:18px;accent-color:var(--blue)}
+#status{color:var(--muted);font-size:13px}
+#status.dirty{color:var(--warn);font-weight:700}
+#status.ok{color:var(--ok);font-weight:700}
+#status.err{color:#D93A3A;font-weight:700}
+.hint{margin:0;color:var(--muted);font-size:13px}
+.hint b{color:var(--ink)}
+#linkRow{background:var(--blue-soft);border-radius:10px;padding:6px 10px}
+#linkRow label{font-weight:700;color:var(--blue)}
+#linkInput{flex:1;min-width:200px;border:1px solid var(--line);border-radius:8px;padding:6px 8px;background:#fff}
+main{flex:1;position:relative;min-height:0}
+iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+#empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);text-align:center;padding:16px}
+#done{position:fixed;right:16px;bottom:16px;max-width:420px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 12px 32px rgba(20,27,45,.18);padding:16px 18px;z-index:5}
+#done h3{margin:0 0 6px;font-size:16px}
+#done ol{margin:6px 0 10px;padding-left:20px}
+#done a{color:var(--blue);font-weight:700}
+@media (max-width:640px){.brand{width:100%}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="row">
+    <span class="brand">✏️ 포트폴리오 편집기</span>
+    <button class="btn" data-page="index.html">이력서 포트폴리오</button>
+    <button class="btn" data-page="crazy-splash.html">CRAZY SPLASH</button>
+    <button class="btn" data-page="lol-mmo.html">소환사의 도시</button>
+    <label class="btn quiet" title="내 컴퓨터에 있는 HTML 파일 열기">📂 내 PC 파일 열기<input type="file" id="fileOpen" accept=".html,.htm,text/html" hidden></label>
+    <span class="spacer"></span>
+    <label class="switch"><input type="checkbox" id="editToggle" checked> 편집 모드</label>
+    <button class="btn quiet" id="expandAll" title="눌러서 여는 항목을 모두 펼쳐서 안쪽 글도 고칠 수 있게 합니다">펼침 항목 모두 열기</button>
+    <button class="btn quiet" id="reset" title="저장하지 않은 수정을 모두 버리고 처음 상태로 되돌립니다">수정 취소</button>
+    <span id="status"></span>
+    <button class="btn primary" id="save" disabled>💾 HTML 저장</button>
+  </div>
+  <div class="row" id="linkRow" hidden>
+    <label for="linkInput">🔗 링크 주소</label>
+    <input id="linkInput" type="text" spellcheck="false" placeholder="https://… 또는 lol-mmo.html">
+  </div>
+  <p class="hint"><b>글자</b>를 클릭해 바로 고치세요 · <b>사진</b>을 클릭하면 다른 사진으로 바뀝니다 · 링크 글자를 클릭하면 링크 주소도 고칠 수 있어요 · <b>Ctrl+Z</b> 되돌리기 · <b>Ctrl+S</b> 저장</p>
+</header>
+<main>
+  <div id="empty">위에서 고칠 페이지를 고르세요.</div>
+  <iframe id="view" title="편집 중인 페이지"></iframe>
+</main>
+<input type="file" id="imgFile" accept="image/*" hidden>
+<div id="done" hidden>
+  <h3>✅ 저장했어요</h3>
+  <div>다운로드 폴더에 <b id="doneName"></b> 파일이 생겼습니다. 사이트에 반영하려면:</div>
+  <ol>
+    <li><a href="https://github.com/woonshikryu-jpg/portfolio/upload/main" target="_blank" rel="noopener">GitHub 업로드 화면</a>을 엽니다.</li>
+    <li>방금 받은 파일을 끌어다 놓고 <b>Commit changes</b>를 누릅니다.</li>
+    <li>1~2분 뒤 사이트에서 확인합니다.</li>
+  </ol>
+  <button class="btn" id="doneClose">닫기</button>
+</div>
+
+<script>
+'use strict';
+const $ = s => document.querySelector(s);
+const frame = $('#view');
+const SKIP = new Set(['SCRIPT','STYLE','NOSCRIPT','TEMPLATE','SVG','CANVAS','SELECT','TEXTAREA','INPUT','IFRAME','VIDEO','AUDIO','OPTION','IMG','svg']);
+const BLOCKY = new Set(['P','LI','BLOCKQUOTE','DD','DIV','TD','TH','SECTION','ARTICLE']);
+let S = null;            // 현재 문서 상태
+let savedVersion = 0, version = 0, draftTimer = 0, imgTarget = null, linkTarget = null;
+
+/* ---------- 페이지 안에서 먼저 실행되는 보호 코드 ---------- */
+function guard(){
+  window.__edit = false;
+  const hostOf = n => { const el = n && (n.nodeType === 1 ? n : n.parentElement); return el ? el.closest('[contenteditable="true"]') : null; };
+  const BLOCK = ['P','LI','BLOCKQUOTE','DD','DIV','TD','TH'];
+  ['keydown','keyup','keypress'].forEach(t => window.addEventListener(t, e => {
+    if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) { e.preventDefault(); e.stopImmediatePropagation(); if (t === 'keydown' && parent.__edSave) parent.__edSave(); return; }
+    if (!window.__edit) return;
+    const h = hostOf(e.target);
+    if (!h) return;
+    e.stopImmediatePropagation();               // 페이지(게임 등)의 키 처리 막기
+    if (t === 'keydown' && e.key === 'Enter') {
+      e.preventDefault();
+      if (BLOCK.includes(h.tagName) || e.shiftKey) document.execCommand('insertLineBreak');
+    }
+  }, true));
+  ['pointerdown','pointerup','mousedown','mouseup','touchstart','touchend'].forEach(t => window.addEventListener(t, e => {
+    if (window.__edit && (hostOf(e.target) || (e.target.tagName === 'IMG' && e.target.hasAttribute('data-edid')))) e.stopImmediatePropagation();
+  }, true));
+  window.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('a');
+    if (window.__edit) {
+      if (e.target.tagName === 'IMG' && e.target.hasAttribute('data-edid')) { e.preventDefault(); e.stopImmediatePropagation(); parent.__edImg && parent.__edImg(e.target); return; }
+      if (hostOf(e.target)) { e.stopImmediatePropagation(); if (a) e.preventDefault(); return; }
+      if (a) { e.preventDefault(); e.stopImmediatePropagation(); }
+      return;
+    }
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+    e.preventDefault();
+    if (href.startsWith('#')) { const t = href.length > 1 && document.getElementById(decodeURIComponent(href.slice(1))); if (t) t.scrollIntoView({behavior:'smooth'}); else scrollTo({top:0,behavior:'smooth'}); return; }
+    if (/^(crazy-splash|lol-mmo|index)\.html$/.test(href) && parent.__edOpen) { parent.__edOpen(href); return; }
+    if (href) window.open(a.href, '_blank', 'noopener');
+  }, true);
+}
+const EDIT_CSS = `
+html.__ed-on [contenteditable="true"]{cursor:text}
+html.__ed-on [contenteditable="true"]:hover{outline:2px dashed rgba(59,91,253,.55);outline-offset:2px}
+html.__ed-on [contenteditable="true"]:focus{outline:2px solid #3B5BFD;outline-offset:2px;background-color:rgba(59,91,253,.06)}
+html.__ed-on img[data-edid]{cursor:pointer}
+html.__ed-on img[data-edid]:hover{outline:4px solid #FFB020;outline-offset:-4px;filter:brightness(1.05)}
+`;
+
+/* ---------- 열기 ---------- */
+function hashStr(s){ let h = 0; for (let i = 0; i < s.length; i += 5) h = (h * 31 + s.charCodeAt(i)) | 0; return s.length + ':' + h; }
+function okToLeave(){ return version === savedVersion || confirm('저장하지 않은 수정이 있어요. 그래도 다른 페이지로 넘어갈까요?\n(수정 내용은 이 브라우저에 임시 저장되어 있어서, 같은 페이지를 다시 열면 이어서 할 수 있어요.)'); }
+
+async function openByName(name){
+  if (S && !okToLeave()) return;
+  setStatus('불러오는 중…');
+  try {
+    const r = await fetch(name, {cache:'no-store'});
+    if (!r.ok) throw new Error(r.status);
+    load(name, await r.text());
+  } catch (e) {
+    setStatus('사이트 주소에서 열어야 바로 불러올 수 있어요. "내 PC 파일 열기"로 파일을 골라 주세요.', 'err');
+  }
+}
+window.__edOpen = name => openByName(name);
+
+function load(name, src){
+  const P = new DOMParser().parseFromString(src, 'text/html');
+  let n = 0;
+  P.body.querySelectorAll('*').forEach(el => el.setAttribute('data-edid', ++n));
+  const g = P.createElement('script'); g.textContent = '(' + guard.toString() + ')();';
+  const st = P.createElement('style'); st.textContent = EDIT_CSS;
+  P.head.prepend(g); P.head.append(st);
+  const live = '<!DOCTYPE html>\n' + P.documentElement.outerHTML;
+  g.remove(); st.remove();
+  S = { name, hash: hashStr(src), P, text: new Map(), imgs: new Map(), links: new Map(), hosts: [] };
+  version = savedVersion = 0;
+  document.querySelectorAll('[data-page]').forEach(b => b.setAttribute('aria-pressed', b.dataset.page === name));
+  document.title = name + ' · 포트폴리오 편집기';
+  $('#empty').hidden = true; $('#linkRow').hidden = true; $('#done').hidden = true;
+  frame.onload = () => { setupFrame(); restoreDraft(); updateStatus(); };
+  frame.srcdoc = live;
+}
+
+/* ---------- 편집 가능 영역 표시 ---------- */
+const hasText = el => [...el.childNodes].some(c => c.nodeType === 3 && /\S/.test(c.nodeValue));
+function findHosts(d){
+  const hosts = [];
+  (function walk(el){
+    for (const c of el.children) {
+      if (SKIP.has(c.tagName) || !c.hasAttribute('data-edid')) continue;
+      if (c.getAttribute('aria-hidden') === 'true') continue;
+      if (hasText(c)) hosts.push(c); else walk(c);
+    }
+  })(d.body);
+  return hosts;
+}
+function lockInside(h){
+  h.querySelectorAll('[aria-hidden="true"], button, img, svg, canvas, input, select, textarea').forEach(x => x.setAttribute('contenteditable', 'false'));
+}
+function setEdit(on){
+  const d = frame.contentDocument, w = frame.contentWindow;
+  if (!S || !d || !w) return;
+  w.__edit = on;
+  d.documentElement.classList.toggle('__ed-on', on);
+  for (const h of S.hosts) {
+    if (on) { h.setAttribute('contenteditable', 'true'); h.setAttribute('spellcheck', 'false'); lockInside(h); }
+    else { h.removeAttribute('contenteditable'); h.querySelectorAll('[contenteditable]').forEach(x => x.removeAttribute('contenteditable')); }
+  }
+  if (!on) $('#linkRow').hidden = true;
+}
+function setupFrame(){
+  const d = frame.contentDocument;
+  S.hosts = findHosts(d);
+  const hostOf = n => { const el = n && (n.nodeType === 1 ? n : n.parentElement); return el ? el.closest('[contenteditable="true"]') : null; };
+  d.addEventListener('input', e => { const h = hostOf(e.target); if (h) { S.text.set(h.dataset.edid, true); changed(); } });
+  d.addEventListener('paste', e => {
+    if (!hostOf(e.target)) return;
+    e.preventDefault();
+    const t = (e.clipboardData && e.clipboardData.getData('text/plain')) || '';
+    d.execCommand('insertText', false, t.replace(/\r?\n+/g, ' '));
+  });
+  d.addEventListener('drop', e => { if (hostOf(e.target)) e.preventDefault(); });
+  d.addEventListener('selectionchange', () => {
+    const sel = d.getSelection();
+    const node = sel && sel.anchorNode;
+    const el = node && (node.nodeType === 1 ? node : node.parentElement);
+    const a = el && hostOf(el) ? el.closest('a') : null;
+    linkTarget = a && a.hasAttribute('data-edid') ? a : null;
+    $('#linkRow').hidden = !linkTarget;
+    if (linkTarget && d.activeElement !== null) $('#linkInput').value = linkTarget.getAttribute('href') || '';
+  });
+  setEdit($('#editToggle').checked);
+}
+
+/* ---------- 링크 ---------- */
+$('#linkInput').addEventListener('input', e => {
+  if (!linkTarget) return;
+  linkTarget.setAttribute('href', e.target.value.trim());
+  S.links.set(linkTarget.dataset.edid, e.target.value.trim());
+  changed();
+});
+
+/* ---------- 사진 바꾸기 ---------- */
+window.__edImg = img => { imgTarget = img; $('#imgFile').value = ''; $('#imgFile').click(); };
+$('#imgFile').addEventListener('change', async e => {
+  const f = e.target.files[0];
+  if (!f || !imgTarget) return;
+  setStatus('사진 넣는 중…');
+  try {
+    const url = await shrink(f);
+    imgTarget.src = url; imgTarget.removeAttribute('srcset');
+    S.imgs.set(imgTarget.dataset.edid, url);
+    changed();
+  } catch (err) { setStatus('이 사진은 넣을 수 없어요. JPG나 PNG로 다시 시도해 주세요.', 'err'); }
+});
+const readURL = f => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = no; r.readAsDataURL(f); });
+async function shrink(file){
+  if (/svg|gif/.test(file.type)) return readURL(file);
+  const bmp = await createImageBitmap(file);
+  const k = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement('canvas');
+  c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+  const x = c.getContext('2d');
+  if (file.type === 'image/png' || file.type === 'image/webp') {
+    x.drawImage(bmp, 0, 0, c.width, c.height);
+    const png = c.toDataURL('image/png');
+    if (png.length < 900000) return png;
+  }
+  x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+  x.drawImage(bmp, 0, 0, c.width, c.height);
+  return c.toDataURL('image/jpeg', 0.85);
+}
+
+/* ---------- 변경 기록 · 임시 저장 ---------- */
+function changed(){ version++; updateStatus(); clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 700); }
+function count(){ return S ? S.text.size + S.imgs.size + S.links.size : 0; }
+function setStatus(msg, cls){ const s = $('#status'); s.textContent = msg; s.className = cls || ''; }
+function updateStatus(){
+  $('#save').disabled = !S;
+  if (!S) return;
+  const n = count();
+  if (version !== savedVersion) setStatus('수정 ' + n + '곳 · 아직 저장 안 함', 'dirty');
+  else if (n) setStatus('수정 ' + n + '곳 · 저장됨', 'ok');
+  else setStatus('수정한 곳 없음');
+}
+function cleanHTML(el){
+  const c = el.cloneNode(true);
+  c.querySelectorAll('[contenteditable]').forEach(x => x.removeAttribute('contenteditable'));
+  c.querySelectorAll('[spellcheck]').forEach(x => x.removeAttribute('spellcheck'));
+  return c.innerHTML;
+}
+const KEY = () => 'portfolio-editor:' + S.name;
+function snapshot(){
+  const d = frame.contentDocument, t = {};
+  for (const id of S.text.keys()) { const el = d.querySelector('[data-edid="' + id + '"]'); if (el) t[id] = cleanHTML(el); }
+  return { hash: S.hash, text: t, imgs: Object.fromEntries(S.imgs), links: Object.fromEntries(S.links) };
+}
+function saveDraft(){
+  if (!S) return;
+  try {
+    if (!count()) { localStorage.removeItem(KEY()); return; }
+    localStorage.setItem(KEY(), JSON.stringify(snapshot()));
+  } catch (e) {
+    try { const s = snapshot(); s.imgs = {}; localStorage.setItem(KEY(), JSON.stringify(s)); } catch (e2) {}
+  }
+}
+function restoreDraft(){
+  let dr = null;
+  try { dr = JSON.parse(localStorage.getItem(KEY()) || 'null'); } catch (e) {}
+  if (!dr) return;
+  if (dr.hash !== S.hash) { try { localStorage.removeItem(KEY()); } catch (e) {} return; }
+  const n = Object.keys(dr.text).length + Object.keys(dr.imgs).length + Object.keys(dr.links).length;
+  if (!n || !confirm('저장하지 않은 수정 ' + n + '곳이 남아 있어요. 이어서 할까요?\n(취소를 누르면 버리고 처음부터 시작합니다.)')) { try { localStorage.removeItem(KEY()); } catch (e) {} return; }
+  const d = frame.contentDocument, q = id => d.querySelector('[data-edid="' + id + '"]');
+  for (const [id, html] of Object.entries(dr.text)) { const el = q(id); if (el) { el.innerHTML = html; S.text.set(id, true); } }
+  for (const [id, href] of Object.entries(dr.links)) { const el = q(id); if (el) { el.setAttribute('href', href); S.links.set(id, href); } }
+  for (const [id, src] of Object.entries(dr.imgs)) { const el = q(id); if (el) { el.src = src; el.removeAttribute('srcset'); S.imgs.set(id, src); } }
+  setEdit($('#editToggle').checked);
+  version = 1; savedVersion = 0;
+}
+
+/* ---------- 저장 ---------- */
+function build(){
+  const d = frame.contentDocument;
+  const P = S.P.cloneNode(true);
+  const q = id => P.querySelector('[data-edid="' + id + '"]');
+  for (const id of S.text.keys()) {
+    const live = d.querySelector('[data-edid="' + id + '"]'), out = q(id);
+    if (!live || !out) continue;
+    out.innerHTML = cleanHTML(live);
+    const cp = out.querySelectorAll('[data-copy]');
+    if (cp.length === 1) {
+      const t = [...out.childNodes].filter(x => x.nodeType === 3).map(x => x.nodeValue).join('').trim();
+      if (t) cp[0].setAttribute('data-copy', t);
+    }
+  }
+  for (const [id, href] of S.links) { const el = q(id); if (el) el.setAttribute('href', href); }
+  for (const [id, src] of S.imgs) { const el = q(id); if (el) { el.setAttribute('src', src); el.removeAttribute('srcset'); } }
+  P.querySelectorAll('[data-edid]').forEach(el => el.removeAttribute('data-edid'));
+  return '<!DOCTYPE html>\n' + P.documentElement.outerHTML + '\n';
+}
+function save(){
+  if (!S) return;
+  const blob = new Blob([build()], {type: 'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = S.name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+  savedVersion = version; updateStatus();
+  $('#doneName').textContent = S.name; $('#done').hidden = false;
+}
+window.__edSave = save;
+
+/* ---------- 버튼 ---------- */
+document.querySelectorAll('[data-page]').forEach(b => b.addEventListener('click', () => openByName(b.dataset.page)));
+$('#fileOpen').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = '';
+  if (!f || (S && !okToLeave())) return;
+  load(f.name, await f.text());
+});
+$('#editToggle').addEventListener('change', e => setEdit(e.target.checked));
+$('#expandAll').addEventListener('click', () => {
+  const d = frame.contentDocument, w = frame.contentWindow;
+  if (!d) return;
+  const was = w.__edit; w.__edit = false;
+  d.querySelectorAll('button[aria-expanded="false"]').forEach(b => b.click());
+  d.querySelectorAll('details:not([open])').forEach(x => x.open = true);
+  w.__edit = was;
+});
+$('#reset').addEventListener('click', () => {
+  if (!S || !count()) return;
+  if (!confirm('저장하지 않은 수정을 모두 버리고 처음 상태로 되돌릴까요?')) return;
+  try { localStorage.removeItem(KEY()); } catch (e) {}
+  version = savedVersion; const name = S.name; S = null; openByName(name);
+});
+$('#save').addEventListener('click', save);
+$('#doneClose').addEventListener('click', () => $('#done').hidden = true);
+addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) { e.preventDefault(); save(); } });
+addEventListener('beforeunload', e => { if (S && version !== savedVersion) { e.preventDefault(); e.returnValue = ''; } });
+
+if (location.protocol.startsWith('http')) openByName('index.html');
+else $('#empty').textContent = '"내 PC 파일 열기"로 고칠 HTML 파일을 골라 주세요. (사이트 주소 …/portfolio/editor.html 에서 열면 버튼으로 바로 불러올 수 있어요.)';
+</script>
+</body>
+</html>

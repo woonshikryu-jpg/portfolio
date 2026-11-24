@@ -172,6 +172,22 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
   .letter .acc-in{padding:0 22px 22px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.acc-body{transition:none}.btn{transition:none}}
+
+/* 모든 세부 내용 항상 펼침 */
+.acc.static .acc-btn{cursor:default}
+.proj .acc.static .acc-btn{color:var(--blue);font-size:16px;padding-bottom:8px}
+.acc.static .acc-body{display:block}
+.acc.static .acc-body > div{overflow:visible}
+.letter .acc.static .acc-btn{grid-template-columns:48px 1fr;padding-bottom:12px}
+@media (max-width:720px){.letter .acc.static .acc-btn{grid-template-columns:40px 1fr}}
+
+/* 팀 프로젝트 카드: 넓은 화면에서 요약 | 세부 2단 */
+@media (min-width:900px){
+  #projects .projects{grid-template-columns:1fr}
+  .proj.wide{display:grid;grid-template-columns:1fr 1fr}
+  .proj.wide .details{border-left:1px solid var(--line)}
+  .proj.wide .details .acc:first-child{border-top:0}
+}
 </style>
 </head>
 <body>
@@ -243,10 +259,11 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
 
 <section id="projects" style="background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
   <div class="wrap">
-    <div class="head"><div class="mono">02 — Projects</div><h2>프로젝트</h2><p>팀으로 참여한 프로젝트입니다. 카드 아래 항목을 누르면 세부 내용이 펼쳐집니다.</p></div>
+    <div class="head"><div class="mono">02 — Projects</div><h2>프로젝트</h2><p>팀으로 참여한 프로젝트와 맡은 역할입니다.</p></div>
     <div class="projects">
 
-      <article class="proj">
+      <article class="proj wide">
+        <div class="main">
         <div class="vis ramp-vis">
           <span class="badge live">TEAM · 진행 중</span>
           <div class="logo">R.A.M.P</div>
@@ -263,8 +280,10 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
             <div><dt>OUTPUT</dt><dd>로비 · 레이스 맵 · 캐릭터</dd></div>
           </dl>
         </div>
-        <div class="acc">
-          <button class="acc-btn" aria-expanded="false">로비 레벨 디자인: 마법사의 저택<span class="pl" aria-hidden="true">+</span></button>
+        </div>
+        <div class="details">
+        <div class="acc static">
+          <div class="acc-btn">로비 레벨 디자인: 마법사의 저택</div>
           <div class="acc-body"><div><div class="acc-in">
             <h4>과제</h4>
             <p>처음 접속한 유저가 커스터마이징 → 조작 학습 → 게임 시작을 별도의 안내 없이 이어 가게 만들 것. 팀의 요청은 “PEAK의 공항 같은 느낌”이었습니다.</p>
@@ -279,8 +298,8 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
             <p>유저의 행동이 한 방향으로 이어지는 로비를 완성해 팀원 모두의 만족을 얻었습니다.</p>
           </div></div></div>
         </div>
-        <div class="acc">
-          <button class="acc-btn" aria-expanded="false">레이스 맵 · 전투 시스템 기여<span class="pl" aria-hidden="true">+</span></button>
+        <div class="acc static">
+          <div class="acc-btn">레이스 맵 · 전투 시스템 기여</div>
           <div class="acc-body"><div><div class="acc-in">
             <h4>2라운드 레이스 맵</h4>
             <p>기획부터 개발까지 맡아, 합의한 방향대로 단계마다 팀장 컨펌을 받으며 완성했습니다. 완성 후 “난이도가 높고 난투가 잘 일어나지 않는다”는 의견이 나와 다시 만들었습니다.</p>
@@ -289,6 +308,7 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
             <h4>전투 시스템 제안</h4>
             <p>엇갈리는 팀 의견을 엮어 ‘기절 수치’ 전투 시스템과 물바가지 점령지 기믹을 제안했고, 실제 게임에 들어갔습니다.</p>
           </div></div></div>
+        </div>
         </div>
       </article>
 
@@ -317,8 +337,8 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
             <div><dt>PROTOTYPE</dt><dd>브라우저 플레이 가능</dd></div>
           </dl>
         </div>
-        <div class="acc">
-          <button class="acc-btn" aria-expanded="false">핵심 설계 요약<span class="pl" aria-hidden="true">+</span></button>
+        <div class="acc static">
+          <div class="acc-btn">핵심 설계 요약</div>
           <div class="acc-body"><div><div class="acc-in">
             <ol class="flow">
               <li><span><b>원작 계승</b>: 갇힘 → 적 터치 팡! / 아군 터치 구출 규칙은 그대로, 설치형 물풍선만 투척형으로.</span></li>
@@ -349,8 +369,8 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
             <div><dt>DEMO</dt><dd>세력 기여도 체험</dd></div>
           </dl>
         </div>
-        <div class="acc">
-          <button class="acc-btn" aria-expanded="false">핵심 설계 요약<span class="pl" aria-hidden="true">+</span></button>
+        <div class="acc static">
+          <div class="acc-btn">핵심 설계 요약</div>
           <div class="acc-body"><div><div class="acc-in">
             <ol class="flow">
               <li><span><b>문제 정의</b>: 장시간 집중, 팀원 갈등, 기여도와 무관한 승패 보상이 피로를 쌓습니다.</span></li>
@@ -394,16 +414,16 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
 
 <section id="letter" class="letter" style="border-top:1px solid var(--line)">
   <div class="wrap">
-    <div class="head"><div class="mono">05 — Cover Letter</div><h2>자기소개서</h2><p>문항을 누르면 본문이 펼쳐집니다.</p></div>
-    <div class="acc">
-      <button class="acc-btn" aria-expanded="true"><span class="no">01</span><span class="q"><small>지원 동기 · 게임 기획자를 꿈꾸게 된 계기</small><span>머물고 싶은 세계를 만드는 사람이 되고 싶었습니다</span></span><span class="pl" aria-hidden="true">+</span></button>
+    <div class="head"><div class="mono">05 — Cover Letter</div><h2>자기소개서</h2></div>
+    <div class="acc static">
+      <div class="acc-btn"><span class="no">01</span><span class="q"><small>지원 동기 · 게임 기획자를 꿈꾸게 된 계기</small><span>머물고 싶은 세계를 만드는 사람이 되고 싶었습니다</span></span></div>
       <div class="acc-body"><div><div class="acc-in">
         <p>어린 시절 포켓몬 도감을 하나씩 채워 가며, 게임 속 세계에 실제로 살고 있는 듯한 설렘을 느꼈습니다. 그때 저를 사로잡은 것은 단순한 콘텐츠가 아니라 그 안에 계속 머물고 싶게 만드는 하나의 세계였습니다.</p>
         <p>포켓몬과 마리오가 세대를 넘어 사랑받고, 마블이 수많은 이야기를 하나의 IP로 확장해 온 것도 결국 사람들이 그 세계를 사랑했기 때문이라고 생각합니다. 저 역시 게임을 시작으로 유저의 마음을 움직이고 오래 기억되는 세계를 만들고 싶어 게임 기획자의 길을 선택했습니다.</p>
       </div></div></div>
     </div>
-    <div class="acc">
-      <button class="acc-btn" aria-expanded="false"><span class="no">02</span><span class="q"><small>경험과 역할 · 문제를 해결해 본 경험</small><span>느낌을 구조로 바꾸는 것, 그것이 기획이라고 믿습니다</span></span><span class="pl" aria-hidden="true">+</span></button>
+    <div class="acc static">
+      <div class="acc-btn"><span class="no">02</span><span class="q"><small>경험과 역할 · 문제를 해결해 본 경험</small><span>느낌을 구조로 바꾸는 것, 그것이 기획이라고 믿습니다</span></span></div>
       <div class="acc-body"><div><div class="acc-in">
         <p>마법을 테마로 한 파티 게임 팀 프로젝트에서 로비 레벨 디자인을 맡았습니다. 풀어야 할 과제는 처음 접속한 유저가 커스터마이징, 조작 학습, 게임 시작을 별도의 안내 없이 자연스럽게 이어 가도록 만드는 것이었습니다.</p>
         <p>레퍼런스인 ‘PEAK’의 공항이 체크인부터 탑승까지 걷는 것만으로 다음 행동을 알려 주듯, 공간의 배치 자체가 순서를 알려 주는 구조를 만들고자 했습니다. 그래서 로비를 ‘마법사의 저택’으로 설계했습니다.</p>
@@ -411,8 +431,8 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
         <p>그 결과 유저의 행동이 한 방향으로 이어지는 로비를 완성해 팀원 모두의 만족을 얻었습니다.</p>
       </div></div></div>
     </div>
-    <div class="acc">
-      <button class="acc-btn" aria-expanded="false"><span class="no">03</span><span class="q"><small>입사 후 목표 · 만들고 싶은 재미</small><span>판단의 재미에서 감각의 쾌감까지, 오래 머무는 세계</span></span><span class="pl" aria-hidden="true">+</span></button>
+    <div class="acc static">
+      <div class="acc-btn"><span class="no">03</span><span class="q"><small>입사 후 목표 · 만들고 싶은 재미</small><span>판단의 재미에서 감각의 쾌감까지, 오래 머무는 세계</span></span></div>
       <div class="acc-body"><div><div class="acc-in">
         <div class="fun">
           <div><b>판단의 재미</b>모바일: 상황 판단과 덱 빌딩 중심의 시뮬레이션 전투. 전장을 내려다보는 지휘관</div>
@@ -441,8 +461,6 @@ footer{padding:22px 0;color:var(--muted);font-size:13px}
 <footer><div class="wrap">© 2026 유운식 · Game Designer Portfolio</div></footer>
 
 <script>
-document.querySelectorAll('.acc-btn').forEach(b => b.addEventListener('click', () =>
-  b.setAttribute('aria-expanded', b.getAttribute('aria-expanded') === 'true' ? 'false' : 'true')));
 document.querySelectorAll('.copy').forEach(b => b.addEventListener('click', async () => {
   try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = '복사됨'; }
   catch (e) { b.textContent = '직접 선택해 복사'; }
