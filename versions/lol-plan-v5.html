@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>숨어 사는 소환사들 · 기획서 v5 (판타지 연출 + 설명)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Hahmlet:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700&family=Gaegu:wght@400;700&display=swap">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#EFE6D2;color:#2A2118;font:16px/1.7 'Noto Sans KR',sans-serif;word-break:keep-all}
+p,h1,h2,h3{margin:0}
+.back{position:fixed;left:14px;top:14px;z-index:60;background:rgba(255,250,238,.9);color:#3A2C1C;font:700 13.5px/1 'Noto Sans KR',sans-serif;padding:9px 15px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.credit{position:fixed;right:14px;top:14px;z-index:60;background:rgba(40,30,20,.55);color:#FFF8EA;font-size:12px;padding:4px 12px;border-radius:999px}
+
+/* scene */
+.scene{position:relative}
+.sticky{position:sticky;top:0;height:100vh;overflow:hidden}
+.world{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+.world>img{position:absolute;inset:0;width:100%;height:100%}
+.mark{position:absolute;transform:translate(-50%,-50%);opacity:0;transition:opacity .6s ease;pointer-events:none}
+.mark.on{opacity:1;pointer-events:auto}
+
+/* wooden sign */
+.sign{display:flex;flex-direction:column;align-items:center}
+.plank{padding:1.1em 1.6em 1em;border-radius:.5em;text-align:center;color:#FCEFD2;
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 2px,transparent 2px 9px),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 5px),
+    linear-gradient(180deg,#8A5A32,#6B4122 55%,#5A361C);
+  box-shadow:0 .5em 1.2em rgba(40,20,5,.45), inset 0 0 0 .12em rgba(30,15,5,.45), inset 0 .15em 0 rgba(255,220,170,.25);
+  transform:rotate(-2deg)}
+.plank .en{font:900 2.1em/1 'Cinzel',serif;letter-spacing:.05em;color:#FFE7A8;text-shadow:0 .06em 0 #3A220E,0 -.03em 0 rgba(255,240,200,.4)}
+.plank .kr{font:800 1.55em/1.3 'Hahmlet',serif;margin-top:.25em;text-shadow:0 .05em 0 #3A220E}
+.plank .sub{font:700 .62em/1.4 'Noto Sans KR',sans-serif;margin-top:.5em;color:#F3DDB0;letter-spacing:.04em}
+.post{width:1.1em;height:4.2em;background:linear-gradient(90deg,#5A361C,#7A4C28,#4E2E17);box-shadow:0 .4em .8em rgba(40,20,5,.4)}
+
+/* paper tag (handwriting) */
+.tag{background:linear-gradient(160deg,#FFF6DF,#F1DFB8);color:#5A3A1A;font:700 1.35em/1.35 'Gaegu',sans-serif;padding:.7em 1em;border-radius:.3em;box-shadow:0 .4em 1em rgba(40,20,5,.35);transform:rotate(4deg);max-width:13em;text-align:center}
+.tag::before{content:'';display:block;width:.5em;height:.5em;border-radius:50%;background:#8A5A32;margin:0 auto .4em;box-shadow:inset 0 .1em .1em rgba(0,0,0,.4)}
+
+/* inscribed text (그림 위에 직접 새긴 글) */
+.carve{text-align:center;color:#F4E4BE;padding:1.4em 2.2em;background:radial-gradient(ellipse at center,rgba(25,18,8,.56),rgba(25,18,8,.26) 48%,rgba(25,18,8,0) 74%)}
+.carve h2{font:800 1.9em/1.3 'Hahmlet',serif;text-shadow:0 -.04em 0 rgba(0,0,0,.75),0 .05em .02em rgba(255,240,200,.2),0 0 .6em rgba(0,0,0,.45)}
+.carve h3{font:800 1.25em/1.3 'Hahmlet',serif;text-shadow:0 -.04em 0 rgba(0,0,0,.75),0 0 .5em rgba(0,0,0,.45)}
+.carve p{font:700 .9em/1.6 'Hahmlet',serif;margin-top:.5em;color:#EAD7AC;text-shadow:0 -.04em 0 rgba(0,0,0,.75),0 0 .5em rgba(0,0,0,.5)}
+.carve .pn{display:block;font:900 .72em/1.2 'Cinzel','Hahmlet',serif;letter-spacing:.16em;color:#F2CF84;text-shadow:0 0 .5em rgba(0,0,0,.6);margin-bottom:.3em}
+.carve .en{font:900 1.6em/1 'Cinzel',serif;letter-spacing:.08em;color:#F6DFA4;text-shadow:0 -.04em 0 rgba(0,0,0,.7),0 0 .6em rgba(0,0,0,.45);margin-bottom:.25em}
+.carve.title h2{font-size:2.3em}
+.carve.pair{background:radial-gradient(ellipse at center,rgba(25,18,8,.62),rgba(25,18,8,.3) 50%,rgba(25,18,8,0) 75%);display:flex;gap:1.6em;align-items:center;text-align:left}
+.carve.pair .arr{font:800 1.6em/1 'Hahmlet',serif;color:#F2CF84;text-shadow:0 0 .5em rgba(0,0,0,.6)}
+.rune{cursor:pointer;border:0;background:radial-gradient(ellipse at center,rgba(25,18,8,.45),rgba(25,18,8,0) 72%);padding:.8em 1.6em;color:#F4E4BE;font:800 1em/1.3 'Hahmlet',serif;text-shadow:0 0 .5em rgba(0,0,0,.6);display:inline-flex;align-items:center;gap:.6em}
+.rune i{font-style:normal;width:1.6em;height:1.6em;border-radius:50%;border:.12em solid #F2CF84;color:#F2CF84;display:grid;place-items:center;font:900 1em/1 'Noto Sans KR',sans-serif;box-shadow:0 0 .8em rgba(242,207,132,.55);animation:glow 2.4s ease-in-out infinite}
+.rune:hover i{background:#F2CF84;color:#3A2814}
+@keyframes glow{50%{box-shadow:0 0 1.4em rgba(242,207,132,.9)}}
+/* cloth banner */
+.cloth{background:linear-gradient(175deg,#E9A13B,#D47F1E 60%,#B9650F);color:#3B1F05;padding:.8em 1.6em .9em;text-align:center;
+  clip-path:polygon(0 0,100% 0,100% 88%,92% 100%,84% 88%,76% 100%,68% 88%,60% 100%,52% 88%,44% 100%,36% 88%,28% 100%,20% 88%,12% 100%,4% 88%,0 100%);
+  box-shadow:0 .4em 1em rgba(60,30,5,.35);transform:rotate(-3deg)}
+.cloth .pn{font:900 .7em/1 'Cinzel',serif;letter-spacing:.14em;color:#5A2E05}
+.cloth h2{font:800 1.5em/1.3 'Hahmlet',serif;margin-top:.3em}
+.cloth.pair{display:flex;gap:1.2em;align-items:stretch;padding:1em 1.4em 1.4em;transform:rotate(-1.5deg)}
+.cloth.pair div{text-align:left;max-width:11em}
+.cloth.pair b{display:block;font:900 .65em/1 'Cinzel','Noto Sans KR',serif;letter-spacing:.1em;color:#5A2E05;margin-bottom:.35em}
+.cloth.pair h3{font:800 1.05em/1.3 'Hahmlet',serif}
+.cloth.pair p{font:700 .72em/1.5 'Noto Sans KR',sans-serif;margin-top:.3em}
+.cloth.pair .arr{align-self:center;font:900 1.4em/1 'Hahmlet',serif}
+
+/* pinned note -> opens scroll */
+.note{cursor:pointer;background:linear-gradient(160deg,#FFF7E2,#EBD7AE);color:#4A3015;border:0;font:700 .8em/1.3 'Noto Sans KR',sans-serif;padding:.7em .9em .7em 2.3em;border-radius:.3em;box-shadow:0 .35em .9em rgba(40,20,5,.35);transform:rotate(-3deg);position:relative;text-align:left}
+.note::before{content:'+';position:absolute;left:.55em;top:50%;transform:translateY(-50%);width:1.3em;height:1.3em;border-radius:50%;background:#9C2F22;color:#FFF3DA;display:grid;place-items:center;font:900 1em/1 'Noto Sans KR',sans-serif;box-shadow:0 .1em 0 #5E1A12}
+.note:hover{transform:rotate(-3deg) translateY(-.2em)}
+
+/* scroll modal */
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:rgba(40,28,14,.35);opacity:0;pointer-events:none;transition:opacity .3s}
+.modal.open{opacity:1;pointer-events:auto}
+.scroll{position:relative;width:min(720px,92vw);max-height:84vh;display:flex;flex-direction:column;transform:scaleY(.2);transform-origin:top;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+.modal.open .scroll{transform:none}
+.rod{height:22px;border-radius:11px;background:linear-gradient(180deg,#8A5A32,#5A361C);box-shadow:0 4px 10px rgba(0,0,0,.3);margin:0 -14px;position:relative;z-index:2}
+.paper{overflow:auto;padding:28px 36px 30px;background:radial-gradient(ellipse at 50% 30%,#FFF8E6,#F3E2BC 70%,#E6CF9E);box-shadow:inset 0 0 40px rgba(140,100,40,.25);color:#3A2814}
+.paper h3{font:800 24px/1.3 'Hahmlet',serif;color:#6B3A12;margin-bottom:12px}
+.paper ul{margin:0;padding-left:20px;font-size:15.5px}
+.paper li+li{margin-top:8px}
+.paper .seal{display:block;margin-top:14px;padding:10px 14px;border-radius:10px;background:rgba(156,47,34,.1);color:#7A2318;font-weight:700;font-size:14px}
+.close{position:absolute;right:-6px;top:-8px;z-index:3;width:36px;height:36px;border-radius:50%;border:0;background:#9C2F22;color:#FFF3DA;font:900 20px/1 'Noto Sans KR',sans-serif;cursor:pointer;box-shadow:0 3px 0 #5E1A12}
+
+
+.mark{transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1);transform:translate(-50%,calc(-50% + 1.2em))}
+.mark.on{transform:translate(-50%,-50%)}
+.wall{background:
+  repeating-linear-gradient(0deg,rgba(150,130,100,.10) 0 2px,transparent 2px 120px),
+  repeating-linear-gradient(90deg,rgba(150,130,100,.07) 0 2px,transparent 2px 240px),
+  radial-gradient(ellipse at 50% 35%,#FBF6EA,#EDE3CF 70%,#E2D5BA)}
+.frame .world::before{content:'';position:absolute;inset:-3.2%;z-index:-1;border-radius:6px;
+  background:linear-gradient(135deg,#F3D98C,#B8862F 30%,#F6E2A2 50%,#A97424 72%,#E9C978);
+  box-shadow:0 30px 60px rgba(60,40,10,.35),inset 0 0 0 6px rgba(120,80,20,.35)}
+.frame .world>img{box-shadow:inset 0 0 0 2px rgba(0,0,0,.2)}
+.plaque{position:absolute;left:50%;top:107%;transform:translateX(-50%);background:linear-gradient(180deg,#E9CF8A,#C59A45);color:#3B2608;padding:.9% 2.2%;border-radius:4px;text-align:center;font-size:calc(var(--u) * 1.1);box-shadow:0 6px 14px rgba(60,40,10,.3);white-space:nowrap}
+.plaque b{display:block;font:900 .7em/1.2 'Cinzel','Noto Sans KR',serif;letter-spacing:.12em}
+.plaque span{display:block;font:800 1em/1.4 'Hahmlet',serif}
+.hall{height:46vh;display:grid;place-items:center;text-align:center;background:linear-gradient(180deg,#E9E2D0,#F3ECDD);color:#5A4630;font:800 clamp(18px,2.2vw,26px)/1.5 'Hahmlet',serif}
+.hall span{display:block;font:500 14.5px/1.6 'Noto Sans KR',sans-serif;color:#7A6648;margin-top:6px}
+
+/* scroll hint & between */
+.hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);background:rgba(255,248,232,.85);color:#4A3015;font:700 13px/1 'Noto Sans KR',sans-serif;padding:8px 14px;border-radius:999px;transition:opacity .4s}
+.between{height:30vh;background:linear-gradient(180deg,#EFE6D2,#E2EDD6);display:grid;place-items:center;color:#5A4630;font:700 15px 'Hahmlet',serif;letter-spacing:.1em}
+.end{padding:60px 20px 80px;text-align:center;background:#E2EDD6;color:#3A4A30;font-size:15px}
+
+/* 장면별 효과 */
+.world>img{transition:none}
+.fx{position:absolute;inset:0;pointer-events:none}
+.fx-mist{background:
+  radial-gradient(ellipse at 30% 60%,rgba(255,255,255,.88),rgba(255,255,255,.6) 45%,rgba(255,255,255,.2) 80%),
+  linear-gradient(180deg,rgba(245,248,255,.9),rgba(255,255,255,.75));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.fx-light{mix-blend-mode:screen;background:radial-gradient(circle at var(--lx,30%) var(--ly,40%),rgba(255,236,180,.85),rgba(255,214,140,.35) var(--lr,14%),rgba(255,200,120,0) calc(var(--lr,14%) * 2.2))}
+.fx-shade{background:rgba(70,48,20,.28);transition:opacity .2s}
+.fx-glow{mix-blend-mode:screen;background:radial-gradient(circle at 53% 9%,rgba(255,240,190,.95),rgba(255,214,140,.55) 16%,rgba(255,190,110,0) 46%)}
+canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mark.frost{filter:blur(10px);transform:translate(-50%,-50%) scale(1.06);transition:opacity 1s ease,filter 1.2s ease,transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.mark.frost.on{filter:blur(0);transform:translate(-50%,-50%) scale(1)}
+.carve .feel{font:700 1.15em/1.4 'Gaegu',sans-serif;color:#F6D9A0;margin-top:.5em;text-shadow:0 0 .6em rgba(0,0,0,.55)}
+.carve.ice{color:#F4FAFF;background:radial-gradient(ellipse at center,rgba(20,40,70,.45),rgba(20,40,70,.18) 50%,rgba(20,40,70,0) 74%)}
+.carve.ice .pn{color:#CFE6FF}
+.carve.ice p{color:#E3F0FF}
+.carve.sun .pn{color:#FFE6A8}
+.spacer{height:26vh;background:linear-gradient(180deg,#EFE6D2,#F6EFE2)}
+
+/* ── 설명 부분 (밝은 양피지 톤) ── */
+.ex{--bg:#F6EFDF;--accent:#8A5A1E;--soft:#EFE2C4;--spark:#A8402F;color:#2E2418;font:16px/1.7 'Noto Sans KR',sans-serif}
+.ex.r-ionia{--bg:#F1F3E4;--accent:#3E6B3A;--soft:#E1E9CF;--spark:#B4466F}
+.ex.r-shurima{--bg:#F8EEDA;--accent:#94500F;--soft:#F1E0BC;--spark:#A8402F}
+.ex.r-demacia{--bg:#EEF2EE;--accent:#1E5E66;--soft:#DCE9E6;--spark:#B6492F}
+.ex.r-frel{--bg:#EEF2F6;--accent:#2D5D86;--soft:#DCE6F0;--spark:#6E4FA0}
+.ex section{padding:80px 0;background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.65),rgba(255,255,255,0) 60%),linear-gradient(180deg,var(--bg),color-mix(in srgb,var(--bg) 88%,#C9A96A))}
+.ex section.alt{background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 92%,#fff),var(--bg))}
+.ex .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.ex .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:30px;flex-wrap:wrap}
+.ex .sec-no{font:900 14px/1.2 'Cinzel','Hahmlet',serif;letter-spacing:.14em;color:var(--accent)}
+.ex .sec-head h2{font:800 clamp(28px,3.8vw,42px)/1.25 'Hahmlet',serif;color:#2A2118;margin-top:8px}
+.ex .sec-head h2::after{content:'';display:block;width:84px;height:3px;margin-top:14px;background:linear-gradient(90deg,#C9A24E,rgba(201,162,78,0))}
+.ex .sec-head p{max-width:420px;color:#5A4A36;font-weight:500}
+.ex .grid{display:grid;gap:18px}
+.ex .g2{grid-template-columns:repeat(2,1fr)}.ex .g3{grid-template-columns:repeat(3,1fr)}.ex .g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:820px){.ex .g2,.ex .g3,.ex .g4{grid-template-columns:1fr}}
+.ex .card{background:linear-gradient(180deg,#FFFCF4,#FBF3E2);border:1px solid #E3CF9F;border-radius:14px;padding:24px 24px 22px;display:flex;flex-direction:column;gap:6px;box-shadow:inset 0 1px 0 #fff,0 8px 22px rgba(90,60,20,.08)}
+.ex .card.tint{background:linear-gradient(180deg,var(--soft),color-mix(in srgb,var(--soft) 80%,#fff))}
+.ex .num{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:900 17px/1 'Cinzel',serif;color:#FFF6DE;background:radial-gradient(circle at 35% 30%,#E8C46E,#A9792A 70%);box-shadow:0 2px 0 #7A5418,inset 0 0 0 2px rgba(255,240,200,.4);margin-bottom:6px}
+.ex .steps .num{width:auto;height:auto;padding:6px 14px;border-radius:999px;font:800 15px/1 'Hahmlet',serif}
+.ex .card h3{font:800 21px/1.3 'Hahmlet',serif;color:#2A2118}
+.ex .one{font-weight:700;font-size:15.5px;color:#3A2E20}
+.ex .feel{font:700 21px/1.35 'Gaegu',sans-serif;color:var(--spark)}
+.ex .tag{font:900 12.5px/1.2 'Cinzel','Noto Sans KR',serif;letter-spacing:.12em;color:var(--accent)}
+.ex .banner{margin-top:24px;border-radius:14px;padding:18px 24px;text-align:center;font:800 20px/1.4 'Hahmlet',serif;color:#FFF6DE;background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 88%,#fff),var(--accent));box-shadow:0 6px 18px rgba(90,60,20,.18),inset 0 0 0 1px rgba(255,230,170,.35)}
+.ex .small{font-size:13.5px;color:#6A5A44;margin-top:12px}
+.ex table{width:100%;border-collapse:separate;border-spacing:0;background:#FFFCF4;border:1px solid #E3CF9F;border-radius:14px;overflow:hidden;font-size:15.5px}
+.ex th,.ex td{text-align:left;padding:13px 18px;border-bottom:1px solid #EFE2C4}
+.ex th{background:var(--soft);font:800 15px 'Hahmlet',serif;color:var(--accent)}
+.ex tr:last-child td{border-bottom:none}
+.ex .acc{background:linear-gradient(180deg,#FFFCF4,#FBF3E2);border:1px solid #E3CF9F;border-radius:14px;overflow:hidden;box-shadow:0 6px 16px rgba(90,60,20,.06)}
+.ex .acc + .acc{margin-top:10px}
+.ex .acc-btn{width:100%;display:flex;align-items:center;gap:14px;text-align:left;background:none;border:0;padding:16px 20px;cursor:pointer;font:800 16.5px/1.4 'Hahmlet',serif;color:#2A2118}
+.ex .acc-btn .sum{display:block;font:500 14px/1.5 'Noto Sans KR',sans-serif;color:#6A5A44;margin-top:2px}
+.ex .acc-btn .n{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:900 15px/1 'Cinzel',serif;color:#FFF6DE;background:radial-gradient(circle at 35% 30%,#E8C46E,#A9792A 70%);box-shadow:0 2px 0 #7A5418}
+.ex .plus{margin-left:auto;flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:900 19px/1 'Noto Sans KR',sans-serif;color:#A9792A;border:2px solid #D7B567;transition:transform .35s,background .3s,color .3s}
+.ex .acc-btn[aria-expanded="true"] .plus{transform:rotate(45deg);background:#A9792A;color:#FFF6DE;border-color:#A9792A}
+.ex .acc-btn:hover .plus{background:#F3E1B2}
+.ex .acc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.2,.8,.2,1)}
+.ex .acc-body>div{overflow:hidden}
+.ex .acc-btn[aria-expanded="true"]+.acc-body{grid-template-rows:1fr}
+.ex .acc-inner{font-size:15.5px;color:#2E2418;border-top:1px dashed #E3CF9F;margin:0 18px;padding:14px 4px 22px}
+.ex .acc-inner ul{margin:0;padding-left:20px}
+.ex .acc-inner li+li{margin-top:7px}
+.ex .acc-inner h4{font:800 15px 'Hahmlet',serif;margin:16px 0 6px;color:var(--accent)}
+.ex .acc-inner h4:first-child{margin-top:0}
+.ex .acc-inner table{font-size:14.5px;margin:6px 0}
+.ex .acc-inner th,.ex .acc-inner td{padding:9px 12px}
+.ex .note{display:block;margin-top:12px;padding:10px 14px;background:#FFF1CF;border-left:3px solid #C9A24E;border-radius:8px;font-weight:700;font-size:14px}
+.ex .k{color:var(--accent);font-weight:800}
+.ex .split{display:grid;grid-template-columns:1fr 1.1fr;gap:26px;align-items:start}
+@media(max-width:820px){.ex .split{grid-template-columns:1fr}}
+.ex .ph{border:2px dashed #CDB27A;border-radius:14px;background:rgba(255,252,244,.7);min-height:280px;display:grid;place-items:center;text-align:center;color:#8A6A2E;font-weight:700;font-size:14.5px;padding:20px}
+.ex .flow4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:820px){.ex .flow4{grid-template-columns:1fr 1fr}}
+.ex .timeline{display:grid;background:#FFFCF4;border:1px solid #E3CF9F;border-radius:14px;overflow:hidden}
+.ex .tl{display:grid;grid-template-columns:130px 1fr 1fr;gap:18px;padding:15px 22px;border-bottom:1px solid #EFE2C4;align-items:center;font-weight:700}
+.ex .tl:last-child{border-bottom:none}
+.ex .tl b{font:800 18px 'Hahmlet',serif;color:var(--accent)}
+.ex .tl .f{font:700 21px/1.3 'Gaegu',sans-serif;color:var(--spark)}
+@media(max-width:820px){.ex .tl{grid-template-columns:1fr}}
+.ex .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:end}
+.ex .steps .card:nth-child(2){margin-bottom:40px}.ex .steps .card:nth-child(3){margin-bottom:80px}
+@media(max-width:820px){.ex .steps{grid-template-columns:1fr}.ex .steps .card{margin-bottom:0!important}}
+
+/* ── 새 연출 ── */
+.doors{display:grid;grid-template-columns:repeat(3,1fr);height:100%;gap:6px;background:#E9E0CC;padding:6px}
+.door{position:relative;overflow:hidden;border-radius:4px}
+.door img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.door::before,.door::after{content:'';position:absolute;top:0;bottom:0;width:50%;z-index:1;transition:transform 1.4s cubic-bezier(.7,0,.2,1);box-shadow:inset 0 0 0 1px rgba(150,120,70,.25)}
+.door::before{left:0;background:linear-gradient(90deg,#D9C9A3,#EADDBF)}
+.door::after{right:0;background:linear-gradient(270deg,#D9C9A3,#EADDBF)}
+.door.open::before{transform:translateX(-101%)}.door.open::after{transform:translateX(101%)}
+.door .carve{position:absolute;left:50%;bottom:9%;transform:translate(-50%,20px);opacity:0;transition:opacity 1s .9s,transform 1s .9s;z-index:2;font-size:clamp(12px,1.25vw,20px);width:92%}
+.door.open .carve{opacity:1;transform:translate(-50%,0)}
+.doors-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;transition:opacity .8s;font-size:clamp(14px,1.6vw,24px);pointer-events:none}
+.doors-title .carve{background:none}
+.doors-title .carve h2,.doors-title .carve p{color:#4A3517;text-shadow:0 1px 0 rgba(255,255,255,.6)}
+.doors-title .carve .pn{color:#8A5A1E;text-shadow:none}
+.harbor-frame{position:absolute;left:50%;top:48%;transform-origin:50% 50%}
+.harbor-frame::before{content:'';position:absolute;inset:-3%;z-index:-1;border-radius:6px;background:linear-gradient(135deg,#F3D98C,#B8862F 30%,#F6E2A2 50%,#A97424 72%,#E9C978);box-shadow:0 30px 60px rgba(60,40,10,.35),inset 0 0 0 6px rgba(120,80,20,.35)}
+.harbor-frame>img{display:block;width:100%;height:100%}
+.ripple.on{filter:url(#ripple)}
+.race-img{position:absolute;inset:0}
+.race-img img{width:100%;height:100%;object-fit:cover}
+.race-lines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,0) 0 22px,rgba(255,255,255,.55) 22px 24px);mix-blend-mode:screen;pointer-events:none}
+.scene-cap{z-index:3}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 버전 모음</a>
+<span class="credit" style="position:fixed">이미지 출처: Riot Games</span>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="ripple"><feTurbulence id="turb" type="fractalNoise" baseFrequency="0.008 0.05" numOctaves="2" seed="4"/><feDisplacementMap id="disp" in="SourceGraphic" in2="turb" scale="0"/></filter></svg>
+
+<!-- 1 · 안개가 걷힘 -->
+<div class="scene still" data-mode="mist" data-w="1832" data-h="837" style="height:260vh">
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/cover-hq.jpg" alt="아이오니아 들판을 걷는 여행자">
+      <div class="mark" style="left:40%;top:52%;font-size:var(--u)" data-from="0.16" data-to="1">
+        <div class="carve title"><div class="en">HIDDEN SUMMONERS</div><h2>숨어 사는 소환사들</h2><p>리그 오브 레전드 IP 확장 제안 · 게임기획 포트폴리오</p></div>
+      </div>
+      <div class="mark" style="left:40%;top:80%;font-size:calc(var(--u) * .95)" data-from="0.55" data-to="1">
+        <div class="carve"><h2>한 판을 하지 않아도,<br>머물 이유가 있는 LoL</h2></div>
+      </div>
+    </div>
+    <div class="fx fx-mist"></div>
+    <div class="hint">스크롤 ↓</div>
+  </div>
+</div>
+
+<div class="ex r-ionia"><section id="summary" class="r-ionia">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">한 장 요약</div><h2>LoL에 머무는 광장과<br>쉬어 가는 모드를 더한다</h2></div>
+      <p>숨어 사는 소환사들의 학회가 협곡에서 도시의 운명을 겨룹니다.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><span class="num">01</span><h3>한 판 할 이유</h3><p class="one">승리 → 학회 순위 · 광장 축제 · 챔피언 외형</p></div>
+      <div class="card"><span class="num">02</span><h3>지친 날도 접속</h3><p class="one">관전형 · 패치 무관 캐주얼 모드</p></div>
+      <div class="card"><span class="num">03</span><h3>스킨의 무대</h3><p class="one">광장 = 꾸밈 상설 무대 · 능력치 영향 0</p></div>
+    </div>
+    <div class="banner">기존 클라이언트 위 1단계 → 지표로 증명하며 확장</div>
+  </div>
+</section></div>
+
+<!-- 2 · 햇빛이 훑고 지나감 -->
+<div class="scene still" data-mode="sweep" data-w="2083" data-h="1080" style="height:520vh"
+  data-light='[{"p":0,"x":50,"y":50,"r":60},{"p":0.14,"x":50,"y":50,"r":60},{"p":0.2,"x":24,"y":44,"r":14},{"p":0.32,"x":24,"y":44,"r":14},{"p":0.38,"x":56,"y":46,"r":14},{"p":0.48,"x":56,"y":46,"r":14},{"p":0.54,"x":80,"y":40,"r":14},{"p":0.64,"x":80,"y":40,"r":14},{"p":0.7,"x":40,"y":76,"r":14},{"p":0.8,"x":40,"y":76,"r":14},{"p":0.9,"x":50,"y":50,"r":70},{"p":1,"x":50,"y":50,"r":70}]'>
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/d1-hq.jpg" alt="정오의 슈리마 사구">
+      <div class="fx fx-shade"></div>
+      <div class="fx fx-light"></div>
+      <div class="mark" style="left:50%;top:48%;font-size:var(--u)" data-from="0" data-to="0.14">
+        <div class="carve sun"><span class="pn">PART 01 · 슈리마 사막</span><h2>메마른 한 판</h2><p>이겨도 져도, 남는 건 LP 하나.</p></div>
+      </div>
+      <div class="mark" style="left:24%;top:44%;font-size:calc(var(--u) * .9)" data-from="0.2" data-to="0.33">
+        <div class="carve"><h3>한 판의 피로</h3><p>30분 집중 · 팀원 갈등</p><div class="feel">“오늘은 30분 집중할 자신이 없다.”</div></div>
+      </div>
+      <div class="mark" style="left:56%;top:46%;font-size:calc(var(--u) * .9)" data-from="0.38" data-to="0.49">
+        <div class="carve"><h3>패치 공부</h3><p>매 패치 챔피언 · 아이템 변경</p><div class="feel">“또 바뀌었어? 뭐부터 봐야 하지.”</div></div>
+      </div>
+      <div class="mark" style="left:80%;top:40%;font-size:calc(var(--u) * .9)" data-from="0.54" data-to="0.65">
+        <div class="carve"><h3>복귀 격차</h3><p>바뀐 메타 · 손 감각 차이</p><div class="feel">“나만 예전 게임을 하고 있다.”</div></div>
+      </div>
+      <div class="mark" style="left:40%;top:76%;font-size:calc(var(--u) * .9)" data-from="0.7" data-to="0.81">
+        <div class="carve"><h3>LP뿐인 보상</h3><p>이겨도 져도 숫자 하나</p><div class="feel">“30분을 썼는데 남은 게 −23 LP.”</div></div>
+      </div>
+      <div class="mark" style="left:50%;top:50%;font-size:calc(var(--u) * 1.05)" data-from="0.88" data-to="1">
+        <div class="carve sun"><span class="pn">핵심 질문</span><h2>한 판을 하지 않아도<br>머물 이유가 있는 LoL은 가능할까?</h2><p>경쟁은 협곡에 → 쉼과 기록은 그 바깥에</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hall"><p>숨은 소환사들의 학회 기록관<br><span>벽에 걸린 그림은 룬테라 각 지역으로 통하는 문입니다</span></p></div>
+
+<!-- 3 · 액자 속으로 -->
+<div class="scene frame" data-mode="frame" data-w="1920" data-h="1080" style="height:440vh"
+  data-keys='[{"p":0,"x":50,"y":50,"s":0},{"p":0.08,"x":50,"y":50,"s":0},{"p":0.3,"x":50,"y":45,"s":1.06},{"p":0.46,"x":52,"y":42,"s":1.08},{"p":0.56,"x":62,"y":38,"s":1.16},{"p":0.68,"x":62,"y":38,"s":1.16},{"p":0.8,"x":62,"y":70,"s":1.14},{"p":1,"x":62,"y":70,"s":1.14}]'>
+  <div class="sticky wall">
+    <div class="world">
+      <img src="img/lol/d2-hq.jpg" alt="아이오니아 큰 나무 아래 장터">
+      <div class="plaque"><b>PART 02 · 아이오니아 초원</b><span>탁 트인 쉼터를 세운다</span></div>
+      <div class="mark inside" style="left:50%;top:40%;font-size:var(--u)" data-from="0.33" data-to="0.47">
+        <div class="carve"><div class="pn">PART 02 · 아이오니아 초원</div><h2>탁 트인 쉼터를 세운다</h2></div>
+      </div>
+      <div class="mark inside" style="left:62%;top:38%;font-size:calc(var(--u) * 1.05)" data-from="0.5" data-to="0.68">
+        <div class="carve"><h2>전쟁의 학회가 사라진 뒤,<br>소환사들은 숨어 살았다</h2><p>신들처럼 몰래 도시에 섞여 산다.<br>주민은 그들의 정체를 모른다.</p></div>
+      </div>
+      <div class="mark inside" style="left:62%;top:64%;font-size:calc(var(--u) * 1)" data-from="0.74" data-to="1">
+        <div class="carve pair">
+          <div><span class="pn">옛 설정</span><h3>전쟁 대신 전장</h3><p>분쟁을 협곡 승부로 결정<br>→ 공식 설정에서 삭제</p></div>
+          <span class="arr">→</span>
+          <div><span class="pn">이 기획</span><h3>숨은 학회들의 승부</h3><p>도시별 학회가 협곡에서 겨룸<br>→ 도시의 운명</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ex r-ionia"><section class="r-ionia">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-1 · 한 문장 콘셉트</div><h2>경쟁은 협곡에서,<br>쉼과 기록은 도시에서</h2></div>
+      <p>새 게임이 아니라, 협곡 바깥의 시간을 채웁니다.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><span class="num">01</span><h3>머무는 광장</h3><p class="one">큐 대기 · 친구 · 산책</p></div>
+      <div class="card"><span class="num">02</span><h3>쉬어 가는 캐주얼</h3><p class="one">짧은 판 · 보기만 해도 OK</p></div>
+      <div class="card"><span class="num">03</span><h3>흔적이 남는 승부</h3><p class="one">승리 → 순위 · 풍경 · 외형</p></div>
+    </div>
+    <div style="margin-top:28px">
+      <table>
+        <tr><th style="width:36%">벽</th><th>장치</th></tr>
+        <tr><td>한 판의 피로 · 갈등</td><td>관전형 캐주얼 · 머무는 광장</td></tr>
+        <tr><td>패치 공부</td><td>패치 무관 캐주얼</td></tr>
+        <tr><td>복귀 격차</td><td>관찰 · 운 중심 모드</td></tr>
+        <tr><td>LP뿐인 보상</td><td>학회 순위 · 광장 · 외형</td></tr>
+      </table>
+    </div>
+    <div class="banner">협곡 규칙은 그대로. 바뀌는 건 바깥의 시간.</div>
+  </div>
+</section><section class="r-ionia alt" id="world">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-2 · 세계관</div><h2>전쟁의 학회가 사라진 뒤,<br>소환사들은 숨어 살았다</h2></div>
+      <p>신들처럼 몰래 도시에 섞여 삽니다. 주민은 정체를 모릅니다.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card"><span class="tag">옛 설정</span><h3>전쟁 대신 전장</h3><p class="one">분쟁을 협곡 승부로 결정 → 공식 설정에서 삭제</p></div>
+      <div class="card tint"><span class="tag">이 기획</span><h3>숨은 학회들의 승부</h3><p class="one">도시별 학회가 협곡에서 겨룸 → 도시의 운명</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>왜 세계관을 이렇게 잡았나<span class="sum">공식 설정을 바꾸지 않고, 이길 이유를 이야기에서 만든다</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <ul>
+            <li><b>빈자리를 채운다</b>: 초창기 LoL에는 "나라들이 전쟁 대신 정의의 전장에서 분쟁을 결정하고, 소환사가 챔피언을 불러 싸운다"는 설정이 있었습니다. 지금 공식 이야기에서는 빠져 있어서, 협곡에서 <span class="k">왜 싸우는지</span>에 대한 답이 비어 있습니다.</li>
+            <li><b>숨어 산다 = 공식 설정과 충돌하지 않는다</b>: 소환사는 룬테라 주민에게 정체를 드러내지 않습니다. 그래서 공식 이야기 속 인물과 사건을 하나도 바꾸지 않고 그 옆에 덧붙일 수 있습니다.</li>
+            <li><b>유저 = 소환사</b>: 플레이어는 원래 "소환사"라고 불립니다. 이 호칭에 몸(광장의 아바타)과 소속(학회)을 붙여 주는 것뿐이라, 새로 배울 설정이 거의 없습니다.</li>
+            <li><b>이길 이유가 설정에서 나온다</b>: 협곡의 승부가 내가 사는 도시의 분쟁 방향을 정한다는 설정 덕분에, 보상을 덧붙이지 않아도 이길 이유가 생깁니다. 월드컵처럼 직접 뛰지 않는 날에도 "우리 도시의 승부"가 됩니다.</li>
+          </ul>
+          <span class="note">룬테라 지역·도시 이름은 공식 설정을 그대로 쓰고, 소환사와 학회만 이 기획의 해석입니다.</span>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section></div>
+
+<!-- 학회 · 세 개의 문 -->
+<div class="scene" data-mode="doors" style="height:300vh">
+  <div class="sticky">
+    <div class="doors">
+      <div class="door" data-at="0.25"><img src="img/lol/demacia-hq.jpg" alt="데마시아 왕궁 전경"><div class="carve"><span class="pn">데마시아 학회</span><h3>흰 석회암 · 푸른 깃발</h3></div></div>
+      <div class="door" data-at="0.45"><img src="img/lol/noxus-hq.jpg" alt="녹서스의 붉은 차양 시장"><div class="carve"><span class="pn">녹서스 학회</span><h3>붉은 깃발 · 데마시아의 맞수</h3></div></div>
+      <div class="door" data-at="0.65"><img src="img/lol/piltover-hq.jpg" alt="필트오버 거리"><div class="carve"><span class="pn">필트오버 학회</span><h3>황동 · 톱니 · 발명</h3></div></div>
+    </div>
+    <div class="doors-title"><div class="carve"><span class="pn">2-3 · 학회</span><h2>거주 도시 = 학회 = 세력</h2><p>문을 열면, 그 도시의 학회원이 된다</p></div></div>
+  </div>
+</div>
+<div class="ex r-ionia"><section class="r-ionia" id="academy">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-3 · 학회</div><h2>거주 도시 = 학회 = 세력</h2></div>
+      <p>시즌마다 이사 가능 · 다른 학회 광장은 구경 가능</p>
+    </div>
+    
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>학회 소속 규칙<span class="sum">언제 고르고, 언제 옮기고, 쏠리면 어떻게 하나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <h4>고르기</h4>
+          <ul>
+            <li><b>시즌 시작 때 한 번</b> 거주 도시를 고릅니다. 고른 도시의 학회원이 되고, 클라이언트 첫 화면이 그 도시의 광장으로 바뀝니다.</li>
+            <li>고르지 않은 유저는 <b>가장 많이 플레이한 챔피언의 출신 지역</b>으로 임시 배정합니다. 첫 접속에서 선택 화면을 한 번 더 보여 줍니다.</li>
+          </ul>
+          <h4>옮기기 (이사)</h4>
+          <ul>
+            <li>시즌 중 이사는 <b>1회</b>만 허용합니다. 이사하면 그때까지 쌓은 기여는 원래 학회에 남고, 새 학회에서는 0부터 쌓습니다.</li>
+            <li>시즌 마지막 2주에는 이사를 막습니다. 이길 것 같은 학회로 몰려가는 것을 막기 위해서입니다.</li>
+          </ul>
+          <h4>쏠림 대비</h4>
+          <ul>
+            <li>학회 순위는 <b>학회원 1인당 평균 기여</b>로 정합니다(세력 시즌 참고). 사람이 많다고 이기지 않으니, 인기 도시로 몰릴 이유가 줄어듭니다.</li>
+            <li>다른 학회 광장은 언제든 <b>구경</b>할 수 있습니다. 소속은 하나지만, 보는 건 자유입니다.</li>
+          </ul>
+          <span class="note">1단계는 시즌 갈등의 두 도시(데마시아 · 녹서스)와 필트오버, 3개 학회로 시작합니다. 회수·기간은 예시이며 테스트로 확정합니다.</span>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section><section class="r-ionia alt" id="view">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-4 · 시점 규칙</div><h2>움직이면 3인칭,<br>내려다보면 탑다운</h2></div>
+      <p>시점 전환 = 역할 전환</p>
+    </div>
+    <div class="grid g2">
+      <div class="card"><span class="tag">3인칭 · 소환사 자신</span><h3>걷기 · 만나기 · 올려다보기</h3></div>
+      <div class="card"><span class="tag">탑다운 · 소환사의 눈</span><h3>지휘 · 관전</h3><p class="one">협곡 · 숨바꼭질 · 포로 경주</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>출전과 귀환의 시점 전환<span class="sum">로딩 화면 대신, 카메라가 역할을 바꿔 준다</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <ul>
+            <li><b>출전</b>: 포탈에 들어서면 카메라가 소환사 등 뒤에서 하늘로 솟아오르고(약 1초), 화면이 위에서 내려다보는 시점으로 바뀌며 기존 로딩 화면으로 이어집니다. "이제 지휘한다"는 신호입니다.</li>
+            <li><b>귀환</b>: 경기가 끝나면 결과 화면 뒤에 카메라가 내려와 광장의 내 소환사 곁에 붙습니다. "다시 나로 돌아왔다"는 쉼의 신호입니다.</li>
+            <li><b>왜 이 규칙인가</b>: LoL의 탑다운 시점은 원래 "소환사가 챔피언을 내려다보며 지휘하는 눈"으로 읽을 수 있습니다. 소환사 자신이 움직일 때만 3인칭을 쓰면, 시점만 보고도 지금 내가 무엇을 하는지 알 수 있습니다.</li>
+            <li><b>1단계는 간단하게</b>: 1단계 광장은 비용을 줄이려고 쿼터뷰(비스듬히 내려다보는 시점) 클릭 이동으로 만들고, 출전 때 카메라가 위로 빠지는 짧은 연출만 넣습니다. 3인칭은 3단계 도시에서 씁니다.</li>
+          </ul>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section></div>
+
+<!-- PART 03 · 데마시아 항구 (수면에 비친 글) -->
+<div class="scene" data-mode="harbor" data-w="1000" data-h="562" style="height:360vh">
+  <div class="sticky wall">
+    <div class="harbor-frame">
+      <img src="img/lol/harbor-hq.jpg" alt="데마시아 항구와 푸른 돛의 함대">
+      <div class="mark ripple" style="left:50%;top:72%;font-size:var(--u)" data-from="0.18" data-to="0.42">
+        <div class="carve"><span class="pn">PART 03 · 데마시아 항구</span><h2>사람이 모이는 항구</h2><p>1단계 · 학회 광장과 세력 시즌</p></div>
+      </div>
+      <div class="mark ripple" style="left:50%;top:72%;font-size:var(--u)" data-from="0.46" data-to="0.7">
+        <div class="carve"><h2>새 게임이 아니라,<br>지금 클라이언트 위에</h2></div>
+      </div>
+      <div class="mark ripple" style="left:50%;top:72%;font-size:var(--u)" data-from="0.74" data-to="1">
+        <div class="carve"><h2>첫 화면이<br>내가 사는 도시의 광장</h2></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="ex r-demacia"><section class="r-demacia">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-0 · 개요</div><h2>새 게임이 아니라,<br>지금 클라이언트 위에</h2></div>
+      <p>TFT처럼 기존 챔피언 · 스킨 · 클라이언트 위에 새 규칙만 얹습니다.</p>
+    </div>
+    <div class="grid g4">
+      <div class="card"><span class="num">3-1</span><h3>학회 광장</h3><p class="one">첫 화면 = 내 도시</p></div>
+      <div class="card"><span class="num">3-2</span><h3>세력 시즌</h3><p class="one">협곡 결과 → 학회 순위</p></div>
+      <div class="card"><span class="num">3-3</span><h3>승리 보상</h3><p class="one">전부 외형 · 능력치 0</p></div>
+      <div class="card"><span class="num">3-4</span><h3>캐주얼 모드</h3><p class="one">아레나처럼 새 모드</p></div>
+    </div>
+  </div>
+</section><section class="r-demacia alt" id="plaza">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-1 · 학회 광장</div><h2>첫 화면이 내가 사는 도시의 광장</h2></div>
+      <p>번호를 누르면 설계가 펼쳐집니다.</p>
+    </div>
+    <div class="split">
+      <div class="ph">화면 목업 자리<br>쿼터뷰 학회 광장 + 클라이언트 UI<br>① 내 소환사 ② 큐 버튼 ③ 친구 소환사 ④ 포탈</div>
+      <div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>클릭으로 걷는 내 소환사<span class="sum">쿼터뷰 · 이동과 감정표현만</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>광장을 비스듬히 내려다보는 쿼터뷰에서, 바닥을 클릭하면 내 소환사가 걸어갑니다. <b>점프·전투·채집 같은 조작은 없습니다.</b> 쉬러 온 공간이라 할 일을 만들지 않습니다.</li>
+            <li>할 수 있는 건 걷기와 <b>감정표현</b>(인사, 박수, 앉기 등)뿐입니다.</li>
+            <li>소환사는 기본 외형으로 시작하고, 의상·장신구·걸음 이펙트 슬롯을 꾸밀 수 있습니다(수익 모델 참고).</li>
+            <li><b>기술 근거</b>: 작은 캐릭터를 클릭으로 움직이는 방식은 TFT의 전설이가 이미 쓰고 있습니다. 같은 클라이언트 기술을 재사용해 저사양 PC에서도 가볍게 돌아갑니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>큐 대기 = 광장 산책<span class="sum">매칭을 기다리는 시간이 쉬는 시간</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>큐 버튼은 지금처럼 화면 위쪽에 있습니다. 누르면 화면 위에 대기 타이머가 뜨고, <b>그대로 광장을 걸어 다닐 수 있습니다.</b></li>
+            <li>매칭이 잡히면 지금과 같은 수락 창이 뜹니다. 광장 어디에 있든 바로 수락할 수 있고, 수락하면 내 소환사 옆에 포탈이 열립니다(④).</li>
+            <li>큐를 돌리지 않아도 광장에 머물 수 있습니다. 친구를 기다리거나, 캐주얼 모드만 하다 가도 됩니다.</li>
+            <li><b>왜</b>: 매칭 대기는 LoL에서 가장 할 일이 없는 시간입니다. 그 시간을 광장 산책으로 바꾸면, 기능을 추가하지 않고도 체감 대기가 짧아집니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>친구가 서 있는 광장<span class="sum">친구 목록을 공간으로 보여 준다</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>광장에는 <b>온라인 친구의 소환사</b>와, 같은 학회원 중 무작위 일부(예시 최대 20명)가 보입니다. 한 화면에 보이는 인원을 제한해 서버와 PC 부담을 낮춥니다.</li>
+            <li>친구 소환사를 클릭하면 <b>파티 초대 · 프로필 · 관전</b> 메뉴가 뜹니다. 지금 친구 목록에서 하던 일을 광장에서 그대로 합니다.</li>
+            <li>게임 중인 친구는 광장에 서 있지 않고, 머리 위에 「출전 중」 깃발만 남습니다.</li>
+            <li><b>모르는 학회원과는 채팅이 없고 감정표현만</b> 됩니다. 광장이 또 하나의 갈등 공간이 되지 않게 하기 위해서입니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">4</span><span>매칭 → 포탈 열림 → 출전<span class="sum">광장에서 협곡으로 걸어 들어간다</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>수락하면 내 소환사 옆에 포탈이 열리고, 소환사가 걸어 들어가며 카메라가 위로 빠집니다(시점 규칙 참고). 그 뒤는 지금의 챔피언 선택 · 로딩 화면 그대로입니다.</li>
+            <li>경기가 끝나면 결과 화면 뒤에 광장으로 돌아옵니다. 이긴 날은 학회 기여가 쌓이는 연출을, 진 날도 참여분이 쌓이는 연출을 짧게 보여 줍니다.</li>
+            <li><b>광장 끄기</b>: 설정에서 광장을 끄면 지금의 메뉴 화면으로 돌아갑니다. 바로 큐만 잡고 싶은 유저의 길은 그대로 둡니다.</li>
+          </ul></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section><section class="r-demacia" id="season">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-2 · 세력 시즌</div><h2>협곡의 결과가 학회의 이야기로</h2></div>
+      <p>결말은 유저의 승부가 씁니다.</p>
+    </div>
+    <div class="flow4">
+      <div class="card"><span class="num">01</span><h3>시즌 갈등</h3><p class="one">녹서스 vs 데마시아</p></div>
+      <div class="card"><span class="num">02</span><h3>협곡 플레이</h3><p class="one">승리 ↑ · 패배도 참여분</p></div>
+      <div class="card"><span class="num">03</span><h3>주간 정산</h3><p class="one">순위 · 광장 장식 변경</p></div>
+      <div class="card"><span class="num">04</span><h3>시즌 종료</h3><p class="one">축제 or 재정비</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>학회 기여 계산<span class="sum">한 판이 몇 점이 되고, 순위는 어떻게 정하나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <h4>한 판의 기여 (예시 수치)</h4>
+          <table>
+            <tr><th>결과</th><th>랭크</th><th>일반 · 칼바람 등</th><th>캐주얼 모드</th></tr>
+            <tr><td>승리</td><td>10</td><td>7</td><td>참여 2</td></tr>
+            <tr><td>패배</td><td>3</td><td>2</td><td>참여 2</td></tr>
+            <tr><td>탈주 · 자리 비움</td><td>0</td><td>0</td><td>0</td></tr>
+          </table>
+          <ul>
+            <li><b>이기면 크게, 져도 조금</b>: 패배도 참여분이 쌓여 허무하지 않지만, 승리와의 차이가 커서 이길 이유는 분명합니다.</li>
+            <li><b>캐주얼은 참여분만</b>: 경쟁하지 않는 유저도 학회 이야기에 이름을 남기되, 순위를 크게 흔들지는 못하게 합니다.</li>
+            <li><b>한 팀에 학회가 섞여도 괜찮다</b>: 매칭은 지금과 같고, 이기면 각자 자기 학회에 기여합니다. 그래서 팀원끼리 이해관계가 완전히 같습니다.</li>
+          </ul>
+          <h4>순위 정하기</h4>
+          <ul>
+            <li>학회 순위 = <b>학회원 1인당 평균 기여</b>. 사람이 많은 학회가 숫자로 이기지 않습니다.</li>
+            <li>평균은 그 주에 한 판 이상 플레이한 학회원만으로 계산합니다. 접속하지 않는 학회원이 평균을 깎지 않게 하기 위해서입니다.</li>
+            <li><b>1인 하루 상한</b>: 하루 기여는 예시로 10판분까지만 셉니다. 시간이 많은 소수가 학회 순위를 좌우하지 않게 하고, 과몰입도 막습니다.</li>
+          </ul>
+          <h4>어뷰징 막기</h4>
+          <ul>
+            <li>고의 패배는 승리보다 항상 손해라 할 이유가 없습니다. 탈주·자리 비움은 0점이고, 신고가 확정된 판은 기여를 되돌립니다.</li>
+            <li>시즌 마지막 2주에는 이사를 막아, 이기는 학회로 몰려가는 것을 막습니다.</li>
+          </ul>
+          <span class="note">수치는 구조를 보여 주는 예시이며, 실제 값은 테스트로 확정합니다.</span>
+        </div></div></div>
+      </div>
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>시즌 이야기 진행<span class="sum">미리 정한 결말 대신, 유저의 승부로 완성</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>시즌 시작</b>: 광장 소식판에 이번 시즌의 사건이 올라옵니다. 예: "녹서스 군대가 데마시아 국경 요새로 진군한다."</li>
+          <li><b>매주</b>: 정산 결과가 소식판에 전황으로 실립니다. 순위가 광장 장식에 반영됩니다(순위별 광장 참고).</li>
+          <li><b>시즌 종료</b>: 1위 학회의 도시에는 축제가, 낮은 순위 도시에는 재정비 이야기가 열립니다. <b>어느 세력도 멸망하지 않고</b>, 결과가 다음 시즌 사건의 출발점이 됩니다.</li>
+          <li><b>기존 RPG와의 차이</b>: 개발자가 정한 결말을 따라가는 것이 아니라, 유저들의 승부 결과로 이야기 방향이 정해집니다. 기존 기획서의 시즌 서사 시스템을 그대로 이어받습니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section><section class="r-demacia alt" id="rank">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-3 · 순위별 광장</div><h2>순위가 광장의 분위기를 바꾼다</h2></div>
+      <p>모든 순위가 밝게 · 주간 정산마다 한 칸씩</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 축제</div><span class="tag">1위</span><h3>축제</h3><p class="one">꽃가루 · 깃발 · 음악</p></div>
+      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 장터</div><span class="tag">2위</span><h3>활기찬 일상</h3><p class="one">장터 · 붐비는 광장</p></div>
+      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 비계와 현수막</div><span class="tag">3위</span><h3>재정비</h3><p class="one">비계 · 「다음엔 우리 차례」</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>광장은 어떻게 바뀌나<span class="sum">세 가지 분위기 × 한 주에 한 칸</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>같은 광장, 다른 장식</b>: 광장 구조는 그대로 두고 장식 세트(깃발, 조명, 노점, 비계, 현수막, 배경음)만 바꿉니다. 새 맵을 만드는 게 아니라 비용이 낮습니다.</li>
+          <li><b>한 주에 한 칸</b>: 각 분위기 사이를 단계로 나누고, 주간 정산마다 한 칸씩만 움직입니다. 순위가 크게 뒤집혀도 광장이 하루아침에 바뀌지 않아 자연스럽고, 매주 "조금 달라졌다"는 변화가 보입니다.</li>
+          <li><b>낮은 순위도 밝게</b>: 꼴찌 광장이 쓸쓸하면 그 학회원은 클라이언트를 켤 때마다 기분이 나빠집니다. 그래서 재정비는 "진 도시"가 아니라 "준비 중인 도시"로 그립니다. 비계가 하나씩 걷히는 모습이 곧 다음 판을 할 이유가 됩니다.</li>
+          <li><b>다른 학회 광장 구경</b>: 축제 중인 상대 학회 광장에 놀러 가 볼 수 있어, 이기고 싶은 마음이 생깁니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section><section class="r-demacia" id="reward">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-4 · 승리 보상</div><h2>이긴 학회는 협곡에서 보인다</h2></div>
+      <p>전부 외형 · 능력치 0 · 상대 9명이 봅니다.</p>
+    </div>
+    <div class="split">
+      <div class="ph">주석 이미지 자리<br>협곡 화면 위 ① 챔피언 효과 ② 귀환 ③ 우물 표시</div>
+      <div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>학회 챔피언 특수 효과 · 스킨<span class="sum">이긴 학회 × 그 도시 출신 챔피언</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li><b>누가</b>: 지난 시즌 1위 학회의 학회원 중, 시즌 동안 최소 참여(예시 20판)를 채운 소환사.</li>
+            <li><b>어떤 챔피언</b>: 공식 설정의 출신 지역이 그 도시인 챔피언. 예: 데마시아가 이기면 가렌, 럭스 등.</li>
+            <li><b>무엇이</b>: 지금 낀 스킨 위에 학회 색의 오라·테두리 효과가 얹힙니다. 스킨을 대체하지 않아 기존 스킨 판매와 부딪히지 않습니다. 시즌 대표 챔피언에는 한정 특수 스킨을 줍니다.</li>
+            <li><b>얼마나</b>: 다음 시즌 동안 유지됩니다. 다음 시즌에 다시 이겨야 이어집니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>귀환 이펙트<span class="sum">학회 문양 · 빛</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>승리 학회의 학회원은 <b>모든 챔피언</b>으로 귀환할 때 바닥에 학회 문양이 빛납니다.</li>
+            <li>귀환 시간과 판정은 그대로입니다. 보이는 모습만 바뀝니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>우물 연출<span class="sum">깃발 · 병사 환호</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>승리 학회의 학회원이 <b>부활하거나 귀환할 때</b>, 우물 옆에 학회 깃발과 병사들이 나타나 환호합니다.</li>
+            <li>한 팀에 여러 학회가 섞여 있으므로 우물 전체를 바꾸지 않고, 그 소환사 개인의 연출로만 보여 줍니다.</li>
+            <li>회복량·속도 등 우물의 기능은 그대로입니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">+</span><span>왜 능력치가 아니라 외형인가<span class="sum">공정성 · 악순환 방지 · LoL 수익 구조와 정합</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li><b>공정성</b>: 시즌에서 진 학회가 협곡에서까지 불리해지면, 지는 쪽이 계속 지는 악순환이 생깁니다.</li>
+            <li><b>보여야 동기가 된다</b>: 외형은 상대 9명이 모두 봅니다. "저 학회 이번에 이겼구나"가 경기 중에 드러나고, 다음 시즌에 이기고 싶은 이유가 됩니다.</li>
+            <li><b>진 학회도 빈손은 아니다</b>: 시즌 참여 기념 아이콘 테두리를 받습니다. 승리 보상보다 훨씬 작게 둬서 이길 이유는 지킵니다.</li>
+            <li><b>LoL과 같은 방향</b>: LoL은 능력치가 아닌 외형으로 수익을 냅니다. 보상도 같은 원칙을 따릅니다.</li>
+          </ul></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section></div>
+
+<!-- 4 · 눈이 내리고 글이 서리처럼 -->
+<div class="scene still" data-mode="snow" data-w="1920" data-h="1080" style="height:480vh">
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/d4-hq.jpg" alt="프렐요드 설원의 마을">
+      <div class="mark frost" style="left:50%;top:32%;font-size:var(--u)" data-from="0" data-to="0.16">
+        <div class="carve ice"><span class="pn">PART 03 · 04 · 프렐요드 설원</span><h2>포로의 고향에서 쉬어 간다</h2><p>경쟁 없는 놀이, 그리고 한 소환사의 하루</p></div>
+      </div>
+      <div class="mark frost" style="left:50%;top:32%;font-size:var(--u)" data-from="0.2" data-to="0.34">
+        <div class="carve ice"><span class="pn">3-5 · 캐주얼 모드</span><h2>아레나처럼 새 모드로,<br>네 가지만 지킨다</h2></div>
+      </div>
+      <div class="mark frost" style="left:50%;top:32%;font-size:var(--u)" data-from="0.38" data-to="0.5">
+        <div class="carve ice"><span class="pn">01</span><h2>실력보다 관찰과 운</h2><p>손 빠르기 X · 눈치 O</p></div>
+      </div>
+      <div class="mark frost" style="left:50%;top:32%;font-size:var(--u)" data-from="0.54" data-to="0.66">
+        <div class="carve ice"><span class="pn">02</span><h2>패치 무관</h2><p>이동 + 버튼 1개 · 공부 0</p></div>
+      </div>
+      <div class="mark frost" style="left:50%;top:32%;font-size:var(--u)" data-from="0.7" data-to="0.82">
+        <div class="carve ice"><span class="pn">03</span><h2>3~5분 짧은 판</h2><p>중간 참여 · 진 쪽도 보상</p></div>
+      </div>
+      <div class="mark frost" style="left:50%;top:32%;font-size:var(--u)" data-from="0.86" data-to="1">
+        <div class="carve ice"><span class="pn">04</span><h2>관객이 더 안다</h2><p>전체 시야 → 보기만 해도 긴장</p></div>
+      </div>
+    </div>
+    <canvas class="snow"></canvas>
+  </div>
+</div>
+
+<div class="ex r-frel"><section class="r-frel" id="casual">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-5 · 캐주얼 모드 원칙</div><h2>아레나처럼 새 모드로,<br>네 가지만 지킨다</h2></div>
+      <p>경쟁은 내려놓고, 쉬면서 즐깁니다.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card"><span class="num">01</span><h3>실력보다 관찰과 운</h3><p class="one">손 빠르기 X · 눈치 O</p></div>
+      <div class="card"><span class="num">02</span><h3>패치 무관</h3><p class="one">이동 + 버튼 1개 · 공부 0</p></div>
+      <div class="card"><span class="num">03</span><h3>3~5분 짧은 판</h3><p class="one">중간 참여 · 진 쪽도 보상</p></div>
+      <div class="card"><span class="num">04</span><h3>관객이 더 안다</h3><p class="one">전체 시야 → 보기만 해도 긴장</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>네 원칙이 벽을 푸는 방식<span class="sum">피로 · 패치 · 복귀 격차에 각각 대응</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>피로</b> → 3~5분짜리 판, 보기만 해도 되는 관전형. 30분 집중할 여력이 없는 날에도 들어올 수 있습니다.</li>
+          <li><b>패치 공부</b> → 챔피언 스킬 대신 이동과 버튼 하나. 패치가 바뀌어도 규칙은 그대로라 배울 것이 없습니다.</li>
+          <li><b>복귀 격차</b> → 승패를 손 빠르기가 아니라 관찰과 운이 가릅니다. 석 달 쉬고 온 유저도 첫 판부터 대등합니다. 여기서 감을 되찾고 일반전 → 랭크로 돌아가는 계단이 됩니다.</li>
+          <li><b>팀원 갈등</b> → 판이 짧고, 진 쪽도 참여 보상을 받고, 개인 실수가 결과를 좌우하지 않아 탓할 거리가 줄어듭니다.</li>
+          <li><b>개발 범위</b>: 아레나처럼 기존 큐에 모드 하나를 더하는 방식입니다. 맵 엔진·챔피언·부쉬·와드 시스템을 재사용합니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section><section class="r-frel alt" id="hide">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-6 · 대표 모드 · 탑다운</div><h2>부쉬 숨바꼭질</h2></div>
+      <p>관객만 아는 긴장. LoL의 부쉬 · 와드 · 시야를 그대로 씁니다.</p>
+    </div>
+    <div class="split">
+      <div>
+        <div class="ph" style="min-height:240px">탑다운 맵 도식 자리<br>부쉬 · 술래 · 숨은 포로</div>
+        <div class="grid g2" style="margin-top:14px">
+          <div class="ph" style="min-height:150px">플레이어 화면<br>(시야 제한)</div>
+          <div class="ph" style="min-height:150px">관전자 화면<br>(전체 시야)</div>
+        </div>
+      </div>
+      <div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>한 판 흐름<span class="sum">준비 → 숨기 → 수색 → 결과, 약 4분</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner">
+            <table>
+              <tr><th>단계</th><th>시간</th><th>일어나는 일</th></tr>
+              <tr><td>준비</td><td>15초</td><td>역할 공개, 숨는 쪽은 변신할 모습 선택</td></tr>
+              <tr><td>숨기</td><td>30초</td><td>숨는 쪽만 이동. 술래는 화면이 가려진 채 대기</td></tr>
+              <tr><td>수색</td><td>3분</td><td>술래가 찾기 시작. 부쉬가 1분마다 시듦</td></tr>
+              <tr><td>결과</td><td>10초</td><td>승패, 생존 시간, 예측 결과 공개 → 광장 귀환</td></tr>
+            </table>
+            <span class="note">시간은 예시이며 테스트로 확정합니다.</span>
+          </div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>역할과 조작<span class="sum">술래 2 : 숨는 쪽 8 · 버튼 하나</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li><b>숨는 쪽 8명</b>: 포로, 미니언, 정글 몹 중 하나로 변신합니다. 맵에는 같은 모습의 NPC 무리가 돌아다녀서 그 사이에 섞일 수 있습니다. 조작은 우클릭 이동 + <b>변신 버튼</b>(다른 모습으로 바꾸기, 쿨타임 20초).</li>
+            <li><b>술래 2명</b>: 우클릭 이동 + <b>와드 버튼</b>(설치한 자리 주변을 밝힘, 최대 3개). 밝혀진 범위 안의 대상을 클릭하면 잡습니다.</li>
+            <li><b>잘못 잡으면</b>: NPC를 클릭하면 술래가 2초 동안 멈춥니다. 아무거나 누르는 것을 막습니다.</li>
+            <li>챔피언 스킬은 쓰지 않습니다. 패치가 바뀌어도 규칙은 그대로입니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>맵과 부쉬 시듦<span class="sum">넓은 맵 · 많은 부쉬 · 점점 좁아지는 숨을 곳</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>협곡보다 넓은 전용 맵에 부쉬를 많이 깝니다. 처음에는 숨을 곳이 넉넉합니다.</li>
+            <li>수색이 시작되면 <b>1분마다 부쉬 일부(예시 25%)가 시듭니다</b>. 어떤 부쉬가 시들지는 10초 전에 노랗게 예고합니다.</li>
+            <li>시간이 갈수록 숨을 곳이 줄어 마지막 1분에 긴장이 가장 높아집니다. 맵만 넓으면 술래가 헤매다 지루해지고, 부쉬만 많으면 운으로 끝나는 문제를 막습니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">4</span><span>승패와 보상<span class="sum">한 명이라도 살아남으면 숨는 쪽 승리</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>3분 동안 <b>한 명이라도 살아남으면 숨는 쪽 승리</b>, 모두 잡으면 술래 승리.</li>
+            <li>잡힌 사람은 바로 <b>관전자</b>가 되어 전체 시야로 남은 판을 보고, 생존 예측에 참여합니다. 탈락해도 할 일이 있습니다.</li>
+            <li>보상은 참여분 + 생존 시간. 이긴 쪽은 조금 더 받지만, 진 쪽도 빈손이 아닙니다. 학회 기여는 참여분만 쌓입니다(기여 계산 참고).</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">5</span><span>관전과 예측<span class="sum">관객이 플레이어보다 더 많이 안다</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>관전자(잡힌 사람, 친구 관전, 광장 관람)에게는 <b>숨은 사람이 전부 보입니다</b>. 술래가 바로 옆 부쉬를 지나칠 때 관객만 아는 긴장이 생깁니다. 영화의 서스펜스와 같은 원리입니다.</li>
+            <li>관전자는 "누가 끝까지 살아남을까"를 무료 포인트로 예측합니다(포로 경주와 같은 포인트).</li>
+            <li>관전자의 채팅·핑은 플레이어에게 보이지 않습니다. 관객이 답을 알려 주는 것을 막습니다.</li>
+          </ul></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section></div>
+
+<!-- 포로 경주 · 달려 들어옴 -->
+<div class="scene" data-mode="race" style="height:260vh">
+  <div class="sticky">
+    <div class="race-img"><img src="img/lol/poro-hq.jpg" alt="눈밭 위의 포로들"></div>
+    <div class="race-lines"></div>
+    <div class="mark scene-cap" style="left:30%;top:40%;font-size:clamp(13px,1.5vw,24px)" data-from="0.45" data-to="1">
+      <div class="carve ice"><span class="pn">3-7 · 관전형 모드</span><h2>포로 경주</h2><p>응원만 해도 한 판</p></div>
+    </div>
+  </div>
+</div>
+<div class="ex r-frel"><section class="r-frel" id="poro">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-7 · 관전형 모드 · 탑다운</div><h2>포로 경주: 응원만 해도 한 판</h2></div>
+      <p>협곡이 부담스러운 날의 쉼표</p>
+    </div>
+    <div class="split">
+      <div class="ph">관전 화면 목업 자리<br>트랙을 달리는 포로들 + 응원 · 예측 UI</div>
+      <div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>조작 0 · 자동 경주<span class="sum">포로 8마리, 90초 레이스</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>포로 8마리가 트랙을 <b>자동으로</b> 달립니다(예시 90초). 유저는 아무것도 조작하지 않습니다.</li>
+            <li>코스 중간에 눈덩이, 지름길, 미끄러운 얼음 같은 <b>무작위 이벤트</b>가 일어나 결과를 예측하기 어렵게 만듭니다. 매번 순위가 뒤집힐 여지가 있어 끝까지 보게 됩니다.</li>
+            <li>광장 한쪽의 트랙에서 정해진 간격(예시 10분마다)으로 열립니다. 큐를 돌리면서도 볼 수 있습니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>포인트 예측<span class="sum">무료 포인트만 · 현금성 0</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>경주 전 1등 포로를 <b>예측 포인트</b>로 고릅니다. 포인트는 매일 무료로 받고, <b>돈으로 살 수 없으며 현금으로 바꿀 수도 없습니다.</b></li>
+            <li>모은 포인트는 광장 꾸밈(감정표현, 장신구 등) 교환에만 씁니다. 사행성 논란이 생길 구조를 처음부터 만들지 않습니다.</li>
+            <li>맞히면 보너스, 틀려도 참여분이 쌓입니다. 진 사람이 없는 구조입니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>응원<span class="sum">함께 보는 재미 · 결과에는 영향 없음</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>응원 버튼을 누르면 트랙 옆 관중석에 내 소환사의 응원 연출이 뜹니다. 같은 포로를 응원하는 사람이 많을수록 관중석이 들썩입니다.</li>
+            <li>응원은 <b>연출만</b> 있고 결과에는 영향이 없습니다. 많이 누른 쪽이 이기면 공정하지 않기 때문입니다.</li>
+          </ul></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section><section class="r-frel alt" id="day">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">PART 04 · 한 소환사의 하루</div><h2>석 달 만에 돌아온 소환사</h2></div>
+    </div>
+    <div class="timeline">
+      <div class="tl"><b>접속</b><span>1위 학회 광장 · 꽃가루</span><span class="f">“어, 우리 축제 중이네?”</span></div>
+      <div class="tl"><b>소식판</b><span>바뀐 것 · 시즌 상황 훑기</span><span class="f">“패치 노트보다 편하다.”</span></div>
+      <div class="tl"><b>친구</b><span>클릭 → 파티</span><span class="f">“오랜만에 같이 해 볼까.”</span></div>
+      <div class="tl"><b>숨바꼭질</b><span>5분 · 공부 없이 손 풀기</span><span class="f">“이건 실력 차이가 안 나네.”</span></div>
+      <div class="tl"><b>협곡</b><span>가렌 + 승리 학회 효과</span><span class="f">“상대도 이거 보겠지.”</span></div>
+      <div class="tl"><b>패배해도</b><span>참여분 적립 → 광장 귀환</span><span class="f">“한 판만 더.”</span></div>
+    </div>
+  </div>
+</section></div>
+
+<!-- 5 · 해가 떠오름 -->
+<div class="scene still" data-mode="dawn" data-w="1920" data-h="1080" style="height:440vh">
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/d5-hq.jpg" alt="슈리마 사막 위로 떠오른 태양 원반">
+      <div class="fx fx-glow"></div>
+      <div class="mark" style="left:53%;top:58%;font-size:var(--u)" data-from="0" data-to="0.26">
+        <div class="carve sun"><span class="pn">PART 05 · 슈리마 사막</span><h2>다시 떠오르는 태양</h2><p>작게 시작해, 증명하며 넓힌다</p></div>
+      </div>
+      <div class="mark" style="left:19%;top:30%;font-size:calc(var(--u) * .85)" data-from="0.32" data-to="1">
+        <div class="carve sun"><span class="pn">1단계</span><h3>클라이언트 광장</h3><p>학회 광장 · 순위 변화 · 캐주얼</p></div>
+      </div>
+      <div class="mark" style="left:84%;top:32%;font-size:calc(var(--u) * .85)" data-from="0.5" data-to="1">
+        <div class="carve sun"><span class="pn">2단계</span><h3>광장 확장</h3><p>경기 같이 보기 · 숨은 소환사 찾기</p></div>
+      </div>
+      <div class="mark" style="left:53%;top:46%;font-size:calc(var(--u) * .95)" data-from="0.68" data-to="1">
+        <div class="carve sun"><span class="pn">3단계</span><h3>룬테라 여행</h3><p>3인칭 도시 · 포탈 여행</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ex r-shurima"><section class="r-shurima" id="roadmap">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">5-1 · 단계별 확장</div><h2>작게 시작해, 증명하며 넓힌다</h2></div>
+      <p>앞 단계 지표가 좋아야 다음 단계로 갑니다.</p>
+    </div>
+    <div class="steps">
+      <div class="card"><span class="num">1단계</span><h3>클라이언트 광장</h3><p class="one">학회 광장 · 순위 변화 · 캐주얼</p></div>
+      <div class="card"><span class="num">2단계</span><h3>광장 확장</h3><p class="one">경기 같이 보기 · 숨은 소환사 찾기</p></div>
+      <div class="card tint"><span class="num">3단계</span><h3>룬테라 여행</h3><p class="one">3인칭 도시 · 포탈 여행</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>단계를 넘어가는 기준<span class="sum">무엇이 좋아져야 다음 단계를 여나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <h4>1단계 → 2단계</h4>
+          <ul>
+            <li>광장을 켠 그룹이 끈 그룹보다 <b>주간 판 수, 패배 후 바로 종료 비율, 복귀 유저 재이탈</b> 중 둘 이상에서 나아질 것.</li>
+            <li>광장을 스스로 끄는 비율이 낮을 것. 높으면 광장이 방해가 된다는 뜻이라 먼저 고칩니다.</li>
+          </ul>
+          <h4>2단계 → 3단계</h4>
+          <ul>
+            <li>협곡을 하지 않고 광장·캐주얼만 이용한 접속이 꾸준히 생길 것. "머물 이유"가 증명된 상태입니다.</li>
+            <li>소환사 꾸밈 판매가 2단계 개발 비용을 회수할 흐름을 보일 것.</li>
+          </ul>
+          <h4>2단계에 더하는 것</h4>
+          <ul>
+            <li><b>경기 같이 보기</b>: 광장 대형 스크린에서 리그 경기를 함께 보고, 포인트로 승부를 예측합니다.</li>
+            <li><b>숨은 소환사 찾기</b>: 광장 곳곳에 숨은 챔피언 코스튬 NPC를 찾아 도감을 채웁니다. 큐 중에 떠나도 기록이 남습니다.</li>
+          </ul>
+          <span class="note">기준의 구체적인 목표치는 1단계 출시 전 데이터로 정합니다.</span>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section><section class="r-shurima alt" id="carry">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="sec-no">5-2 · 이어지는 자산</div><h2>1단계에 만든 것은 버려지지 않는다</h2></div></div>
+    <div class="timeline">
+      <div class="tl" style="grid-template-columns:160px 1fr"><b>소환사 · 꾸밈</b><span>1단계 그대로 → 3단계에서 걷는다</span></div>
+      <div class="tl" style="grid-template-columns:160px 1fr"><b>학회 기록</b><span>시즌 기록 → 도시의 역사</span></div>
+      <div class="tl" style="grid-template-columns:160px 1fr"><b>광장 디자인</b><span>1단계 광장 → 3단계 중심 광장</span></div>
+    </div>
+    <div class="grid g2" style="margin-top:18px">
+      <div class="card"><span class="tag">회사에게</span><h3>1단계 비용 = 다음 단계의 기반</h3></div>
+      <div class="card tint"><span class="tag">유저에게</span><h3>처음부터 함께한 소환사가 넓은 세상으로</h3></div>
+    </div>
+  </div>
+</section><section class="r-shurima" id="bm">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">6-1 · 수익 모델</div><h2>스킨에게, 보여 줄 무대를</h2></div>
+      <p>지금 스킨은 한 판 동안 9명만 봅니다 → 광장 = 상설 무대</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><span class="num">01</span><h3>소환사 꾸미기</h3><p class="one">의상 · 장신구 · 걸음 이펙트</p></div>
+      <div class="card"><span class="num">02</span><h3>광장 감정표현</h3><p class="one">몸짓 · 포즈</p></div>
+      <div class="card"><span class="num">03</span><h3>학회 테마 의상</h3><p class="one">학회 색 · 문양</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>판매 구조<span class="sum">무엇을, 어떻게 팔고, 무엇은 팔지 않나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>새 슬롯</b>: 소환사는 챔피언과 별개의 꾸밈 슬롯입니다. 기존 챔피언 스킨과 겹치지 않아 매출을 나눠 먹지 않고 더해집니다.</li>
+          <li><b>상점 단품</b>: 의상, 장신구, 걸음 이펙트, 감정표현을 단품으로 팝니다. TFT 전설이 상점과 같은 방식입니다.</li>
+          <li><b>시즌 한정 학회 의상</b>: 시즌마다 학회 색·문양을 담은 의상을 한정 판매합니다. 승리 보상(협곡 외형)과는 별개입니다.</li>
+          <li><b>무료로도 얻는다</b>: 시즌 참여, 포로 경주 포인트 교환으로 기본 꾸밈을 얻을 수 있습니다. 돈을 쓰지 않는 유저도 광장에서 초라하지 않게 합니다.</li>
+          <li><b>팔지 않는 것</b>: 학회 기여, 순위, 협곡 능력치, 예측 포인트. 경쟁과 결과에 닿는 것은 팔지 않습니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section><section class="r-shurima alt" id="kpi">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">6-2 · 지표 가설</div><h2>무엇이 좋아지는지, 이렇게 확인한다</h2></div>
+      <p>수치는 가정하지 않습니다 · 단계마다 측정</p>
+    </div>
+    <table>
+      <tr><th>지표</th><th>가설</th><th>비교</th></tr>
+      <tr><td>주간 판 수</td><td>흔적이 남으면 한 판 더</td><td>학회 소속 전후</td></tr>
+      <tr><td>패배 후 종료</td><td>남는 게 있으면 안 끈다</td><td>도입 전후</td></tr>
+      <tr><td>복귀 재이탈</td><td>감을 되찾으면 덜 떠난다</td><td>캐주얼 경험 유무</td></tr>
+      <tr><td>협곡 없는 접속</td><td>안 해도 들른다</td><td>광장 · 캐주얼 접속</td></tr>
+      <tr><td>끝까지 하는 판</td><td>이길 이유 → 항복 감소</td><td>항복 투표율</td></tr>
+    </table>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>측정 방법<span class="sum">광장을 켠 그룹과 끈 그룹을 나란히 본다</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>나눠서 연다</b>: 1단계는 일부 서버·일부 계정에 먼저 열고, 같은 기간의 나머지 그룹과 비교합니다. 패치나 이벤트 같은 다른 변수의 영향을 줄입니다.</li>
+          <li><b>기간</b>: 시즌 효과를 보려면 최소 한 시즌(정산 여러 번)을 지켜봅니다. 첫 주의 신기함만 보고 판단하지 않습니다.</li>
+          <li><b>복귀 유저 따로 보기</b>: 일정 기간 접속하지 않았다 돌아온 유저만 묶어, 캐주얼을 먼저 한 그룹과 바로 협곡으로 간 그룹의 재이탈을 비교합니다.</li>
+          <li><b>부작용도 본다</b>: 광장을 끄는 비율, 신고율, 랭크 매칭 시간이 나빠지지 않는지 함께 봅니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section><section class="r-shurima" id="risk">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="sec-no">6-3 · 리스크와 대응</div><h2>먼저 묻게 될 질문에, 먼저 답한다</h2></div></div>
+    <table>
+      <tr><th style="width:32%">우려</th><th>대응</th></tr>
+      <tr><td>개발 비용</td><td>기존 클라이언트 · 챔피언 재사용</td></tr>
+      <tr><td>저사양 PC</td><td>쿼터뷰 · 선택형 · 바로 큐 유지</td></tr>
+      <tr><td>경쟁 공정성</td><td>보상은 외형뿐</td></tr>
+      <tr><td>협곡 시간 잠식</td><td>대기 시간 활용 · 복귀 유입</td></tr>
+      <tr><td>학회 쏠림</td><td>1인당 평균 기여로 순위</td></tr>
+      <tr><td>학회 간 대립</td><td>한 팀에 여러 학회 → 승리는 모두의 이득</td></tr>
+    </table>
+    <div class="banner">협곡의 경쟁은 그대로 둔다.</div>
+  </div>
+</section><section class="r-shurima alt" id="compare">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="sec-no">PART 07 · 결론</div><h2>경기로 끝나던 LoL에서, 머무는 LoL로</h2></div></div>
+    <table>
+      <tr><th></th><th>기존 LoL</th><th>본 기획</th></tr>
+      <tr><td>한 판의 결과</td><td>LP 숫자</td><td>학회 순위 · 광장 · 외형</td></tr>
+      <tr><td>협곡 밖</td><td>메뉴 화면</td><td>친구가 있는 학회 광장</td></tr>
+      <tr><td>지친 날</td><td>접속 이유 없음</td><td>보기만 해도 되는 모드</td></tr>
+      <tr><td>복귀</td><td>실력 격차의 벽</td><td>캐주얼로 감 되찾기</td></tr>
+      <tr><td>세계관</td><td>읽는 이야기</td><td>직접 겪는 이야기</td></tr>
+    </table>
+    <div class="banner">판 수 ↑ · 유지 ↑ · 복귀 ↑ · IP 확장</div>
+  </div>
+</section></div>
+
+<!-- 결말 · 뒤로 멀어짐 -->
+<div class="scene still" data-mode="pull" data-w="2334" data-h="1080" style="height:260vh">
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/ionia-hq.jpg" alt="안개 낀 아이오니아 절벽 도시">
+      <div class="mark" style="left:30%;top:26%;font-size:calc(var(--u) * 1.1)" data-from="0.4" data-to="1">
+        <div class="carve"><span class="pn">HIDDEN SUMMONERS</span><h2>한 판의 승부가,<br>내가 사는 도시의 풍경이 된다.</h2><p>유운식 · 게임 기획</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="end">본 기획서는 라이엇 게임즈와 무관한 개인 기획안이며, 수록된 룬테라 이미지의 저작권은 Riot Games에 있습니다.</div>
+<script>
+(function(){
+  var scenes=[].slice.call(document.querySelectorAll('.scene'));
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+  function seg(list,p){var a=list[0],b=list[list.length-1];for(var i=0;i<list.length-1;i++){if(p>=list[i].p&&p<=list[i+1].p){a=list[i];b=list[i+1];break}}var t=b.p===a.p?1:ease((p-a.p)/(b.p-a.p));return{a:a,b:b,t:t}}
+  function lerp(a,b,t){return a+(b-a)*t}
+  function layout(sc){
+    var vw=innerWidth,vh=innerHeight,iw=+sc.dataset.w,ih=+sc.dataset.h;
+    if(sc.dataset.mode==='doors'||sc.dataset.mode==='race'){sc._w=vw;sc._h=vh;return}
+    if(sc.dataset.mode==='harbor'){var fw=Math.min(vw*.78,iw,vh*.74*iw/ih),fh=fw*ih/iw;var hf=sc.querySelector('.harbor-frame');hf.style.width=fw+'px';hf.style.height=fh+'px';hf.style.marginLeft=(-fw/2)+'px';hf.style.marginTop=(-fh/2)+'px';hf.style.setProperty('--u',(fh/562*14)+'px');sc._w=fw;return}
+    var k=Math.max(vw/iw,vh/ih),w=iw*k,h=ih*k;
+    if(sc.dataset.mode==='frame')sc._k0=Math.min(.62*vw/w,.6*vh/h);
+    sc._w=w;sc._h=h;
+    var world=sc.querySelector('.world');world.style.width=w+'px';world.style.height=h+'px';
+    world.style.setProperty('--u',(h/1080*22)+'px');
+    if(sc.dataset.keys)sc._keys=JSON.parse(sc.dataset.keys);
+    if(sc.dataset.light)sc._light=JSON.parse(sc.dataset.light);
+    var cv=sc.querySelector('canvas.snow');if(cv){cv.width=vw*devicePixelRatio;cv.height=vh*devicePixelRatio}
+  }
+  function prog(sc){var r=sc.getBoundingClientRect(),span=sc.offsetHeight-innerHeight;return Math.min(1,Math.max(0,-r.top/span))}
+  var rippleT=0,disp=document.getElementById('disp'),turb=document.getElementById('turb');
+  function rip(){var t=(performance.now()-rippleT)/1800;if(t>1){disp.setAttribute('scale',0);return}var k=Math.pow(1-t,2);disp.setAttribute('scale',(36*k).toFixed(2));turb.setAttribute('baseFrequency',(0.008+0.004*Math.sin(t*9)).toFixed(4)+' 0.05');requestAnimationFrame(rip)}
+  function marks(sc,p){sc.querySelectorAll('.mark').forEach(function(m){var v=p>=+m.dataset.from&&p<=+m.dataset.to;if(m.classList.contains('inside'))v=v&&sc._inside;if(v&&!m.classList.contains('on')&&m.classList.contains('ripple')){rippleT=performance.now();rip()}m.classList.toggle('on',v)})}
+  function render(sc,p){
+    var vw=innerWidth,vh=innerHeight,world=sc.querySelector('.world'),mode=sc.dataset.mode;
+    if(mode==='doors'){sc.querySelectorAll('.door').forEach(function(d){d.classList.toggle('open',p>=+d.dataset.at)});sc.querySelector('.doors-title').style.opacity=p<0.2?1:0;return}
+    if(mode==='harbor'){var g2=ease(Math.min(1,p/0.3)),s2=0.72+0.28*g2;sc.querySelector('.harbor-frame').style.transform='scale('+s2+')';marks(sc,p);return}
+    if(mode==='race'){var r1=ease(Math.min(1,p/0.32));var ri=sc.querySelector('.race-img');ri.style.transform='translateX('+((1-r1)*100)+'%)';ri.style.filter='blur('+((1-r1)*8)+'px)';sc.querySelector('.race-lines').style.opacity=(1-r1)*.9;marks(sc,p);return}
+    if(mode==='frame'){
+      var g=seg(sc._keys,p),sa=g.a.s||sc._k0,sb=g.b.s||sc._k0,s=lerp(sa,sb,g.t),x=lerp(g.a.x,g.b.x,g.t),y=lerp(g.a.y,g.b.y,g.t);
+      var W=sc._w*s,H=sc._h*s,tx=vw/2-sc._w*x/100*s,ty=vh/2-sc._h*y/100*s;
+      if(W>=vw)tx=Math.min(0,Math.max(vw-W,tx));else tx=(vw-W)/2;
+      if(H>=vh)ty=Math.min(0,Math.max(vh-H,ty));else ty=(vh-H)/2-vh*.04;
+      sc._inside=s>=.99;world.style.transform='translate('+tx+'px,'+ty+'px) scale('+s+')';
+    }else{
+      world.style.transform='translate('+(vw-sc._w)/2+'px,'+(vh-sc._h)/2+'px)';
+    }
+    if(mode==='mist'){
+      var q=Math.min(1,p/0.42),e=ease(q);
+      sc.querySelector('.fx-mist').style.opacity=1-e;
+      world.querySelector('img').style.filter='blur('+((1-e)*5)+'px) saturate('+(0.7+0.3*e)+')';
+    }
+    if(mode==='sweep'){
+      var L=seg(sc._light,p),lx=lerp(L.a.x,L.b.x,L.t),ly=lerp(L.a.y,L.b.y,L.t),lr=lerp(L.a.r,L.b.r,L.t);
+      var lf=sc.querySelector('.fx-light');lf.style.setProperty('--lx',lx+'%');lf.style.setProperty('--ly',ly+'%');lf.style.setProperty('--lr',lr+'%');
+      var focus=lr<30?1:Math.max(0,1-(lr-30)/30);
+      sc.querySelector('.fx-shade').style.opacity=focus;lf.style.opacity=0.3+0.7*focus;
+    }
+    if(mode==='pull'){var pz=ease(Math.min(1,p/0.6)),zs=1.16-0.16*pz;world.style.transformOrigin='50% 50%';world.style.transform='translate('+(vw-sc._w)/2+'px,'+(vh-sc._h)/2+'px) scale('+zs+')';}
+    if(mode==='dawn'){
+      var d=ease(Math.min(1,p/0.7));
+      world.querySelector('img').style.filter='brightness('+(0.72+0.28*d)+') saturate('+(0.55+0.45*d)+') sepia('+(0.25*(1-d))+')';
+      sc.querySelector('.fx-glow').style.opacity=0.15+0.85*d;
+    }
+    marks(sc,p);
+    var hh=sc.querySelector('.hint');if(hh)hh.style.opacity=p>0.04?0:1;
+  }
+  function tick(){var moving=false;scenes.forEach(function(sc){var tg=prog(sc);if(sc._cur==null)sc._cur=tg;var d=tg-sc._cur;if(Math.abs(d)>0.0005){sc._cur+=d*0.12;moving=true}else sc._cur=tg;render(sc,sc._cur)});if(moving)requestAnimationFrame(tick);else running=false}
+  var running=false;function kick(){if(!running){running=true;requestAnimationFrame(tick)}}
+  function all(){scenes.forEach(layout);kick()}
+  addEventListener('resize',all);addEventListener('scroll',kick,{passive:true});all();
+  // snow
+  scenes.filter(function(sc){return sc.dataset.mode==='snow'}).forEach(function(sc){
+    var cv=sc.querySelector('canvas.snow'),cx=cv.getContext('2d'),flakes=[];
+    for(var i=0;i<140;i++)flakes.push({x:Math.random(),y:Math.random(),r:Math.random()*2.2+.6,v:Math.random()*.0012+.0006,w:Math.random()*Math.PI*2});
+    function draw(){var r=sc.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight){var W=cv.width,H=cv.height,dpr=devicePixelRatio;cx.clearRect(0,0,W,H);cx.fillStyle='rgba(255,255,255,.9)';flakes.forEach(function(f){f.y+=f.v;f.w+=.01;if(f.y>1.02){f.y=-.02;f.x=Math.random()}cx.beginPath();cx.arc((f.x+Math.sin(f.w)*.01)*W,f.y*H,f.r*dpr,0,7);cx.fill()})}requestAnimationFrame(draw)}
+    draw();
+  });
+  document.querySelectorAll('.acc-btn').forEach(function(b){b.addEventListener('click',function(){b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')})});
+  document.querySelectorAll('[data-open]').forEach(function(b){b.addEventListener('click',function(){document.getElementById(b.dataset.open).classList.add('open')})});
+  document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m||e.target.classList.contains('close'))m.classList.remove('open')})});
+  addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(function(m){m.classList.remove('open')})});
+})();
+</script>
+</body>
+</html>
