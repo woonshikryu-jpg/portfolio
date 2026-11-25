@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>유운식 포트폴리오</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* VOICE: 밝고 차분한 영화 오프닝. 지친 현업자가 쉬듯 넘겨 보는 포트폴리오 모음.
+   IDEA: 작품마다 한 편의 짧은 오프닝 시퀀스 — 스크롤이 필름을 넘긴다.
+   PICTURE: 사용자가 생성한 지브리풍 이미지 (지금은 이미지 자리 표시).
+   COLOUR/TYPE: 따뜻한 미색 바탕, 잉크색 글자, 작품별 포인트 색 하나. Noto Sans KR.
+   LAYOUT: 작품 목록 → 연출 2편 → 팀 프로젝트(정돈형) → 연락처. 이력서는 메뉴 이동만. */
+:root{color-scheme:light;--bg:#fbf8f1;--paper:#fff;--ink:#22201c;--sub:#6a655c;--line:#e7e1d4;--cs:#1f8fd0;--city:#c9822a;--ramp:#7a5cc7}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;overflow-x:clip}
+a{color:inherit}
+/* header */
+.hd{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px max(4vw,16px);background:rgba(251,248,241,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.back{font-size:13px;font-weight:700;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:7px 12px;background:#fff;white-space:nowrap}
+.logo{font-weight:900;letter-spacing:-.02em;white-space:nowrap}
+.nav{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav a{flex:none;text-decoration:none;font-size:14px;font-weight:500;padding:8px 12px;border-radius:999px}
+.nav a:hover,.nav a:focus-visible{background:#efe9dc}
+.nav a.cv{border:1px solid var(--ink);font-weight:700}
+a:focus-visible,button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* intro: portfolio index */
+.intro{padding:clamp(40px,7vw,88px) max(5vw,16px) clamp(32px,5vw,56px);max-width:1240px;margin:0 auto}
+.intro h1{font-size:clamp(34px,5vw,52px);line-height:1.1;letter-spacing:-.04em;margin:0 0 10px;font-weight:900;text-wrap:balance}
+.intro p{color:var(--sub);margin:0 0 32px;max-width:60ch}
+.works{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.work{position:relative;display:flex;flex-direction:column;text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .25s,box-shadow .25s}
+.work:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(60,45,20,.1)}
+.thumb{aspect-ratio:16/9;background-size:cover;background-position:center;position:relative}
+.work .body{padding:16px 18px 18px}
+.work small{display:block;color:var(--sub);font-size:13px}
+.work b{display:block;font-size:20px;letter-spacing:-.02em;margin:2px 0 4px}
+.work span.one{font-size:14px;color:#3d3a34}
+.badge{position:absolute;top:12px;left:12px;background:#fff;border-radius:999px;font-size:12px;font-weight:700;padding:4px 10px}
+/* reel */
+.reel{position:relative}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#eaf3f8}
+.shot{position:absolute;inset:-4%;background-size:cover;background-position:center;opacity:0;will-change:opacity,transform}
+.ph{display:grid;place-items:center;text-align:center;color:#3d4a55}
+.ph div{background:rgba(255,255,255,.75);border:1.5px dashed rgba(0,0,0,.25);border-radius:14px;padding:12px 18px;font-size:14px;max-width:80%}
+.ph code{display:block;font-size:13px;color:#566}
+.cap{position:absolute;left:max(5vw,16px);bottom:max(9vh,72px);max-width:min(560px,calc(100vw - 32px));background:rgba(255,255,255,.88);backdrop-filter:blur(8px);border-radius:18px;padding:20px 24px;opacity:0;transform:translateY(14px);transition:opacity .45s,transform .45s;pointer-events:none;box-shadow:0 10px 30px rgba(40,40,30,.12)}
+.cap.on{opacity:1;transform:none}
+.cap small{display:block;font-weight:700;font-size:13px;color:var(--accent)}
+.cap h3{font-size:clamp(24px,3.2vw,36px);line-height:1.15;letter-spacing:-.035em;margin:4px 0 8px;text-wrap:balance}
+.cap p{margin:0;color:#3a3732}
+.cap.title h3{font-size:clamp(36px,6vw,68px);font-weight:900}
+.dots{position:absolute;right:max(3vw,14px);top:50%;transform:translateY(-50%);display:grid;gap:10px}
+.dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.7);border:1.5px solid rgba(0,0,0,.25);transition:background .3s,transform .3s}
+.dots i.on{background:var(--accent);border-color:var(--accent);transform:scale(1.3)}
+.skip{position:absolute;right:max(3vw,14px);bottom:max(4vh,20px);font-weight:700;font-size:14px;font-family:inherit;color:var(--ink);background:#fff;border:1px solid rgba(0,0,0,.15);border-radius:999px;padding:10px 16px;cursor:pointer;min-height:44px}
+.draft{position:absolute;left:max(5vw,16px);top:18px;font-size:12px;background:rgba(255,255,255,.8);border-radius:999px;padding:4px 10px;color:#555}
+/* summary after reel */
+.sum{max-width:1240px;margin:0 auto;padding:clamp(36px,5vw,64px) max(5vw,16px)}
+.sum h2{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.035em;line-height:1.15;margin:0 0 6px}
+.sum .lead{color:var(--sub);margin:0 0 24px}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.facts div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.facts small{display:block;color:var(--sub);font-size:12.5px}
+.facts b{font-size:15px}
+.points{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.points div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.points b{display:block;margin-bottom:4px}
+.points p{margin:0;font-size:14.5px;color:#46423b}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;border-radius:999px;background:var(--ink);color:#fff;text-decoration:none;font-weight:700;font-size:15px}
+/* ramp (plain) */
+.ramp{border-top:1px solid var(--line)}
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 22px;padding:0;list-style:none;counter-reset:f}
+.flow li{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;font-size:14.5px;position:relative}
+.flow li b{display:block;color:var(--ramp)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.two b{display:block;margin-bottom:4px}
+.two p{margin:0;font-size:14.5px;color:#46423b}
+/* contact */
+.ct{background:#f1ebdd;padding:clamp(40px,6vw,72px) max(5vw,16px)}
+.ct .in{max-width:1240px;margin:0 auto;display:flex;flex-wrap:wrap;gap:24px;align-items:end;justify-content:space-between}
+.ct h2{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.035em;margin:0}
+.ct ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ct li{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.ct li small{color:var(--sub);width:48px}
+.ct li span{font-weight:700;white-space:nowrap}
+.copy{font-weight:600;font-size:13px;font-family:inherit;color:var(--ink);border:1px solid #cfc6b3;background:#fff;border-radius:999px;padding:6px 12px;cursor:pointer;min-height:34px}
+footer{text-align:center;font-size:13px;color:var(--sub);padding:20px}
+@media(max-width:900px){.works{grid-template-columns:1fr 1fr}.facts{grid-template-columns:1fr 1fr}.points,.flow{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.works,.points,.flow,.two{grid-template-columns:1fr}.logo{display:none}.dots{display:none}}
+@media(prefers-reduced-motion:reduce){.cap{transition:none}.work{transition:none}}
+</style></head><body>
+
+<header class="hd">
+  <a class="back" href="../">← 버전 모음</a>
+  <span class="logo">유운식 · 게임 기획</span>
+  <nav class="nav" aria-label="메뉴">
+    <a href="#crazy-splash">Crazy Splash</a>
+    <a href="#summoners-city">소환사의 도시</a>
+    <a href="#ramp">R.A.M.P</a>
+    <a href="#contact">연락처</a>
+    <a class="cv" href="resume.html">이력서</a>
+  </nav>
+</header>
+
+<main>
+<section class="intro" id="top">
+  <h1>유운식의 포트폴리오</h1>
+  <p>게임 기획자 유운식이 직접 기획한 작업들입니다. 카드를 누르면 해당 작품으로 이동합니다.</p>
+  <div class="works" id="works"></div>
+</section>
+
+<section class="reel" id="crazy-splash" data-reel="cs" style="--accent:var(--cs)"></section>
+<section class="sum" id="crazy-splash-sum" style="--accent:var(--cs)">
+  <h2>Crazy Splash</h2>
+  <p class="lead">3D 팀 점령 액션 · PC/모바일 · 크레이지파크 IP 리부트 제안 · 개인 기획</p>
+  <div class="facts">
+    <div><small>한 판</small><b>3분</b></div>
+    <div><small>탈락 후 대기</small><b>0초</b></div>
+    <div><small>진입 루트</small><b>4개</b></div>
+    <div><small>대전</small><b>4 vs 4</b></div>
+  </div>
+  <div class="points">
+    <div><b>죽지 않고, 밀려날 뿐</b><p>팡! 당하면 물살에 실려 외곽으로 떠밀리고, 그 자리에서 바로 다시 움직입니다.</p></div>
+    <div><b>루트 4개 = 전략 4개</b><p>워터 슬라이드, 짚라인, 벽타기, 외곽 배수로. 어디로 들어갈지가 매 순간의 선택입니다.</p></div>
+    <div><b>끝날 때까지 끝나지 않는다</b><p>배수로 끝 물바가지 레버 3초. 점령지 전원을 휩쓸어 판을 뒤집습니다.</p></div>
+  </div>
+  <a class="btn" href="../crazy-splash.html">기획 사이트 · 프로토타입 열기 →</a>
+</section>
+
+<section class="reel" id="summoners-city" data-reel="city" style="--accent:var(--city)"></section>
+<section class="sum" id="summoners-city-sum" style="--accent:var(--city)">
+  <h2>소환사의 도시</h2>
+  <p class="lead">오픈월드 MMO · PC · 리그 오브 레전드 IP 확장 제안 · 개인 기획</p>
+  <div class="facts">
+    <div><small>한 판</small><b>30분+</b></div>
+    <div><small>무대</small><b>협곡 · 도시</b></div>
+    <div><small>시즌 결말</small><b>유저가 정한다</b></div>
+    <div><small>승리 보상</small><b>5종</b></div>
+  </div>
+  <div class="points">
+    <div><b>싸우고, 쉬고, 다시 싸운다</b><p>협곡의 긴장과 도시의 휴식을 오가며 지치지 않고 오래 머무는 리듬을 만듭니다.</p></div>
+    <div><b>내 한 판이 역사가 된다</b><p>랭크 결과가 세력 기여도로 쌓여 시즌 사건의 결말을 정합니다.</p></div>
+    <div><b>승리가 눈에 보인다</b><p>승리 세력의 색으로 도시가 물들고, 축제 · 칭호 · 기념비 · 의상으로 기억됩니다.</p></div>
+  </div>
+  <a class="btn" href="../lol-mmo.html">기획 사이트 열기 →</a>
+</section>
+
+<section class="sum ramp" id="ramp">
+  <h2>R.A.M.P</h2>
+  <p class="lead">마법 테마 파티 게임 · PC · 팀 프로젝트(기획 3 · 개발 2) · 2026.09 – 2026.11 · 레벨 디자인 · 캐릭터 디자인</p>
+  <ol class="flow">
+    <li><b>의상실</b>첫 스폰과 커스터마이징. 끝내야 바깥 문이 열립니다.</li>
+    <li><b>마법 수련장</b>지나가기만 해도 조작을 익힙니다.</li>
+    <li><b>포탈 관문</b>멀리서도 보이는 관문이 다음 목적지를 알려 줍니다.</li>
+    <li><b>마법진</b>올라서면 게임이 시작됩니다.</li>
+  </ol>
+  <div class="two">
+    <div><b>로비 「마법사의 저택」</b><p>안내 문구 없이 공간 배치만으로 커스터마이징 → 조작 학습 → 게임 시작을 잇는 로비를 완성해 팀원 모두의 만족을 얻었습니다.</p></div>
+    <div><b>레이스 맵 · 전투 시스템</b><p>“난이도가 높고 난투가 적다”는 의견을 받아 레이스 맵을 다시 만들었고, ‘기절 수치’ 전투 시스템과 물바가지 점령지 기믹을 제안해 반영했습니다.</p></div>
+  </div>
+</section>
+</main>
+
+<section class="ct" id="contact">
+  <div class="in">
+    <h2>같이 만들어요.</h2>
+    <ul>
+      <li><small>Email</small><span>wolf1205@naver.com</span><button class="copy" type="button" data-copy="wolf1205@naver.com">복사</button></li>
+      <li><small>Phone</small><span>010-9719-7184</span><button class="copy" type="button" data-copy="010-9719-7184">복사</button></li>
+      <li><small>이력서</small><a href="resume.html">이력서 보기 →</a></li>
+    </ul>
+  </div>
+</section>
+<footer>유운식 · 게임 기획 포트폴리오 · 2026</footer>
+
+<script>
+{
+/* ===== 연출 데이터 =====
+   이미지가 준비되면 img 파일을 같은 폴더의 img/ 에 넣고 경로만 맞추면 됩니다.
+   장면을 늘리거나 줄이려면 shots 배열에 항목을 추가/삭제하세요. (지금 문구는 임시) */
+const REELS={
+  cs:{name:'Crazy Splash',bg:'linear-gradient(160deg,#bfe6fb,#fff3cf)',shots:[
+    {img:'img/cs-1.jpg',scene:'햇살 가득한 3D 워터파크 전경',kicker:'개인 기획 · 3D 팀 점령 액션',title:'CRAZY SPLASH',text:'3분. 대기 0초. 마지막 1초까지 뒤집힌다.',big:true},
+    {img:'img/cs-2.jpg',scene:'물살에 실려 떠밀려 가는 캐릭터',kicker:'규칙 하나',title:'죽지 않고, 밀려날 뿐',text:'팡! 당하면 물살에 실려 외곽으로. 그 자리에서 바로 다시 움직입니다.'},
+    {img:'img/cs-3.jpg',scene:'슬라이드 · 짚라인 · 벽 · 배수로가 보이는 조감',kicker:'규칙 둘',title:'루트 4개 = 전략 4개',text:'워터 슬라이드, 짚라인, 벽타기, 외곽 배수로. 어디로 들어갈지가 매 순간의 선택입니다.'},
+    {img:'img/cs-4.jpg',scene:'거대한 물바가지가 쏟아지는 순간',kicker:'규칙 셋',title:'끝날 때까지 끝나지 않는다',text:'배수로 끝 물바가지 레버 3초. 점령지 전원을 휩쓸어 판을 뒤집습니다.'}
+  ]},
+  city:{name:'소환사의 도시',bg:'linear-gradient(160deg,#ffe2b8,#e9f1ff)',shots:[
+    {img:'img/city-1.jpg',scene:'한 판을 끝내고 협곡을 걸어 나오는 길',kicker:'개인 기획 · 오픈월드 MMO',title:'소환사의 도시',text:'30분의 한 판이, LP 숫자 하나로 끝나지 않게.',big:true},
+    {img:'img/city-2.jpg',scene:'협곡 너머 펼쳐지는 평화로운 도시',kicker:'리듬',title:'싸우고, 쉬고, 다시 싸운다',text:'협곡의 긴장과 도시의 휴식을 오가며 지치지 않고 오래 머뭅니다.'},
+    {img:'img/city-3.jpg',scene:'두 세력의 깃발이 걸린 광장',kicker:'기여',title:'내 한 판이 역사가 된다',text:'랭크 결과가 세력 기여도로 쌓여 시즌 사건의 결말을 정합니다.'},
+    {img:'img/city-4.jpg',scene:'승리 세력의 색으로 물든 축제 날의 도시',kicker:'기억',title:'승리가 눈에 보인다',text:'승리 세력의 색으로 도시가 물들고, 축제 · 칭호 · 기념비 · 의상으로 기억됩니다.'}
+  ]}
+};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* 작품 목록 카드 */
+const WORKS=[
+  {href:'#crazy-splash',thumb:REELS.cs.shots[0].img,bg:REELS.cs.bg,badge:'연출',sub:'개인 기획 · 3D 팀 점령 액션',name:'Crazy Splash',one:'3분. 대기 0초. 마지막 1초까지 뒤집힌다.'},
+  {href:'#summoners-city',thumb:REELS.city.shots[0].img,bg:REELS.city.bg,badge:'연출',sub:'개인 기획 · 오픈월드 MMO',name:'소환사의 도시',one:'30분의 한 판이, LP 숫자 하나로 끝나지 않게.'},
+  {href:'#ramp',thumb:'img/ramp-1.jpg',bg:'linear-gradient(160deg,#e6defc,#fff4e0)',badge:'팀',sub:'팀 프로젝트 · 진행 중',name:'R.A.M.P',one:'안내 문구 0줄, 걷기만 하면 게임이 시작되는 로비.'}
+];
+const wl=document.getElementById('works');
+wl.innerHTML=WORKS.map(w=>`<a class="work" href="${esc(w.href)}"><div class="thumb" style="background-image:${esc(w.bg)}" data-img="${esc(w.thumb)}"><span class="badge">${esc(w.badge)}</span></div><div class="body"><small>${esc(w.sub)}</small><b>${esc(w.name)}</b><span class="one">${esc(w.one)}</span></div></a>`).join('');
+function tryImg(src,ok){if(!src)return;const im=new Image();im.onload=()=>ok(src);im.src=src}
+wl.querySelectorAll('.thumb').forEach(t=>tryImg(t.dataset.img,s=>{t.style.backgroundImage=`url("${s}")`}));
+
+/* 연출 엔진 */
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reels=[];
+document.querySelectorAll('[data-reel]').forEach(el=>{
+  const R=REELS[el.dataset.reel];if(!R)return;
+  const n=R.shots.length;
+  el.style.height=(n*100+40)+'vh';
+  el.innerHTML=`<div class="stage" style="background:${esc(R.bg)}">
+    ${R.shots.map((s,i)=>`<div class="shot ph" data-i="${i}" style="background:${esc(R.bg)}"><div>${esc(s.scene)}<code>이미지 자리 · ${esc(s.img)}</code></div></div>`).join('')}
+    ${R.shots.map((s,i)=>`<div class="cap${s.big?' title':''}" data-i="${i}"><small>${esc(s.kicker)}</small><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div>`).join('')}
+    <span class="draft">임시 콘티 · 내용 수정 예정</span>
+    <div class="dots" aria-hidden="true">${R.shots.map(()=>'<i></i>').join('')}</div>
+    <button class="skip" type="button">건너뛰기 ↓</button>
+  </div>`;
+  const shots=[...el.querySelectorAll('.shot')],caps=[...el.querySelectorAll('.cap')],dots=[...el.querySelectorAll('.dots i')];
+  R.shots.forEach((s,i)=>tryImg(s.img,src=>{const d=shots[i];d.classList.remove('ph');d.innerHTML='';d.style.background=`url("${src}") center/cover`}));
+  el.querySelector('.skip').addEventListener('click',()=>{const nx=el.nextElementSibling;(nx||el).scrollIntoView({behavior:reduce?'auto':'smooth'})});
+  reels.push({el,n,shots,caps,dots,cur:-1});
+});
+let mx=0,my=0,tx=0,ty=0;
+addEventListener('pointermove',e=>{tx=e.clientX/innerWidth*2-1;ty=e.clientY/innerHeight*2-1},{passive:true});
+const sm=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
+function update(){
+  const vh=innerHeight;
+  for(const r of reels){
+    const rect=r.el.getBoundingClientRect();
+    if(rect.bottom<0||rect.top>vh)continue;
+    const total=r.el.offsetHeight-vh;
+    const p=Math.min(Math.max(-rect.top/total,0),.9999);
+    const pos=p*r.n,i=Math.floor(pos),t=pos-i;
+    r.shots.forEach((s,j)=>{
+      let o=0;
+      if(j===i)o=1;else if(j===i+1)o=sm((t-.72)/.28);
+      const local=j===i?t:(j===i+1?0:0);
+      const sc=reduce?1:1.06-.05*local;
+      const px=reduce?0:-mx*14,py=reduce?0:-my*9;
+      s.style.opacity=o;
+      s.style.transform=`translate3d(${px}px,${py}px,0) scale(${sc})`;
+    });
+    const show=(t>.06&&(t<.8||i===r.n-1))?i:-1;
+    if(show!==r.cur){r.cur=show;r.caps.forEach((c,j)=>c.classList.toggle('on',j===show))}
+    r.dots.forEach((d,j)=>d.classList.toggle('on',j===i));
+  }
+}
+function frame(){
+  mx+=(tx-mx)*.06;my+=(ty-my)*.06;
+  update();
+  requestAnimationFrame(frame);
+}
+addEventListener('scroll',update,{passive:true});
+addEventListener('resize',update);
+update();
+requestAnimationFrame(frame);
+
+/* 복사 버튼 */
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(b.dataset.copy);b.textContent='복사됨'}catch(e){b.textContent='길게 눌러 복사'}
+  setTimeout(()=>b.textContent='복사',1600);
+}));
+}
+</script>
+</body></html>

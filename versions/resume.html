@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>유운식 이력서</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* 편집 방법: 이 파일을 크롬으로 열고 글자를 클릭해서 고친 뒤, 위쪽 [PDF로 저장]을 누릅니다.
+   고친 내용은 이 브라우저에 자동 저장됩니다. 다른 컴퓨터로 옮길 땐 [편집본 파일로 저장]. */
+:root{--bg:#f6f6f3;--ink:#141414;--sub:#6b6b6b;--line:#e4e4e0;--blue:#3b5bfd;--blue-soft:#eef1ff;--field:#f3f3f0;
+--sans:"Pretendard","Pretendard Variable","Noto Sans KR","Noto Sans CJK KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+--mono:"JetBrains Mono","D2Coding","DejaVu Sans Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:#d9d9d5;font-family:var(--sans);color:var(--ink);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{width:794px;height:1123px;margin:24px auto;background:var(--bg);padding:44px 52px 0;position:relative;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.12)}
+.page.over{outline:3px solid #e5484d}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:13.5px;letter-spacing:-.01em}
+.brand::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--blue)}
+.pno{font:400 11.5px var(--mono);color:#7a7a7a;letter-spacing:.06em}
+.mono{font-family:var(--mono)}
+h1{font-size:44px;line-height:1.2;letter-spacing:-.045em;font-weight:800;margin:0 0 18px}
+h1 em{font-style:normal;color:var(--blue)}
+.eyebrow{font:500 12px var(--mono);color:var(--blue);letter-spacing:.16em;margin:0 0 6px}
+h2{font-size:31px;letter-spacing:-.04em;font-weight:800;margin:0 0 16px;line-height:1.2}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px}
+.lbl{font:500 13.5px var(--mono);letter-spacing:.14em}
+.lbl b{font-family:var(--sans);font-weight:600;letter-spacing:.08em;color:var(--ink)}
+.blue{color:var(--blue)}
+/* page 1 */
+.idrow{display:grid;grid-template-columns:199px 1fr;gap:17px;margin-bottom:18px}
+.photo{height:262px;border-radius:18px;background:linear-gradient(160deg,#dde3ff,#efe5ff);display:grid;place-items:center;font:400 11px var(--mono);letter-spacing:.2em;color:#8f8fa3;background-size:cover;background-position:center;cursor:pointer;position:relative}
+.photo.has span{display:none}
+.info{padding:6px 24px}
+.irow{display:grid;grid-template-columns:108px 1fr;align-items:center;height:42px;border-bottom:1px solid var(--line)}
+.irow:last-child{border-bottom:0}
+.irow small{display:block;font:400 9.5px var(--mono);letter-spacing:.14em;color:#555;line-height:1.3}
+.irow i{font-style:normal;font-size:11.5px;color:#444;display:block}
+.irow div:last-child{font-size:15px}
+.genres{display:grid;grid-template-columns:1fr auto;padding:20px 24px;margin-bottom:20px;align-items:center}
+.genres .lbl{margin-bottom:12px}
+.now{border-left:1px solid var(--line);padding-left:20px;min-width:200px}
+.now small{font:400 9.5px var(--mono);letter-spacing:.14em;color:#555;display:block;margin-bottom:4px}
+.now div{font-weight:700;font-size:15px;line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.chip{border:1px solid #d6d6d2;border-radius:999px;padding:6px 16px;font-size:14px;background:#fff;min-width:24px}
+.chip.fill{border:0;background:var(--field);border-radius:10px;font-weight:600;font-size:14.5px;padding:8px 14px}
+.edu{padding:16px 24px 14px;margin-bottom:14px}
+.ev{position:relative;padding-left:22px}
+.ev+.ev{margin-top:14px}
+.ev::before{content:"";position:absolute;left:0;top:5px;width:9px;height:9px;border-radius:50%;background:var(--blue)}
+.ev+.ev::before{background:#fff;border:2px solid var(--blue);width:9px;height:9px}
+.ev .meta{display:flex;gap:10px;align-items:center;font:400 10.5px var(--mono);color:#555}
+.tag{background:var(--blue-soft);color:var(--blue);border-radius:999px;padding:2px 8px;letter-spacing:.1em}
+.ev .tag.gray{background:var(--field);color:#666}
+.ev h3{font-size:17px;margin:5px 0 1px;letter-spacing:-.02em}
+.ev p{margin:0;font-size:11px;color:var(--sub)}
+.prog{padding:20px 24px}
+.prog .lbl{margin-bottom:12px}
+.prog hr{border:0;border-top:2px solid var(--line);margin:12px 0 10px}
+/* page 2 */
+.proj{padding:20px 24px 18px;margin-bottom:22px}
+.proj .lbl{font-size:11.5px;color:#555;margin-bottom:14px}
+.proj .lbl .code{font-size:16px;letter-spacing:.14em;color:#555}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px 11px}
+.f.full{grid-column:1/-1}
+.f>small{display:block;font-size:11.5px;letter-spacing:.12em;color:#555;margin:6px 0 6px}
+.f>div{background:var(--field);border-radius:9px;padding:11px 12px;font-size:14px;line-height:1.45}
+.sw{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.sw .card{padding:22px 24px}
+.sw .card.s{background:var(--blue-soft);border-color:var(--blue-soft)}
+.sw .lbl{font-size:13px;color:var(--ink)}
+.sw h4{color:var(--blue);font-size:16px;margin:12px 0 12px;letter-spacing:-.02em}
+.box{background:#fff;border-radius:9px;padding:12px 14px;font-size:12.2px;line-height:1.75}
+.sw .card:not(.s) .box{background:var(--field)}
+.ins{padding:22px 24px}
+.ins .lbl{font-size:11.5px;color:#555;margin-bottom:14px}
+.quote{border-left:4px solid var(--blue);padding-left:16px;font-size:20.5px;font-weight:800;letter-spacing:-.035em;margin:0 0 14px}
+.ins .box{background:var(--field);font-size:12.2px;line-height:1.75}
+/* page 3 */
+.cl{padding:26px 28px 20px}
+.q+.q{border-top:1px solid var(--line);margin-top:14px;padding-top:16px}
+.q h3{display:flex;align-items:baseline;gap:12px;font-size:18.5px;margin:0 0 8px;letter-spacing:-.03em}
+.q h3 .n{font:800 22px var(--sans);color:var(--blue);letter-spacing:-.02em}
+.q h4{color:var(--blue);font-size:15px;margin:0 0 8px;letter-spacing:-.02em}
+.q p{font-size:12px;line-height:1.82;margin:0 0 7px;color:#2a2a2a}
+/* editor ui */
+.bar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:10px 14px;background:rgba(250,250,248,.95);border-bottom:1px solid #ccc;font-size:14px}
+.bar button{font:600 14px var(--sans);padding:10px 16px;border-radius:9px;border:1px solid #bbb;background:#fff;cursor:pointer;min-height:40px}
+.bar button.pri{background:var(--blue);border-color:var(--blue);color:#fff}
+.bar button:focus-visible,[contenteditable]:focus{outline:2px solid var(--blue);outline-offset:2px}
+.bar .hint{color:#555;flex-basis:100%;text-align:center;font-size:13px}
+.bar .warn{color:#d0313a;font-weight:600}
+[contenteditable]:hover{background-color:rgba(59,91,253,.06);border-radius:4px}
+.add{font:600 12px var(--sans);border:1px dashed #aab;background:transparent;border-radius:999px;padding:5px 10px;color:#667;cursor:pointer}
+.rnav{position:sticky;top:0;z-index:5;display:flex;gap:8px;justify-content:center;padding:10px;background:rgba(250,250,248,.95);border-bottom:1px solid #ccc}
+.rnav a{font:700 14px var(--sans);text-decoration:none;color:var(--ink);background:#fff;border:1px solid #bbb;border-radius:999px;padding:9px 16px}
+.wrap{overflow-x:auto}
+@media(max-width:820px){.page{transform-origin:top left;margin:12px}}
+@page{size:A4;margin:0}
+@media print{
+  body{background:none}
+  .bar,.add{display:none!important}
+  .page{margin:0;box-shadow:none;break-after:page;outline:0!important;width:210mm;height:297mm}
+  .page:last-child{break-after:auto}
+  [contenteditable]:hover{background:none}
+}
+</style></head><body>
+
+
+<nav class="rnav"><a href="v9.html">← 포트폴리오로</a><a href="../">버전 모음</a></nav>
+<main id="doc">
+<!-- ============ 1쪽 ============ -->
+<section class="page">
+  <div class="top"><div class="brand">GAME DESIGNER RESUME</div><div class="pno">01 / 03</div></div>
+  <h1>플레이어의 <em>감동</em>을<br>설계하는 게임 기획자, 유운식 입니다.</h1>
+  <div class="idrow">
+    <div class="photo" id="photo" title="눌러서 사진 넣기"><span>PHOTO</span></div>
+    <div class="card info">
+      <div class="irow"><div><small>NAME</small><i>이름</i></div><div>유운식</div></div>
+      <div class="irow"><div><small>BIRTH</small><i>생년월일</i></div><div>1998.12.05</div></div>
+      <div class="irow"><div><small>PHONE</small><i>연락처</i></div><div>010-9719-7184</div></div>
+      <div class="irow"><div><small>EMAIL</small><i>이메일</i></div><div>wolf1205@naver.com</div></div>
+      <div class="irow"><div><small>LOCATION</small><i>거주지</i></div><div>경기도 화성시 만세구</div></div>
+      <div class="irow"><div><small>LINK</small><i>포트폴리오</i></div><div>portfolio 링크</div></div>
+    </div>
+  </div>
+  <div class="card genres">
+    <div>
+      <div class="lbl blue">FAVORITE GENRES · <b>관심 장르</b></div>
+      <div class="chips" data-chips="chip"><span class="chip">AOS</span><span class="chip">캐주얼</span><span class="chip">액션</span><span class="chip">RPG</span><span class="chip">퍼즐</span></div>
+    </div>
+    <div class="now"><small>NOW PLAYING</small><div>리그오브레전드</div><div>TFT:전략적팀전투</div></div>
+  </div>
+  <div class="eyebrow">01 — EDUCATION &amp; EXPERIENCE</div>
+  <h2>학력 및 경력</h2>
+  <div class="card edu">
+    <div class="ev"><div class="meta"><span class="tag">EDUCATION</span><span>2026.03 - 2026.12</span></div><h3>경일게임아카데미</h3><p>게임기획</p></div>
+    <div class="ev"><div class="meta"><span class="tag gray">EDUCATION</span><span>2018.03 — 2026.02</span></div><h3>협성대학교</h3><p>경영학과 · 학사</p></div>
+  </div>
+  <div class="card prog">
+    <div class="lbl blue">PROGRAMS · <b>활용 가능 프로그램</b></div>
+    <div class="chips" data-chips="chip fill"><span class="chip fill">Unity</span><span class="chip fill">Figma</span><span class="chip fill">Canva</span><span class="chip fill">Excel</span><span class="chip fill">Word</span></div>
+    <hr>
+    <div class="lbl blue">AI</div>
+    <div class="chips" data-chips="chip fill"><span class="chip fill">Chat GPT</span><span class="chip fill">Codex</span><span class="chip fill">Claude</span><span class="chip fill">Claude Code</span><span class="chip fill">Gemini</span></div>
+  </div>
+</section>
+
+<!-- ============ 2쪽 ============ -->
+<section class="page">
+  <div class="top"><div class="brand">GAME DESIGNER RESUME</div><div class="pno">02 / 03</div></div>
+  <div class="eyebrow">02 — PROJECT · EXPERIENCE</div>
+  <h2>프로젝트 경험</h2>
+  <div class="card proj">
+    <div class="lbl">TEAM PROJECT · <b>팀 프로젝트</b> <span class="code">[R.A.M.P]</span></div>
+    <div class="fgrid">
+      <div class="f"><small>기간</small><div>2026.09.22 - 2026.11.23</div></div>
+      <div class="f"><small>장르 · 플랫폼</small><div>파티플레이 · PC</div></div>
+      <div class="f"><small>팀 구성</small><div>5명</div></div>
+      <div class="f"><small>사용 툴</small><div>Unity · Claude Code</div></div>
+      <div class="f full"><small>담당 역할</small><div>레벨 디자인, 캐릭터 디자인</div></div>
+      <div class="f full"><small>주요 작업 · 성과</small><div>로비 맵 디자인, 레이스 맵 디자인, 캐릭터 디자인, 캐릭터 애니메이션</div></div>
+    </div>
+  </div>
+  <div class="eyebrow">03 — TEAM PROJECT INSIGHT</div>
+  <h2>팀 프로젝트 인사이트</h2>
+  <div class="sw">
+    <div class="card s"><div class="lbl">STRENGTH · <b>강점</b></div><h4>의견을 엮어 답을 찾는 문제 해결력</h4>
+      <div class="box">엇갈리는 의견을 엮어 '기절 수치' 전투 시스템과 물바가지 점령지 기믹을 제안해 실제 게임에 들어갔습니다. “PEAK의 공항 같은 느낌”이라는 요청을 레벨로 풀어내 팀 모두가 만족한 로비를 완성했습니다.</div></div>
+    <div class="card"><div class="lbl">WEAKNESS · <b>보완점</b></div><h4>답답함이 쌓이면 직설적으로 표현하는 점</h4>
+      <div class="box">로비 제안이 세 번 반려되자 답답한 마음에 직설적으로 말해 마찰이 생긴 적이 있습니다. 지금은 첫 반려 때 바로 새 안을 만들기보다, 동선, 규모, 분위기 중 무엇이 다른지 먼저 묻고 기준을 맞춥니다.</div></div>
+  </div>
+  <div class="card ins">
+    <div class="lbl">TEAM PROJECT INSIGHT · <b>팀 프로젝트에서 느낀 점</b></div>
+    <p class="quote">"기준에 합의하는 것보다, 그 기준을 같은 뜻으로 이해하는 것이 먼저다"</p>
+    <div class="box">2라운드 레이스 맵을 기획부터 개발까지 맡아, 팀과 합의한 방향대로 팀장님께 단계마다 컨펌을 받으며 완성했습니다. 하지만 완성 후 '난이도가 높고 난투가 잘 일어나지 않는다'는 의견이 나와 다시 만들게 되었습니다. 같은 기준에 합의했어도 '적당한 난이도', '충분한 난투'를 받아들이는 정도는 사람마다 달랐던 것입니다. 이후에는 말로 맞춘 기준을 실제 플레이 테스트, 수치, 레퍼런스 영상처럼 모두가 같은 그림을 볼 수 있는 형태로 확인한 뒤 작업합니다.</div>
+  </div>
+</section>
+
+<!-- ============ 3쪽 ============ -->
+<section class="page">
+  <div class="top"><div class="brand">GAME DESIGNER RESUME</div><div class="pno">03 / 03</div></div>
+  <div class="eyebrow">04 — COVER LETTER</div>
+  <h2>자기소개서</h2>
+  <div class="card cl">
+    <div class="q"><h3><span class="n">01</span><span>지원 동기 · 게임 기획자를 꿈꾸게 된 계기</span></h3>
+      <h4>「머물고 싶은 세계를 만드는 사람이 되고 싶었습니다」</h4>
+      <p>어린 시절 포켓몬 도감을 하나씩 채워가며, 게임 속 세계에 실제로 살고 있는 듯한 설렘을 느꼈습니다. 그때 저를 사로잡은 것은 단순한 콘텐츠가 아니라 그 안에 계속 머물고 싶게 만드는 하나의 세계였습니다. 포켓몬과 마리오가 세대를 넘어 사랑받고, 마블이 수많은 이야기를 하나의 IP로 확장해 온 것도 결국 사람들이 그 세계를 사랑했기 때문이라고 생각합니다. 저 역시 게임을 시작으로 유저의 마음을 움직이고 오래 기억되는 세계를 만들고 싶어 게임 기획자의 길을 선택했습니다.</p></div>
+    <div class="q"><h3><span class="n">02</span><span>경험과 역할 · 문제를 해결해 본 경험</span></h3>
+      <h4>「느낌을 구조로 바꾸는 것, 그것이 기획이라고 믿습니다」</h4>
+      <p>마법을 테마로 한 파티게임 팀 프로젝트에서 로비 레벨 디자인을 맡았습니다. 로비 레벨 디자인을 맡으며 풀어야 할 과제는, 처음 접속한 유저가 커스터마이징, 조작 학습, 게임 시작을 별도의 안내 없이 자연스럽게 이어 가도록 만드는 것이었습니다. 레퍼런스인 ‘PEAK’의 공항이 체크인부터 탑승까지 걷는 것만으로 다음 행동을 알려 주듯, 저는 공간의 배치 자체가 순서를 알려 주는 구조를 만들고자 했습니다. 이를 위해 로비를 '마법사의 저택'으로 설계했습니다. 1층 의상실에서 첫 스폰과 커스터마이징을 마쳐야 바깥으로 향하는 문이 열리도록 해 다음 단계로 넘어가는 시점을 정했고, 문 밖 마당에는 원형 마법 수련장을 두어 이동하며 자연스럽게 조작을 익히게 했습니다. 수련장 뒤편에는 멀리서도 보이는 거대한 포탈 관문을 세워 다음 목적지를 알려 주었고, 그 앞 마법진에 올라서면 게임이 시작되도록 했습니다. 그 결과 유저의 행동이 한 방향으로 이어지는 로비를 완성해 팀원 모두의 만족을 얻었습니다.</p></div>
+    <div class="q"><h3><span class="n">03</span><span>입사 후 목표 · 만들고 싶은 재미</span></h3>
+      <h4>「판단의 재미에서 감각의 쾌감까지, 오래 머무는 세계」</h4>
+      <p>제가 만들고 싶은 첫 번째 재미는 '판단의 재미'입니다. 모바일에서는 복잡한 직접 조작 대신 상황 판단과 덱 빌딩이 중심이 되는 시뮬레이션 전투를 설계하여, 유저가 플레이 환경의 제약 없이 전장을 내려다보는 지휘관이 되어 동료들을 이끄는 경험을 만들고 싶습니다.</p>
+      <p>두 번째는 '감각의 재미'입니다. 모바일에서 지휘하던 그 동료들을 PC에서는 직접 조종하며 전장 한가운데로 뛰어드는 것입니다. 찰나에 발동하는 공격과 마법, 역동적인 이동과 비행처럼 본능적인 조작이 승리로 이어지는 쾌감을 통해, 지휘관의 시점에서 보던 세계를 영웅의 시점으로 다시 경험하게 하고 싶습니다.</p>
+      <p>마지막으로, 이 세계에 오래 머물 이유를 만들고 싶습니다. 단기적인 스펙업 대신 명예의 전당, 유저 주도형 거점, 커뮤니티 이벤트처럼 유저가 세계 속에서 자신의 영향력을 실감할 수 있는 엔드 콘텐츠를 통해, 유저가 단순한 플레이어를 넘어 세계의 일부가 되는 경험을 만들겠습니다.</p>
+      <p>이 모든 재미는 결국 동료들의 손을 거쳐 완성됩니다. 만드는 과정의 무게를 잊지 않고, 끊임없이 검증하며 모두를 매료시키는 기획자가 되겠습니다.</p></div>
+  </div>
+</section>
+</main>
+
+</body></html>
