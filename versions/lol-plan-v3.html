@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>숨어 사는 소환사들 · 소환사의 도시 기획서 v3</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400..800&family=Noto+Sans+KR:wght@400;500;700&family=Gaegu:wght@400;700&display=swap">
+<style>
+:root{
+  --ink:#1F2A26; --body:#4B5650; --paper:#FFFDF8; --line:#E4DFD2;
+  --bg:#F1F6EA; --bg2:#DFEBD1; --accent:#2E6A45; --soft:#D9E9CD; --spark:#B4466F;
+  --display:'Hahmlet',Georgia,serif; --sans:'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif; --hand:'Gaegu','Noto Sans KR',sans-serif;
+}
+.r-ionia{--bg:#F1F6EA;--bg2:#DFEBD1;--accent:#2E6A45;--soft:#D9E9CD;--spark:#B4466F}
+.r-shurima{--bg:#FAF2E1;--bg2:#F1DFBA;--accent:#94500F;--soft:#F3E1BF;--spark:#A8402F}
+.r-demacia{--bg:#EAF4F3;--bg2:#D3E8E6;--accent:#17636A;--soft:#D2E9E7;--spark:#B6492F}
+.r-frel{--bg:#EFF4F9;--bg2:#DCE7F1;--accent:#2D5D86;--soft:#D8E5F1;--spark:#6E4FA0}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;word-break:keep-all;overflow-wrap:break-word;background:#FBF9F4;color:var(--ink);font:17px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(251,249,244,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:24px;height:62px}
+.back{font-weight:700;font-size:14px;color:var(--body);text-decoration:none;white-space:nowrap}
+.logo{font-family:var(--display);font-weight:800;font-size:20px;color:#2E6A45;text-decoration:none;white-space:nowrap}
+.nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;overflow-x:auto;flex:1}
+.nav ul a{text-decoration:none;font-weight:700;font-size:14.5px;color:var(--body);white-space:nowrap}
+.nav ul a:hover{color:var(--ink)}
+
+/* hero */
+.hero{position:relative;min-height:640px;display:flex;align-items:flex-end;overflow:hidden}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero .wrap{position:relative;width:100%;padding-bottom:64px}
+.panel{background:rgba(255,253,248,.93);border-radius:28px;padding:40px 44px;max-width:640px;box-shadow:0 20px 50px rgba(31,42,38,.14)}
+.chip{display:inline-block;background:var(--accent);color:#FFFDF8;font-weight:700;font-size:13.5px;padding:5px 14px;border-radius:999px}
+.hero h1{font-size:clamp(44px,6vw,76px);font-weight:800;line-height:1.1;margin:16px 0 8px}
+.hero .lead{font-size:20px;font-weight:700;margin:6px 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{background:#fff;border:2px solid var(--line);border-radius:999px;padding:4px 13px;font-weight:700;font-size:14px}
+.credit{position:absolute;right:16px;top:16px;background:rgba(31,42,38,.6);color:#FFFDF8;font-size:12.5px;padding:4px 12px;border-radius:999px}
+
+/* sections */
+section{padding:84px 0;background:var(--bg)}
+section.alt{background:linear-gradient(180deg,var(--bg),var(--bg2))}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:32px;flex-wrap:wrap}
+.sec-no{font-weight:700;font-size:14px;color:var(--accent);letter-spacing:.08em}
+.sec-head h2{font-size:clamp(30px,4vw,46px);line-height:1.2;margin-top:6px;font-weight:800}
+.sec-head p{max-width:420px;color:var(--body);font-weight:500}
+
+/* part band */
+.band{position:relative;height:420px;overflow:hidden;display:flex;align-items:flex-end}
+.band>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.band .wrap{position:relative;width:100%;padding-bottom:40px}
+.band .panel{padding:28px 34px;max-width:560px}
+.band .pn{font-family:var(--display);font-weight:800;color:var(--accent);letter-spacing:.12em;font-size:15px}
+.band h2{font-size:clamp(32px,4.4vw,52px);font-weight:800;margin:10px 0 4px}
+.band p{font-weight:500;color:var(--body)}
+
+/* cards */
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:820px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:20px;padding:24px 26px;display:flex;flex-direction:column;gap:6px}
+.card.tint{background:var(--soft);border-color:var(--soft)}
+.num{font-family:var(--display);font-weight:800;font-size:30px;color:var(--accent);line-height:1.1}
+.card h3{font-size:22px;font-weight:700}
+.one{font-weight:700;font-size:16.5px}
+.feel{font-family:var(--hand);font-size:22px;color:var(--spark);line-height:1.35;margin-top:4px}
+.card img{border-radius:14px;height:180px;width:100%;object-fit:cover;margin-bottom:8px}
+.tag{font-weight:700;font-size:13.5px;color:var(--accent);letter-spacing:.04em}
+.banner{margin-top:22px;background:var(--accent);color:#FFFDF8;border-radius:18px;padding:20px 26px;font-family:var(--display);font-weight:700;font-size:21px}
+.statement{text-align:left;padding:40px 0 10px}
+.statement h2{font-size:clamp(32px,4.6vw,54px);color:var(--accent);font-weight:800;line-height:1.25}
+.statement p{font-size:19px;font-weight:500;margin-top:14px}
+.small{font-size:14px;color:var(--body);margin-top:14px}
+
+/* table */
+table{width:100%;border-collapse:separate;border-spacing:0;background:var(--paper);border:2px solid var(--line);border-radius:18px;overflow:hidden;font-size:16px}
+th,td{text-align:left;padding:14px 18px;border-bottom:1px solid var(--line)}
+th{background:var(--soft);font-weight:700}
+tr:last-child td{border-bottom:none}
+
+/* accordion */
+.acc{background:var(--paper);border:2px solid var(--line);border-radius:18px;overflow:hidden}
+.acc + .acc{margin-top:12px}
+.acc-btn{width:100%;display:flex;align-items:center;gap:14px;text-align:left;background:none;border:0;padding:18px 22px;cursor:pointer;font:700 17px/1.4 var(--sans);color:var(--ink)}
+.acc-btn .sum{display:block;font-weight:500;font-size:14.5px;color:var(--body);margin-top:2px}
+.acc-btn .n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#FFFDF8;display:grid;place-items:center;font-family:var(--display);font-size:16px}
+.plus{margin-left:auto;flex:none;width:32px;height:32px;border-radius:50%;background:var(--soft);color:var(--accent);display:grid;place-items:center;font-size:21px;line-height:1;transition:transform .3s,background .3s,color .3s}
+.acc-btn[aria-expanded="true"] .plus{transform:rotate(45deg);background:var(--accent);color:#FFFDF8}
+.acc-btn:hover .plus{background:var(--accent);color:#FFFDF8}
+.acc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.2,.8,.2,1)}
+.acc-body>div{overflow:hidden}
+.acc-btn[aria-expanded="true"]+.acc-body{grid-template-rows:1fr}
+.acc-inner{padding:0 24px 22px;font-size:15.5px;color:var(--ink)}
+.acc-inner ul{margin:0;padding-left:20px}
+.acc-inner li+li{margin-top:7px}
+.acc-inner h4{font-size:15.5px;margin:16px 0 6px;color:var(--accent)}
+.acc-inner h4:first-child{margin-top:0}
+.acc-inner table{font-size:14.5px;margin:6px 0}
+.acc-inner th,.acc-inner td{padding:9px 12px}
+.note{display:block;margin-top:12px;padding:10px 14px;background:#FFF6DA;border-radius:12px;font-weight:700;font-size:14px}
+.k{color:var(--accent);font-weight:700}
+.card .acc{margin-top:12px;border-radius:14px}
+.card .acc-btn{padding:12px 14px;font-size:14.5px}
+.card .acc-inner{padding:0 16px 16px;font-size:14.5px}
+
+/* layout helpers */
+.split{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:start}
+@media(max-width:820px){.split{grid-template-columns:1fr}}
+.ph{border:2px dashed var(--accent);border-radius:20px;background:rgba(255,253,248,.6);min-height:300px;display:grid;place-items:center;text-align:center;color:var(--accent);font-weight:700;font-size:14.5px;padding:20px}
+.shot img{border-radius:20px;width:100%;height:340px;object-fit:cover}
+.flow4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:820px){.flow4{grid-template-columns:1fr 1fr}}
+.timeline{display:grid;gap:0;background:var(--paper);border:2px solid var(--line);border-radius:20px;overflow:hidden}
+.tl{display:grid;grid-template-columns:120px 1fr 1fr;gap:18px;padding:16px 22px;border-bottom:1px solid var(--line);align-items:center}
+.tl:last-child{border-bottom:none}
+.tl b{font-family:var(--display);color:var(--accent)}
+.tl .f{font-family:var(--hand);font-size:21px;color:var(--spark)}
+@media(max-width:820px){.tl{grid-template-columns:1fr}}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:end}
+.steps .card:nth-child(2){margin-bottom:40px}.steps .card:nth-child(3){margin-bottom:80px}
+@media(max-width:820px){.steps{grid-template-columns:1fr}.steps .card{margin-bottom:0!important}}
+.closing{position:relative;min-height:520px;display:flex;align-items:flex-end;overflow:hidden}
+.closing>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.closing .wrap{position:relative;width:100%;padding-bottom:56px}
+.closing h2{font-size:clamp(30px,4.4vw,50px);font-weight:800;line-height:1.25;margin:12px 0}
+footer{padding:28px 0 40px;text-align:center;font-size:13.5px;color:#6b6b6b;background:#FBF9F4}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="섹션">
+  <div class="wrap">
+    <a class="back" href="index.html">← 버전 모음</a>
+    <a class="logo" href="#top">숨어 사는 소환사들</a>
+    <ul>
+      <li><a href="#summary">요약</a></li>
+      <li><a href="#problem">문제</a></li>
+      <li><a href="#concept">콘셉트</a></li>
+      <li><a href="#plaza">학회 광장</a></li>
+      <li><a href="#season">세력 시즌</a></li>
+      <li><a href="#reward">승리 보상</a></li>
+      <li><a href="#casual">캐주얼</a></li>
+      <li><a href="#day">하루</a></li>
+      <li><a href="#roadmap">확장</a></li>
+      <li><a href="#bm">실행</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero r-ionia" id="top">
+  <img src="img/lol/cover.jpg" alt="알록달록한 아이오니아 들판을 걷는 여행자">
+  <span class="credit">이미지 출처: Riot Games</span>
+  <div class="wrap">
+    <div class="panel">
+      <span class="chip">리그 오브 레전드 IP 확장 제안 · 게임기획 포트폴리오</span>
+      <h1>숨어 사는 소환사들</h1>
+      <p class="lead">한 판을 하지 않아도, 머물 이유가 있는 LoL</p>
+      <div class="chips"><span>클라이언트 속 학회 광장</span><span>세력 시즌</span><span>캐주얼 · 관전 모드</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- 요약 -->
+<section id="summary" class="r-ionia">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">한 장 요약</div><h2>LoL에 머무는 광장과<br>쉬어 가는 모드를 더한다</h2></div>
+      <p>숨어 사는 소환사들의 학회가 협곡에서 도시의 운명을 겨룹니다.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><span class="num">01</span><h3>한 판 할 이유</h3><p class="one">승리 → 학회 순위 · 광장 축제 · 챔피언 외형</p></div>
+      <div class="card"><span class="num">02</span><h3>지친 날도 접속</h3><p class="one">관전형 · 패치 무관 캐주얼 모드</p></div>
+      <div class="card"><span class="num">03</span><h3>스킨의 무대</h3><p class="one">광장 = 꾸밈 상설 무대 · 능력치 영향 0</p></div>
+    </div>
+    <div class="banner">기존 클라이언트 위 1단계 → 지표로 증명하며 확장</div>
+  </div>
+</section>
+
+<!-- PART 01 -->
+<div class="band r-shurima" id="problem">
+  <img src="img/lol/d1.jpg" alt="정오의 슈리마 사구">
+  <span class="credit">이미지 출처: Riot Games</span>
+  <div class="wrap"><div class="panel"><span class="pn">PART 01 · 슈리마 사막</span><h2>메마른 한 판</h2><p>이겨도 져도, 남는 건 LP 하나.</p></div></div>
+</div>
+<section class="r-shurima alt">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="sec-no">1-1 · 네 개의 벽</div><h2>다시 켜기까지, 네 개의 벽</h2></div></div>
+    <div class="grid g2">
+      <div class="card"><h3>한 판의 피로</h3><p class="one">30분 집중 · 팀원 갈등</p><p class="feel">“오늘은 30분 집중할 자신이 없다.”</p></div>
+      <div class="card"><h3>패치 공부</h3><p class="one">매 패치 챔피언 · 아이템 변경</p><p class="feel">“또 바뀌었어? 뭐부터 봐야 하지.”</p></div>
+      <div class="card"><h3>복귀 격차</h3><p class="one">바뀐 메타 · 손 감각 차이</p><p class="feel">“나만 예전 게임을 하고 있다.”</p></div>
+      <div class="card"><h3>LP뿐인 보상</h3><p class="one">이겨도 져도 숫자 하나</p><p class="feel">“30분을 썼는데 남은 게 −23 LP.”</p></div>
+    </div>
+    <div class="statement">
+      <h2>한 판을 하지 않아도<br>머물 이유가 있는 LoL은 가능할까?</h2>
+      <p>경쟁은 협곡에, 쉼과 기록은 그 바깥에.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PART 02 -->
+<div class="band r-ionia" id="concept">
+  <img src="img/lol/d2.jpg" alt="아이오니아 큰 나무 아래 장터">
+  <span class="credit">이미지 출처: Riot Games</span>
+  <div class="wrap"><div class="panel"><span class="pn">PART 02 · 아이오니아 초원</span><h2>탁 트인 쉼터를 세운다</h2><p>협곡 밖, 소환사가 머무는 세계.</p></div></div>
+</div>
+<section class="r-ionia">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-1 · 한 문장 콘셉트</div><h2>경쟁은 협곡에서,<br>쉼과 기록은 도시에서</h2></div>
+      <p>새 게임이 아니라, 협곡 바깥의 시간을 채웁니다.</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><span class="num">01</span><h3>머무는 광장</h3><p class="one">큐 대기 · 친구 · 산책</p></div>
+      <div class="card"><span class="num">02</span><h3>쉬어 가는 캐주얼</h3><p class="one">짧은 판 · 보기만 해도 OK</p></div>
+      <div class="card"><span class="num">03</span><h3>흔적이 남는 승부</h3><p class="one">승리 → 순위 · 풍경 · 외형</p></div>
+    </div>
+    <div style="margin-top:28px">
+      <table>
+        <tr><th style="width:36%">벽</th><th>장치</th></tr>
+        <tr><td>한 판의 피로 · 갈등</td><td>관전형 캐주얼 · 머무는 광장</td></tr>
+        <tr><td>패치 공부</td><td>패치 무관 캐주얼</td></tr>
+        <tr><td>복귀 격차</td><td>관찰 · 운 중심 모드</td></tr>
+        <tr><td>LP뿐인 보상</td><td>학회 순위 · 광장 · 외형</td></tr>
+      </table>
+    </div>
+    <div class="banner">협곡 규칙은 그대로. 바뀌는 건 바깥의 시간.</div>
+  </div>
+</section>
+
+<section class="r-ionia alt" id="world">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-2 · 세계관</div><h2>전쟁의 학회가 사라진 뒤,<br>소환사들은 숨어 살았다</h2></div>
+      <p>신들처럼 몰래 도시에 섞여 삽니다. 주민은 정체를 모릅니다.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card"><span class="tag">옛 설정</span><h3>전쟁 대신 전장</h3><p class="one">분쟁을 협곡 승부로 결정 → 공식 설정에서 삭제</p></div>
+      <div class="card tint"><span class="tag">이 기획</span><h3>숨은 학회들의 승부</h3><p class="one">도시별 학회가 협곡에서 겨룸 → 도시의 운명</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>왜 세계관을 이렇게 잡았나<span class="sum">공식 설정을 바꾸지 않고, 이길 이유를 이야기에서 만든다</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <ul>
+            <li><b>빈자리를 채운다</b>: 초창기 LoL에는 "나라들이 전쟁 대신 정의의 전장에서 분쟁을 결정하고, 소환사가 챔피언을 불러 싸운다"는 설정이 있었습니다. 지금 공식 이야기에서는 빠져 있어서, 협곡에서 <span class="k">왜 싸우는지</span>에 대한 답이 비어 있습니다.</li>
+            <li><b>숨어 산다 = 공식 설정과 충돌하지 않는다</b>: 소환사는 룬테라 주민에게 정체를 드러내지 않습니다. 그래서 공식 이야기 속 인물과 사건을 하나도 바꾸지 않고 그 옆에 덧붙일 수 있습니다.</li>
+            <li><b>유저 = 소환사</b>: 플레이어는 원래 "소환사"라고 불립니다. 이 호칭에 몸(광장의 아바타)과 소속(학회)을 붙여 주는 것뿐이라, 새로 배울 설정이 거의 없습니다.</li>
+            <li><b>이길 이유가 설정에서 나온다</b>: 협곡의 승부가 내가 사는 도시의 분쟁 방향을 정한다는 설정 덕분에, 보상을 덧붙이지 않아도 이길 이유가 생깁니다. 월드컵처럼 직접 뛰지 않는 날에도 "우리 도시의 승부"가 됩니다.</li>
+          </ul>
+          <span class="note">룬테라 지역·도시 이름은 공식 설정을 그대로 쓰고, 소환사와 학회만 이 기획의 해석입니다.</span>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-ionia" id="academy">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-3 · 학회</div><h2>거주 도시 = 학회 = 세력</h2></div>
+      <p>시즌마다 이사 가능 · 다른 학회 광장은 구경 가능</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><img src="img/lol/demacia.jpg" alt="데마시아 왕궁 전경"><h3>데마시아 학회</h3><p class="one">흰 석회암 · 푸른 깃발</p></div>
+      <div class="card"><img src="img/lol/noxus.jpg" alt="녹서스의 붉은 차양 시장"><h3>녹서스 학회</h3><p class="one">붉은 깃발 · 데마시아의 맞수</p></div>
+      <div class="card"><img src="img/lol/piltover.jpg" alt="필트오버 거리"><h3>필트오버 학회</h3><p class="one">황동 · 톱니 · 발명</p></div>
+    </div>
+    <p class="small">이미지 출처: Riot Games</p>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>학회 소속 규칙<span class="sum">언제 고르고, 언제 옮기고, 쏠리면 어떻게 하나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <h4>고르기</h4>
+          <ul>
+            <li><b>시즌 시작 때 한 번</b> 거주 도시를 고릅니다. 고른 도시의 학회원이 되고, 클라이언트 첫 화면이 그 도시의 광장으로 바뀝니다.</li>
+            <li>고르지 않은 유저는 <b>가장 많이 플레이한 챔피언의 출신 지역</b>으로 임시 배정합니다. 첫 접속에서 선택 화면을 한 번 더 보여 줍니다.</li>
+          </ul>
+          <h4>옮기기 (이사)</h4>
+          <ul>
+            <li>시즌 중 이사는 <b>1회</b>만 허용합니다. 이사하면 그때까지 쌓은 기여는 원래 학회에 남고, 새 학회에서는 0부터 쌓습니다.</li>
+            <li>시즌 마지막 2주에는 이사를 막습니다. 이길 것 같은 학회로 몰려가는 것을 막기 위해서입니다.</li>
+          </ul>
+          <h4>쏠림 대비</h4>
+          <ul>
+            <li>학회 순위는 <b>학회원 1인당 평균 기여</b>로 정합니다(세력 시즌 참고). 사람이 많다고 이기지 않으니, 인기 도시로 몰릴 이유가 줄어듭니다.</li>
+            <li>다른 학회 광장은 언제든 <b>구경</b>할 수 있습니다. 소속은 하나지만, 보는 건 자유입니다.</li>
+          </ul>
+          <span class="note">1단계는 시즌 갈등의 두 도시(데마시아 · 녹서스)와 필트오버, 3개 학회로 시작합니다. 회수·기간은 예시이며 테스트로 확정합니다.</span>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-ionia alt" id="view">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-4 · 시점 규칙</div><h2>움직이면 3인칭,<br>내려다보면 탑다운</h2></div>
+      <p>시점 전환 = 역할 전환</p>
+    </div>
+    <div class="grid g2">
+      <div class="card"><span class="tag">3인칭 · 소환사 자신</span><h3>걷기 · 만나기 · 올려다보기</h3></div>
+      <div class="card"><span class="tag">탑다운 · 소환사의 눈</span><h3>지휘 · 관전</h3><p class="one">협곡 · 숨바꼭질 · 포로 경주</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>출전과 귀환의 시점 전환<span class="sum">로딩 화면 대신, 카메라가 역할을 바꿔 준다</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <ul>
+            <li><b>출전</b>: 포탈에 들어서면 카메라가 소환사 등 뒤에서 하늘로 솟아오르고(약 1초), 화면이 위에서 내려다보는 시점으로 바뀌며 기존 로딩 화면으로 이어집니다. "이제 지휘한다"는 신호입니다.</li>
+            <li><b>귀환</b>: 경기가 끝나면 결과 화면 뒤에 카메라가 내려와 광장의 내 소환사 곁에 붙습니다. "다시 나로 돌아왔다"는 쉼의 신호입니다.</li>
+            <li><b>왜 이 규칙인가</b>: LoL의 탑다운 시점은 원래 "소환사가 챔피언을 내려다보며 지휘하는 눈"으로 읽을 수 있습니다. 소환사 자신이 움직일 때만 3인칭을 쓰면, 시점만 보고도 지금 내가 무엇을 하는지 알 수 있습니다.</li>
+            <li><b>1단계는 간단하게</b>: 1단계 광장은 비용을 줄이려고 쿼터뷰(비스듬히 내려다보는 시점) 클릭 이동으로 만들고, 출전 때 카메라가 위로 빠지는 짧은 연출만 넣습니다. 3인칭은 3단계 도시에서 씁니다.</li>
+          </ul>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 03 -->
+<div class="band r-demacia" id="stage1">
+  <img src="img/lol/d3b.jpg" alt="데마시아 항구와 푸른 돛의 함대">
+  <span class="credit">이미지 출처: Riot Games</span>
+  <div class="wrap"><div class="panel"><span class="pn">PART 03 · 데마시아 항구</span><h2>사람이 모이는 항구</h2><p>1단계 · 학회 광장과 세력 시즌</p></div></div>
+</div>
+<section class="r-demacia">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-0 · 개요</div><h2>새 게임이 아니라,<br>지금 클라이언트 위에</h2></div>
+      <p>TFT처럼 기존 챔피언 · 스킨 · 클라이언트 위에 새 규칙만 얹습니다.</p>
+    </div>
+    <div class="grid g4">
+      <div class="card"><span class="num">3-1</span><h3>학회 광장</h3><p class="one">첫 화면 = 내 도시</p></div>
+      <div class="card"><span class="num">3-2</span><h3>세력 시즌</h3><p class="one">협곡 결과 → 학회 순위</p></div>
+      <div class="card"><span class="num">3-3</span><h3>승리 보상</h3><p class="one">전부 외형 · 능력치 0</p></div>
+      <div class="card"><span class="num">3-4</span><h3>캐주얼 모드</h3><p class="one">아레나처럼 새 모드</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="r-demacia alt" id="plaza">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-1 · 학회 광장</div><h2>첫 화면이 내가 사는 도시의 광장</h2></div>
+      <p>번호를 누르면 설계가 펼쳐집니다.</p>
+    </div>
+    <div class="split">
+      <div class="ph">화면 목업 자리<br>쿼터뷰 학회 광장 + 클라이언트 UI<br>① 내 소환사 ② 큐 버튼 ③ 친구 소환사 ④ 포탈</div>
+      <div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>클릭으로 걷는 내 소환사<span class="sum">쿼터뷰 · 이동과 감정표현만</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>광장을 비스듬히 내려다보는 쿼터뷰에서, 바닥을 클릭하면 내 소환사가 걸어갑니다. <b>점프·전투·채집 같은 조작은 없습니다.</b> 쉬러 온 공간이라 할 일을 만들지 않습니다.</li>
+            <li>할 수 있는 건 걷기와 <b>감정표현</b>(인사, 박수, 앉기 등)뿐입니다.</li>
+            <li>소환사는 기본 외형으로 시작하고, 의상·장신구·걸음 이펙트 슬롯을 꾸밀 수 있습니다(수익 모델 참고).</li>
+            <li><b>기술 근거</b>: 작은 캐릭터를 클릭으로 움직이는 방식은 TFT의 전설이가 이미 쓰고 있습니다. 같은 클라이언트 기술을 재사용해 저사양 PC에서도 가볍게 돌아갑니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>큐 대기 = 광장 산책<span class="sum">매칭을 기다리는 시간이 쉬는 시간</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>큐 버튼은 지금처럼 화면 위쪽에 있습니다. 누르면 화면 위에 대기 타이머가 뜨고, <b>그대로 광장을 걸어 다닐 수 있습니다.</b></li>
+            <li>매칭이 잡히면 지금과 같은 수락 창이 뜹니다. 광장 어디에 있든 바로 수락할 수 있고, 수락하면 내 소환사 옆에 포탈이 열립니다(④).</li>
+            <li>큐를 돌리지 않아도 광장에 머물 수 있습니다. 친구를 기다리거나, 캐주얼 모드만 하다 가도 됩니다.</li>
+            <li><b>왜</b>: 매칭 대기는 LoL에서 가장 할 일이 없는 시간입니다. 그 시간을 광장 산책으로 바꾸면, 기능을 추가하지 않고도 체감 대기가 짧아집니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>친구가 서 있는 광장<span class="sum">친구 목록을 공간으로 보여 준다</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>광장에는 <b>온라인 친구의 소환사</b>와, 같은 학회원 중 무작위 일부(예시 최대 20명)가 보입니다. 한 화면에 보이는 인원을 제한해 서버와 PC 부담을 낮춥니다.</li>
+            <li>친구 소환사를 클릭하면 <b>파티 초대 · 프로필 · 관전</b> 메뉴가 뜹니다. 지금 친구 목록에서 하던 일을 광장에서 그대로 합니다.</li>
+            <li>게임 중인 친구는 광장에 서 있지 않고, 머리 위에 「출전 중」 깃발만 남습니다.</li>
+            <li><b>모르는 학회원과는 채팅이 없고 감정표현만</b> 됩니다. 광장이 또 하나의 갈등 공간이 되지 않게 하기 위해서입니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">4</span><span>매칭 → 포탈 열림 → 출전<span class="sum">광장에서 협곡으로 걸어 들어간다</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>수락하면 내 소환사 옆에 포탈이 열리고, 소환사가 걸어 들어가며 카메라가 위로 빠집니다(시점 규칙 참고). 그 뒤는 지금의 챔피언 선택 · 로딩 화면 그대로입니다.</li>
+            <li>경기가 끝나면 결과 화면 뒤에 광장으로 돌아옵니다. 이긴 날은 학회 기여가 쌓이는 연출을, 진 날도 참여분이 쌓이는 연출을 짧게 보여 줍니다.</li>
+            <li><b>광장 끄기</b>: 설정에서 광장을 끄면 지금의 메뉴 화면으로 돌아갑니다. 바로 큐만 잡고 싶은 유저의 길은 그대로 둡니다.</li>
+          </ul></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-demacia" id="season">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-2 · 세력 시즌</div><h2>협곡의 결과가 학회의 이야기로</h2></div>
+      <p>결말은 유저의 승부가 씁니다.</p>
+    </div>
+    <div class="flow4">
+      <div class="card"><span class="num">01</span><h3>시즌 갈등</h3><p class="one">녹서스 vs 데마시아</p></div>
+      <div class="card"><span class="num">02</span><h3>협곡 플레이</h3><p class="one">승리 ↑ · 패배도 참여분</p></div>
+      <div class="card"><span class="num">03</span><h3>주간 정산</h3><p class="one">순위 · 광장 장식 변경</p></div>
+      <div class="card"><span class="num">04</span><h3>시즌 종료</h3><p class="one">축제 or 재정비</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>학회 기여 계산<span class="sum">한 판이 몇 점이 되고, 순위는 어떻게 정하나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <h4>한 판의 기여 (예시 수치)</h4>
+          <table>
+            <tr><th>결과</th><th>랭크</th><th>일반 · 칼바람 등</th><th>캐주얼 모드</th></tr>
+            <tr><td>승리</td><td>10</td><td>7</td><td>참여 2</td></tr>
+            <tr><td>패배</td><td>3</td><td>2</td><td>참여 2</td></tr>
+            <tr><td>탈주 · 자리 비움</td><td>0</td><td>0</td><td>0</td></tr>
+          </table>
+          <ul>
+            <li><b>이기면 크게, 져도 조금</b>: 패배도 참여분이 쌓여 허무하지 않지만, 승리와의 차이가 커서 이길 이유는 분명합니다.</li>
+            <li><b>캐주얼은 참여분만</b>: 경쟁하지 않는 유저도 학회 이야기에 이름을 남기되, 순위를 크게 흔들지는 못하게 합니다.</li>
+            <li><b>한 팀에 학회가 섞여도 괜찮다</b>: 매칭은 지금과 같고, 이기면 각자 자기 학회에 기여합니다. 그래서 팀원끼리 이해관계가 완전히 같습니다.</li>
+          </ul>
+          <h4>순위 정하기</h4>
+          <ul>
+            <li>학회 순위 = <b>학회원 1인당 평균 기여</b>. 사람이 많은 학회가 숫자로 이기지 않습니다.</li>
+            <li>평균은 그 주에 한 판 이상 플레이한 학회원만으로 계산합니다. 접속하지 않는 학회원이 평균을 깎지 않게 하기 위해서입니다.</li>
+            <li><b>1인 하루 상한</b>: 하루 기여는 예시로 10판분까지만 셉니다. 시간이 많은 소수가 학회 순위를 좌우하지 않게 하고, 과몰입도 막습니다.</li>
+          </ul>
+          <h4>어뷰징 막기</h4>
+          <ul>
+            <li>고의 패배는 승리보다 항상 손해라 할 이유가 없습니다. 탈주·자리 비움은 0점이고, 신고가 확정된 판은 기여를 되돌립니다.</li>
+            <li>시즌 마지막 2주에는 이사를 막아, 이기는 학회로 몰려가는 것을 막습니다.</li>
+          </ul>
+          <span class="note">수치는 구조를 보여 주는 예시이며, 실제 값은 테스트로 확정합니다.</span>
+        </div></div></div>
+      </div>
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>시즌 이야기 진행<span class="sum">미리 정한 결말 대신, 유저의 승부로 완성</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>시즌 시작</b>: 광장 소식판에 이번 시즌의 사건이 올라옵니다. 예: "녹서스 군대가 데마시아 국경 요새로 진군한다."</li>
+          <li><b>매주</b>: 정산 결과가 소식판에 전황으로 실립니다. 순위가 광장 장식에 반영됩니다(순위별 광장 참고).</li>
+          <li><b>시즌 종료</b>: 1위 학회의 도시에는 축제가, 낮은 순위 도시에는 재정비 이야기가 열립니다. <b>어느 세력도 멸망하지 않고</b>, 결과가 다음 시즌 사건의 출발점이 됩니다.</li>
+          <li><b>기존 RPG와의 차이</b>: 개발자가 정한 결말을 따라가는 것이 아니라, 유저들의 승부 결과로 이야기 방향이 정해집니다. 기존 기획서의 시즌 서사 시스템을 그대로 이어받습니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-demacia alt" id="rank">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-3 · 순위별 광장</div><h2>순위가 광장의 분위기를 바꾼다</h2></div>
+      <p>모든 순위가 밝게 · 주간 정산마다 한 칸씩</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 축제</div><span class="tag">1위</span><h3>축제</h3><p class="one">꽃가루 · 깃발 · 음악</p></div>
+      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 장터</div><span class="tag">2위</span><h3>활기찬 일상</h3><p class="one">장터 · 붐비는 광장</p></div>
+      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 비계와 현수막</div><span class="tag">3위</span><h3>재정비</h3><p class="one">비계 · 「다음엔 우리 차례」</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>광장은 어떻게 바뀌나<span class="sum">세 가지 분위기 × 한 주에 한 칸</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>같은 광장, 다른 장식</b>: 광장 구조는 그대로 두고 장식 세트(깃발, 조명, 노점, 비계, 현수막, 배경음)만 바꿉니다. 새 맵을 만드는 게 아니라 비용이 낮습니다.</li>
+          <li><b>한 주에 한 칸</b>: 각 분위기 사이를 단계로 나누고, 주간 정산마다 한 칸씩만 움직입니다. 순위가 크게 뒤집혀도 광장이 하루아침에 바뀌지 않아 자연스럽고, 매주 "조금 달라졌다"는 변화가 보입니다.</li>
+          <li><b>낮은 순위도 밝게</b>: 꼴찌 광장이 쓸쓸하면 그 학회원은 클라이언트를 켤 때마다 기분이 나빠집니다. 그래서 재정비는 "진 도시"가 아니라 "준비 중인 도시"로 그립니다. 비계가 하나씩 걷히는 모습이 곧 다음 판을 할 이유가 됩니다.</li>
+          <li><b>다른 학회 광장 구경</b>: 축제 중인 상대 학회 광장에 놀러 가 볼 수 있어, 이기고 싶은 마음이 생깁니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-demacia" id="reward">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-4 · 승리 보상</div><h2>이긴 학회는 협곡에서 보인다</h2></div>
+      <p>전부 외형 · 능력치 0 · 상대 9명이 봅니다.</p>
+    </div>
+    <div class="split">
+      <div class="ph">주석 이미지 자리<br>협곡 화면 위 ① 챔피언 효과 ② 귀환 ③ 우물 표시</div>
+      <div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>학회 챔피언 특수 효과 · 스킨<span class="sum">이긴 학회 × 그 도시 출신 챔피언</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li><b>누가</b>: 지난 시즌 1위 학회의 학회원 중, 시즌 동안 최소 참여(예시 20판)를 채운 소환사.</li>
+            <li><b>어떤 챔피언</b>: 공식 설정의 출신 지역이 그 도시인 챔피언. 예: 데마시아가 이기면 가렌, 럭스 등.</li>
+            <li><b>무엇이</b>: 지금 낀 스킨 위에 학회 색의 오라·테두리 효과가 얹힙니다. 스킨을 대체하지 않아 기존 스킨 판매와 부딪히지 않습니다. 시즌 대표 챔피언에는 한정 특수 스킨을 줍니다.</li>
+            <li><b>얼마나</b>: 다음 시즌 동안 유지됩니다. 다음 시즌에 다시 이겨야 이어집니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>귀환 이펙트<span class="sum">학회 문양 · 빛</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>승리 학회의 학회원은 <b>모든 챔피언</b>으로 귀환할 때 바닥에 학회 문양이 빛납니다.</li>
+            <li>귀환 시간과 판정은 그대로입니다. 보이는 모습만 바뀝니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>우물 연출<span class="sum">깃발 · 병사 환호</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>승리 학회의 학회원이 <b>부활하거나 귀환할 때</b>, 우물 옆에 학회 깃발과 병사들이 나타나 환호합니다.</li>
+            <li>한 팀에 여러 학회가 섞여 있으므로 우물 전체를 바꾸지 않고, 그 소환사 개인의 연출로만 보여 줍니다.</li>
+            <li>회복량·속도 등 우물의 기능은 그대로입니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">+</span><span>왜 능력치가 아니라 외형인가<span class="sum">공정성 · 악순환 방지 · LoL 수익 구조와 정합</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li><b>공정성</b>: 시즌에서 진 학회가 협곡에서까지 불리해지면, 지는 쪽이 계속 지는 악순환이 생깁니다.</li>
+            <li><b>보여야 동기가 된다</b>: 외형은 상대 9명이 모두 봅니다. "저 학회 이번에 이겼구나"가 경기 중에 드러나고, 다음 시즌에 이기고 싶은 이유가 됩니다.</li>
+            <li><b>진 학회도 빈손은 아니다</b>: 시즌 참여 기념 아이콘 테두리를 받습니다. 승리 보상보다 훨씬 작게 둬서 이길 이유는 지킵니다.</li>
+            <li><b>LoL과 같은 방향</b>: LoL은 능력치가 아닌 외형으로 수익을 냅니다. 보상도 같은 원칙을 따릅니다.</li>
+          </ul></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 03·04 -->
+<div class="band r-frel" id="casual-band">
+  <img src="img/lol/d4.jpg" alt="프렐요드 설원의 마을">
+  <span class="credit">이미지 출처: Riot Games</span>
+  <div class="wrap"><div class="panel"><span class="pn">PART 03 · 04 · 프렐요드 설원</span><h2>포로의 고향에서 쉬어 간다</h2><p>경쟁 없는 놀이, 그리고 한 소환사의 하루</p></div></div>
+</div>
+<section class="r-frel" id="casual">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-5 · 캐주얼 모드 원칙</div><h2>아레나처럼 새 모드로,<br>네 가지만 지킨다</h2></div>
+      <p>경쟁은 내려놓고, 쉬면서 즐깁니다.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card"><span class="num">01</span><h3>실력보다 관찰과 운</h3><p class="one">손 빠르기 X · 눈치 O</p></div>
+      <div class="card"><span class="num">02</span><h3>패치 무관</h3><p class="one">이동 + 버튼 1개 · 공부 0</p></div>
+      <div class="card"><span class="num">03</span><h3>3~5분 짧은 판</h3><p class="one">중간 참여 · 진 쪽도 보상</p></div>
+      <div class="card"><span class="num">04</span><h3>관객이 더 안다</h3><p class="one">전체 시야 → 보기만 해도 긴장</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>네 원칙이 벽을 푸는 방식<span class="sum">피로 · 패치 · 복귀 격차에 각각 대응</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>피로</b> → 3~5분짜리 판, 보기만 해도 되는 관전형. 30분 집중할 여력이 없는 날에도 들어올 수 있습니다.</li>
+          <li><b>패치 공부</b> → 챔피언 스킬 대신 이동과 버튼 하나. 패치가 바뀌어도 규칙은 그대로라 배울 것이 없습니다.</li>
+          <li><b>복귀 격차</b> → 승패를 손 빠르기가 아니라 관찰과 운이 가릅니다. 석 달 쉬고 온 유저도 첫 판부터 대등합니다. 여기서 감을 되찾고 일반전 → 랭크로 돌아가는 계단이 됩니다.</li>
+          <li><b>팀원 갈등</b> → 판이 짧고, 진 쪽도 참여 보상을 받고, 개인 실수가 결과를 좌우하지 않아 탓할 거리가 줄어듭니다.</li>
+          <li><b>개발 범위</b>: 아레나처럼 기존 큐에 모드 하나를 더하는 방식입니다. 맵 엔진·챔피언·부쉬·와드 시스템을 재사용합니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-frel alt" id="hide">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-6 · 대표 모드 · 탑다운</div><h2>부쉬 숨바꼭질</h2></div>
+      <p>관객만 아는 긴장. LoL의 부쉬 · 와드 · 시야를 그대로 씁니다.</p>
+    </div>
+    <div class="split">
+      <div>
+        <div class="ph" style="min-height:240px">탑다운 맵 도식 자리<br>부쉬 · 술래 · 숨은 포로</div>
+        <div class="grid g2" style="margin-top:14px">
+          <div class="ph" style="min-height:150px">플레이어 화면<br>(시야 제한)</div>
+          <div class="ph" style="min-height:150px">관전자 화면<br>(전체 시야)</div>
+        </div>
+      </div>
+      <div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>한 판 흐름<span class="sum">준비 → 숨기 → 수색 → 결과, 약 4분</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner">
+            <table>
+              <tr><th>단계</th><th>시간</th><th>일어나는 일</th></tr>
+              <tr><td>준비</td><td>15초</td><td>역할 공개, 숨는 쪽은 변신할 모습 선택</td></tr>
+              <tr><td>숨기</td><td>30초</td><td>숨는 쪽만 이동. 술래는 화면이 가려진 채 대기</td></tr>
+              <tr><td>수색</td><td>3분</td><td>술래가 찾기 시작. 부쉬가 1분마다 시듦</td></tr>
+              <tr><td>결과</td><td>10초</td><td>승패, 생존 시간, 예측 결과 공개 → 광장 귀환</td></tr>
+            </table>
+            <span class="note">시간은 예시이며 테스트로 확정합니다.</span>
+          </div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>역할과 조작<span class="sum">술래 2 : 숨는 쪽 8 · 버튼 하나</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li><b>숨는 쪽 8명</b>: 포로, 미니언, 정글 몹 중 하나로 변신합니다. 맵에는 같은 모습의 NPC 무리가 돌아다녀서 그 사이에 섞일 수 있습니다. 조작은 우클릭 이동 + <b>변신 버튼</b>(다른 모습으로 바꾸기, 쿨타임 20초).</li>
+            <li><b>술래 2명</b>: 우클릭 이동 + <b>와드 버튼</b>(설치한 자리 주변을 밝힘, 최대 3개). 밝혀진 범위 안의 대상을 클릭하면 잡습니다.</li>
+            <li><b>잘못 잡으면</b>: NPC를 클릭하면 술래가 2초 동안 멈춥니다. 아무거나 누르는 것을 막습니다.</li>
+            <li>챔피언 스킬은 쓰지 않습니다. 패치가 바뀌어도 규칙은 그대로입니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>맵과 부쉬 시듦<span class="sum">넓은 맵 · 많은 부쉬 · 점점 좁아지는 숨을 곳</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>협곡보다 넓은 전용 맵에 부쉬를 많이 깝니다. 처음에는 숨을 곳이 넉넉합니다.</li>
+            <li>수색이 시작되면 <b>1분마다 부쉬 일부(예시 25%)가 시듭니다</b>. 어떤 부쉬가 시들지는 10초 전에 노랗게 예고합니다.</li>
+            <li>시간이 갈수록 숨을 곳이 줄어 마지막 1분에 긴장이 가장 높아집니다. 맵만 넓으면 술래가 헤매다 지루해지고, 부쉬만 많으면 운으로 끝나는 문제를 막습니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">4</span><span>승패와 보상<span class="sum">한 명이라도 살아남으면 숨는 쪽 승리</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>3분 동안 <b>한 명이라도 살아남으면 숨는 쪽 승리</b>, 모두 잡으면 술래 승리.</li>
+            <li>잡힌 사람은 바로 <b>관전자</b>가 되어 전체 시야로 남은 판을 보고, 생존 예측에 참여합니다. 탈락해도 할 일이 있습니다.</li>
+            <li>보상은 참여분 + 생존 시간. 이긴 쪽은 조금 더 받지만, 진 쪽도 빈손이 아닙니다. 학회 기여는 참여분만 쌓입니다(기여 계산 참고).</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">5</span><span>관전과 예측<span class="sum">관객이 플레이어보다 더 많이 안다</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>관전자(잡힌 사람, 친구 관전, 광장 관람)에게는 <b>숨은 사람이 전부 보입니다</b>. 술래가 바로 옆 부쉬를 지나칠 때 관객만 아는 긴장이 생깁니다. 영화의 서스펜스와 같은 원리입니다.</li>
+            <li>관전자는 "누가 끝까지 살아남을까"를 무료 포인트로 예측합니다(포로 경주와 같은 포인트).</li>
+            <li>관전자의 채팅·핑은 플레이어에게 보이지 않습니다. 관객이 답을 알려 주는 것을 막습니다.</li>
+          </ul></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-frel" id="poro">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-7 · 관전형 모드 · 탑다운</div><h2>포로 경주: 응원만 해도 한 판</h2></div>
+      <p>협곡이 부담스러운 날의 쉼표</p>
+    </div>
+    <div class="split">
+      <div class="shot"><img src="img/lol/poro.jpg" alt="눈밭 위의 포로들"><p class="small">이미지 출처: Riot Games · 관전 화면 목업은 추후 교체</p></div>
+      <div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>조작 0 · 자동 경주<span class="sum">포로 8마리, 90초 레이스</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>포로 8마리가 트랙을 <b>자동으로</b> 달립니다(예시 90초). 유저는 아무것도 조작하지 않습니다.</li>
+            <li>코스 중간에 눈덩이, 지름길, 미끄러운 얼음 같은 <b>무작위 이벤트</b>가 일어나 결과를 예측하기 어렵게 만듭니다. 매번 순위가 뒤집힐 여지가 있어 끝까지 보게 됩니다.</li>
+            <li>광장 한쪽의 트랙에서 정해진 간격(예시 10분마다)으로 열립니다. 큐를 돌리면서도 볼 수 있습니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>포인트 예측<span class="sum">무료 포인트만 · 현금성 0</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>경주 전 1등 포로를 <b>예측 포인트</b>로 고릅니다. 포인트는 매일 무료로 받고, <b>돈으로 살 수 없으며 현금으로 바꿀 수도 없습니다.</b></li>
+            <li>모은 포인트는 광장 꾸밈(감정표현, 장신구 등) 교환에만 씁니다. 사행성 논란이 생길 구조를 처음부터 만들지 않습니다.</li>
+            <li>맞히면 보너스, 틀려도 참여분이 쌓입니다. 진 사람이 없는 구조입니다.</li>
+          </ul></div></div></div></div>
+        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>응원<span class="sum">함께 보는 재미 · 결과에는 영향 없음</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>응원 버튼을 누르면 트랙 옆 관중석에 내 소환사의 응원 연출이 뜹니다. 같은 포로를 응원하는 사람이 많을수록 관중석이 들썩입니다.</li>
+            <li>응원은 <b>연출만</b> 있고 결과에는 영향이 없습니다. 많이 누른 쪽이 이기면 공정하지 않기 때문입니다.</li>
+          </ul></div></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-frel alt" id="day">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">PART 04 · 한 소환사의 하루</div><h2>석 달 만에 돌아온 소환사</h2></div>
+    </div>
+    <div class="timeline">
+      <div class="tl"><b>접속</b><span>1위 학회 광장 · 꽃가루</span><span class="f">“어, 우리 축제 중이네?”</span></div>
+      <div class="tl"><b>소식판</b><span>바뀐 것 · 시즌 상황 훑기</span><span class="f">“패치 노트보다 편하다.”</span></div>
+      <div class="tl"><b>친구</b><span>클릭 → 파티</span><span class="f">“오랜만에 같이 해 볼까.”</span></div>
+      <div class="tl"><b>숨바꼭질</b><span>5분 · 공부 없이 손 풀기</span><span class="f">“이건 실력 차이가 안 나네.”</span></div>
+      <div class="tl"><b>협곡</b><span>가렌 + 승리 학회 효과</span><span class="f">“상대도 이거 보겠지.”</span></div>
+      <div class="tl"><b>패배해도</b><span>참여분 적립 → 광장 귀환</span><span class="f">“한 판만 더.”</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 05-07 -->
+<div class="band r-shurima" id="roadmap-band">
+  <img src="img/lol/d5.jpg" alt="슈리마 사막 위로 떠오른 태양 원반">
+  <span class="credit">이미지 출처: Riot Games</span>
+  <div class="wrap"><div class="panel"><span class="pn">PART 05 – 07 · 슈리마 사막</span><h2>다시 떠오르는 태양</h2><p>작게 시작해 넓히는 길, 그리고 실행</p></div></div>
+</div>
+<section class="r-shurima" id="roadmap">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">5-1 · 단계별 확장</div><h2>작게 시작해, 증명하며 넓힌다</h2></div>
+      <p>앞 단계 지표가 좋아야 다음 단계로 갑니다.</p>
+    </div>
+    <div class="steps">
+      <div class="card"><span class="num">1단계</span><h3>클라이언트 광장</h3><p class="one">학회 광장 · 순위 변화 · 캐주얼</p></div>
+      <div class="card"><span class="num">2단계</span><h3>광장 확장</h3><p class="one">경기 같이 보기 · 숨은 소환사 찾기</p></div>
+      <div class="card tint"><span class="num">3단계</span><h3>룬테라 여행</h3><p class="one">3인칭 도시 · 포탈 여행</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>단계를 넘어가는 기준<span class="sum">무엇이 좋아져야 다음 단계를 여나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <h4>1단계 → 2단계</h4>
+          <ul>
+            <li>광장을 켠 그룹이 끈 그룹보다 <b>주간 판 수, 패배 후 바로 종료 비율, 복귀 유저 재이탈</b> 중 둘 이상에서 나아질 것.</li>
+            <li>광장을 스스로 끄는 비율이 낮을 것. 높으면 광장이 방해가 된다는 뜻이라 먼저 고칩니다.</li>
+          </ul>
+          <h4>2단계 → 3단계</h4>
+          <ul>
+            <li>협곡을 하지 않고 광장·캐주얼만 이용한 접속이 꾸준히 생길 것. "머물 이유"가 증명된 상태입니다.</li>
+            <li>소환사 꾸밈 판매가 2단계 개발 비용을 회수할 흐름을 보일 것.</li>
+          </ul>
+          <h4>2단계에 더하는 것</h4>
+          <ul>
+            <li><b>경기 같이 보기</b>: 광장 대형 스크린에서 리그 경기를 함께 보고, 포인트로 승부를 예측합니다.</li>
+            <li><b>숨은 소환사 찾기</b>: 광장 곳곳에 숨은 챔피언 코스튬 NPC를 찾아 도감을 채웁니다. 큐 중에 떠나도 기록이 남습니다.</li>
+          </ul>
+          <span class="note">기준의 구체적인 목표치는 1단계 출시 전 데이터로 정합니다.</span>
+        </div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-shurima alt" id="carry">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="sec-no">5-2 · 이어지는 자산</div><h2>1단계에 만든 것은 버려지지 않는다</h2></div></div>
+    <div class="timeline">
+      <div class="tl" style="grid-template-columns:160px 1fr"><b>소환사 · 꾸밈</b><span>1단계 그대로 → 3단계에서 걷는다</span></div>
+      <div class="tl" style="grid-template-columns:160px 1fr"><b>학회 기록</b><span>시즌 기록 → 도시의 역사</span></div>
+      <div class="tl" style="grid-template-columns:160px 1fr"><b>광장 디자인</b><span>1단계 광장 → 3단계 중심 광장</span></div>
+    </div>
+    <div class="grid g2" style="margin-top:18px">
+      <div class="card"><span class="tag">회사에게</span><h3>1단계 비용 = 다음 단계의 기반</h3></div>
+      <div class="card tint"><span class="tag">유저에게</span><h3>처음부터 함께한 소환사가 넓은 세상으로</h3></div>
+    </div>
+  </div>
+</section>
+
+<section class="r-shurima" id="bm">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">6-1 · 수익 모델</div><h2>스킨에게, 보여 줄 무대를</h2></div>
+      <p>지금 스킨은 한 판 동안 9명만 봅니다 → 광장 = 상설 무대</p>
+    </div>
+    <div class="grid g3">
+      <div class="card"><span class="num">01</span><h3>소환사 꾸미기</h3><p class="one">의상 · 장신구 · 걸음 이펙트</p></div>
+      <div class="card"><span class="num">02</span><h3>광장 감정표현</h3><p class="one">몸짓 · 포즈</p></div>
+      <div class="card"><span class="num">03</span><h3>학회 테마 의상</h3><p class="one">학회 색 · 문양</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>판매 구조<span class="sum">무엇을, 어떻게 팔고, 무엇은 팔지 않나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>새 슬롯</b>: 소환사는 챔피언과 별개의 꾸밈 슬롯입니다. 기존 챔피언 스킨과 겹치지 않아 매출을 나눠 먹지 않고 더해집니다.</li>
+          <li><b>상점 단품</b>: 의상, 장신구, 걸음 이펙트, 감정표현을 단품으로 팝니다. TFT 전설이 상점과 같은 방식입니다.</li>
+          <li><b>시즌 한정 학회 의상</b>: 시즌마다 학회 색·문양을 담은 의상을 한정 판매합니다. 승리 보상(협곡 외형)과는 별개입니다.</li>
+          <li><b>무료로도 얻는다</b>: 시즌 참여, 포로 경주 포인트 교환으로 기본 꾸밈을 얻을 수 있습니다. 돈을 쓰지 않는 유저도 광장에서 초라하지 않게 합니다.</li>
+          <li><b>팔지 않는 것</b>: 학회 기여, 순위, 협곡 능력치, 예측 포인트. 경쟁과 결과에 닿는 것은 팔지 않습니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-shurima alt" id="kpi">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">6-2 · 지표 가설</div><h2>무엇이 좋아지는지, 이렇게 확인한다</h2></div>
+      <p>수치는 가정하지 않습니다 · 단계마다 측정</p>
+    </div>
+    <table>
+      <tr><th>지표</th><th>가설</th><th>비교</th></tr>
+      <tr><td>주간 판 수</td><td>흔적이 남으면 한 판 더</td><td>학회 소속 전후</td></tr>
+      <tr><td>패배 후 종료</td><td>남는 게 있으면 안 끈다</td><td>도입 전후</td></tr>
+      <tr><td>복귀 재이탈</td><td>감을 되찾으면 덜 떠난다</td><td>캐주얼 경험 유무</td></tr>
+      <tr><td>협곡 없는 접속</td><td>안 해도 들른다</td><td>광장 · 캐주얼 접속</td></tr>
+      <tr><td>끝까지 하는 판</td><td>이길 이유 → 항복 감소</td><td>항복 투표율</td></tr>
+    </table>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>측정 방법<span class="sum">광장을 켠 그룹과 끈 그룹을 나란히 본다</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>나눠서 연다</b>: 1단계는 일부 서버·일부 계정에 먼저 열고, 같은 기간의 나머지 그룹과 비교합니다. 패치나 이벤트 같은 다른 변수의 영향을 줄입니다.</li>
+          <li><b>기간</b>: 시즌 효과를 보려면 최소 한 시즌(정산 여러 번)을 지켜봅니다. 첫 주의 신기함만 보고 판단하지 않습니다.</li>
+          <li><b>복귀 유저 따로 보기</b>: 일정 기간 접속하지 않았다 돌아온 유저만 묶어, 캐주얼을 먼저 한 그룹과 바로 협곡으로 간 그룹의 재이탈을 비교합니다.</li>
+          <li><b>부작용도 본다</b>: 광장을 끄는 비율, 신고율, 랭크 매칭 시간이 나빠지지 않는지 함께 봅니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="r-shurima" id="risk">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="sec-no">6-3 · 리스크와 대응</div><h2>먼저 묻게 될 질문에, 먼저 답한다</h2></div></div>
+    <table>
+      <tr><th style="width:32%">우려</th><th>대응</th></tr>
+      <tr><td>개발 비용</td><td>기존 클라이언트 · 챔피언 재사용</td></tr>
+      <tr><td>저사양 PC</td><td>쿼터뷰 · 선택형 · 바로 큐 유지</td></tr>
+      <tr><td>경쟁 공정성</td><td>보상은 외형뿐</td></tr>
+      <tr><td>협곡 시간 잠식</td><td>대기 시간 활용 · 복귀 유입</td></tr>
+      <tr><td>학회 쏠림</td><td>1인당 평균 기여로 순위</td></tr>
+      <tr><td>학회 간 대립</td><td>한 팀에 여러 학회 → 승리는 모두의 이득</td></tr>
+    </table>
+    <div class="banner">협곡의 경쟁은 그대로 둔다.</div>
+  </div>
+</section>
+
+<section class="r-shurima alt" id="compare">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="sec-no">PART 07 · 결론</div><h2>경기로 끝나던 LoL에서, 머무는 LoL로</h2></div></div>
+    <table>
+      <tr><th></th><th>기존 LoL</th><th>본 기획</th></tr>
+      <tr><td>한 판의 결과</td><td>LP 숫자</td><td>학회 순위 · 광장 · 외형</td></tr>
+      <tr><td>협곡 밖</td><td>메뉴 화면</td><td>친구가 있는 학회 광장</td></tr>
+      <tr><td>지친 날</td><td>접속 이유 없음</td><td>보기만 해도 되는 모드</td></tr>
+      <tr><td>복귀</td><td>실력 격차의 벽</td><td>캐주얼로 감 되찾기</td></tr>
+      <tr><td>세계관</td><td>읽는 이야기</td><td>직접 겪는 이야기</td></tr>
+    </table>
+    <div class="banner">판 수 ↑ · 유지 ↑ · 복귀 ↑ · IP 확장</div>
+  </div>
+</section>
+
+<div class="closing r-ionia">
+  <img src="img/lol/closing.jpg" alt="데마시아의 도시 실버미어">
+  <span class="credit">이미지 출처: Riot Games</span>
+  <div class="wrap"><div class="panel"><span class="chip">숨어 사는 소환사들</span><h2>한 판의 승부가,<br>내가 사는 도시의 풍경이 된다.</h2><p>유운식 · 게임 기획</p></div></div>
+</div>
+
+</main>
+<footer>본 기획서는 라이엇 게임즈와 무관한 개인 기획안이며, 수록된 룬테라 이미지의 저작권은 Riot Games에 있습니다.</footer>
+
+<script>
+document.querySelectorAll('.acc-btn').forEach(function(b){
+  b.addEventListener('click',function(){b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true');});
+});
+</script>
+</body>
+</html>
