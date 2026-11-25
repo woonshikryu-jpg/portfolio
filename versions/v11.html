@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>갈래 로비 · 유운식 포트폴리오</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@600;900&display=swap">
+<style>
+/* VOICE: 밝은 캐주얼 온라인 게임 로비. 들어오면 광장에 서 있고, 판넬을 눌러 갈래를 고른다.
+   IDEA: 「갈래」 시간 관측소의 로비 — 타일 = 갈래, 공지판 = 관측 공지, 채팅 = 시간지기와 알림.
+   PICTURE: 배경 광장 장면(사용자 지브리풍 이미지 img/lobby.jpg) 위에 반투명 파란 판넬.
+   COLOUR/TYPE: 하늘색·파란 유광 판넬, 흰 글자, 금빛 포인트. Noto Sans KR 굵게, 제목 Noto Serif KR.
+   LAYOUT: 상단 아이콘 바 / 왼쪽 타일 3 + 가운데 큰 타일 + 오른쪽 공지판·배너 / 왼쪽 아래 채팅 / 광장 가운데 관측자. */
+:root{color-scheme:light;--p1:#38a6f0;--p2:#1f7fd6;--p3:#1764b8;--edge:rgba(255,255,255,.65);--ink:#1f2430;--gold:#ffb21e;
+--cs:#1f8fd0;--city:#d98a1f;--ramp:#7a5cc7;--serif:"Noto Serif KR",serif;--sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;height:100%}
+body{font:15px/1.5 var(--sans);color:#fff;overflow:hidden;background:#cfe9fb}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;color:inherit;cursor:pointer}
+a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+/* 배경 장면 */
+.scene{position:fixed;inset:0;background:linear-gradient(180deg,#bfe6ff 0%,#e7f6ff 46%,#f6efd9 47%,#efe3c4 100%);background-size:cover;background-position:center}
+.scene .ph{position:absolute;left:70%;top:88%;transform:translate(-50%,-50%);color:#2d4a63;text-align:center;font-size:13px;background:rgba(255,255,255,.7);border:1.5px dashed rgba(0,0,0,.2);border-radius:12px;padding:8px 14px}
+.scene .ph code{display:block;color:#567}
+.lobby{position:relative;height:100vh;height:100dvh;padding:58px 14px 14px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr) minmax(0,.95fr);grid-template-rows:auto 1fr;gap:10px 10px;max-width:1440px;margin:0 auto}
+/* 판넬 공통: 유광 파랑 */
+.pn{background:linear-gradient(180deg,rgba(64,170,240,.95),rgba(29,120,210,.95));border:2px solid var(--edge);border-radius:6px;box-shadow:0 3px 0 rgba(10,60,120,.35),inset 0 1px 0 rgba(255,255,255,.45)}
+/* 상단 아이콘 바 */
+.bar{position:fixed;top:6px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:6px;align-items:center;padding:4px 6px;border-radius:8px;background:linear-gradient(180deg,#cfeaff,#8cc8f4);border:2px solid #fff;box-shadow:0 3px 8px rgba(20,80,140,.25);max-width:calc(100vw - 12px);overflow-x:auto;scrollbar-width:none}
+.bar a,.bar button{flex:none;display:flex;align-items:center;gap:6px;height:34px;padding:0 12px 0 6px;border-radius:6px;border:1.5px solid #fff;background:linear-gradient(180deg,#4fb2f5,#2283d8);font-size:13.5px;font-weight:700;color:#fff;white-space:nowrap;text-shadow:0 1px 0 rgba(0,40,90,.35)}
+.bar a:hover,.bar button:hover{filter:brightness(1.08)}
+.bar svg{width:22px;height:22px;flex:none;background:#fff;border-radius:5px;padding:3px;color:var(--p2)}
+.bar .home{padding:0 6px}
+.bar .gap{width:8px}
+.bar .meter{flex:none;display:flex;align-items:center;height:34px;border-radius:6px;border:1.5px solid #9ccbf0;white-space:nowrap;font-size:13px;background:linear-gradient(180deg,#fff,#e6f4ff);color:var(--ink);text-shadow:none;padding:0 10px;font-weight:500;border-color:#9ccbf0}
+.bar .meter b{font-variant-numeric:tabular-nums;margin-left:4px}
+/* 왼쪽 타일 3개 */
+.left{grid-column:1;grid-row:1;display:grid;grid-template-rows:repeat(3,minmax(0,1fr));gap:6px;height:min(40vh,300px)}
+.tile{position:relative;display:block;overflow:hidden;text-align:left;padding:12px 14px;border-radius:6px}
+.tile .art{position:absolute;right:0;top:0;bottom:0;width:52%;background-size:cover;background-position:center;-webkit-mask-image:linear-gradient(90deg,transparent,#000 30%);mask-image:linear-gradient(90deg,transparent,#000 30%)}
+.tile .art.ph{background:linear-gradient(120deg,rgba(255,255,255,0),rgba(255,255,255,.35))}
+.tile .art.ph span{position:absolute;right:8px;bottom:6px;font-size:10.5px;color:rgba(255,255,255,.85)}
+.tile b{position:relative;display:block;font:900 clamp(18px,1.9vw,24px)/1.15 var(--sans);letter-spacing:-.03em;text-shadow:0 2px 0 rgba(0,40,90,.35)}
+.tile small{position:relative;display:block;font-size:12px;opacity:.95;max-width:62%}
+.tile .tag{position:absolute;left:8px;top:6px;font-size:11px;font-weight:700;color:#24410a;background:#c8f26a;border-radius:3px;padding:0 6px}
+.tile.has-tag{padding-top:24px}
+.tile:hover{filter:brightness(1.07)}
+.tile .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--c);border:1.5px solid #fff;margin-right:6px;vertical-align:1px}
+/* 가운데 큰 타일 */
+.quick{grid-column:2;grid-row:1;height:min(40vh,300px);position:relative;overflow:hidden;border-radius:6px;text-align:left;padding:0}
+.quick .art{position:absolute;inset:0;background:radial-gradient(circle at 70% 40%,rgba(255,236,180,.9),rgba(255,236,180,0) 45%),linear-gradient(180deg,rgba(64,170,240,.0),rgba(29,120,210,.0));background-size:cover;background-position:center}
+.quick .ring{position:absolute;right:12%;top:18%;width:min(16vw,170px);aspect-ratio:1;border-radius:50%;border:2px solid rgba(255,255,255,.75);display:grid;place-items:center;text-align:center;font:700 13px/1.4 var(--sans);color:#7a5410;background:radial-gradient(circle,#fffdf3 0 40%,#ffe9b5 65%,rgba(255,233,181,0) 72%)}
+.quick .ring::after{content:"";position:absolute;inset:-12px;border-radius:50%;border:1.5px solid rgba(255,255,255,.55);animation:breathe 4s ease-in-out infinite}
+@keyframes breathe{50%{transform:scale(1.08);opacity:.35}}
+.quick .txt{position:absolute;left:16px;bottom:14px}
+.quick b{display:block;font:900 clamp(30px,3.6vw,46px)/1 var(--sans);letter-spacing:-.04em;text-shadow:0 3px 0 rgba(0,40,90,.35)}
+.quick small{display:block;font-size:12.5px;margin-top:6px}
+.quick:hover{filter:brightness(1.06)}
+/* 오른쪽: 공지판 + 배너 */
+.right{grid-column:3;grid-row:1/3;display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.notice{padding:6px;border-radius:6px}
+.notice h2{margin:0 0 6px;font-size:15px;font-weight:900;padding:2px 6px;text-shadow:0 1px 0 rgba(0,40,90,.35)}
+.notice .banner{display:block;position:relative;height:clamp(84px,13vh,118px);border-radius:4px;overflow:hidden;background:linear-gradient(120deg,#fff4d1,#ffd27a);color:#4a2c00;padding:10px 12px;border:2px solid #fff}
+.notice .banner b{display:block;font:900 clamp(18px,1.8vw,24px)/1.15 var(--serif);letter-spacing:-.03em}
+.notice .banner span{font-size:12.5px;font-weight:500}
+.notice ul{list-style:none;margin:6px 0 0;padding:4px;background:rgba(255,255,255,.95);border-radius:4px;color:var(--ink);max-height:22vh;overflow-y:auto}
+.notice li a{display:block;font-size:13.5px;padding:4px 8px;border-radius:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.notice li a:hover,.notice li a:focus-visible{background:#e3f1ff}
+.notice li a.new::after{content:"NEW";font-size:10px;font-weight:900;color:#fff;background:#ff6b3d;border-radius:3px;padding:0 4px;margin-left:6px;vertical-align:1px}
+.banners{display:grid;gap:6px;margin-left:auto;width:min(100%,300px)}
+.bn{display:grid;grid-template-columns:64px 1fr;align-items:center;gap:8px;min-height:48px;padding:4px 10px 4px 4px;border-radius:6px;text-align:center;font-size:14px;font-weight:700;line-height:1.3}
+.bn i{height:40px;border-radius:4px;background:linear-gradient(135deg,#fff,#cde9ff);display:grid;place-items:center;color:var(--p3);font-style:normal;font-size:12px;font-weight:900}
+.bn:hover{filter:brightness(1.07)}
+/* 장면 속: 관측자 이름표 + NPC 말풍선 */
+.me{position:fixed;left:50%;bottom:16vh;transform:translateX(-50%);text-align:center;pointer-events:none;z-index:1}
+.me .arrow{width:0;height:0;margin:4px auto 0;border:14px solid transparent;border-top:20px solid #ff8a1e;border-bottom:0;filter:drop-shadow(0 2px 0 rgba(120,50,0,.4));animation:bob 1.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(6px)}}
+.me .tagname{display:inline-block;font-size:12.5px;font-weight:700;color:#fff;background:rgba(30,40,60,.55);border-radius:4px;padding:1px 8px}
+.me .title{display:block;font-size:11.5px;color:#2a6bb0;font-weight:700;text-shadow:0 0 3px #fff}
+.me .shadow{width:110px;height:18px;margin:44px auto 0;border-radius:50%;background:radial-gradient(rgba(0,0,0,.18),rgba(0,0,0,0) 70%)}
+.npc{position:fixed;z-index:2;max-width:240px;text-align:left;background:linear-gradient(180deg,#9b6cf0,#7a4fd8);border:2px solid #fff;border-radius:8px;padding:6px 10px;font-size:13px;box-shadow:0 4px 10px rgba(60,30,120,.25)}
+.npc b{display:block;font-size:13.5px;color:#fff6c8}
+.npc::after{content:"";position:absolute;left:18px;bottom:-10px;border:8px solid transparent;border-top-color:var(--tail,#7a4fd8);border-bottom:0}
+.npc:hover{filter:brightness(1.08)}
+/* 채팅창 */
+.chat{position:fixed;left:10px;bottom:8px;z-index:3;width:min(470px,calc(100vw - 20px));pointer-events:none}
+.log{max-height:22vh;overflow:hidden;padding:6px 8px;border-radius:4px;background:rgba(20,40,70,.42);display:flex;flex-direction:column;justify-content:flex-end;gap:1px;font-size:13px;font-weight:700;text-shadow:0 1px 1px rgba(0,0,0,.55),0 0 2px rgba(0,0,0,.45)}
+.log p{margin:0;animation:in .4s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(6px)}}
+.log .sys{color:#c8ff7a}.log .keeper{color:#ffd8ff}.log .me2{color:#fff}
+.chatbar{margin-top:4px;display:flex;align-items:center;gap:6px;height:24px;background:rgba(20,40,70,.55);border-radius:3px;padding:0 6px;font-size:12px}
+.chatbar span{background:linear-gradient(180deg,#4fb2f5,#2283d8);border-radius:3px;padding:0 6px;font-weight:700}
+/* 갈래 창 (게임 창) */
+.win{position:fixed;inset:0;z-index:20;display:none;place-items:center;background:rgba(140,190,230,.35);padding:16px}
+.win.on{display:grid}
+.wbox{width:min(980px,100%);max-height:calc(100dvh - 32px);display:flex;flex-direction:column;border-radius:8px;overflow:hidden;background:#fff;color:var(--ink);border:2px solid #fff;box-shadow:0 18px 50px rgba(20,60,110,.35)}
+.wtitle{display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;background:linear-gradient(180deg,#4fb2f5,#1f7fd6);color:#fff;font-weight:900;text-shadow:0 1px 0 rgba(0,40,90,.35)}
+.wtitle .x{margin-left:auto;width:34px;height:30px;border-radius:5px;border:1.5px solid #fff;background:linear-gradient(180deg,#ff8a6b,#e2553a);font-weight:900;font-size:16px}
+.wscroll{overflow-y:auto}
+.hero{position:relative;height:clamp(150px,26vh,240px);background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:16px 20px}
+.hero .ph{position:absolute;right:16px;top:12px;font-size:12px;color:#3d4a55;background:rgba(255,255,255,.75);border:1.5px dashed rgba(0,0,0,.2);border-radius:10px;padding:4px 10px}
+.hero .card{position:relative;background:rgba(255,255,255,.93);border-radius:14px;padding:12px 16px;max-width:560px}
+.hero small{font-weight:700;color:var(--c);font-size:12.5px}
+.hero h2{font:900 clamp(26px,3vw,36px)/1.1 var(--serif);letter-spacing:-.03em;margin:2px 0 4px}
+.hero p{margin:0;color:#3d4452}
+.wbody{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:22px;padding:20px}
+.tl{list-style:none;margin:0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:linear-gradient(#dfe6ee,#e0a53a 45%,var(--c))}
+.tl li{position:relative;padding:0 0 18px 38px}
+.tl li::before{content:"";position:absolute;left:4px;top:5px;width:16px;height:16px;border-radius:50%;background:#fff;border:2.5px solid #b9c4cf}
+.tl li.fork::before{border-color:#e0a53a;background:#fbe6b8}
+.tl li.new::before,.tl li.future::before{border-color:var(--c);background:var(--c)}
+.tl li.now::before{border-color:var(--c);background:var(--c);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--c) 22%,transparent)}}
+.tl small{display:block;font-size:12px;font-weight:700;color:#5f6878}
+.tl h3{font-size:18px;letter-spacing:-.025em;margin:1px 0 4px;line-height:1.3}
+.tl p{margin:0 0 4px;color:#3d4452;font-size:14.5px}
+.tl .orig{font-size:12.5px;color:#5f6878}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.chips span{font-size:12.5px;background:#f1f6fb;border:1px solid #dfe6ee;border-radius:999px;padding:2px 9px}
+.enter{display:inline-flex;align-items:center;min-height:46px;padding:10px 20px;border-radius:8px;border:2px solid #fff;background:linear-gradient(180deg,#ffc94a,#f39a12);color:#4a2600;font-size:16px;font-weight:900;box-shadow:0 3px 0 #b86d00}
+.enter:hover{filter:brightness(1.05)}
+.side{background:#f4f8fc;border:1px solid #dfe6ee;border-radius:12px;padding:14px;align-self:start}
+.side dl{margin:0;display:grid;gap:8px}
+.side dt{font-size:11.5px;color:#5f6878;font-weight:700}
+.side dd{margin:0;font-size:14.5px;font-weight:500}
+.side a{display:block;margin-top:12px;text-align:center;font-weight:700;font-size:13.5px;border:1.5px solid var(--ink);border-radius:999px;padding:9px;background:#fff}
+.draft{display:inline-block;font-size:11.5px;color:#5f6878;background:#fff;border:1px solid #dfe6ee;border-radius:999px;padding:1px 9px;margin-bottom:10px}
+.copy{font-size:12px;font-weight:600;border:1px solid #dfe6ee;background:#fff;border-radius:999px;padding:2px 9px;margin-left:6px}
+.page{padding:22px;color:var(--ink)}
+.page h2{font:900 26px/1.2 var(--serif);margin:0 0 8px}
+.page p{margin:0 0 10px;color:#3d4452}
+.page ol{margin:0;padding-left:20px;color:#3d4452}
+/* 로딩 + 연출 */
+.load{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:radial-gradient(circle,#fffdf6,#d9efff 70%);opacity:0;pointer-events:none;transition:opacity .4s;color:var(--ink)}
+.load.on{opacity:1;pointer-events:auto}
+.load div{text-align:center}
+.load p{font:600 clamp(18px,2.4vw,24px) var(--serif);margin:0 0 14px}
+.load .lb{width:240px;height:6px;border-radius:6px;background:#fff;border:1px solid #bcd9f0;overflow:hidden;margin:0 auto}
+.load .lb i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffc94a,#f39a12)}
+.load.on .lb i{animation:fill 1.3s ease-out forwards}
+@keyframes fill{to{width:100%}}
+.rv{position:fixed;inset:0;z-index:30;overflow-y:auto;background:#fff;display:none;color:var(--ink)}
+.rv.on{display:block}
+.rv-top{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:10px;padding:10px 14px;pointer-events:none}
+.rv-top>*{pointer-events:auto}
+.rv-top button{font-size:14px;font-weight:700;background:rgba(255,255,255,.92);border:1px solid rgba(0,0,0,.12);border-radius:999px;padding:8px 14px;min-height:40px}
+.rv-top span{margin-left:auto;font-size:13px;font-weight:700;background:rgba(255,255,255,.88);border-radius:999px;padding:6px 12px}
+.reel{position:relative}
+.stage{position:sticky;top:0;height:100vh;height:100dvh;overflow:hidden}
+.shot{position:absolute;inset:-4%;background-size:cover;background-position:center;opacity:0;will-change:opacity,transform}
+.shot.ph{display:grid;place-items:center;text-align:center;color:#3d4a55}
+.shot.ph div{background:rgba(255,255,255,.75);border:1.5px dashed rgba(0,0,0,.25);border-radius:14px;padding:12px 18px;font-size:14px;max-width:80%}
+.shot.ph code{display:block;font-size:13px;color:#566}
+.cap{position:absolute;left:max(5vw,16px);bottom:max(9vh,64px);max-width:min(560px,calc(100vw - 32px));background:rgba(255,255,255,.92);border-radius:18px;padding:20px 24px;opacity:0;transform:translateY(14px);transition:opacity .45s,transform .45s;pointer-events:none;box-shadow:0 10px 30px rgba(40,40,30,.12)}
+.cap.on{opacity:1;transform:none}
+.cap small{display:block;font-weight:700;font-size:13px;color:var(--c)}
+.cap h3{font:900 clamp(24px,3.2vw,36px)/1.18 var(--serif);letter-spacing:-.03em;margin:4px 0 8px;text-wrap:balance}
+.cap p{margin:0;color:#3a3f4a}
+.dots{position:absolute;right:max(3vw,14px);top:50%;transform:translateY(-50%);display:grid;gap:10px}
+.dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.75);border:1.5px solid rgba(0,0,0,.25);transition:.3s}
+.dots i.on{background:var(--c);border-color:var(--c);transform:scale(1.3)}
+.end{min-height:70vh;display:grid;place-items:center;text-align:center;padding:48px 20px;background:linear-gradient(#e7f5ff,#fff)}
+.end h2{font:900 clamp(26px,3.4vw,40px)/1.2 var(--serif);letter-spacing:-.03em;margin:0 0 10px}
+.end p{color:#5f6878;margin:0 0 22px}
+.end .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.end a,.end button{min-height:46px;padding:11px 20px;border-radius:8px;font-weight:700;font-size:15px;border:1.5px solid var(--ink);background:#fff}
+.end .pri{background:linear-gradient(180deg,#ffc94a,#f39a12);border-color:#fff;color:#4a2600;box-shadow:0 3px 0 #b86d00}
+.foot{position:fixed;right:10px;bottom:8px;z-index:3;font-size:11.5px;color:#2d4a63;background:rgba(255,255,255,.75);border-radius:4px;padding:2px 8px}
+@media(max-width:1000px){
+ body{overflow:auto}.lobby{height:auto;grid-template-columns:1fr 1fr;padding-top:56px}
+ .left{grid-column:1;height:auto;grid-template-rows:none}.tile{min-height:84px}
+ .quick{grid-column:2;height:auto;min-height:260px}
+ .right{grid-column:1/-1;grid-row:auto}.banners{width:100%;grid-template-columns:repeat(3,1fr);margin:0}
+ .me,.npc{display:none}.chat{position:static;width:auto;padding:0 14px 50px}.foot{position:static;display:block;margin:0 14px 14px}
+ .wbody{grid-template-columns:1fr}
+}
+@media(max-width:600px){.lobby{grid-template-columns:1fr}.quick{grid-column:1}.banners{grid-template-columns:1fr}.bar .lbl{display:none}.bar a,.bar button{padding:0 6px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<div class="scene" id="scene"><div class="ph">로비 배경 자리<code>img/lobby.jpg</code></div></div>
+
+<nav class="bar" aria-label="메뉴">
+  <a class="home" href="#" title="로비"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2 11h3v9h5v-6h4v6h5v-9h3z"/></svg></a>
+  <a id="vmBack" href="index.html" title="버전 모음"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 5 7 12l7 7v-4h6V9h-6z"/></svg><span class="lbl">버전 모음</span></a>
+  <button type="button" data-open="crazy-splash"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s7 7.6 7 12.5A7 7 0 0 1 5 14.5C5 9.6 12 2 12 2z"/></svg><span class="lbl">끊긴 시간</span></button>
+  <button type="button" data-open="summoners-city"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 21V9l4-3 4 3v-5h2l4 3v14h4"/></svg><span class="lbl">흘러간 시간</span></button>
+  <button type="button" data-open="ramp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.6 6.9L22 9l-5.6 4.6L18.2 21 12 17l-6.2 4 1.8-7.4L2 9l7.4-.1z"/></svg><span class="lbl">지금 흐르는 시간</span></button>
+  <a href="resume.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h9l5 5v15H6zM14 3v5h5"/></svg><span class="lbl">기획자 기록</span></a>
+  <button type="button" data-page="contact"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v14H3zm2 2v.5l7 5 7-5V7z"/></svg><span class="lbl">연락처</span></button>
+  <span class="gap"></span>
+  <span class="meter" title="이 페이지를 연 뒤 흐른 시간">관측 시간<b id="obsTime">00:00</b></span>
+  <span class="meter">현재 시각<b id="clock">-</b></span>
+</nav>
+
+<main class="lobby">
+  <div class="left" id="left"></div>
+
+  <button class="pn quick" type="button" id="quick">
+    <span class="art" id="quickArt"></span>
+    <span class="ring">지금,<br>여기</span>
+    <span class="txt"><b>바로 관측</b><small>끊긴 시간 → 흘러간 시간, 갈래 두 개를 차례로 관측합니다</small></span>
+  </button>
+
+  <aside class="right">
+    <section class="pn notice">
+      <h2>관측 공지</h2>
+      <a class="banner" href="#" data-open="crazy-splash"><b>멈춘 물길이 다시 열렸습니다</b><span>Crazy Splash 갈래 · 브라우저 프로토타입 체험 가능</span></a>
+      <ul id="notices"></ul>
+    </section>
+    <div class="banners">
+      <a class="pn bn" href="resume.html"><i>기록</i><span>기획자 기록<br>유운식 · 이력서</span></a>
+      <button class="pn bn" type="button" data-page="note"><i>일지</i><span>관측 일지<br>이 로비의 기획</span></button>
+      <button class="pn bn" type="button" data-page="contact"><i>편지</i><span>연락처<br>다음 갈래는 같이</span></button>
+    </div>
+  </aside>
+</main>
+
+<button class="npc" type="button" style="left:22vw;top:52vh" data-open="crazy-splash"><b>시간지기</b>어느 갈래부터 볼래요? 멈춘 물길부터 열어 볼까요?</button>
+<button class="npc" type="button" style="right:24vw;top:60vh;background:linear-gradient(180deg,#f0a64a,#d98a1f);--tail:#d98a1f" data-open="summoners-city"><b>도시의 기록관</b>흘러간 판들이 여기 쌓여 있어요.</button>
+
+<div class="me" aria-hidden="true"><span class="title">&lt;처음 온 관측자&gt;</span><span class="tagname">당신</span><div class="arrow"></div><div class="shadow"></div></div>
+
+<div class="chat" aria-live="polite"><div class="log" id="log"></div><div class="chatbar"><span>일반</span>시간지기와 알림이 여기에 올라옵니다</div></div>
+<div class="foot">개인 기획이며 각 사와 무관합니다</div>
+
+<div class="win" id="win" role="dialog" aria-modal="true" aria-labelledby="wtitle"><div class="wbox"><div class="wtitle"><span id="wtitle">갈래</span><button class="x" type="button" data-close aria-label="닫기">×</button></div><div class="wscroll" id="wcontent"></div></div></div>
+<div class="load" id="load" aria-hidden="true"><div><p id="loadText">갈래를 불러오는 중…</p><div class="lb"><i></i></div></div></div>
+<div class="rv" id="rv" role="dialog" aria-label="갈래 연출"></div>
+
+<script>
+{
+const UP=location.pathname.includes('/versions/')?'../':'';
+document.getElementById('vmBack').href=UP?'../':'index.html';
+const WORLDS=[
+ {id:'crazy-splash',group:'끊긴 시간을 다시 잇다',c:'var(--cs)',name:'Crazy Splash',
+  ask:'만약 물풍선 대전이 3D 워터파크였다면?',art:'img/cs-key.jpg',
+  orig:{title:'크레이지 아케이드 · 2D 아케이드 물풍선 대전',maker:'넥슨',text:'원작의 ‘가두고 터뜨리기’ 규칙. 2026년 크레이지 아케이드와 버블파이터가 종료되며 물풍선 대전의 자리가 비었습니다.'},
+  fork:{title:'갇히면 구경만 해야 했다',text:'한 번 터지면 판이 끝날 때까지 기다려야 했습니다. 기다리는 순간 몰입이 끊깁니다.'},
+  branch:{title:'3D 팀 점령 액션',text:'원작 규칙은 그대로, 무대는 3D 워터파크로. 터지면 죽지 않고 물살에 밀려날 뿐입니다.',chips:['4 vs 4 · 3분','대기 0초','진입 루트 4개','역전 장치 물바가지']},
+  load:'멈춘 물길을 다시 여는 중…',site:'crazy-splash.html',siteLabel:'기획 사이트 · 프로토타입 열기',
+  shots:[
+   {img:'img/cs-1.jpg',scene:'햇살 가득한 3D 워터파크 전경',kicker:'이 갈래의 미래 · 1',title:'물풍선 대전이 다시 열린다',text:'3분. 대기 0초. 마지막 1초까지 뒤집힌다.'},
+   {img:'img/cs-2.jpg',scene:'물살에 실려 떠밀려 가는 캐릭터',kicker:'이 갈래의 미래 · 2',title:'죽지 않고, 밀려날 뿐',text:'팡! 당하면 물살에 실려 외곽으로. 그 자리에서 바로 다시 움직입니다.'},
+   {img:'img/cs-3.jpg',scene:'슬라이드 · 짚라인 · 벽 · 배수로가 보이는 조감',kicker:'이 갈래의 미래 · 3',title:'루트 4개 = 전략 4개',text:'워터 슬라이드, 짚라인, 벽타기, 외곽 배수로. 어디로 들어갈지가 매 순간의 선택입니다.'},
+   {img:'img/cs-4.jpg',scene:'거대한 물바가지가 쏟아지는 순간',kicker:'이 갈래의 미래 · 4',title:'끝날 때까지 끝나지 않는다',text:'배수로 끝 물바가지 레버 3초. 점령지 전원을 휩쓸어 판을 뒤집습니다.'}]},
+ {id:'summoners-city',group:'흘러간 시간을 쌓다',c:'var(--city)',name:'소환사의 도시',
+  ask:'만약 협곡의 한 판이 도시의 역사로 남는다면?',art:'img/city-key.jpg',
+  orig:{title:'리그 오브 레전드 · AOS',maker:'라이엇게임즈',text:'협곡의 규칙과 랭크로 이어지는 30분의 한 판.'},
+  fork:{title:'30분을 쏟은 한 판이 숫자 하나로 끝났다',text:'장시간 집중, 팀원 갈등, 기여도와 무관한 승패 보상이 피로로 쌓입니다. 한 판이 끝나면 남는 것이 LP 숫자뿐입니다.'},
+  branch:{title:'오픈월드 MMO 플랫폼',text:'협곡의 규칙과 랭크는 그대로 두고, 한 판의 결과가 향하는 곳만 도시로 넓힙니다.',chips:['협곡 · 도시','세력 기여도','시즌 결말을 유저가','승리 보상 5종']},
+  load:'흘러간 판들을 도시에 쌓는 중…',site:'lol-mmo.html',siteLabel:'기획 사이트 열기',
+  shots:[
+   {img:'img/city-1.jpg',scene:'한 판을 끝내고 협곡을 걸어 나오는 길',kicker:'이 갈래의 미래 · 1',title:'한 판이 끝나도 세계는 이어진다',text:'30분의 한 판이, LP 숫자 하나로 끝나지 않게.'},
+   {img:'img/city-2.jpg',scene:'협곡 너머 펼쳐지는 평화로운 도시',kicker:'이 갈래의 미래 · 2',title:'싸우고, 쉬고, 다시 싸운다',text:'협곡의 긴장과 도시의 휴식을 오가며 지치지 않고 오래 머뭅니다.'},
+   {img:'img/city-3.jpg',scene:'두 세력의 깃발이 걸린 광장',kicker:'이 갈래의 미래 · 3',title:'내 한 판이 역사가 된다',text:'랭크 결과가 세력 기여도로 쌓여 시즌 사건의 결말을 정합니다.'},
+   {img:'img/city-4.jpg',scene:'승리 세력의 색으로 물든 축제 날의 도시',kicker:'이 갈래의 미래 · 4',title:'승리가 눈에 보인다',text:'승리 세력의 색으로 도시가 물들고, 축제 · 칭호 · 기념비 · 의상으로 기억됩니다.'}]},
+ {id:'ramp',group:'지금 흐르는 시간',c:'var(--ramp)',name:'R.A.M.P',
+  ask:'안내 문구 0줄, 걷기만 하면 게임이 시작되는 로비',art:'img/ramp-key.jpg',now:true,
+  orig:{title:'마법 테마 파티 게임 · PC',maker:'팀 프로젝트 · 기획 3 · 개발 2',text:'팀의 요청은 “PEAK의 공항 같은 느낌”. 레벨 디자인 · 캐릭터 디자인 담당.'},
+  fork:{title:'처음 온 유저는 무엇을 해야 할지 모른다',text:'커스터마이징 → 조작 학습 → 게임 시작을 별도의 안내 없이 이어 가야 했습니다.'},
+  branch:{title:'로비 「마법사의 저택」',text:'의상실 → 마법 수련장 → 포탈 관문 → 마법진. 공간의 배치만으로 다음 행동을 알려 주는 로비를 완성해 팀원 모두의 만족을 얻었습니다.',chips:['안내 문구 0줄','레이스 맵 재제작','‘기절 수치’ 전투 시스템 제안']},
+  nowText:{title:'지금도 흐르는 중',text:'2026.09 – 2026.11 진행. “난이도가 높고 난투가 적다”는 의견을 받아 레이스 맵을 다시 만들었고, 이후에는 플레이 테스트 · 수치 · 레퍼런스 영상으로 기준을 먼저 맞추고 작업합니다.'}}
+];
+
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const grad={'var(--cs)':'linear-gradient(160deg,#bfe6fb,#fff3cf)','var(--city)':'linear-gradient(160deg,#ffe2b8,#e9f1ff)','var(--ramp)':'linear-gradient(160deg,#e6defc,#fff4e0)'};
+function tryImg(src,ok){if(!src)return;const im=new Image();im.onload=()=>ok(src);im.src=src}
+const W=id=>WORLDS.find(w=>w.id===id);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* 배경 · 타일 */
+tryImg('img/lobby.jpg',s=>{const sc=document.getElementById('scene');sc.style.background=`url("${s}") center/cover`;sc.innerHTML=''});
+tryImg('img/quick.jpg',s=>{document.getElementById('quickArt').style.background=`url("${s}") center/cover`});
+document.getElementById('left').innerHTML=WORLDS.map(w=>`<button class="pn tile${w.now?' has-tag':''}" type="button" data-open="${w.id}" style="--c:${w.c}">${w.now?'<span class="tag">진행 중 · 2026.09 –</span>':''}<span class="art ph" data-img="${esc(w.art)}"><span>${esc(w.art)}</span></span><b><span class="dot"></span>${esc(w.name)}</b><small>${esc(w.group)} · ${esc(w.ask)}</small></button>`).join('');
+document.querySelectorAll('.tile .art').forEach(a=>tryImg(a.dataset.img,s=>{a.classList.remove('ph');a.innerHTML='';a.style.backgroundImage=`url("${s}")`}));
+
+/* 관측 공지 목록 */
+const NOTICES=[
+ {t:'Crazy Splash 프로토타입 체험하기',href:UP+'crazy-splash.html',isNew:true},
+ {t:'소환사의 도시 세력 기여도 데모',href:UP+'lol-mmo.html'},
+ {t:'R.A.M.P 지금 흐르는 시간 기록',open:'ramp'},
+ {t:'기획자 기록(이력서) 열람',href:'resume.html'},
+ {t:'관측 일지: 이 로비는 이렇게 기획했습니다',page:'note'},
+ {t:'다음 갈래는 같이 만들어요',page:'contact'}];
+document.getElementById('notices').innerHTML=NOTICES.map(n=>`<li><a class="${n.isNew?'new':''}" href="${n.href?esc(n.href):'#'}" ${n.open?`data-open="${n.open}"`:''} ${n.page?`data-page="${n.page}"`:''}>${esc(n.t)}</a></li>`).join('');
+
+/* 채팅창 */
+const log=document.getElementById('log');
+function say(cls,who,msg){const p=document.createElement('p');p.className=cls;p.textContent=`[${who}] ${msg}`;log.appendChild(p);while(log.children.length>9)log.firstChild.remove()}
+const nowStr=()=>new Date().toLocaleTimeString('ko-KR',{hour:'numeric',minute:'2-digit'});
+const SCRIPT=[[0,'sys','알림','관측자 님이 「갈래」 로비에 들어왔습니다.'],[1.2,'keeper','시간지기',()=>`${nowStr()}, 관측을 시작합니다.`],
+ [3,'sys','알림','끊긴 시간을 다시 잇다 · Crazy Splash 갈래가 열려 있습니다.'],[5,'sys','알림','흘러간 시간을 쌓다 · 소환사의 도시 갈래가 열려 있습니다.'],
+ [7,'keeper','시간지기','바쁘면 「바로 관측」 하나만 눌러도 돼요.'],[60,'keeper','시간지기','벌써 1분째 머무는 중이시네요.'],[300,'keeper','시간지기','5분이 지났어요. 시계를 안 보셨다면, 그게 이 기획자가 만들고 싶은 경험이에요.']];
+const t0=Date.now();let si=0;
+/* 관측 시간 · 현재 시각 · 예약 대사 */
+const ot=document.getElementById('obsTime'),ck=document.getElementById('clock'),pad=n=>String(n).padStart(2,'0');
+function tick(){
+  const s=(Date.now()-t0)/1000,S=Math.floor(s);
+  ot.textContent=S>=3600?`${Math.floor(S/3600)}:${pad(Math.floor(S/60)%60)}:${pad(S%60)}`:`${pad(Math.floor(S/60))}:${pad(S%60)}`;
+  ck.textContent=nowStr();
+  while(si<SCRIPT.length&&s>=SCRIPT[si][0]){const [,c,w,m]=SCRIPT[si++];say(c,w,typeof m==='function'?m():m)}
+}
+tick();setInterval(tick,500);
+
+/* 갈래 창 */
+const win=document.getElementById('win'),wc=document.getElementById('wcontent'),wt=document.getElementById('wtitle');
+let lastFocus=null;
+function openWin(title,html,c){lastFocus=document.activeElement;wt.textContent=title;wc.innerHTML=html;wc.parentElement.style.setProperty('--c',c||'var(--p2)');win.classList.add('on');wc.scrollTop=0;win.querySelector('[data-close]').focus()}
+function closeWin(){if(!win.classList.contains('on'))return;win.classList.remove('on');wc.innerHTML='';lastFocus&&lastFocus.focus&&lastFocus.focus()}
+function worldHtml(w){
+  const tl=`<ol class="tl">
+   <li><small>원래의 시간</small><h3>${esc(w.orig.title)}</h3><p>${esc(w.orig.text)}</p><span class="orig">${esc(w.orig.maker)}</span></li>
+   <li class="fork"><small>분기점 · 몰입이 끊기던 지점</small><h3>“${esc(w.fork.title)}”</h3><p>${esc(w.fork.text)}</p></li>
+   <li class="new"><small>새 갈래 · 유운식의 기획</small><h3>${esc(w.branch.title)}</h3><p>${esc(w.branch.text)}</p><div class="chips">${w.branch.chips.map(c=>`<span>${esc(c)}</span>`).join('')}</div></li>
+   ${w.now?`<li class="now"><small>지금</small><h3>${esc(w.nowText.title)}</h3><p>${esc(w.nowText.text)}</p></li>`
+    :`<li class="future"><small>이 갈래의 미래</small><h3>이 기획대로 가면 펼쳐질 장면들</h3><p>장면 ${w.shots.length}개 · 스크롤로 넘겨 보세요.</p><button class="enter" type="button" data-enter="${w.id}">이 갈래로 들어가기 ▶</button></li>`}
+  </ol>`;
+  return `<div class="hero" id="hero" style="background:${grad[w.c]}"><span class="ph">키 아트 자리 · ${esc(w.art)}</span><div class="card"><small>${esc(w.group)}</small><h2>${esc(w.name)}</h2><p>${esc(w.ask)}</p></div></div>
+   <div class="wbody"><div><span class="draft">임시 문구 · 몰입 중심으로 다시 쓸 예정</span>${tl}</div>
+   <aside class="side"><dl><div><dt>원래의 시간</dt><dd>${esc(w.orig.title)}</dd></div><div><dt>새 갈래</dt><dd>${esc(w.branch.title)}</dd></div><div><dt>기획</dt><dd>유운식</dd></div></dl>${w.site?`<a href="${UP}${esc(w.site)}">${esc(w.siteLabel)} ↗</a>`:''}</aside></div>`;
+}
+function openWorld(id){
+  const w=W(id);if(!w)return;
+  openWin(`${w.group} · ${w.name}`,worldHtml(w),w.c);
+  tryImg(w.art,s=>{const h=document.getElementById('hero');if(!h)return;h.style.background=`url("${s}") center/cover`;const p=h.querySelector('.ph');p&&p.remove()});
+  say('sys','알림',`${w.name} 갈래 창을 열었습니다.`);
+}
+const PAGES={
+ contact:['연락처',`<div class="page"><h2>다음 갈래는 같이 만들어요.</h2><p>유운식 · 게임 기획자 (레벨 디자인)</p>
+  <p><b>Email</b> wolf1205@naver.com <button class="copy" type="button" data-copy="wolf1205@naver.com">복사</button></p>
+  <p><b>Phone</b> 010-9719-7184 <button class="copy" type="button" data-copy="010-9719-7184">복사</button></p>
+  <p><a href="resume.html"><b>기획자 기록(이력서) 보기 →</b></a></p></div>`],
+ note:['관측 일지 · 이 로비의 기획',`<div class="page"><span class="draft">임시 문구</span><h2>「갈래」는 여러 시간이 모이는 관측소입니다.</h2>
+  <p>게임마다 원래의 시간이 흐르다, 몰입이 끊기는 지점에서 갈라집니다. 그 분기점에서 갈라져 나온 새 갈래가 제 기획입니다.</p>
+  <ol><li>지친 현업자가 쉬듯 둘러보도록, 익숙한 게임 로비 문법으로 만들었습니다.</li>
+  <li>게임사나 장르 대신 ‘시간을 어떻게 바꿨는지’로 나눴습니다. 장르를 바꾼 기획이라 그게 정직한 분류입니다.</li>
+  <li>관측 시간은 이 페이지를 연 순간부터 흐릅니다. 시계를 보지 않게 되는 것, 그게 제가 만들고 싶은 몰입입니다.</li></ol></div>`]};
+function openPage(k){const p=PAGES[k];if(p)openWin(p[0],p[1])}
+
+document.addEventListener('click',e=>{
+  const o=e.target.closest('[data-open]');if(o){e.preventDefault();openWorld(o.dataset.open);return}
+  const pg=e.target.closest('[data-page]');if(pg){e.preventDefault();openPage(pg.dataset.page);return}
+  const en=e.target.closest('[data-enter]');if(en){closeWin();enter([en.dataset.enter]);return}
+  if(e.target.closest('[data-close]')){closeWin();closeReel();return}
+  const nx=e.target.closest('[data-next]');if(nx){closeReel(true);enter(queue);return}
+  const cp=e.target.closest('.copy');if(cp){copy(cp)}
+  if(e.target===win)closeWin();
+});
+addEventListener('keydown',e=>{if(e.key==='Escape'){closeWin();closeReel()}});
+document.getElementById('quick').addEventListener('click',()=>{say('keeper','시간지기','차례로 안내할게요.');enter(['crazy-splash','summoners-city'])});
+async function copy(b){try{await navigator.clipboard.writeText(b.dataset.copy);b.textContent='복사됨'}catch(e){b.textContent='길게 눌러 복사'}setTimeout(()=>b.textContent='복사',1600)}
+
+/* 들어가기 → 로딩 → 연출 (바로 관측은 여러 갈래를 이어서) */
+const load=document.getElementById('load'),rv=document.getElementById('rv');
+let R=null,queue=[];
+function enter(ids){
+  ids=[...ids];const w=W(ids.shift());if(!w)return;queue=ids;
+  document.getElementById('loadText').textContent=w.load;load.classList.add('on');
+  setTimeout(()=>{openReel(w);load.classList.remove('on')},reduce?200:1450);
+}
+function openReel(w){
+  const n=w.shots.length,next=queue.length?W(queue[0]):null;
+  rv.style.setProperty('--c',w.c);
+  rv.innerHTML=`<div class="rv-top"><button type="button" data-close>← 로비로</button><span id="rvCount">${esc(w.name)} · 1 / ${n}</span></div>
+   <div class="reel" style="height:${n*100+40}vh"><div class="stage" style="background:${grad[w.c]}">
+    ${w.shots.map(s=>`<div class="shot ph" style="background:${grad[w.c]}"><div>${esc(s.scene)}<code>이미지 자리 · ${esc(s.img)}</code></div></div>`).join('')}
+    ${w.shots.map(s=>`<div class="cap"><small>${esc(s.kicker)}</small><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div>`).join('')}
+    <div class="dots" aria-hidden="true">${w.shots.map(()=>'<i></i>').join('')}</div></div></div>
+   <section class="end"><div><h2>이 갈래의 미래, 여기까지.</h2><p>${esc(w.ask)}</p><div class="row">
+    ${next?`<button class="pri" type="button" data-next>다음 갈래 · ${esc(next.name)} ▶</button>`:''}
+    ${w.site?`<a class="${next?'':'pri'}" href="${UP}${esc(w.site)}">${esc(w.siteLabel)} ↗</a>`:''}
+    <button type="button" data-close>로비로 돌아가기</button></div></div></section>`;
+  const shots=[...rv.querySelectorAll('.shot')];
+  w.shots.forEach((s,i)=>tryImg(s.img,src=>{const d=shots[i];d.classList.remove('ph');d.innerHTML='';d.style.background=`url("${src}") center/cover`}));
+  R={w,n,reel:rv.querySelector('.reel'),shots,caps:[...rv.querySelectorAll('.cap')],dots:[...rv.querySelectorAll('.dots i')],count:rv.querySelector('#rvCount'),cur:-2,idx:-1};
+  rv.classList.add('on');rv.scrollTop=0;update();rv.querySelector('[data-close]').focus();
+}
+function closeReel(keep){if(!rv.classList.contains('on'))return;rv.classList.remove('on');rv.innerHTML='';const w=R&&R.w;R=null;if(!keep){queue=[];w&&say('keeper','시간지기',`${w.name} 갈래에서 돌아왔어요.`)}}
+let mx=0,my=0,tx=0,ty=0;
+addEventListener('pointermove',e=>{tx=e.clientX/innerWidth*2-1;ty=e.clientY/innerHeight*2-1},{passive:true});
+const sm=t=>t<=0?0:t>=1?1:t*t*(3-2*t);
+function update(){
+  if(!R)return;
+  const vh=rv.clientHeight,total=R.reel.offsetHeight-vh;
+  const p=Math.min(Math.max(rv.scrollTop/total,0),.9999),pos=p*R.n,i=Math.floor(pos),t=pos-i;
+  R.shots.forEach((s,j)=>{const o=j===i?1:j===i+1?sm((t-.72)/.28):0;const sc=reduce?1:1.06-.05*(j===i?t:0);
+    s.style.opacity=o;s.style.transform=reduce?'none':`translate3d(${-mx*14}px,${-my*9}px,0) scale(${sc})`});
+  const show=(t>.06&&(t<.8||i===R.n-1))?i:-1;
+  if(show!==R.cur){R.cur=show;R.caps.forEach((c,j)=>c.classList.toggle('on',j===show))}
+  if(i!==R.idx){R.idx=i;R.dots.forEach((d,j)=>d.classList.toggle('on',j===i));R.count.textContent=`${R.w.name} · ${i+1} / ${R.n}`}
+}
+rv.addEventListener('scroll',update,{passive:true});
+(function frame(){mx+=(tx-mx)*.06;my+=(ty-my)*.06;update();requestAnimationFrame(frame)})();
+}
+</script>
+</body></html>
