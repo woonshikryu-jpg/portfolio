@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>숨어 사는 소환사들 · 시안 1 (그림 속 글귀)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Hahmlet:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700&family=Gaegu:wght@400;700&display=swap">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#EFE6D2;color:#2A2118;font:16px/1.7 'Noto Sans KR',sans-serif;word-break:keep-all}
+p,h1,h2,h3{margin:0}
+.back{position:fixed;left:14px;top:14px;z-index:60;background:rgba(255,250,238,.9);color:#3A2C1C;font:700 13.5px/1 'Noto Sans KR',sans-serif;padding:9px 15px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.credit{position:fixed;right:14px;top:14px;z-index:60;background:rgba(40,30,20,.55);color:#FFF8EA;font-size:12px;padding:4px 12px;border-radius:999px}
+
+/* scene */
+.scene{position:relative}
+.sticky{position:sticky;top:0;height:100vh;overflow:hidden}
+.world{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+.world>img{position:absolute;inset:0;width:100%;height:100%}
+.mark{position:absolute;transform:translate(-50%,-50%);opacity:0;transition:opacity .6s ease;pointer-events:none}
+.mark.on{opacity:1;pointer-events:auto}
+
+/* wooden sign */
+.sign{display:flex;flex-direction:column;align-items:center}
+.plank{padding:1.1em 1.6em 1em;border-radius:.5em;text-align:center;color:#FCEFD2;
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 2px,transparent 2px 9px),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 5px),
+    linear-gradient(180deg,#8A5A32,#6B4122 55%,#5A361C);
+  box-shadow:0 .5em 1.2em rgba(40,20,5,.45), inset 0 0 0 .12em rgba(30,15,5,.45), inset 0 .15em 0 rgba(255,220,170,.25);
+  transform:rotate(-2deg)}
+.plank .en{font:900 2.1em/1 'Cinzel',serif;letter-spacing:.05em;color:#FFE7A8;text-shadow:0 .06em 0 #3A220E,0 -.03em 0 rgba(255,240,200,.4)}
+.plank .kr{font:800 1.55em/1.3 'Hahmlet',serif;margin-top:.25em;text-shadow:0 .05em 0 #3A220E}
+.plank .sub{font:700 .62em/1.4 'Noto Sans KR',sans-serif;margin-top:.5em;color:#F3DDB0;letter-spacing:.04em}
+.post{width:1.1em;height:4.2em;background:linear-gradient(90deg,#5A361C,#7A4C28,#4E2E17);box-shadow:0 .4em .8em rgba(40,20,5,.4)}
+
+/* paper tag (handwriting) */
+.tag{background:linear-gradient(160deg,#FFF6DF,#F1DFB8);color:#5A3A1A;font:700 1.35em/1.35 'Gaegu',sans-serif;padding:.7em 1em;border-radius:.3em;box-shadow:0 .4em 1em rgba(40,20,5,.35);transform:rotate(4deg);max-width:13em;text-align:center}
+.tag::before{content:'';display:block;width:.5em;height:.5em;border-radius:50%;background:#8A5A32;margin:0 auto .4em;box-shadow:inset 0 .1em .1em rgba(0,0,0,.4)}
+
+/* carved into bark */
+.carve{text-align:center;color:#F1DDB0;transform:rotate(-1.5deg);padding:1em 1.4em;background:radial-gradient(ellipse at center,rgba(30,22,10,.55),rgba(30,22,10,0) 70%)}
+.carve h2{font:800 1.9em/1.3 'Hahmlet',serif;text-shadow:0 -.04em 0 rgba(0,0,0,.75),0 .05em .02em rgba(255,240,200,.25),0 0 .5em rgba(0,0,0,.35)}
+.carve p{font:700 .9em/1.6 'Hahmlet',serif;margin-top:.6em;color:#E8D3A6;text-shadow:0 -.04em 0 rgba(0,0,0,.75)}
+/* cloth banner */
+.cloth{background:linear-gradient(175deg,#E9A13B,#D47F1E 60%,#B9650F);color:#3B1F05;padding:.8em 1.6em .9em;text-align:center;
+  clip-path:polygon(0 0,100% 0,100% 88%,92% 100%,84% 88%,76% 100%,68% 88%,60% 100%,52% 88%,44% 100%,36% 88%,28% 100%,20% 88%,12% 100%,4% 88%,0 100%);
+  box-shadow:0 .4em 1em rgba(60,30,5,.35);transform:rotate(-3deg)}
+.cloth .pn{font:900 .7em/1 'Cinzel',serif;letter-spacing:.14em;color:#5A2E05}
+.cloth h2{font:800 1.5em/1.3 'Hahmlet',serif;margin-top:.3em}
+.cloth.pair{display:flex;gap:1.2em;align-items:stretch;padding:1em 1.4em 1.4em;transform:rotate(-1.5deg)}
+.cloth.pair div{text-align:left;max-width:11em}
+.cloth.pair b{display:block;font:900 .65em/1 'Cinzel','Noto Sans KR',serif;letter-spacing:.1em;color:#5A2E05;margin-bottom:.35em}
+.cloth.pair h3{font:800 1.05em/1.3 'Hahmlet',serif}
+.cloth.pair p{font:700 .72em/1.5 'Noto Sans KR',sans-serif;margin-top:.3em}
+.cloth.pair .arr{align-self:center;font:900 1.4em/1 'Hahmlet',serif}
+
+/* pinned note -> opens scroll */
+.note{cursor:pointer;background:linear-gradient(160deg,#FFF7E2,#EBD7AE);color:#4A3015;border:0;font:700 .8em/1.3 'Noto Sans KR',sans-serif;padding:.7em .9em .7em 2.3em;border-radius:.3em;box-shadow:0 .35em .9em rgba(40,20,5,.35);transform:rotate(-3deg);position:relative;text-align:left}
+.note::before{content:'+';position:absolute;left:.55em;top:50%;transform:translateY(-50%);width:1.3em;height:1.3em;border-radius:50%;background:#9C2F22;color:#FFF3DA;display:grid;place-items:center;font:900 1em/1 'Noto Sans KR',sans-serif;box-shadow:0 .1em 0 #5E1A12}
+.note:hover{transform:rotate(-3deg) translateY(-.2em)}
+
+/* scroll modal */
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:rgba(40,28,14,.35);opacity:0;pointer-events:none;transition:opacity .3s}
+.modal.open{opacity:1;pointer-events:auto}
+.scroll{position:relative;width:min(720px,92vw);max-height:84vh;display:flex;flex-direction:column;transform:scaleY(.2);transform-origin:top;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+.modal.open .scroll{transform:none}
+.rod{height:22px;border-radius:11px;background:linear-gradient(180deg,#8A5A32,#5A361C);box-shadow:0 4px 10px rgba(0,0,0,.3);margin:0 -14px;position:relative;z-index:2}
+.paper{overflow:auto;padding:28px 36px 30px;background:radial-gradient(ellipse at 50% 30%,#FFF8E6,#F3E2BC 70%,#E6CF9E);box-shadow:inset 0 0 40px rgba(140,100,40,.25);color:#3A2814}
+.paper h3{font:800 24px/1.3 'Hahmlet',serif;color:#6B3A12;margin-bottom:12px}
+.paper ul{margin:0;padding-left:20px;font-size:15.5px}
+.paper li+li{margin-top:8px}
+.paper .seal{display:block;margin-top:14px;padding:10px 14px;border-radius:10px;background:rgba(156,47,34,.1);color:#7A2318;font-weight:700;font-size:14px}
+.close{position:absolute;right:-6px;top:-8px;z-index:3;width:36px;height:36px;border-radius:50%;border:0;background:#9C2F22;color:#FFF3DA;font:900 20px/1 'Noto Sans KR',sans-serif;cursor:pointer;box-shadow:0 3px 0 #5E1A12}
+
+/* scroll hint & between */
+.hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);background:rgba(255,248,232,.85);color:#4A3015;font:700 13px/1 'Noto Sans KR',sans-serif;padding:8px 14px;border-radius:999px;transition:opacity .4s}
+.between{height:30vh;background:linear-gradient(180deg,#EFE6D2,#E2EDD6);display:grid;place-items:center;color:#5A4630;font:700 15px 'Hahmlet',serif;letter-spacing:.1em}
+.end{padding:60px 20px 80px;text-align:center;background:#E2EDD6;color:#3A4A30;font-size:15px}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 버전 모음</a>
+<span class="credit">이미지 출처: Riot Games</span>
+
+<!-- SCENE 1 : 표지 -->
+<div class="scene" data-img="img/lol/cover.jpg" data-w="1832" data-h="837" style="height:320vh"
+  data-keys='[{"p":0,"x":50,"y":50,"s":1},{"p":0.35,"x":56,"y":58,"s":1.35},{"p":0.65,"x":82,"y":62,"s":2.2},{"p":1,"x":82,"y":62,"s":2.2}]'>
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/cover.jpg" alt="아이오니아 들판을 걷는 여행자">
+      <div class="mark sign" style="left:58%;top:64%;font-size:var(--u)" data-from="0" data-to="0.5">
+        <div class="plank"><div class="en">HIDDEN SUMMONERS</div><div class="kr">숨어 사는 소환사들</div><div class="sub">리그 오브 레전드 IP 확장 제안 · 게임기획 포트폴리오</div></div>
+        <div class="post"></div>
+      </div>
+      <div class="mark" style="left:73%;top:56%;font-size:calc(var(--u) * .55)" data-from="0.55" data-to="1">
+        <div class="tag">한 판을 하지 않아도,<br>머물 이유가 있는 LoL</div>
+      </div>
+    </div>
+    <div class="hint">스크롤하면 그림 속으로 들어갑니다 ↓</div>
+  </div>
+</div>
+
+<div class="between">PART 02 · 아이오니아 초원</div>
+
+<!-- SCENE 2 : 세계관 (큰 나무) -->
+<div class="scene" data-img="img/lol/d2.jpg" data-w="1920" data-h="1080" style="height:420vh"
+  data-keys='[{"p":0,"x":50,"y":50,"s":1},{"p":0.22,"x":50,"y":42,"s":1.15},{"p":0.45,"x":62,"y":36,"s":2.3},{"p":0.62,"x":62,"y":36,"s":2.3},{"p":0.85,"x":64,"y":70,"s":2.1},{"p":1,"x":64,"y":70,"s":2.1}]'>
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/d2.jpg" alt="아이오니아 큰 나무 아래 장터">
+      <div class="mark" style="left:40%;top:30%;font-size:var(--u)" data-from="0" data-to="0.3">
+        <div class="cloth"><div class="pn">PART 02 · 아이오니아 초원</div><h2>탁 트인 쉼터를 세운다</h2></div>
+      </div>
+      <div class="mark" style="left:62%;top:36%;font-size:calc(var(--u) * .62)" data-from="0.36" data-to="0.7">
+        <div class="carve"><h2>전쟁의 학회가 사라진 뒤,<br>소환사들은 숨어 살았다</h2><p>신들처럼 몰래 도시에 섞여 산다.<br>주민은 그들의 정체를 모른다.</p></div>
+      </div>
+      <div class="mark" style="left:64%;top:66%;font-size:calc(var(--u) * .6)" data-from="0.76" data-to="1">
+        <div class="cloth pair">
+          <div><b>옛 설정</b><h3>전쟁 대신 전장</h3><p>분쟁을 협곡 승부로 결정 → 공식 설정에서 삭제</p></div>
+          <span class="arr">→</span>
+          <div><b>이 기획</b><h3>숨은 학회들의 승부</h3><p>도시별 학회가 협곡에서 겨룸 → 도시의 운명</p></div>
+        </div>
+      </div>
+      <div class="mark" style="left:56%;top:80%;font-size:calc(var(--u) * .55)" data-from="0.8" data-to="1">
+        <button class="note" data-open="why">왜 세계관을 이렇게 잡았나</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="end">시안 1 · 그림 속 글귀 방식 (표지 · 세계관 두 장면)<br>본 기획서는 라이엇 게임즈와 무관한 개인 기획안이며, 수록된 룬테라 이미지의 저작권은 Riot Games에 있습니다.</div>
+
+<div class="modal" id="why" role="dialog" aria-modal="true" aria-label="왜 세계관을 이렇게 잡았나">
+  <div class="scroll">
+    <button class="close" aria-label="닫기">×</button>
+    <div class="rod"></div>
+    <div class="paper">
+      <h3>왜 세계관을 이렇게 잡았나</h3>
+      <ul>
+        <li><b>빈자리를 채운다</b>: 초창기 LoL에는 "나라들이 전쟁 대신 정의의 전장에서 분쟁을 결정하고, 소환사가 챔피언을 불러 싸운다"는 설정이 있었습니다. 지금 공식 이야기에서는 빠져 있어서, 협곡에서 왜 싸우는지에 대한 답이 비어 있습니다.</li>
+        <li><b>숨어 산다 = 공식 설정과 충돌하지 않는다</b>: 소환사는 룬테라 주민에게 정체를 드러내지 않습니다. 그래서 공식 이야기 속 인물과 사건을 하나도 바꾸지 않고 그 옆에 덧붙일 수 있습니다.</li>
+        <li><b>유저 = 소환사</b>: 플레이어는 원래 "소환사"라고 불립니다. 이 호칭에 몸(광장의 아바타)과 소속(학회)을 붙여 주는 것뿐이라, 새로 배울 설정이 거의 없습니다.</li>
+        <li><b>이길 이유가 설정에서 나온다</b>: 협곡의 승부가 내가 사는 도시의 분쟁 방향을 정한다는 설정 덕분에, 보상을 덧붙이지 않아도 이길 이유가 생깁니다. 월드컵처럼 직접 뛰지 않는 날에도 "우리 도시의 승부"가 됩니다.</li>
+      </ul>
+      <span class="seal">룬테라 지역·도시 이름은 공식 설정을 그대로 쓰고, 소환사와 학회만 이 기획의 해석입니다.</span>
+    </div>
+    <div class="rod"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var scenes=[].slice.call(document.querySelectorAll('.scene'));
+  function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
+  function layout(sc){
+    var vw=innerWidth,vh=innerHeight,iw=+sc.dataset.w,ih=+sc.dataset.h;
+    var k=Math.max(vw/iw,vh/ih),w=iw*k,h=ih*k;
+    sc._w=w;sc._h=h;
+    var world=sc.querySelector('.world');world.style.width=w+'px';world.style.height=h+'px';
+    world.style.setProperty('--u',(w/1920*22)+'px');
+    sc._keys=JSON.parse(sc.dataset.keys);
+  }
+  function frame(){
+    var vw=innerWidth,vh=innerHeight;
+    scenes.forEach(function(sc){
+      var r=sc.getBoundingClientRect(),span=sc.offsetHeight-vh;
+      var p=Math.min(1,Math.max(0,-r.top/span));
+      var ks=sc._keys,a=ks[0],b=ks[ks.length-1];
+      for(var i=0;i<ks.length-1;i++){if(p>=ks[i].p&&p<=ks[i+1].p){a=ks[i];b=ks[i+1];break}}
+      var t=b.p===a.p?1:ease((p-a.p)/(b.p-a.p));
+      var x=a.x+(b.x-a.x)*t,y=a.y+(b.y-a.y)*t,s=a.s+(b.s-a.s)*t;
+      var fx=sc._w*x/100,fy=sc._h*y/100;
+      var tx=vw/2-fx*s,ty=vh/2-fy*s;
+      tx=Math.min(0,Math.max(vw-sc._w*s,tx));ty=Math.min(0,Math.max(vh-sc._h*s,ty));
+      sc.querySelector('.world').style.transform='translate('+tx+'px,'+ty+'px) scale('+s+')';
+      sc.querySelectorAll('.mark').forEach(function(m){m.classList.toggle('on',p>=+m.dataset.from&&p<=+m.dataset.to)});
+      var h=sc.querySelector('.hint');if(h)h.style.opacity=p>0.05?0:1;
+    });
+  }
+  function all(){scenes.forEach(layout);frame()}
+  addEventListener('resize',all);addEventListener('scroll',function(){requestAnimationFrame(frame)},{passive:true});
+  all();
+  document.querySelectorAll('[data-open]').forEach(function(b){b.addEventListener('click',function(){document.getElementById(b.dataset.open).classList.add('open')})});
+  document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m||e.target.classList.contains('close'))m.classList.remove('open')})});
+  addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(function(m){m.classList.remove('open')})});
+})();
+</script>
+</body>
+</html>
