@@ -128,7 +128,7 @@ def wall(h3):
     return walls_html[i:j]
 shot = re.search(r'<figure class="real-shot">[\s\S]*?</figure>', walls_html).group(0)
 vis = ('<div class="wall-vis">'
-       '<div class="wv" data-k="1"><div class="ph">게임하는 모습 일러스트 자리<br>늦은 밤, 모니터 앞에서 30분째 집중하는 플레이어</div></div>'
+       '<div class="wv" data-k="1"><figure class="illu"><img src="img/lol/fatigue.jpg" alt="늦은 밤 퇴근 복장 그대로 모니터 앞에 웅크려 게임하는 사람"></figure></div>'
        '<div class="wv" data-k="2"><figure class="real-shot"><img src="img/lol/patch-notes.png" alt="실제 LoL 26.23 패치 노트 — 챔피언 수치 변경 목록"><figcaption>실제 패치 노트 · 26.23 · 2주마다 이만큼씩</figcaption></figure></div>'
        '<div class="wv" data-k="3"><div class="ph">복귀 격차 이미지 자리<br>시즌 변경 안내 · 처음 보는 아이템/지도</div></div>'
        f'<div class="wv" data-k="4">{shot}</div>'
@@ -210,6 +210,8 @@ css = '''
 .wv .real-shot img{display:block;width:100%;border-radius:4px}
 .wv .real-shot figcaption{font:600 13px/1.6 'Pretendard Variable',Pretendard,sans-serif;color:#3A424C;padding-top:6px;text-align:center}
 .wv .real-shot figcaption b{color:#B3322A}
+.wv .illu{width:100%;margin:0;border-radius:14px;overflow:hidden;box-shadow:0 22px 44px rgba(17,20,24,.22)}
+.wv .illu img{display:block;width:100%}
 .q-big{font:900 220px/1 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent);opacity:.18}
 .wtxt h3{font:800 34px/1.25 'Pretendard Variable',Pretendard,sans-serif;color:#111418;letter-spacing:-.02em}
 .wtxt h2{font:800 34px/1.35 'Pretendard Variable',Pretendard,sans-serif;color:#111418;letter-spacing:-.02em;margin-top:8px}
