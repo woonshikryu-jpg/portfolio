@@ -131,10 +131,10 @@ css = '''
 .scene[data-mode="sweep"] .fx-light,.scene[data-mode="sweep"] .fx-shade{display:none!important}
 .scene[data-mode="sweep"] .world .mark{z-index:4}
 .dust{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
-.haze{position:absolute;left:-50%;right:-50%;bottom:0;height:46%;z-index:2;pointer-events:none;
-  background:repeating-linear-gradient(100deg,rgba(225,196,150,0) 0 9%,rgba(225,196,150,.3) 14%,rgba(225,196,150,0) 22%),linear-gradient(0deg,rgba(214,182,132,.55),rgba(214,182,132,0));
-  animation:hazeMove 14s linear infinite;filter:blur(6px)}
-@keyframes hazeMove{from{transform:translateX(0)}to{transform:translateX(33.3%)}}
+.haze{position:absolute;left:0;right:0;bottom:0;height:46%;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(100deg,rgba(225,196,150,0) 0 120px,rgba(225,196,150,.3) 190px,rgba(225,196,150,0) 300px),linear-gradient(0deg,rgba(214,182,132,.55),rgba(214,182,132,0));
+  background-size:600px 100%,100% 100%;animation:hazeMove 9s linear infinite}
+@keyframes hazeMove{from{background-position:0 0,0 0}to{background-position:600px 0,0 0}}
 /* 머무는 고리 도식 크게 */
 .story:has(svg.loop){grid-template-columns:1.9fr 1fr!important;gap:28px;width:min(1340px,calc(100vw - 200px));margin-left:calc(50% - min(1340px,calc(100vw - 200px))/2 + 40px)}
 .story:has(svg.loop) .story-vis{height:84vh;top:8vh;display:flex;align-items:center}
