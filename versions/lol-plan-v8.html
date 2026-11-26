@@ -452,6 +452,22 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 .story.day .quotes{position:relative;width:100%;height:100%}
 .story.day .q{position:absolute;inset:0;display:grid;place-items:center;text-align:center;margin:0;font:800 clamp(30px,3.4vw,46px)/1.35 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent);letter-spacing:-.03em;opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}
 .story.day[data-k="1"] .q[data-k="1"],.story.day[data-k="2"] .q[data-k="2"],.story.day[data-k="3"] .q[data-k="3"],.story.day[data-k="4"] .q[data-k="4"],.story.day[data-k="5"] .q[data-k="5"],.story.day[data-k="6"] .q[data-k="6"]{opacity:1;transform:none}
+
+.story.pair{grid-template-columns:1fr 1fr}
+.story.pair .story-vis{height:70vh}
+.story-vis>.ph{width:100%;height:100%;min-height:0!important}
+.story-vis>div:not(.ph){width:100%}
+.story.pair .step{min-height:40vh}
+.story.pair .step>.acc,.story.pair .step>.card{width:100%}
+.story.season .story-vis .grid{grid-template-columns:1fr;gap:10px}
+.story.season .story-vis .card{flex-direction:row;align-items:center;gap:14px;padding:12px}
+.story.season .story-vis .card .ph{min-height:90px!important;width:42%;flex:none}
+.story.road .num{width:auto!important;height:auto!important;border-radius:999px!important;padding:7px 14px}
+.stair{display:flex;flex-direction:column;gap:14px;width:100%}
+.stair b{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;border-radius:12px;border:1px solid #E6E8EB;background:rgba(255,255,255,.85);font:800 22px/1 'Pretendard Variable',Pretendard,sans-serif;color:#9AA1AA;transition:all .4s}
+.stair b span{font:600 16px/1 'Pretendard Variable',Pretendard,sans-serif}
+.stair b:nth-child(2){margin-left:12%}.stair b:nth-child(3){margin-left:24%}
+.story.road[data-k="1"] .stair b[data-k="1"],.story.road[data-k="2"] .stair b[data-k="2"],.story.road[data-k="3"] .stair b[data-k="3"]{background:var(--accent);color:#fff;border-color:var(--accent)}
 @media(max-width:900px){.story{grid-template-columns:1fr}.story-vis{position:relative;top:0;height:auto}.step{min-height:auto;padding:18px 0;opacity:1;transform:none}.story.day .q{position:static;opacity:1;transform:none;font-size:22px}}
 </style>
 </head>
@@ -711,37 +727,30 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
       <div><div class="sec-no">3-1 · 학회 광장</div><h2>첫 화면이 내가 사는 도시의 광장</h2></div>
       <p>메뉴 화면 대신, 친구가 서 있는 내 도시의 광장.</p>
     </div>
-    <div class="split">
-      <div class="ph">화면 목업 자리<br>쿼터뷰 학회 광장 + 클라이언트 UI<br>① 내 소환사 ② 큐 버튼 ③ 친구 소환사 ④ 포탈</div>
-      <div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>클릭으로 걷는 내 소환사<span class="sum">쿼터뷰 · 이동과 감정표현만</span></span><span class="plus" aria-hidden="true">+</span></button>
+    <div class="story pair" data-k="1"><div class="story-vis"><div class="ph">화면 목업 자리<br>쿼터뷰 학회 광장 + 클라이언트 UI<br>① 내 소환사 ② 큐 버튼 ③ 친구 소환사 ④ 포탈</div></div><div class="story-steps"><div class="step" data-k="1"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>클릭으로 걷는 내 소환사<span class="sum">쿼터뷰 · 이동과 감정표현만</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>광장을 비스듬히 내려다보는 쿼터뷰에서, 바닥을 클릭하면 내 소환사가 걸어갑니다. <b>점프·전투·채집 같은 조작은 없습니다.</b> 쉬러 온 공간이라 할 일을 만들지 않습니다.</li>
             <li>할 수 있는 건 걷기와 <b>감정표현</b>(인사, 박수, 앉기 등)뿐입니다.</li>
             <li>소환사는 기본 외형으로 시작하고, 의상·장신구·걸음 이펙트 슬롯을 꾸밀 수 있습니다(수익 모델 참고).</li>
             <li><b>기술 근거</b>: 작은 캐릭터를 클릭으로 움직이는 방식은 TFT의 전설이가 이미 쓰고 있습니다. 같은 클라이언트 기술을 재사용해 저사양 PC에서도 가볍게 돌아갑니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>큐 대기 = 광장 산책<span class="sum">매칭을 기다리는 시간이 쉬는 시간</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="2"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>큐 대기 = 광장 산책<span class="sum">매칭을 기다리는 시간이 쉬는 시간</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>큐 버튼은 지금처럼 화면 위쪽에 있습니다. 누르면 화면 위에 대기 타이머가 뜨고, <b>그대로 광장을 걸어 다닐 수 있습니다.</b></li>
             <li>매칭이 잡히면 지금과 같은 수락 창이 뜹니다. 광장 어디에 있든 바로 수락할 수 있고, 수락하면 내 소환사 옆에 포탈이 열립니다(④).</li>
             <li>큐를 돌리지 않아도 광장에 머물 수 있습니다. 친구를 기다리거나, 캐주얼 모드만 하다 가도 됩니다.</li>
             <li><b>왜</b>: 매칭 대기는 LoL에서 가장 할 일이 없는 시간입니다. 그 시간을 광장 산책으로 바꾸면, 기능을 추가하지 않고도 체감 대기가 짧아집니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>친구가 서 있는 광장<span class="sum">친구 목록을 공간으로 보여 준다</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="3"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>친구가 서 있는 광장<span class="sum">친구 목록을 공간으로 보여 준다</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>광장에는 <b>온라인 친구의 소환사</b>와, 같은 학회원 중 무작위 일부(예시 최대 20명)가 보입니다. 한 화면에 보이는 인원을 제한해 서버와 PC 부담을 낮춥니다.</li>
             <li>친구 소환사를 클릭하면 <b>파티 초대 · 프로필 · 관전</b> 메뉴가 뜹니다. 지금 친구 목록에서 하던 일을 광장에서 그대로 합니다.</li>
             <li>게임 중인 친구는 광장에 서 있지 않고, 머리 위에 「출전 중」 깃발만 남습니다.</li>
             <li><b>모르는 학회원과는 채팅이 없고 감정표현만</b> 됩니다. 광장이 또 하나의 갈등 공간이 되지 않게 하기 위해서입니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">4</span><span>매칭 → 포탈 열림 → 출전<span class="sum">광장에서 협곡으로 걸어 들어간다</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="4"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">4</span><span>매칭 → 포탈 열림 → 출전<span class="sum">광장에서 협곡으로 걸어 들어간다</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>수락하면 내 소환사 옆에 포탈이 열리고, 소환사가 걸어 들어가며 카메라가 위로 빠집니다(시점 규칙 참고). 그 뒤는 지금의 챔피언 선택 · 로딩 화면 그대로입니다.</li>
             <li>경기가 끝나면 결과 화면 뒤에 광장으로 돌아옵니다. 이긴 날은 학회 기여가 쌓이는 연출을, 진 날도 참여분이 쌓이는 연출을 짧게 보여 줍니다.</li>
             <li><b>광장 끄기</b>: 설정에서 광장을 끄면 지금의 메뉴 화면으로 돌아갑니다. 바로 큐만 잡고 싶은 유저의 길은 그대로 둡니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc">
+          </ul></div></div></div></div></div><div class="step" data-k="5"><div class="acc">
         <button class="acc-btn" aria-expanded="false"><span class="n">+</span><span>출전과 귀환의 시점 전환<span class="sum">로딩 화면 대신, 카메라가 역할을 바꿔 준다</span></span><span class="plus" aria-hidden="true">+</span></button>
         <div class="acc-body"><div><div class="acc-inner">
           <ul>
@@ -751,9 +760,7 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
             <li><b>1단계는 간단하게</b>: 1단계 광장은 비용을 줄이려고 쿼터뷰(비스듬히 내려다보는 시점) 클릭 이동으로 만들고, 출전 때 카메라가 위로 빠지는 짧은 연출만 넣습니다. 3인칭은 3단계 도시에서 씁니다.</li>
           </ul>
         </div></div></div>
-      </div>
-      </div>
-    </div>
+      </div></div></div></div>
   </div>
 </section><section class="r-demacia" id="season">
   <div class="wrap">
@@ -761,12 +768,11 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
       <div><div class="sec-no">3-2 · 시즌과 광장 변화</div><h2>협곡의 결과가 학회의 이야기로</h2></div>
       <p>결말은 유저의 승부가 씁니다. 순위는 숫자가 아니라 광장의 풍경으로.</p>
     </div>
-    <div class="flow4">
-      <div class="card"><span class="num">01</span><h3>시즌 갈등</h3><p class="one">녹서스 vs 데마시아</p></div>
-      <div class="card"><span class="num">02</span><h3>협곡 플레이</h3><p class="one">승리 ↑ · 패배도 참여분</p></div>
-      <div class="card"><span class="num">03</span><h3>주간 정산</h3><p class="one">순위 · 광장 장식 변경</p></div>
-      <div class="card"><span class="num">04</span><h3>시즌 종료</h3><p class="one">축제 or 재정비</p></div>
-    </div>
+    <div class="story pair season" data-k="1"><div class="story-vis"><div class="grid g3">
+      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 축제</div><span class="tag">1위</span><h3>축제</h3><p class="one">꽃가루 · 깃발 · 음악</p></div>
+      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 장터</div><span class="tag">2위</span><h3>활기찬 일상</h3><p class="one">장터 · 붐비는 광장</p></div>
+      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 비계와 현수막</div><span class="tag">3위</span><h3>재정비</h3><p class="one">비계 · 「다음엔 우리 차례」</p></div>
+    </div></div><div class="story-steps"><div class="step" data-k="1"><div class="card"><span class="num">01</span><h3>시즌 갈등</h3><p class="one">녹서스 vs 데마시아</p></div></div><div class="step" data-k="2"><div class="card"><span class="num">02</span><h3>협곡 플레이</h3><p class="one">승리 ↑ · 패배도 참여분</p></div></div><div class="step" data-k="3"><div class="card"><span class="num">03</span><h3>주간 정산</h3><p class="one">순위 · 광장 장식 변경</p></div></div><div class="step" data-k="4"><div class="card"><span class="num">04</span><h3>시즌 종료</h3><p class="one">축제 or 재정비</p></div></div></div></div>
     <div style="margin-top:18px">
       <div class="acc must">
         <button class="acc-btn" aria-expanded="true"><span>학회 기여 계산<span class="sum">한 판이 몇 점이 되고, 순위는 어떻게 정하나</span></span><span class="plus" aria-hidden="true">+</span></button>
@@ -798,11 +804,7 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
         </div></div></div>
       </div>
     </div>
-    <div style="margin-top:28px"><div class="grid g3">
-      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 축제</div><span class="tag">1위</span><h3>축제</h3><p class="one">꽃가루 · 깃발 · 음악</p></div>
-      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 장터</div><span class="tag">2위</span><h3>활기찬 일상</h3><p class="one">장터 · 붐비는 광장</p></div>
-      <div class="card"><div class="ph" style="min-height:170px">같은 구도 · 비계와 현수막</div><span class="tag">3위</span><h3>재정비</h3><p class="one">비계 · 「다음엔 우리 차례」</p></div>
-    </div></div>
+    
     <div style="margin-top:18px">
       <div class="acc">
         <button class="acc-btn" aria-expanded="false"><span>시즌 이야기 진행<span class="sum">미리 정한 결말 대신, 유저의 승부로 완성</span></span><span class="plus" aria-hidden="true">+</span></button>
@@ -830,37 +832,29 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
       <div><div class="sec-no">3-3 · 승리 보상</div><h2>이긴 학회는 협곡에서 보인다</h2></div>
       <p>전부 외형 · 능력치 0 · 상대 9명이 봅니다.</p>
     </div>
-    <div class="split">
-      <div class="ph">주석 이미지 자리<br>협곡 화면 위 ① 챔피언 효과 ② 귀환 ③ 우물 표시</div>
-      <div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>학회 챔피언 특수 효과 · 스킨<span class="sum">이긴 학회 × 그 도시 출신 챔피언</span></span><span class="plus" aria-hidden="true">+</span></button>
+    <div class="story pair" data-k="1"><div class="story-vis"><div class="ph">주석 이미지 자리<br>협곡 화면 위 ① 챔피언 효과 ② 귀환 ③ 우물 표시</div></div><div class="story-steps"><div class="step" data-k="1"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>학회 챔피언 특수 효과 · 스킨<span class="sum">이긴 학회 × 그 도시 출신 챔피언</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li><b>누가</b>: 지난 시즌 1위 학회의 학회원 중, 시즌 동안 최소 참여(예시 20판)를 채운 소환사.</li>
             <li><b>어떤 챔피언</b>: 공식 설정의 출신 지역이 그 도시인 챔피언. 예: 데마시아가 이기면 가렌, 럭스 등.</li>
             <li><b>무엇이</b>: 지금 낀 스킨 위에 학회 색의 오라·테두리 효과가 얹힙니다. 스킨을 대체하지 않아 기존 스킨 판매와 부딪히지 않습니다. 시즌 대표 챔피언에는 한정 특수 스킨을 줍니다.</li>
             <li><b>얼마나</b>: 다음 시즌 동안 유지됩니다. 다음 시즌에 다시 이겨야 이어집니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>귀환 이펙트<span class="sum">학회 문양 · 빛</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="2"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>귀환 이펙트<span class="sum">학회 문양 · 빛</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>승리 학회의 학회원은 <b>모든 챔피언</b>으로 귀환할 때 바닥에 학회 문양이 빛납니다.</li>
             <li>귀환 시간과 판정은 그대로입니다. 보이는 모습만 바뀝니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>우물 연출<span class="sum">깃발 · 병사 환호</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="3"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>우물 연출<span class="sum">깃발 · 병사 환호</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>승리 학회의 학회원이 <b>부활하거나 귀환할 때</b>, 우물 옆에 학회 깃발과 병사들이 나타나 환호합니다.</li>
             <li>한 팀에 여러 학회가 섞여 있으므로 우물 전체를 바꾸지 않고, 그 소환사 개인의 연출로만 보여 줍니다.</li>
             <li>회복량·속도 등 우물의 기능은 그대로입니다.</li>
-          </ul></div></div></div></div>
-        
-      </div>
-    </div>
-  <div style="margin-top:18px"><div class="acc must"><button class="acc-btn" aria-expanded="true"><span class="n">+</span><span>왜 능력치가 아니라 외형인가<span class="sum">공정성 · 악순환 방지 · LoL 수익 구조와 정합</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="4"><div class="acc must"><button class="acc-btn" aria-expanded="true"><span class="n">+</span><span>왜 능력치가 아니라 외형인가<span class="sum">공정성 · 악순환 방지 · LoL 수익 구조와 정합</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li><b>공정성</b>: 시즌에서 진 학회가 협곡에서까지 불리해지면, 지는 쪽이 계속 지는 악순환이 생깁니다.</li>
             <li><b>보여야 동기가 된다</b>: 외형은 상대 9명이 모두 봅니다. "저 학회 이번에 이겼구나"가 경기 중에 드러나고, 다음 시즌에 이기고 싶은 이유가 됩니다.</li>
             <li><b>진 학회도 빈손은 아니다</b>: 시즌 참여 기념 아이콘 테두리를 받습니다. 승리 보상보다 훨씬 작게 둬서 이길 이유는 지킵니다.</li>
             <li><b>LoL과 같은 방향</b>: LoL은 능력치가 아닌 외형으로 수익을 냅니다. 보상도 같은 원칙을 따릅니다.</li>
-          </ul></div></div></div></div></div>
+          </ul></div></div></div></div></div></div></div>
+  
   </div>
 </section></div>
 
@@ -899,15 +893,13 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
       <p>관객만 아는 긴장. 아레나처럼 새 모드로 추가합니다.</p>
     </div>
     <div class="rules"><span class="who-l">네 원칙</span><span class="chip">실력보다 관찰과 운</span><span class="chip">패치 무관 · 버튼 1개</span><span class="chip">3~5분 짧은 판</span><span class="chip">관객이 더 안다</span></div>
-    <div class="split hide-top">
-      <div>
+    <div class="story pair" data-k="1"><div class="story-vis"><div>
         <div class="ph" style="min-height:240px">탑다운 맵 도식 자리<br>부쉬 · 술래 · 숨은 포로</div>
         <div class="grid g2" style="margin-top:14px">
           <div class="ph" style="min-height:150px">플레이어 화면<br>(시야 제한)</div>
           <div class="ph" style="min-height:150px">관전자 화면<br>(전체 시야)</div>
         </div>
-      </div>
-      <div><div class="acc must"><button class="acc-btn" aria-expanded="true"><span class="n">1</span><span>한 판 흐름<span class="sum">준비 → 숨기 → 수색 → 결과, 약 4분</span></span><span class="plus" aria-hidden="true">+</span></button>
+      </div></div><div class="story-steps"><div class="step" data-k="1"><div class="acc must"><button class="acc-btn" aria-expanded="true"><span class="n">1</span><span>한 판 흐름<span class="sum">준비 → 숨기 → 수색 → 결과, 약 4분</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner">
             <table>
               <tr><th>단계</th><th>시간</th><th>일어나는 일</th></tr>
@@ -917,35 +909,28 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
               <tr><td>결과</td><td>10초</td><td>승패, 생존 시간, 예측 결과 공개 → 광장 귀환</td></tr>
             </table>
             <span class="note">시간은 예시이며 테스트로 확정합니다.</span>
-          </div></div></div></div></div>
-    </div>
-    <div class="acc-grid">
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>역할과 조작<span class="sum">술래 2 : 숨는 쪽 8 · 버튼 하나</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </div></div></div></div></div><div class="step" data-k="2"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>역할과 조작<span class="sum">술래 2 : 숨는 쪽 8 · 버튼 하나</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li><b>숨는 쪽 8명</b>: 포로, 미니언, 정글 몹 중 하나로 변신합니다. 맵에는 같은 모습의 NPC 무리가 돌아다녀서 그 사이에 섞일 수 있습니다. 조작은 우클릭 이동 + <b>변신 버튼</b>(다른 모습으로 바꾸기, 쿨타임 20초).</li>
             <li><b>술래 2명</b>: 우클릭 이동 + <b>와드 버튼</b>(설치한 자리 주변을 밝힘, 최대 3개). 밝혀진 범위 안의 대상을 클릭하면 잡습니다.</li>
             <li><b>잘못 잡으면</b>: NPC를 클릭하면 술래가 2초 동안 멈춥니다. 아무거나 누르는 것을 막습니다.</li>
             <li>챔피언 스킬은 쓰지 않습니다. 패치가 바뀌어도 규칙은 그대로입니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>맵과 부쉬 시듦<span class="sum">넓은 맵 · 많은 부쉬 · 점점 좁아지는 숨을 곳</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="3"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>맵과 부쉬 시듦<span class="sum">넓은 맵 · 많은 부쉬 · 점점 좁아지는 숨을 곳</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>협곡보다 넓은 전용 맵에 부쉬를 많이 깝니다. 처음에는 숨을 곳이 넉넉합니다.</li>
             <li>수색이 시작되면 <b>1분마다 부쉬 일부(예시 25%)가 시듭니다</b>. 어떤 부쉬가 시들지는 10초 전에 노랗게 예고합니다.</li>
             <li>시간이 갈수록 숨을 곳이 줄어 마지막 1분에 긴장이 가장 높아집니다. 맵만 넓으면 술래가 헤매다 지루해지고, 부쉬만 많으면 운으로 끝나는 문제를 막습니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">4</span><span>승패와 보상<span class="sum">한 명이라도 살아남으면 숨는 쪽 승리</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="4"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">4</span><span>승패와 보상<span class="sum">한 명이라도 살아남으면 숨는 쪽 승리</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>3분 동안 <b>한 명이라도 살아남으면 숨는 쪽 승리</b>, 모두 잡으면 술래 승리.</li>
             <li>잡힌 사람은 바로 <b>관전자</b>가 되어 전체 시야로 남은 판을 보고, 생존 예측에 참여합니다. 탈락해도 할 일이 있습니다.</li>
             <li>보상은 참여분 + 생존 시간. 이긴 쪽은 조금 더 받지만, 진 쪽도 빈손이 아닙니다. 학회 기여는 참여분만 쌓입니다(기여 계산 참고).</li>
-          </ul></div></div></div></div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">5</span><span>관전과 예측<span class="sum">관객이 플레이어보다 더 많이 안다</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="5"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">5</span><span>관전과 예측<span class="sum">관객이 플레이어보다 더 많이 안다</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>관전자(잡힌 사람, 친구 관전, 광장 관람)에게는 <b>숨은 사람이 전부 보입니다</b>. 술래가 바로 옆 부쉬를 지나칠 때 관객만 아는 긴장이 생깁니다. 영화의 서스펜스와 같은 원리입니다.</li>
             <li>관전자는 "누가 끝까지 살아남을까"를 무료 포인트로 예측합니다(포로 경주와 같은 포인트).</li>
             <li>관전자의 채팅·핑은 플레이어에게 보이지 않습니다. 관객이 답을 알려 주는 것을 막습니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc">
+          </ul></div></div></div></div></div><div class="step" data-k="6"><div class="acc">
         <button class="acc-btn" aria-expanded="false"><span>네 원칙이 벽을 푸는 방식<span class="sum">피로 · 패치 · 복귀 격차에 각각 대응</span></span><span class="plus" aria-hidden="true">+</span></button>
         <div class="acc-body"><div><div class="acc-inner"><ul>
           <li><b>피로</b> → 3~5분짜리 판, 보기만 해도 되는 관전형. 30분 집중할 여력이 없는 날에도 들어올 수 있습니다.</li>
@@ -954,8 +939,8 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
           <li><b>팀원 갈등</b> → 판이 짧고, 진 쪽도 참여 보상을 받고, 개인 실수가 결과를 좌우하지 않아 탓할 거리가 줄어듭니다.</li>
           <li><b>개발 범위</b>: 아레나처럼 기존 큐에 모드 하나를 더하는 방식입니다. 맵 엔진·챔피언·부쉬·와드 시스템을 재사용합니다.</li>
         </ul></div></div></div>
-      </div>
-    </div>
+      </div></div></div></div>
+    
   </div>
 </section></div>
 
@@ -975,28 +960,21 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
       <div><div class="sec-no">3-5 · 관전형 모드</div><h2>포로 경주: 응원만 해도 한 판</h2></div>
       <p>협곡이 부담스러운 날의 쉼표</p>
     </div>
-    <div class="split">
-      <div class="ph">관전 화면 목업 자리<br>트랙을 달리는 포로들 + 응원 · 예측 UI</div>
-      <div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>조작 0 · 자동 경주<span class="sum">포로 8마리, 90초 레이스</span></span><span class="plus" aria-hidden="true">+</span></button>
+    <div class="story pair" data-k="1"><div class="story-vis"><div class="ph">관전 화면 목업 자리<br>트랙을 달리는 포로들 + 응원 · 예측 UI</div></div><div class="story-steps"><div class="step" data-k="1"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>조작 0 · 자동 경주<span class="sum">포로 8마리, 90초 레이스</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>포로 8마리가 트랙을 <b>자동으로</b> 달립니다(예시 90초). 유저는 아무것도 조작하지 않습니다.</li>
             <li>코스 중간에 눈덩이, 지름길, 미끄러운 얼음 같은 <b>무작위 이벤트</b>가 일어나 결과를 예측하기 어렵게 만듭니다. 매번 순위가 뒤집힐 여지가 있어 끝까지 보게 됩니다.</li>
             <li>광장 한쪽의 트랙에서 정해진 간격(예시 10분마다)으로 열립니다. 큐를 돌리면서도 볼 수 있습니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>포인트 예측<span class="sum">무료 포인트만 · 현금성 0</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="2"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>포인트 예측<span class="sum">무료 포인트만 · 현금성 0</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>경주 전 1등 포로를 <b>예측 포인트</b>로 고릅니다. 포인트는 매일 무료로 받고, <b>돈으로 살 수 없으며 현금으로 바꿀 수도 없습니다.</b></li>
             <li>모은 포인트는 광장 꾸밈(감정표현, 장신구 등) 교환에만 씁니다. 사행성 논란이 생길 구조를 처음부터 만들지 않습니다.</li>
             <li>맞히면 보너스, 틀려도 참여분이 쌓입니다. 진 사람이 없는 구조입니다.</li>
-          </ul></div></div></div></div>
-        <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>응원<span class="sum">함께 보는 재미 · 결과에는 영향 없음</span></span><span class="plus" aria-hidden="true">+</span></button>
+          </ul></div></div></div></div></div><div class="step" data-k="3"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>응원<span class="sum">함께 보는 재미 · 결과에는 영향 없음</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li>응원 버튼을 누르면 트랙 옆 관중석에 내 소환사의 응원 연출이 뜹니다. 같은 포로를 응원하는 사람이 많을수록 관중석이 들썩입니다.</li>
             <li>응원은 <b>연출만</b> 있고 결과에는 영향이 없습니다. 많이 누른 쪽이 이기면 공정하지 않기 때문입니다.</li>
-          </ul></div></div></div></div>
-      </div>
-    </div>
+          </ul></div></div></div></div></div></div></div>
   </div>
 </section><section class="r-frel alt" id="day">
   <div class="wrap">
@@ -1035,11 +1013,7 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
       <div><div class="sec-no">5 · 단계별 확장</div><h2>작게 시작해, 증명하며 넓힌다</h2></div>
       <p>앞 단계 지표가 좋아야 다음 단계로 갑니다.</p>
     </div>
-    <div class="steps">
-      <div class="card"><span class="num">1단계</span><h3>클라이언트 광장</h3><p class="one">학회 광장 · 순위 변화 · 캐주얼</p></div>
-      <div class="card"><span class="num">2단계</span><h3>광장 확장</h3><p class="one">경기 같이 보기 · 숨은 소환사 찾기</p></div>
-      <div class="card tint"><span class="num">3단계</span><h3>룬테라 여행</h3><p class="one">3인칭 도시 · 포탈 여행</p></div>
-    </div>
+    <div class="story pair road" data-k="1"><div class="story-vis"><div class="stair"><b data-k="1">1단계<span>클라이언트 광장</span></b><b data-k="2">2단계<span>광장 확장</span></b><b data-k="3">3단계<span>룬테라 여행</span></b></div></div><div class="story-steps"><div class="step" data-k="1"><div class="card"><span class="num">1단계</span><h3>클라이언트 광장</h3><p class="one">학회 광장 · 순위 변화 · 캐주얼</p></div></div><div class="step" data-k="2"><div class="card"><span class="num">2단계</span><h3>광장 확장</h3><p class="one">경기 같이 보기 · 숨은 소환사 찾기</p></div></div><div class="step" data-k="3"><div class="card tint"><span class="num">3단계</span><h3>룬테라 여행</h3><p class="one">3인칭 도시 · 포탈 여행</p></div></div></div></div>
     <div style="margin-top:18px">
       <div class="acc">
         <button class="acc-btn" aria-expanded="false"><span>단계를 넘어가는 기준<span class="sum">무엇이 좋아져야 다음 단계를 여나</span></span><span class="plus" aria-hidden="true">+</span></button>

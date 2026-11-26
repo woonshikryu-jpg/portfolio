@@ -55,6 +55,59 @@ st = ''.join(f'<div class="step" data-k="{j+1}"><span class="sk">{j+1:02d} · {b
 story = f'<div class="story day" data-k="1"><div class="story-vis"><div class="quotes">{quotes}</div></div><div class="story-steps">{st}</div></div>'
 s = s[:a] + story + s[b:]
 
+
+# ---------- (2-c) 그림 + 항목이 짝인 장: 왼쪽 그림 고정, 오른쪽 항목 한 화면씩 ----------
+def bal(t, a):
+    d = 0
+    for m in re.finditer(r'<div\b|</div>', t[a:]):
+        d += 1 if m.group(0) == '<div' else -1
+        if d == 0:
+            return a + m.end()
+def kids(block):
+    inner_a = block.index('>') + 1; inner = block[inner_a:block.rindex('</div>')]
+    out = []; k = 0
+    while True:
+        m = re.search(r'<div\b', inner[k:])
+        if not m: break
+        st = k + m.start(); en = bal(inner, st); out.append(inner[st:en]); k = en
+    return out
+def section(sid):
+    i = s.index(f'id="{sid}"'); return s.rfind('<section', 0, i), s.index('</section>', i)
+def story(vis, items, cls=''):
+    st = ''.join(f'<div class="step" data-k="{j+1}">{it}</div>' for j, it in enumerate(items))
+    return f'<div class="story {cls}" data-k="1"><div class="story-vis">{vis}</div><div class="story-steps">{st}</div></div>'
+def grab(sec, start_pat):
+    a = sec.index(start_pat); b = bal(sec, a); return a, b
+
+for sid in ['plaza', 'poro', 'reward']:
+    A, B = section(sid); sec = s[A:B]
+    a, b = grab(sec, '<div class="split">'); ph, right = kids(sec[a:b]); items = kids(right)
+    rest = sec[b:]
+    if sid == 'reward':
+        ma = rest.index('<div style="margin-top:18px"><div class="acc must">'); mb = bal(rest, ma)
+        items.append(kids(rest[ma:mb])[0]); rest = rest[:ma] + rest[mb:]
+    sec = sec[:a] + story(ph, items, 'pair') + rest
+    s = s[:A] + sec + s[B:]
+
+A, B = section('hide'); sec = s[A:B]
+a, b = grab(sec, '<div class="split hide-top">'); left, mustwrap = kids(sec[a:b]); must = kids(mustwrap)[0]
+ga, gb = grab(sec, '<div class="acc-grid">'); grid = kids(sec[ga:gb])
+sec = sec[:a] + story(left, [must] + grid, 'pair') + sec[b:ga] + sec[gb:]
+s = s[:A] + sec + s[B:]
+
+A, B = section('season'); sec = s[A:B]
+a, b = grab(sec, '<div class="flow4">'); cards = kids(sec[a:b])
+ra, rb = grab(sec, '<div style="margin-top:28px"><div class="grid g3">'); rank = kids(sec[ra:rb])[0]
+sec = sec[:ra] + sec[rb:]
+sec = sec[:a] + story(rank, cards, 'pair season') + sec[b:]
+s = s[:A] + sec + s[B:]
+
+A, B = section('roadmap'); sec = s[A:B]
+a, b = grab(sec, '<div class="steps">'); cards = kids(sec[a:b])
+stair = '<div class="stair"><b data-k="1">1단계<span>클라이언트 광장</span></b><b data-k="2">2단계<span>광장 확장</span></b><b data-k="3">3단계<span>룬테라 여행</span></b></div>'
+sec = sec[:a] + story(stair, cards, 'pair road') + sec[b:]
+s = s[:A] + sec + s[B:]
+
 css = '''
 /* ===== v8 ===== */
 /* (1) 장면 그림이 설명 뒤에 남는다 */
@@ -84,6 +137,22 @@ css = '''
 .story.day .quotes{position:relative;width:100%;height:100%}
 .story.day .q{position:absolute;inset:0;display:grid;place-items:center;text-align:center;margin:0;font:800 clamp(30px,3.4vw,46px)/1.35 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent);letter-spacing:-.03em;opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}
 .story.day[data-k="1"] .q[data-k="1"],.story.day[data-k="2"] .q[data-k="2"],.story.day[data-k="3"] .q[data-k="3"],.story.day[data-k="4"] .q[data-k="4"],.story.day[data-k="5"] .q[data-k="5"],.story.day[data-k="6"] .q[data-k="6"]{opacity:1;transform:none}
+
+.story.pair{grid-template-columns:1fr 1fr}
+.story.pair .story-vis{height:70vh}
+.story-vis>.ph{width:100%;height:100%;min-height:0!important}
+.story-vis>div:not(.ph){width:100%}
+.story.pair .step{min-height:40vh}
+.story.pair .step>.acc,.story.pair .step>.card{width:100%}
+.story.season .story-vis .grid{grid-template-columns:1fr;gap:10px}
+.story.season .story-vis .card{flex-direction:row;align-items:center;gap:14px;padding:12px}
+.story.season .story-vis .card .ph{min-height:90px!important;width:42%;flex:none}
+.story.road .num{width:auto!important;height:auto!important;border-radius:999px!important;padding:7px 14px}
+.stair{display:flex;flex-direction:column;gap:14px;width:100%}
+.stair b{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;border-radius:12px;border:1px solid #E6E8EB;background:rgba(255,255,255,.85);font:800 22px/1 'Pretendard Variable',Pretendard,sans-serif;color:#9AA1AA;transition:all .4s}
+.stair b span{font:600 16px/1 'Pretendard Variable',Pretendard,sans-serif}
+.stair b:nth-child(2){margin-left:12%}.stair b:nth-child(3){margin-left:24%}
+.story.road[data-k="1"] .stair b[data-k="1"],.story.road[data-k="2"] .stair b[data-k="2"],.story.road[data-k="3"] .stair b[data-k="3"]{background:var(--accent);color:#fff;border-color:var(--accent)}
 @media(max-width:900px){.story{grid-template-columns:1fr}.story-vis{position:relative;top:0;height:auto}.step{min-height:auto;padding:18px 0;opacity:1;transform:none}.story.day .q{position:static;opacity:1;transform:none;font-size:22px}}
 '''
 j = s.rindex('</style>'); s = s[:j] + css + s[j:]
