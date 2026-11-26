@@ -337,6 +337,16 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 .acc-inner .note::before,.who .note::before{content:none}
 .world2>img{object-fit:cover}
 .world2 .mark{white-space:nowrap}
+.hide-top{align-items:stretch}
+.hide-top>div:first-child{display:flex;flex-direction:column}
+.hide-top>div:first-child>.ph:first-child{flex:1}
+.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;align-items:start}
+.acc-grid .acc+.acc{margin-top:0}
+@media(max-width:900px){.acc-grid{grid-template-columns:1fr}}
+/* v7: 그림 자리와 오른쪽 목록 높이 맞춤 */
+#plaza .split,#reward .split,#poro .split{align-items:stretch}
+#plaza .split>.ph,#reward .split>.ph,#poro .split>.ph{height:auto;min-height:100%}
+.acc-grid>.acc:last-child:nth-child(odd){grid-column:1/-1}
 </style>
 </head>
 <body>
@@ -736,15 +746,16 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
             <li>한 팀에 여러 학회가 섞여 있으므로 우물 전체를 바꾸지 않고, 그 소환사 개인의 연출로만 보여 줍니다.</li>
             <li>회복량·속도 등 우물의 기능은 그대로입니다.</li>
           </ul></div></div></div></div>
-        <div class="acc must"><button class="acc-btn" aria-expanded="true"><span class="n">+</span><span>왜 능력치가 아니라 외형인가<span class="sum">공정성 · 악순환 방지 · LoL 수익 구조와 정합</span></span><span class="plus" aria-hidden="true">+</span></button>
+        
+      </div>
+    </div>
+  <div style="margin-top:18px"><div class="acc must"><button class="acc-btn" aria-expanded="true"><span class="n">+</span><span>왜 능력치가 아니라 외형인가<span class="sum">공정성 · 악순환 방지 · LoL 수익 구조와 정합</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li><b>공정성</b>: 시즌에서 진 학회가 협곡에서까지 불리해지면, 지는 쪽이 계속 지는 악순환이 생깁니다.</li>
             <li><b>보여야 동기가 된다</b>: 외형은 상대 9명이 모두 봅니다. "저 학회 이번에 이겼구나"가 경기 중에 드러나고, 다음 시즌에 이기고 싶은 이유가 됩니다.</li>
             <li><b>진 학회도 빈손은 아니다</b>: 시즌 참여 기념 아이콘 테두리를 받습니다. 승리 보상보다 훨씬 작게 둬서 이길 이유는 지킵니다.</li>
             <li><b>LoL과 같은 방향</b>: LoL은 능력치가 아닌 외형으로 수익을 냅니다. 보상도 같은 원칙을 따릅니다.</li>
-          </ul></div></div></div></div>
-      </div>
-    </div>
+          </ul></div></div></div></div></div>
   </div>
 </section></div>
 
@@ -783,7 +794,7 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
       <p>관객만 아는 긴장. 아레나처럼 새 모드로 추가합니다.</p>
     </div>
     <div class="rules"><span class="who-l">네 원칙</span><span class="chip">실력보다 관찰과 운</span><span class="chip">패치 무관 · 버튼 1개</span><span class="chip">3~5분 짧은 판</span><span class="chip">관객이 더 안다</span></div>
-    <div class="split">
+    <div class="split hide-top">
       <div>
         <div class="ph" style="min-height:240px">탑다운 맵 도식 자리<br>부쉬 · 술래 · 숨은 포로</div>
         <div class="grid g2" style="margin-top:14px">
@@ -791,8 +802,7 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
           <div class="ph" style="min-height:150px">관전자 화면<br>(전체 시야)</div>
         </div>
       </div>
-      <div>
-        <div class="acc must"><button class="acc-btn" aria-expanded="true"><span class="n">1</span><span>한 판 흐름<span class="sum">준비 → 숨기 → 수색 → 결과, 약 4분</span></span><span class="plus" aria-hidden="true">+</span></button>
+      <div><div class="acc must"><button class="acc-btn" aria-expanded="true"><span class="n">1</span><span>한 판 흐름<span class="sum">준비 → 숨기 → 수색 → 결과, 약 4분</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner">
             <table>
               <tr><th>단계</th><th>시간</th><th>일어나는 일</th></tr>
@@ -802,7 +812,9 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
               <tr><td>결과</td><td>10초</td><td>승패, 생존 시간, 예측 결과 공개 → 광장 귀환</td></tr>
             </table>
             <span class="note">시간은 예시이며 테스트로 확정합니다.</span>
-          </div></div></div></div>
+          </div></div></div></div></div>
+    </div>
+    <div class="acc-grid">
         <div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>역할과 조작<span class="sum">술래 2 : 숨는 쪽 8 · 버튼 하나</span></span><span class="plus" aria-hidden="true">+</span></button>
           <div class="acc-body"><div><div class="acc-inner"><ul>
             <li><b>숨는 쪽 8명</b>: 포로, 미니언, 정글 몹 중 하나로 변신합니다. 맵에는 같은 모습의 NPC 무리가 돌아다녀서 그 사이에 섞일 수 있습니다. 조작은 우클릭 이동 + <b>변신 버튼</b>(다른 모습으로 바꾸기, 쿨타임 20초).</li>
@@ -837,7 +849,6 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
           <li><b>팀원 갈등</b> → 판이 짧고, 진 쪽도 참여 보상을 받고, 개인 실수가 결과를 좌우하지 않아 탓할 거리가 줄어듭니다.</li>
           <li><b>개발 범위</b>: 아레나처럼 기존 큐에 모드 하나를 더하는 방식입니다. 맵 엔진·챔피언·부쉬·와드 시스템을 재사용합니다.</li>
         </ul></div></div></div>
-      </div>
       </div>
     </div>
   </div>
