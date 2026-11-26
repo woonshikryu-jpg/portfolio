@@ -62,7 +62,7 @@ academy = f'''<section class="cs" id="academy">
       <ol class="cs-tl">
         <li><span class="when">초창기 롤 설정</span><b>전쟁의 학회</b><span class="what">나라끼리 전쟁 대신, 소환사의 협곡 대결로 분쟁을 정했다</span></li>
         <li><span class="when">2014년 무렵</span><b>공식 설정에서 삭제</b><span class="what">"협곡에서 왜 싸우는가"가 비어 버렸다</span></li>
-        <li class="mine"><span class="when">이 기획</span><b>소환사들은 도시에 숨어 산다</b><span class="what">신들처럼 몰래 섞여 산다 · 주민은 정체를 모른다</span></li>
+        <li class="mine"><span class="when">이 기획</span><b>소환사들은 도시에 숨어 산다</b><span class="what">신들처럼 몰래 섞여 산다 · 주민은 정체를 모른다 · 버려진 본단에서 다시 모인다</span></li>
         <li class="mine"><span class="when">그래서</span><b>숨은 학회가 협곡에서 겨룬다</b><span class="what">이긴 학회의 도시가 시즌의 주인공이 된다</span></li>
       </ol>
       <div class="cs-side">
@@ -76,7 +76,16 @@ academy = f'''<section class="cs" id="academy">
       <figure><img src="img/lol/noxus-city-hq.jpg" alt="녹서스"><figcaption><b>녹서스 학회</b>붉은 깃발 · 데마시아의 맞수</figcaption></figure>
       <figure><img src="img/lol/piltover-hq.jpg" alt="필트오버"><figcaption><b>필트오버 학회</b>황동 · 톱니 · 발명</figcaption></figure>
     </div>
-    <p class="cs-line">공식 이야기는 하나도 바꾸지 않고 → <em>그 옆에 숨은 소환사만 더한다</em></p>
+    <h3 class="cs-sub">모두가 모이는 곳, 숨겨진 전쟁의 학회 본단</h3>
+    <div class="cs-hq">
+      <div class="cs-hq-img"><img src="img/lol/hq.jpg" alt="안개 낀 산골짜기에 숨겨진 전쟁의 학회 본단" onerror="this.parentNode.classList.add('empty')"><span class="ph-t">전쟁의 학회 본단 그림 자리</span></div>
+      <div class="cs-hq-txt">
+        <p>전쟁의 학회는 사라졌지만, 본단 건물은 남았습니다. 안개 낀 골짜기 깊은 곳, 주민들은 오래된 유적이라고만 알고 있는 곳입니다.</p>
+        <p>숨어 살던 소환사들은 이곳에서 다시 모입니다. 1단계에서 클라이언트를 켜면 처음 보이는 광장이 바로 <b>본단의 안뜰</b>입니다.</p>
+        <div class="cs-punch small"><span class="k">시즌 보상이 눈에 보이는 곳</span><b>지난 시즌 우승 학회가 <em>본단을 자기 도시 양식으로</em> 꾸민다</b><span>데마시아가 이기면 흰 석회암과 푸른 깃발, 녹서스가 이기면 붉은 깃발과 철 장식. 모든 소환사가 다음 시즌 내내 그 모습을 봅니다.</span></div>
+      </div>
+    </div>
+    <p class="cs-line">공식 이야기는 하나도 바꾸지 않고 → <em>그 옆에 숨은 소환사와 그들의 본단만 더한다</em></p>
     <div style="margin-top:18px">{why_world}{rule}</div>
   </div>
 </section>'''
@@ -88,7 +97,7 @@ pa = accs(old)
 b1, b2, b3, b4 = [body(x) for x in pa[:4]]
 bview = body(pa[4]) if len(pa) > 4 else ''
 rows = [
-    ('첫 화면', '메뉴 버튼이 늘어선 화면', '내가 사는 도시의 광장', b1),
+    ('첫 화면', '메뉴 버튼이 늘어선 화면', '본단 안뜰 · 우승 학회 양식으로 꾸며짐', b1),
     ('큐 대기', '타이머만 보며 기다린다', '광장을 걸으며 기다린다', b2),
     ('친구', '목록 속 이름 한 줄', '광장에 서 있는 소환사 · 클릭하면 파티', b3),
     ('출전', '수락 → 로딩 화면', '포탈로 걸어 들어가면 카메라가 하늘로', b4),
@@ -98,8 +107,8 @@ rh = ''.join(f'''<div class="cmp-row"><button aria-expanded="false"><span class=
 plaza = f'''<section class="cs" id="plaza">
   <div class="wrap">
     <div class="sec-head">
-      <div><div class="sec-no">3-1 · 학회 광장</div><h2>메뉴 화면 대신, 내가 사는 도시의 광장</h2></div>
-      <p>지금 클라이언트에서 하던 일은 그대로. 하는 장소만 광장으로 옮깁니다. 줄을 누르면 설계가 열립니다.</p>
+      <div><div class="sec-no">3-1 · 학회 광장</div><h2>메뉴 화면 대신, 소환사들이 모이는 본단</h2></div>
+      <p>1단계의 광장은 전쟁의 학회 본단 안뜰입니다. 클라이언트에서 하던 일은 그대로, 하는 장소만 이곳으로 옮깁니다. 줄을 누르면 설계가 열립니다.</p>
     </div>
     <div class="cmp">
       <div class="cmp-head"><span></span><span>지금 롤 클라이언트</span><span>학회 광장</span><span></span></div>
@@ -112,6 +121,19 @@ s = s[:A] + plaza + s[B:]
 
 css = '''
 /* ===== v10: Crazy Splash 방식 설명 ===== */
+.cs-hq{display:grid;grid-template-columns:1.35fr 1fr;gap:26px;align-items:center}
+.cs-hq-img{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:16/9;background:#F2F3F5;border:1.5px solid #E6E8EB}
+.cs-hq-img img{display:block;width:100%;height:100%;object-fit:cover}
+.cs-hq-img .ph-t{display:none}
+.cs-hq-img.empty img{display:none}
+.cs-hq-img.empty{border-style:dashed;display:grid;place-items:center}
+.cs-hq-img.empty .ph-t{display:block;font:600 14px 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+.cs-hq-txt p{font:500 16px/1.75 'Pretendard Variable',Pretendard,sans-serif;color:#2A3038;margin:0 0 10px}
+.cs-hq-txt p b{color:#111418;font-weight:800}
+.cs-punch.small{margin-top:14px;padding:18px 20px}
+.cs-punch.small b{font-size:21px}
+@media(max-width:900px){.cs-hq{grid-template-columns:1fr}}
+
 .pan.one img{transform:none!important}
 .ex section.cs{position:relative;z-index:1;background:#fff!important;padding:96px 0}
 .ex section.cs+section{border-top:0}
