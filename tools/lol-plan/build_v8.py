@@ -108,6 +108,13 @@ stair = '<div class="stair"><b data-k="1">1단계<span>클라이언트 광장</s
 sec = sec[:a] + story(stair, cards, 'pair road') + sec[b:]
 s = s[:A] + sec + s[B:]
 
+# ---------- 포로 경주 장면: 줄무늬 빼고, 동그랗게 열리는(아이리스) 연출 + 글이 통 튀어나옴 ----------
+s = s.replace('    <div class="race-lines"></div>\n', '', 1)
+s = s.replace('<div class="mark scene-cap" style="left:30%;top:40%', '<div class="mark scene-cap pop" style="left:30%;top:40%', 1)
+old = "if(mode==='race'){var r1=ease(Math.min(1,p/0.32));var ri=sc.querySelector('.race-img');ri.style.transform='translateX('+((1-r1)*100)+'%)';ri.style.filter='blur('+((1-r1)*8)+'px)';sc.querySelector('.race-lines').style.opacity=(1-r1)*.9;marks(sc,p);return}"
+assert old in s
+s = s.replace(old, "if(mode==='race'){var r1=ease(Math.min(1,p/0.38));var ri=sc.querySelector('.race-img');ri.style.clipPath='circle('+(4+r1*78)+'% at 52% 58%)';ri.querySelector('img').style.transform='scale('+(1.18-0.18*r1)+')';marks(sc,p);return}")
+
 css = '''
 /* ===== v8 ===== */
 /* (1) 장면 그림이 설명 뒤에 남는다 */
@@ -153,6 +160,12 @@ css = '''
 .stair b span{font:600 16px/1 'Pretendard Variable',Pretendard,sans-serif}
 .stair b:nth-child(2){margin-left:12%}.stair b:nth-child(3){margin-left:24%}
 .story.road[data-k="1"] .stair b[data-k="1"],.story.road[data-k="2"] .stair b[data-k="2"],.story.road[data-k="3"] .stair b[data-k="3"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* 포로 경주: 아이리스 + 통 튀는 글 */
+.scene[data-mode="race"] .sticky{background:radial-gradient(ellipse at 50% 60%,#FFFFFF,#E8F0F8)}
+.race-img img{transition:none;will-change:transform}
+.mark.pop{transform:translate(-50%,-50%) scale(.55);transition:opacity .35s ease,transform .75s cubic-bezier(.34,1.9,.5,1)}
+.mark.pop.on{transform:translate(-50%,-50%) scale(1)}
 @media(max-width:900px){.story{grid-template-columns:1fr}.story-vis{position:relative;top:0;height:auto}.step{min-height:auto;padding:18px 0;opacity:1;transform:none}.story.day .q{position:static;opacity:1;transform:none;font-size:22px}}
 '''
 j = s.rindex('</style>'); s = s[:j] + css + s[j:]
