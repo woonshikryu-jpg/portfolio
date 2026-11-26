@@ -226,6 +226,22 @@ canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
 .carve.shot-carve{padding-top:1em}
 .carve.shot-carve{background:radial-gradient(ellipse 60% 30% at 50% 84%,rgba(25,18,8,.75),rgba(25,18,8,0) 100%)}
 .shot-carve h3,.shot-carve>p,.shot-carve .feel{text-shadow:0 0 .4em rgba(0,0,0,.85),0 0 1.2em rgba(0,0,0,.6)}
+
+/* v6: 학회별 진짜 문짝 */
+.door::before,.door::after{content:none}
+.door .leaf{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;z-index:1;transition:transform 1.6s cubic-bezier(.7,0,.2,1)}
+.door .leaf.l{left:0}.door .leaf.r{right:0}
+.door .leaf img{position:absolute;top:0;bottom:auto;height:100%;width:200%;object-fit:cover;inset:auto}
+.door .leaf.l img{left:0;top:0}.door .leaf.r img{right:0;left:auto;top:0}
+.door.open .leaf.l{transform:translateX(-101%)}
+.door.open .leaf.r{transform:translateX(101%)}
+.door .leaf.l::after,.door .leaf.r::after{content:'';position:absolute;top:0;bottom:0;width:18%;pointer-events:none;opacity:0;transition:opacity .6s}
+.door .leaf.l::after{right:0;background:linear-gradient(270deg,rgba(40,25,10,.35),transparent)}
+.door .leaf.r::after{left:0;background:linear-gradient(90deg,rgba(40,25,10,.35),transparent)}
+.door.open .leaf::after{opacity:1}
+.doors-title .carve{background:radial-gradient(ellipse at center,rgba(25,18,8,.75),rgba(25,18,8,.45) 55%,rgba(25,18,8,0) 80%);padding:2em 3em}
+.doors-title .carve h2,.doors-title .carve p{color:#F6E6C2;text-shadow:0 0 .5em rgba(0,0,0,.7)}
+.doors-title .carve .pn{color:#F2CF84;text-shadow:0 0 .5em rgba(0,0,0,.6)}
 </style>
 </head>
 <body>
@@ -374,9 +390,9 @@ canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
 <div class="scene" data-mode="doors" style="height:450vh">
   <div class="sticky">
     <div class="doors">
-      <div class="door" data-at="0.25"><img src="img/lol/demacia-hq.jpg" alt="데마시아 왕궁 전경"><div class="carve"><span class="pn">데마시아 학회</span><h3>흰 석회암 · 푸른 깃발</h3></div></div>
-      <div class="door" data-at="0.45"><img src="img/lol/noxus-city-hq.jpg" alt="안개 속 녹서스 성벽 도시"><div class="carve"><span class="pn">녹서스 학회</span><h3>붉은 깃발 · 데마시아의 맞수</h3></div></div>
-      <div class="door" data-at="0.65"><img src="img/lol/piltover-hq.jpg" alt="필트오버 거리"><div class="carve"><span class="pn">필트오버 학회</span><h3>황동 · 톱니 · 발명</h3></div></div>
+      <div class="door" data-at="0.25"><img src="img/lol/demacia-hq.jpg" alt="데마시아 왕궁 전경"><div class="leaf l"><img src="img/lol/door-demacia.jpg" alt=""></div><div class="leaf r"><img src="img/lol/door-demacia.jpg" alt="데마시아 학회의 닫힌 문"></div><div class="carve"><span class="pn">데마시아 학회</span><h3>흰 석회암 · 푸른 깃발</h3></div></div>
+      <div class="door" data-at="0.45"><img src="img/lol/noxus-city-hq.jpg" alt="안개 속 녹서스 성벽 도시"><div class="leaf l"><img src="img/lol/door-noxus.jpg" alt=""></div><div class="leaf r"><img src="img/lol/door-noxus.jpg" alt="녹서스 학회의 닫힌 문"></div><div class="carve"><span class="pn">녹서스 학회</span><h3>붉은 깃발 · 데마시아의 맞수</h3></div></div>
+      <div class="door" data-at="0.65"><img src="img/lol/piltover-hq.jpg" alt="필트오버 거리"><div class="leaf l"><img src="img/lol/door-piltover.jpg" alt=""></div><div class="leaf r"><img src="img/lol/door-piltover.jpg" alt="필트오버 학회의 닫힌 문"></div><div class="carve"><span class="pn">필트오버 학회</span><h3>황동 · 톱니 · 발명</h3></div></div>
     </div>
     <div class="doors-title"><div class="carve"><span class="pn">2-3 · 학회</span><h2>거주 도시 = 학회 = 세력</h2><p>문을 열면, 그 도시의 학회원이 된다</p></div></div>
   </div>
