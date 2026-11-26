@@ -95,18 +95,6 @@ for mode in ['mist', 'frame', 'doors', 'harbor', 'dawn']:
 
 css = '''
 /* ===== v9 ===== */
-/* 글이 뜨면 배경이 물러난다 */
-.scene .world>img,.scene .pan,.scene .race-img img,.scene .harbor-frame>img{transition:filter .7s ease}
-.scene .sticky:has(.mark.on:not(.scene-cap)) .world>img,
-.scene .sticky:has(.mark.on) .pan{filter:blur(5px) brightness(.72) saturate(.85)}
-.scene[data-mode="harbor"] .sticky:has(.mark.on) .harbor-frame>img{filter:blur(3px) brightness(.75)}
-.scene[data-mode="snow"] .sticky:has(.mark.on) .world>img{filter:blur(4px) brightness(.8) saturate(.85)}
-.scene .fx-light{transition:opacity .7s}
-.scene .sticky:has(.mark.on) .fx-light{opacity:.25!important}
-/* 필터를 스크립트가 쓰는 장면(안개·해돋이)은 막을 덮어 물러나게 */
-.scene[data-mode="mist"] .world .mark,.scene[data-mode="dawn"] .world .mark{z-index:3}
-.scene[data-mode="mist"] .world::after,.scene[data-mode="dawn"] .world::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,rgba(24,16,8,.5),rgba(24,16,8,.25) 60%,rgba(24,16,8,.12));backdrop-filter:blur(4px);opacity:0;transition:opacity .7s}
-.scene[data-mode="mist"] .sticky:has(.mark.on) .world::after,.scene[data-mode="dawn"] .sticky:has(.mark.on) .world::after{opacity:1}
 /* 촘촘한 설명 */
 .flat{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
 .flat4{grid-template-columns:repeat(4,1fr)}
