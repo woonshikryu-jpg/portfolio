@@ -40,6 +40,13 @@ a = s.index('data-mode="frame"'); a = s.rfind('<div class="scene', 0, a)
 hd = s[a:s.index('>', a)]
 s = s[:a] + re.sub(r'style="height:\d+vh"', 'style="height:380vh"', hd) + s[a + len(hd):]
 
+# PART 02 장면: 제목 뒤 카메라 추가 이동(버벅임 원인) 제거 — 들어간 뒤엔 멈춘 채 제목만
+a = s.index('data-mode="frame"'); a = s.rfind('<div class="scene', 0, a); b = bal(s, a)
+sc = s[a:b]
+sc = re.sub(r"data-keys='[^']*'", "data-keys='" + '[{"p":0,"x":50,"y":50,"s":0},{"p":0.1,"x":50,"y":50,"s":0},{"p":0.38,"x":50,"y":46,"s":1.06},{"p":1,"x":50,"y":46,"s":1.06}]' + "'", sc, count=1)
+sc = re.sub(r'(<div class="mark[^"]*"[^>]*data-from=")[\d.]+(" data-to=")[\d.]+(")', r'\g<1>0.42\g<2>0.92\3', sc, count=1)
+s = s[:a] + sc + s[b:]
+
 # ---------- 2. 2-2 세계관 (Crazy Splash 01 '기획 배경' 방식: 연표 + 큰 카드) ----------
 A, B = section('academy'); old = s[A:B]
 oa = accs(old)
