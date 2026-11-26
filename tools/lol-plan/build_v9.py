@@ -107,6 +107,8 @@ css = '''
 /* 스크롤 이야기 빈 공간 줄이기 */
 .story-steps{padding:8vh 0 14vh}
 .story.pair .step{min-height:30vh}
+.story.walls .step{min-height:62vh}
+.wv{transition:opacity .35s ease,transform .35s ease!important}
 .step{opacity:.38}
 '''
 j = s.rindex('</style>'); s = s[:j] + css + s[j:]

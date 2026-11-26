@@ -278,12 +278,17 @@ js2 = r'''
   })();
 '''
 js = '''
-  // v8: 스크롤 이야기 — 화면 가운데 온 단계를 켠다
-  document.querySelectorAll('.story').forEach(function(st){
-    var steps=[].slice.call(st.querySelectorAll('.step'));
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){steps.forEach(function(x){x.classList.toggle('on',x===e.target)});st.setAttribute('data-k',e.target.getAttribute('data-k'))}})},{rootMargin:'-45% 0px -45% 0px'});
-    steps.forEach(function(x){io.observe(x)});
-  });
+  // 스크롤 이야기: 매 스크롤마다 '화면 가운데에 가장 가까운 칸'을 계산 (건너뜀·늦은 반응 없음)
+  (function(){
+    var stories=[].slice.call(document.querySelectorAll('.story')),ticking=false;
+    function upd(){ticking=false;var line=innerHeight*.5;
+      stories.forEach(function(st){var steps=st.querySelectorAll('.step'),k=0;
+        var best=1e9;for(var i=0;i<steps.length;i++){var r=steps[i].getBoundingClientRect(),d=Math.abs(r.top+r.height/2-line);if(d<best){best=d;k=i}}
+        var cur=st.getAttribute('data-k');if(cur!==String(k+1)){st.setAttribute('data-k',k+1);for(var j=0;j<steps.length;j++)steps[j].classList.toggle('on',j===k)}})}
+    function req(){if(!ticking){ticking=true;requestAnimationFrame(upd)}}
+    addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
+    stories.forEach(function(st){var f=st.querySelector('.step');if(f)f.classList.add('on')});upd();
+  })();
 '''
 k = s.rindex('})();'); s = s[:k] + js + js2 + s[k:]
 open('versions/lol-plan-v8.html', 'w', encoding='utf-8').write(s)
