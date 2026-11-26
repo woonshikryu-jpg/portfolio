@@ -347,6 +347,7 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 #plaza .split,#reward .split,#poro .split{align-items:stretch}
 #plaza .split>.ph,#reward .split>.ph,#poro .split>.ph{height:auto;min-height:100%}
 .acc-grid>.acc:last-child:nth-child(odd){grid-column:1/-1}
+.shot-carve .real-shot figcaption{white-space:nowrap;font-size:.72em}
 </style>
 </head>
 <body>
@@ -389,20 +390,17 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 
 <!-- 2 · 햇빛이 훑고 지나감 -->
 <div class="scene still" data-mode="sweep" data-w="2083" data-h="1080" style="height:780vh"
-  data-light='[{"p":0,"x":50,"y":50,"r":60},{"p":0.14,"x":50,"y":50,"r":60},{"p":0.24,"x":25,"y":50,"r":16},{"p":0.32,"x":25,"y":50,"r":16},{"p":0.38,"x":50,"y":50,"r":16},{"p":0.48,"x":50,"y":50,"r":16},{"p":0.54,"x":75,"y":50,"r":16},{"p":0.64,"x":75,"y":50,"r":16},{"p":0.7,"x":50,"y":50,"r":34},{"p":0.8,"x":50,"y":50,"r":34},{"p":0.9,"x":50,"y":50,"r":70},{"p":1,"x":50,"y":50,"r":70}]'>
+  data-light='[{"p":0,"x":50,"y":50,"r":60},{"p":0.14,"x":50,"y":50,"r":60},{"p":0.2,"x":25,"y":50,"r":16},{"p":0.32,"x":25,"y":50,"r":16},{"p":0.38,"x":50,"y":50,"r":16},{"p":0.48,"x":50,"y":50,"r":16},{"p":0.54,"x":75,"y":50,"r":16},{"p":0.64,"x":75,"y":50,"r":16},{"p":0.7,"x":50,"y":50,"r":34},{"p":0.8,"x":50,"y":50,"r":34},{"p":0.9,"x":50,"y":50,"r":70},{"p":1,"x":50,"y":50,"r":70}]'>
   <div class="sticky">
     <div class="world">
       <img src="img/lol/d1-hq.jpg" alt="정오의 슈리마 사구">
-      <div class="mark" style="left:50%;top:48%;font-size:var(--u)" data-from="0.0" data-to="0.14">
-        <div class="carve sun"><span class="pn">PART 01 · 문제 정의</span><h2>메마른 한 판</h2><p>이겨도 져도, 남는 건 점수 하나.</p></div>
-      </div>
-    </div>
-    <div class="world world2" data-w="1920" data-h="853">
-      <img src="img/lol/noxus-hq.jpg" alt="모래바람 부는 차양 시장">
       <div class="fx fx-shade"></div>
       <div class="fx fx-light"></div>
+      <div class="mark" style="left:50%;top:48%;font-size:var(--u)" data-from="0.0" data-to="0.17">
+        <div class="carve sun"><span class="pn">PART 01 · 문제 정의</span><h2>메마른 한 판</h2><p>이겨도 져도, 남는 건 점수 하나.</p></div>
+      </div>
 
-      <div class="mark" style="left:25%;top:50%;font-size:calc(var(--u) * .9)" data-from="0.24" data-to="0.35">
+      <div class="mark" style="left:25%;top:50%;font-size:calc(var(--u) * .9)" data-from="0.2" data-to="0.35">
         <div class="carve"><h3>한 판의 피로</h3><p>30분 집중 · 팀원 갈등</p><div class="feel">“오늘은 30분 집중할 자신이 없다.”</div><div class="ev">근거 · 실제 랭크 한 판 31분 29초 (결과 화면)</div></div>
       </div>
       <div class="mark" style="left:50%;top:50%;font-size:calc(var(--u) * .9)" data-from="0.38" data-to="0.51">
@@ -1094,9 +1092,9 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
       world.querySelector('img').style.filter='blur('+((1-e)*5)+'px) saturate('+(0.7+0.3*e)+')';
     }
     if(mode==='sweep'){
-      var sl=ease(Math.min(1,Math.max(0,(p-0.15)/0.08)));
+      var w2el=sc.querySelector('.world2');if(w2el){var sl=ease(Math.min(1,Math.max(0,(p-0.15)/0.08)));
       var x1=(vw-sc._w)/2;world.style.transform='translate('+(x1-sl*(sc._w+x1))+'px,'+(vh-sc._h)/2+'px)';
-      sc.querySelector('.world2').style.transform='translate('+((1-sl)*vw)+'px,0)';
+      w2el.style.transform='translate('+((1-sl)*vw)+'px,0)';}
       var L=seg(sc._light,p),lx=lerp(L.a.x,L.b.x,L.t),ly=lerp(L.a.y,L.b.y,L.t),lr=lerp(L.a.r,L.b.r,L.t);
       var lf=sc.querySelector('.fx-light');lf.style.setProperty('--lx',lx+'%');lf.style.setProperty('--ly',ly+'%');lf.style.setProperty('--lr',lr+'%');
       var focus=lr<30?1:Math.max(0,1-(lr-30)/30);
