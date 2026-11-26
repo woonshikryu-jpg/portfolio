@@ -6,7 +6,7 @@ s = open('versions/lol-plan-v7.html', encoding='utf-8').read()
 s = s.replace('기획서 v7', '기획서 v8')
 
 # ---------- (1) 장면 그림을 설명 뒤 배경으로 ----------
-BG = {'summary': 'cover-hq.jpg', 'loop': 'd2-hq.jpg', 'academy': 'noxus-city-hq.jpg', 'build': 'harbor-hq.jpg',
+BG = {'summary': 'cover-hq.jpg', 'loop': 'ionia-rest.jpg', 'academy': 'noxus-city-hq.jpg', 'build': 'harbor-hq.jpg',
       'hide': 'd4-hq.jpg', 'poro': 'poro-hq.jpg', 'roadmap': 'd5-hq.jpg'}
 out = []; k = 0
 for m in re.finditer(r'<div class="ex ([a-z-]+)">', s):
