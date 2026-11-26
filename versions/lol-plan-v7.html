@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>숨어 사는 소환사들 · 기획서 v6 (판타지 연출 + 설명)</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Hahmlet:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700&family=Gaegu:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;background:#EFE6D2;color:#2A2118;font:16px/1.7 'Noto Sans KR',sans-serif;word-break:keep-all}
@@ -362,6 +363,66 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 .wc em{font-style:normal;margin-top:6px;padding-top:10px;border-top:1px dashed #D9C08A;font:800 15px/1.4 'Hahmlet',serif;color:var(--accent)}
 .wc em::before{content:'→ ';color:#C9A24E}
 .acc-inner .src{margin-top:14px;text-align:right;font:600 12.5px/1.4 'Noto Sans KR',sans-serif;color:#8A7458}
+
+/* ===== v7: 설명 부분 = 깔끔한 흰 바탕 + 고딕 (연출 장면은 그대로) ===== */
+.ex{color:#1F2328;font:16px/1.7 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;--line:#E6E8EB;--mute:#5B6470}
+.ex section,.ex section.alt{background:#FFFFFF!important;padding:88px 0}
+.ex section.alt,.ex section:nth-of-type(even){background:#F7F8FA!important}
+.ex .sec-no{font:700 13px/1.2 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;letter-spacing:.08em;color:var(--accent)}
+.ex .sec-head h2{font:800 clamp(28px,3.6vw,40px)/1.3 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#111418;letter-spacing:-.02em}
+.ex .sec-head h2::after{width:40px;height:3px;background:var(--accent)}
+.ex .sec-head p{font:500 15.5px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--mute)}
+.ex .card,.ex .imm-item,.ex .wc{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:none}
+.ex section.alt .card,.ex section:nth-of-type(even) .card{background:#fff}
+.ex .tint{background:color-mix(in srgb,var(--accent) 6%,#fff)!important;border-color:color-mix(in srgb,var(--accent) 25%,#fff)}
+.ex .card h3,.ex .imm-item h3{font:800 19px/1.35 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#111418;letter-spacing:-.01em}
+.ex .one{font:600 15px/1.55 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#3A424C}
+.ex .num,.ex .acc-btn .n,.ex .imm-item .b{background:var(--accent)!important;box-shadow:none!important;color:#fff;font:800 15px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif}
+.ex .num{width:36px;height:36px;font-size:14px}
+.ex .tag{all:unset;display:inline-block;font:700 12.5px/1.2 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;letter-spacing:.06em;color:var(--accent);margin-bottom:4px}
+.ex .tag::before{content:none}
+.ex .banner{background:var(--accent)!important;box-shadow:none;border-radius:12px;font:700 18px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#fff}
+.ex .acc{background:#fff!important;border:1px solid var(--line)!important;border-radius:12px;box-shadow:none!important}
+.ex .acc.must{border-color:color-mix(in srgb,var(--accent) 45%,#fff)!important}
+.ex .acc.must .acc-btn::before{background:var(--accent);font-family:'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif}
+.ex .acc-btn{font:700 16px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#111418}
+.ex .acc-btn .sum{font:500 14px/1.5 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--mute)}
+.ex .acc-btn .plus{border-color:var(--line)!important;color:var(--accent)!important;background:#fff!important}
+.ex .acc-btn[aria-expanded="true"] .plus{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}
+.ex .acc-inner{font:15px/1.75 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#2A3038;border-top:1px solid var(--line)}
+.ex .acc-inner h4{font:700 15px 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--accent)}
+.ex .acc.peek .acc-btn[aria-expanded="false"]+.acc-body{background:#fff!important;border:1px solid var(--line)!important;box-shadow:0 18px 40px rgba(17,20,24,.14)!important}
+.ex .acc-inner .note,.ex .who .note{background:#F4F6F8!important;border-left:3px solid var(--accent)!important;font:600 14px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif!important;color:#3A424C}
+.ex table{background:#fff;border:1px solid var(--line);border-radius:12px;font:15px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif}
+.ex th{background:#F4F6F8!important;font:700 14px 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif!important;color:#3A424C!important}
+.ex td{border-bottom:1px solid var(--line)}
+.ex .chip{background:#fff;border:1px solid var(--line);font:600 14.5px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#2A3038}
+.ex .who-l{font:700 12.5px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;letter-spacing:.06em;color:var(--accent)}
+.ex .ph{border:1.5px dashed #C9CED4;background:#F7F8FA;color:#7A838E;font:600 14px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;border-radius:12px}
+.ex .timeline{background:#fff;border:1px solid var(--line);border-radius:12px}
+.ex .tl{border-bottom:1px solid var(--line);font:600 15px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif}
+.ex .tl b{font:800 16px 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--accent)}
+.ex .tl .f{font:600 15px/1.5 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#5B6470;font-style:normal}
+.ex h3.sub{font:800 21px/1.3 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#111418}
+.ex svg.loop ellipse{stroke:#E6E8EB}
+.ex svg.loop .node rect{fill:#fff;stroke:#C9CED4;stroke-width:1.5}
+.ex svg.loop .node text{font-family:'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;font-weight:800;fill:#111418}
+.ex svg.loop .node text.s{font-family:'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;font-weight:500;fill:#5B6470}
+.ex svg.loop path{stroke:var(--accent)}
+.ex svg.loop marker path{fill:var(--accent)}
+.ex svg.loop .imm circle{fill:var(--accent)}
+.ex svg.loop .imm text{font-family:'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;font-weight:800}
+.ex svg.loop text.mid{font-family:'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;font-weight:700;fill:var(--accent)}
+/* 왜 지금인가 */
+.ex .why-hero .from{font:700 32px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#A3AAB3}
+.ex .why-hero .arr{font:600 26px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#C9CED4}
+.ex .why-hero .to{font:900 60px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--accent);letter-spacing:-.03em}
+.ex .why-hero p{font:600 14px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--mute)}
+.ex .wc b{font:900 34px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#111418;letter-spacing:-.02em}
+.ex .wc span{font:600 14.5px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--mute)}
+.ex .wc em{font:700 15px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--accent);border-top:1px solid var(--line)}
+.ex .wc em::before{color:var(--accent)}
+.ex .acc-inner .src{font:500 12.5px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#8A929C}
 </style>
 </head>
 <body>
