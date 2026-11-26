@@ -130,7 +130,7 @@ shot = re.search(r'<figure class="real-shot">[\s\S]*?</figure>', walls_html).gro
 vis = ('<div class="wall-vis">'
        '<div class="wv" data-k="1"><figure class="illu"><img src="img/lol/fatigue.jpg" alt="늦은 밤 퇴근 복장 그대로 모니터 앞에 웅크려 게임하는 사람"></figure></div>'
        '<div class="wv" data-k="2"><figure class="real-shot"><img src="img/lol/patch-notes.png" alt="실제 LoL 26.23 패치 노트 — 챔피언 수치 변경 목록"><figcaption>실제 패치 노트 · 26.23 · 2주마다 이만큼씩</figcaption></figure></div>'
-       '<div class="wv" data-k="3"><div class="ph">복귀 격차 이미지 자리<br>시즌 변경 안내 · 처음 보는 아이템/지도</div></div>'
+       '<div class="wv" data-k="3"><figure class="real-shot"><img src="img/lol/solokill.jpg" alt="실제 LoL 게임 화면 — 시작 2분 43초, 라인전에서 상대 다리우스에게 솔킬당해 회색 화면으로 부활을 기다리는 모습"><figcaption>실제 게임 화면 · 2분 43초 · 라인전 솔킬 → <b>부활 대기</b></figcaption></figure></div>'
        f'<div class="wv" data-k="4">{shot}</div>'
        '<div class="wv" data-k="5"><div class="q-big">?</div></div>'
        '</div>')
