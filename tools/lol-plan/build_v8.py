@@ -145,13 +145,13 @@ walls_sec = ('<div class="ex r-shurima walls-ex"><div class="ex-bg" aria-hidden=
 s = s[:a] + B + walls_sec + s[b:]
 
 # ---------- 진행 표시 목차 (오른쪽 가장자리) ----------
-rail = ('<nav class="rail" aria-label="목차"><div class="rail-line"><i></i></div>'
+rail = ('<nav class="rail" aria-label="목차"><b class="rail-t">PART</b><div class="rail-line"><i></i></div>'
         + ''.join(f'<a href="#" data-go="{sel}"><span>{name}</span></a>' for sel, name in [
-            ('.scene[data-mode=sweep]', 'PART 01 · 문제 정의'),
-            ('.scene[data-mode=frame]', 'PART 02 · 핵심 콘셉트'),
-            ('.scene[data-mode=harbor]', 'PART 03 · 1단계 설계'),
-            ('.scene[data-mode=snow]', 'PART 03·04 · 캐주얼과 하루'),
-            ('.scene[data-mode=dawn]', 'PART 05 · 단계별 확장'),
+            ('.scene[data-mode=sweep]', '01 문제 정의'),
+            ('.scene[data-mode=frame]', '02 핵심 콘셉트'),
+            ('.scene[data-mode=harbor]', '03 1단계 설계'),
+            ('.scene[data-mode=snow]', '03·04 캐주얼·하루'),
+            ('.scene[data-mode=dawn]', '05 단계별 확장'),
             ('#compare', '결론')])
         + '</nav>')
 _k = s.rindex('<script>'); s = s[:_k] + rail + '\n' + s[_k:]
@@ -243,6 +243,17 @@ css = '''
 .rail:hover a span,.rail a:focus-visible span{opacity:1;transform:translate(0,-50%)}
 .rail a.on span{background:#8A5A1E}
 @media(max-width:700px){.rail{left:6px}.rail a span{display:none}}
+
+/* 목차 이름 항상 보이기 */
+.rail{opacity:.9!important;gap:20px}
+.rail-t{font:800 11px/1 'Pretendard Variable',Pretendard,sans-serif;letter-spacing:.14em;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);margin:0 0 -4px 2px}
+.rail-line{top:34px!important;left:17px!important;width:2px}
+.rail a{margin-left:6px!important;width:12px;height:12px}
+.rail a.on{transform:scale(1.25)!important;transform-origin:center}
+.rail a span{opacity:1!important;transform:translate(0,-50%)!important;background:rgba(30,26,22,.55);font-size:11.5px;padding:5px 9px}
+.rail a.on span{background:#8A5A1E}
+.rail a.on{transform:scale(1.2)}
+.rail a.on span{transform:translate(0,-50%) scale(.84)!important;transform-origin:left center}
 @media(max-width:900px){.story{grid-template-columns:1fr}.story-vis{position:relative;top:0;height:auto}.step{min-height:auto;padding:18px 0;opacity:1;transform:none}.story.day .q{position:static;opacity:1;transform:none;font-size:22px}}
 '''
 j = s.rindex('</style>'); s = s[:j] + css + s[j:]
