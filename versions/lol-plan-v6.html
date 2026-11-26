@@ -242,6 +242,13 @@ canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
 .doors-title .carve{background:radial-gradient(ellipse at center,rgba(25,18,8,.75),rgba(25,18,8,.45) 55%,rgba(25,18,8,0) 80%);padding:2em 3em}
 .doors-title .carve h2,.doors-title .carve p{color:#F6E6C2;text-shadow:0 0 .5em rgba(0,0,0,.7)}
 .doors-title .carve .pn{color:#F2CF84;text-shadow:0 0 .5em rgba(0,0,0,.6)}
+
+/* v6: 크림 회벽 + 고동색 나무 액자 (border-image 9칸 → 어떤 비율에도 모서리 장식 유지) */
+.wall{background:radial-gradient(ellipse at 50% 38%,#F5EBDD,#EEE2D0 65%,#E5D6C1)}
+.frame .world::before,.harbor-frame::before{inset:calc(-1 * var(--fb,40px) + 2px);background:none;border-radius:0;box-sizing:border-box;background:url(img/lol/frame-wood.png) center/100% 100% no-repeat;box-shadow:0 1.6em 3em rgba(60,40,20,.28),0 .3em .6em rgba(60,40,20,.25)}
+.frame .world>img{box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+.plaque{top:calc(100% + var(--fb,40px) + 3%);background:none;box-shadow:none;padding:0;color:#3B2A1A}
+.plaque b{color:#7A5634}
 </style>
 </head>
 <body>
@@ -972,12 +979,12 @@ canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
   function layout(sc){
     var vw=innerWidth,vh=innerHeight,iw=+sc.dataset.w,ih=+sc.dataset.h;
     if(sc.dataset.mode==='doors'||sc.dataset.mode==='race'){sc._w=vw;sc._h=vh;return}
-    if(sc.dataset.mode==='harbor'){var fw=Math.min(vw*.78,iw,vh*.74*iw/ih),fh=fw*ih/iw;var hf=sc.querySelector('.harbor-frame');hf.style.width=fw+'px';hf.style.height=fh+'px';hf.style.marginLeft=(-fw/2)+'px';hf.style.marginTop=(-fh/2)+'px';hf.style.setProperty('--u',(fh/562*14)+'px');sc._w=fw;return}
+    if(sc.dataset.mode==='harbor'){var fw=Math.min(vw*.78,iw,vh*.74*iw/ih),fh=fw*ih/iw;var hf=sc.querySelector('.harbor-frame');hf.style.width=fw+'px';hf.style.height=fh+'px';hf.style.marginLeft=(-fw/2)+'px';hf.style.marginTop=(-fh/2)+'px';hf.style.setProperty('--u',(fh/562*14)+'px');hf.style.setProperty('--fb',(fw*0.0745)+'px');sc._w=fw;return}
     var k=Math.max(vw/iw,vh/ih),w=iw*k,h=ih*k;
     if(sc.dataset.mode==='frame')sc._k0=Math.min(.62*vw/w,.6*vh/h);
     sc._w=w;sc._h=h;
     var world=sc.querySelector('.world');world.style.width=w+'px';world.style.height=h+'px';
-    world.style.setProperty('--u',(h/1080*22)+'px');
+    world.style.setProperty('--u',(h/1080*22)+'px');world.style.setProperty('--fb',(w*0.0745)+'px');
     if(sc.dataset.keys)sc._keys=JSON.parse(sc.dataset.keys);
     if(sc.dataset.light)sc._light=JSON.parse(sc.dataset.light);
     var cv=sc.querySelector('canvas.snow');if(cv){cv.width=vw*devicePixelRatio;cv.height=vh*devicePixelRatio}
