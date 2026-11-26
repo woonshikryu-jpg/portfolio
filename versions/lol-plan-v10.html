@@ -559,6 +559,24 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 .step{opacity:.38}
 
 /* ===== v10: Crazy Splash 방식 설명 ===== */
+/* PART 01 모래바람 */
+.scene[data-mode="sweep"] .fx-light,.scene[data-mode="sweep"] .fx-shade{display:none!important}
+.scene[data-mode="sweep"] .world .mark{z-index:4}
+.dust{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+.haze{position:absolute;left:-50%;right:-50%;bottom:0;height:46%;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(100deg,rgba(225,196,150,0) 0 9%,rgba(225,196,150,.3) 14%,rgba(225,196,150,0) 22%),linear-gradient(0deg,rgba(214,182,132,.55),rgba(214,182,132,0));
+  animation:hazeMove 14s linear infinite;filter:blur(6px)}
+@keyframes hazeMove{from{transform:translateX(0)}to{transform:translateX(33.3%)}}
+/* 머무는 고리 도식 크게 */
+.story:has(svg.loop){grid-template-columns:1.9fr 1fr!important;gap:28px;width:min(1340px,calc(100vw - 200px));margin-left:calc(50% - min(1340px,calc(100vw - 200px))/2 + 40px)}
+.story:has(svg.loop) .story-vis{height:84vh;top:8vh;display:flex;align-items:center}
+.story:has(svg.loop) .story-vis svg.loop{width:100%!important;max-width:none!important;height:auto}
+.story svg.loop .node text{font-size:23px!important}
+.story svg.loop .node text.s{font-size:16px!important}
+.story svg.loop text.mid{font-size:22px!important}
+.story svg.loop .imm text{font-size:18px!important}
+.story:not([data-k="0"]) svg.loop .node{opacity:.72!important}
+
 
 .cs-hq-box{display:flex;flex-direction:column;gap:12px}
 .cs-hq-img .win{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
@@ -671,13 +689,13 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 <!-- 2 · 햇빛이 훑고 지나감 -->
 <div class="scene still" data-mode="sweep" data-w="2083" data-h="1080" style="height:240vh"
   data-light='[{"p":0,"x":50,"y":50,"r":60},{"p":0.14,"x":50,"y":50,"r":60},{"p":0.24,"x":25,"y":50,"r":16},{"p":0.32,"x":25,"y":50,"r":16},{"p":0.38,"x":50,"y":50,"r":16},{"p":0.48,"x":50,"y":50,"r":16},{"p":0.54,"x":75,"y":50,"r":16},{"p":0.64,"x":75,"y":50,"r":16},{"p":0.7,"x":50,"y":50,"r":34},{"p":0.8,"x":50,"y":50,"r":34},{"p":0.9,"x":50,"y":50,"r":70},{"p":1,"x":50,"y":50,"r":70}]'>
-  <div class="sticky">
+  <div class="sticky"><canvas class="dust" aria-hidden="true"></canvas><div class="haze" aria-hidden="true"></div>
     <div class="world">
       <img src="img/lol/d1-hq.jpg" alt="정오의 슈리마 사구">
       <div class="fx fx-shade"></div>
       <div class="fx fx-light"></div>
       <div class="mark" style="left:50%;top:48%;font-size:var(--u)" data-from="0.0" data-to="1.0">
-        <div class="carve sun"><span class="pn">PART 01 · 문제 정의</span><h2>메마른 한 판</h2><p>이겨도 져도, 남는 건 점수 하나.</p></div>
+        <div class="carve sun"><span class="pn">PART 01 · 문제 정의</span><h2>애쓴 만큼 남지 않는 한 판</h2><p>30분의 긴장과 스트레스, 돌아오는 건 점수 하나.</p></div>
       </div>
     </div>
     </div>
@@ -1357,6 +1375,18 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
       var inEx=document.elementFromPoint(innerWidth/2,innerHeight/2);rail.classList.toggle('lit',!!(inEx&&inEx.closest&&inEx.closest('.ex')))}
     addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
   })();
+
+  // 모래바람
+  document.querySelectorAll('.scene[data-mode=sweep] canvas.dust').forEach(function(cv){
+    var cx=cv.getContext('2d'),P=[],dpr=Math.min(2,devicePixelRatio||1);
+    function rs(){cv.width=cv.clientWidth*dpr;cv.height=cv.clientHeight*dpr}rs();addEventListener('resize',rs);
+    for(var i=0;i<280;i++)P.push({x:Math.random(),y:.45+Math.random()*.55,v:.0012+Math.random()*.003,r:.7+Math.random()*2.2,a:.3+Math.random()*.5,w:Math.random()*6.28,l:Math.random()<.25});
+    (function f(){var r=cv.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight){var W=cv.width,H=cv.height;cx.clearRect(0,0,W,H);
+      P.forEach(function(p){p.x+=p.v;p.w+=.02;if(p.x>1.05){p.x=-.05;p.y=.5+Math.random()*.5}var y=(p.y+Math.sin(p.w)*.012)*H,x=p.x*W;
+        if(p.l){cx.strokeStyle='rgba(232,206,160,'+p.a*.6+')';cx.lineWidth=p.r*dpr*.6;cx.beginPath();cx.moveTo(x,y);cx.lineTo(x-38*dpr*p.v*400,y+2*dpr);cx.stroke()}
+        else{cx.fillStyle='rgba(236,212,170,'+p.a+')';cx.beginPath();cx.arc(x,y,p.r*dpr,0,7);cx.fill()}})}
+      requestAnimationFrame(f)})();
+  });
 
   document.querySelectorAll('.cs-hq-tabs button').forEach(function(b){b.addEventListener('click',function(){var box=b.closest('.cs-hq-box');box.querySelector('.cs-hq-img').setAttribute('data-v',b.dataset.v);box.querySelectorAll('.cs-hq-tabs button').forEach(function(x){x.classList.toggle('on',x===b)})})});
   document.querySelectorAll('.cmp-row>button').forEach(function(b){b.addEventListener('click',function(){b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')})});

@@ -47,6 +47,11 @@ sc = re.sub(r"data-keys='[^']*'", "data-keys='" + '[{"p":0,"x":50,"y":50,"s":0},
 sc = re.sub(r'(<div class="mark[^"]*"[^>]*data-from=")[\d.]+(" data-to=")[\d.]+(")', r'\g<1>0.42\g<2>0.92\3', sc, count=1)
 s = s[:a] + sc + s[b:]
 
+# ---------- PART 01 사막: 빛 대신 하단에 모래먼지가 바람에 날림 ----------
+a = s.index('data-mode="sweep"'); a = s.rfind('<div class="scene', 0, a)
+st = s.index('<div class="sticky">', a) + len('<div class="sticky">')
+s = s[:st] + '<canvas class="dust" aria-hidden="true"></canvas><div class="haze" aria-hidden="true"></div>' + s[st:]
+
 # ---------- 2. 2-2 세계관 (Crazy Splash 01 '기획 배경' 방식: 연표 + 큰 카드) ----------
 A, B = section('academy'); old = s[A:B]
 oa = accs(old)
@@ -122,6 +127,24 @@ s = s[:A] + plaza + s[B:]
 
 css = '''
 /* ===== v10: Crazy Splash 방식 설명 ===== */
+/* PART 01 모래바람 */
+.scene[data-mode="sweep"] .fx-light,.scene[data-mode="sweep"] .fx-shade{display:none!important}
+.scene[data-mode="sweep"] .world .mark{z-index:4}
+.dust{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+.haze{position:absolute;left:-50%;right:-50%;bottom:0;height:46%;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(100deg,rgba(225,196,150,0) 0 9%,rgba(225,196,150,.3) 14%,rgba(225,196,150,0) 22%),linear-gradient(0deg,rgba(214,182,132,.55),rgba(214,182,132,0));
+  animation:hazeMove 14s linear infinite;filter:blur(6px)}
+@keyframes hazeMove{from{transform:translateX(0)}to{transform:translateX(33.3%)}}
+/* 머무는 고리 도식 크게 */
+.story:has(svg.loop){grid-template-columns:1.9fr 1fr!important;gap:28px;width:min(1340px,calc(100vw - 200px));margin-left:calc(50% - min(1340px,calc(100vw - 200px))/2 + 40px)}
+.story:has(svg.loop) .story-vis{height:84vh;top:8vh;display:flex;align-items:center}
+.story:has(svg.loop) .story-vis svg.loop{width:100%!important;max-width:none!important;height:auto}
+.story svg.loop .node text{font-size:23px!important}
+.story svg.loop .node text.s{font-size:16px!important}
+.story svg.loop text.mid{font-size:22px!important}
+.story svg.loop .imm text{font-size:18px!important}
+.story:not([data-k="0"]) svg.loop .node{opacity:.72!important}
+
 
 .cs-hq-box{display:flex;flex-direction:column;gap:12px}
 .cs-hq-img .win{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
@@ -194,7 +217,19 @@ css = '''
 @media(max-width:900px){.cs-two,.cs-cities{grid-template-columns:1fr}.cmp-head{display:none}.cmp-row>button{grid-template-columns:1fr 32px}.cmp-row .c0,.cmp-row .c1{grid-column:1}.cmp-in{padding-left:22px}}
 '''
 j = s.rindex('</style>'); s = s[:j] + css + s[j:]
-js = '''
+js = r'''
+  // 모래바람
+  document.querySelectorAll('.scene[data-mode=sweep] canvas.dust').forEach(function(cv){
+    var cx=cv.getContext('2d'),P=[],dpr=Math.min(2,devicePixelRatio||1);
+    function rs(){cv.width=cv.clientWidth*dpr;cv.height=cv.clientHeight*dpr}rs();addEventListener('resize',rs);
+    for(var i=0;i<280;i++)P.push({x:Math.random(),y:.45+Math.random()*.55,v:.0012+Math.random()*.003,r:.7+Math.random()*2.2,a:.3+Math.random()*.5,w:Math.random()*6.28,l:Math.random()<.25});
+    (function f(){var r=cv.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight){var W=cv.width,H=cv.height;cx.clearRect(0,0,W,H);
+      P.forEach(function(p){p.x+=p.v;p.w+=.02;if(p.x>1.05){p.x=-.05;p.y=.5+Math.random()*.5}var y=(p.y+Math.sin(p.w)*.012)*H,x=p.x*W;
+        if(p.l){cx.strokeStyle='rgba(232,206,160,'+p.a*.6+')';cx.lineWidth=p.r*dpr*.6;cx.beginPath();cx.moveTo(x,y);cx.lineTo(x-38*dpr*p.v*400,y+2*dpr);cx.stroke()}
+        else{cx.fillStyle='rgba(236,212,170,'+p.a+')';cx.beginPath();cx.arc(x,y,p.r*dpr,0,7);cx.fill()}})}
+      requestAnimationFrame(f)})();
+  });
+
   document.querySelectorAll('.cs-hq-tabs button').forEach(function(b){b.addEventListener('click',function(){var box=b.closest('.cs-hq-box');box.querySelector('.cs-hq-img').setAttribute('data-v',b.dataset.v);box.querySelectorAll('.cs-hq-tabs button').forEach(function(x){x.classList.toggle('on',x===b)})})});
   document.querySelectorAll('.cmp-row>button').forEach(function(b){b.addEventListener('click',function(){b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')})});
 '''
