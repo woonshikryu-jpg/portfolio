@@ -571,6 +571,14 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 .step{opacity:.38}
 
 /* ===== v10: Crazy Splash 방식 설명 ===== */
+
+.cs-hq-box{display:flex;flex-direction:column;gap:12px}
+.cs-hq-img .win{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
+.cs-hq-img[data-v="1"] .win{opacity:1}
+.cs-hq-tabs{display:flex;gap:8px}
+.cs-hq-tabs button{flex:1;padding:11px 14px;border-radius:999px;border:1.5px solid #E6E8EB;background:#fff;cursor:pointer;font:700 14.5px/1 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470;transition:all .25s}
+.cs-hq-tabs button.on{background:#2C55A8;border-color:#2C55A8;color:#fff}
+.cs-hq-tabs button:first-child.on{background:#3A424C;border-color:#3A424C}
 .cs-hq{display:grid;grid-template-columns:1.35fr 1fr;gap:26px;align-items:center}
 .cs-hq-img{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:16/9;background:#F2F3F5;border:1.5px solid #E6E8EB}
 .cs-hq-img img{display:block;width:100%;height:100%;object-fit:cover}
@@ -797,7 +805,8 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
     </div>
     <h3 class="cs-sub">모두가 모이는 곳, 숨겨진 전쟁의 학회 본단</h3>
     <div class="cs-hq">
-      <div class="cs-hq-img"><img src="img/lol/hq.jpg" alt="안개 낀 산골짜기에 숨겨진 전쟁의 학회 본단" onerror="this.parentNode.classList.add('empty')"><span class="ph-t">전쟁의 학회 본단 그림 자리</span></div>
+      <div class="cs-hq-box"><div class="cs-hq-img" data-v="0"><img src="img/lol/hq.jpg" alt="덩굴과 안개에 덮인 채 다시 사람이 모이기 시작한 전쟁의 학회 본단 안뜰"><img class="win" src="img/lol/hq-demacia.jpg" alt="데마시아 학회가 우승한 시즌, 푸른 깃발과 흰 백합으로 꾸며진 본단 안뜰"></div>
+        <div class="cs-hq-tabs"><button class="on" data-v="0">평소의 본단</button><button data-v="1">데마시아 우승 시즌</button></div></div>
       <div class="cs-hq-txt">
         <p>전쟁의 학회는 사라졌지만, 본단 건물은 남았습니다. 안개 낀 골짜기 깊은 곳, 주민들은 오래된 유적이라고만 알고 있는 곳입니다.</p>
         <p>숨어 살던 소환사들은 이곳에서 다시 모입니다. 1단계에서 클라이언트를 켜면 처음 보이는 광장이 바로 <b>본단의 안뜰</b>입니다.</p>
@@ -1361,6 +1370,7 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
     addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
   })();
 
+  document.querySelectorAll('.cs-hq-tabs button').forEach(function(b){b.addEventListener('click',function(){var box=b.closest('.cs-hq-box');box.querySelector('.cs-hq-img').setAttribute('data-v',b.dataset.v);box.querySelectorAll('.cs-hq-tabs button').forEach(function(x){x.classList.toggle('on',x===b)})})});
   document.querySelectorAll('.cmp-row>button').forEach(function(b){b.addEventListener('click',function(){b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')})});
 })();
 </script>
