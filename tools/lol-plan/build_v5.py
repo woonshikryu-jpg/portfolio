@@ -15,7 +15,7 @@ byid['academy'] = re.sub(r'<div class="grid g3">.*?<p class="small">이미지 �
 byid['poro'] = byid['poro'].replace('<div class="shot"><img src="img/lol/poro.jpg" alt="눈밭 위의 포로들"><p class="small">이미지 출처: Riot Games · 관전 화면 목업은 추후 교체</p></div>', '<div class="ph">관전 화면 목업 자리<br>트랙을 달리는 포로들 + 응원 · 예측 UI</div>')
 def S(k): return byid[k]
 
-expl_css = open('/home/claude/site/expl.css').read()
+expl_css = open('tools/lol-plan/expl.css').read()
 
 def grab(pat):
     m = re.search(pat, p4, re.S)
