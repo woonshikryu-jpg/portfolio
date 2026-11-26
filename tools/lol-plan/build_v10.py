@@ -106,6 +106,23 @@ why = open('tools/lol-plan/whynow.html', encoding='utf-8').read()
 s = s[:A] + lp + why + s[B:]
 s = s.replace('<div class="sec-no">2-2 · 세계관</div>', '<div class="sec-no">2-3 · 세계관</div>', 1)
 
+# ---------- PART 05 확장: 왼쪽 계단 대신 단계별 실제 화면 ----------
+st_old = re.search(r'<div class="stair">.*?</div>', s, re.S).group(0)
+def stg(k, f, alt, cap):
+    return ('<div class="wv stg" data-k="%d"><figure class="stage-shot"><div class="ss-img"><img src="img/lol/%s" alt="%s" '
+            'onerror="this.parentNode.classList.add(\'empty\')"><span class="ph-t">%s 화면 자리</span></div>'
+            '<figcaption>%s</figcaption></figure></div>') % (k, f, alt, cap.split(' · ')[0], cap)
+st_new = ('<div class="wall-vis">'
+          + stg(1, 'stage1.jpg', '본단 안뜰을 걷는 소환사의 3인칭 화면', '1단계 · 본단 안뜰')
+          + stg(2, 'stage2.jpg', '넓어진 본단에서 함께 경기를 보는 소환사들', '2단계 · 넓어진 본단')
+          + stg(3, 'stage3.jpg', '필트오버 거리를 직접 걷는 소환사의 3인칭 화면', '3단계 · 룬테라 여행 · 필트오버를 걷는 소환사')
+          + '</div>')
+s = s.replace(st_old, st_new, 1)
+
+s = s.replace('<h3>클라이언트 광장</h3><p class="one">학회 광장 · 순위 변화 · 캐주얼</p>', '<h3>본단 안뜰</h3><p class="one">클라이언트 첫 화면 · 우승 학회 장식 · 캐주얼 모드</p>', 1)
+s = s.replace('<h3>광장 확장</h3><p class="one">경기 같이 보기 · 숨은 소환사 찾기</p>', '<h3>넓어진 본단</h3><p class="one">함께 경기 보기 · 숨은 소환사 찾기 · 학회별 별관</p>', 1)
+s = s.replace('<h3>룬테라 여행</h3><p class="one">3인칭 도시 · 포탈 여행</p>', '<h3>룬테라 여행</h3><p class="one">본단 포탈을 지나 학회의 도시를 직접 걷는다</p>', 1)
+
 # ---------- 3. 3-1 광장 (Crazy Splash 03 '원작 계승' 방식: 지금 vs 이 기획 비교표, 줄을 누르면 이유) ----------
 A, B = section('plaza'); old = s[A:B]
 pa = accs(old)
@@ -136,6 +153,17 @@ s = s[:A] + plaza + s[B:]
 
 css = '''
 /* ===== v10: Crazy Splash 방식 설명 ===== */
+.story.road .wv{position:absolute}
+.story.road[data-k="1"] .wv[data-k="1"],.story.road[data-k="2"] .wv[data-k="2"],.story.road[data-k="3"] .wv[data-k="3"]{opacity:1;transform:none}
+.stage-shot{margin:0;width:100%}
+.ss-img{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:#F2F3F5;box-shadow:0 20px 44px rgba(17,20,24,.2)}
+.ss-img img{display:block;width:100%;height:100%;object-fit:cover}
+.ss-img .ph-t{display:none}
+.ss-img.empty{border:1.5px dashed #C9CED4;box-shadow:none}
+.ss-img.empty img{display:none}
+.ss-img.empty .ph-t{display:grid;position:absolute;inset:0;place-items:center;font:600 14px 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+.stage-shot figcaption{margin-top:10px;font:700 14px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#3A424C;text-align:center}
+
 .ex section.cs.cs-tint{background:#F3F7F1!important}
 #whynow .why-hero{margin:6px 0 28px}
 #whynow .why-hero .to{font-size:76px}
