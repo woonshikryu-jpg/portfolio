@@ -166,6 +166,11 @@ css = '''
 .race-img img{transition:none;will-change:transform}
 .mark.pop{transform:translate(-50%,-50%) scale(.55);transition:opacity .35s ease,transform .75s cubic-bezier(.34,1.9,.5,1)}
 .mark.pop.on{transform:translate(-50%,-50%) scale(1)}
+
+/* 떠오르는 상세가 아래 칸 뒤로 숨지 않게 */
+.ex .acc.peek{z-index:60!important}
+.ex .step:has(.acc.peek),.ex .story:has(.acc.peek){position:relative;z-index:60}
+.ex .acc.peek .acc-btn[aria-expanded="false"]+.acc-body{background:#fff!important;backdrop-filter:none}
 @media(max-width:900px){.story{grid-template-columns:1fr}.story-vis{position:relative;top:0;height:auto}.step{min-height:auto;padding:18px 0;opacity:1;transform:none}.story.day .q{position:static;opacity:1;transform:none;font-size:22px}}
 '''
 j = s.rindex('</style>'); s = s[:j] + css + s[j:]
