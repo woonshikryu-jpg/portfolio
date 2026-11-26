@@ -146,7 +146,7 @@ s = s[:a] + B + walls_sec + s[b:]
 
 # ---------- 진행 표시 목차 (오른쪽 가장자리) ----------
 rail = ('<nav class="rail" aria-label="목차"><b class="rail-t">PART</b><div class="rail-line"><i></i></div>'
-        + ''.join(f'<a href="#" data-go="{sel}"><span>{name}</span></a>' for sel, name in [
+        + ''.join(f'<a href="#" data-go="{sel}"><span><em>{name.split(" ",1)[0] if name!="결론" else "07"}</em><i>{name.split(" ",1)[1] if name!="결론" else "결론"}</i></span></a>' for sel, name in [
             ('.scene[data-mode=sweep]', '01 문제 정의'),
             ('.scene[data-mode=frame]', '02 핵심 콘셉트'),
             ('.scene[data-mode=harbor]', '03 1단계 설계'),
@@ -254,6 +254,11 @@ css = '''
 .rail a.on span{background:#8A5A1E}
 .rail a.on{transform:scale(1.2)}
 .rail a.on span{transform:translate(0,-50%) scale(.84)!important;transform-origin:left center}
+
+/* 평소엔 번호만, 올리거나 누르면 이름 */
+.rail a span em{font-style:normal}
+.rail a span i{font-style:normal;display:inline-block;max-width:0;overflow:hidden;white-space:nowrap;vertical-align:bottom;opacity:0;transition:max-width .3s ease,opacity .25s ease,margin .3s}
+.rail a:hover span i,.rail a.open span i,.rail a:focus-visible span i{max-width:160px;opacity:1;margin-left:5px}
 @media(max-width:900px){.story{grid-template-columns:1fr}.story-vis{position:relative;top:0;height:auto}.step{min-height:auto;padding:18px 0;opacity:1;transform:none}.story.day .q{position:static;opacity:1;transform:none;font-size:22px}}
 '''
 j = s.rindex('</style>'); s = s[:j] + css + s[j:]
@@ -263,7 +268,7 @@ js2 = r'''
   (function(){
     var rail=document.querySelector('.rail'); if(!rail)return;
     var links=[].slice.call(rail.querySelectorAll('a')),tg=links.map(function(a){return document.querySelector(a.dataset.go)});
-    links.forEach(function(a,i){a.addEventListener('click',function(e){e.preventDefault();if(tg[i])scrollTo({top:tg[i].getBoundingClientRect().top+scrollY,behavior:'smooth'})})});
+    links.forEach(function(a,i){a.addEventListener('click',function(e){e.preventDefault();a.classList.add('open');clearTimeout(a._t);a._t=setTimeout(function(){a.classList.remove('open')},2500);if(tg[i])scrollTo({top:tg[i].getBoundingClientRect().top+scrollY,behavior:'smooth'})})});
     function upd(){var y=scrollY+innerHeight*.4,cur=-1;tg.forEach(function(t,i){if(t&&t.getBoundingClientRect().top+scrollY<=y)cur=i});
       links.forEach(function(a,i){a.classList.toggle('on',i===cur)});
       var h=document.documentElement.scrollHeight-innerHeight;rail.style.setProperty('--fill',(h>0?scrollY/h*100:0)+'%');
