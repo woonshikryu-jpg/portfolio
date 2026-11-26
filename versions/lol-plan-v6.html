@@ -273,6 +273,19 @@ canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
 .carve.ice h2,.carve.ice h3{-webkit-text-stroke-color:rgba(14,30,56,.9);text-shadow:0.060em 0.000em 0 rgba(14,30,56,.95),-0.060em 0.000em 0 rgba(14,30,56,.95),0.000em 0.060em 0 rgba(14,30,56,.95),0.000em -0.060em 0 rgba(14,30,56,.95),0.042em 0.042em 0 rgba(14,30,56,.95),-0.042em 0.042em 0 rgba(14,30,56,.95),0.042em -0.042em 0 rgba(14,30,56,.95),-0.042em -0.042em 0 rgba(14,30,56,.95),0 0 1em rgba(10,25,50,.5)}
 .real-shot{width:19em}
 .mark .carve h2,.mark .carve h3,.mark .carve p,.mark .carve .feel{white-space:nowrap}
+
+/* v6: PART 05 해돋이 — 글이 햇살이 훑고 지나가듯 왼쪽부터 드러남 (슈리마의 '떠오름'과 다르게) */
+.mark.dawnrise{transform:translate(-50%,-50%);transition:opacity .35s ease}
+.mark.dawnrise .carve{position:relative;clip-path:inset(-20% 130% -20% -30%);transition:clip-path 1.5s cubic-bezier(.45,0,.2,1)}
+.mark.dawnrise.on .carve{clip-path:inset(-20% -30% -20% -30%)}
+.mark.dawnrise .carve{background:none;padding:.6em 1em}
+.mark.dawnrise .carve p{font-size:1em}
+.mark.dawnrise .carve::after{content:'';position:absolute;top:-10%;bottom:-10%;left:0;width:28%;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,236,170,0),rgba(255,244,205,.85),rgba(255,236,170,0));mix-blend-mode:screen;filter:blur(6px);
+  transform:translateX(-120%);opacity:0;transition:transform 1.5s cubic-bezier(.45,0,.2,1),opacity .4s ease 1.2s}
+.mark.dawnrise.on .carve::after{transform:translateX(380%);opacity:0}
+.mark.dawnrise.on .carve::after{animation:dawnsheen 1.5s cubic-bezier(.45,0,.2,1)}
+@keyframes dawnsheen{0%{opacity:0}10%{opacity:1}85%{opacity:1}100%{opacity:0}}
 </style>
 </head>
 <body>
@@ -839,16 +852,16 @@ canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
     <div class="world">
       <img src="img/lol/d5-hq.jpg" alt="슈리마 사막 위로 떠오른 태양 원반">
       <div class="fx fx-glow"></div>
-      <div class="mark" style="left:53%;top:58%;font-size:var(--u)" data-from="0.0" data-to="0.29">
+      <div class="mark dawnrise" style="left:50%;top:58%;font-size:var(--u)" data-from="0.0" data-to="0.29">
         <div class="carve sun"><span class="pn">PART 05 · 슈리마 사막</span><h2>다시 떠오르는 태양</h2><p>작게 시작해, 증명하며 넓힌다</p></div>
       </div>
-      <div class="mark" style="left:20%;top:30%;font-size:calc(var(--u) * .85)" data-from="0.32" data-to="1.0">
+      <div class="mark dawnrise" style="left:20%;top:44%;font-size:calc(var(--u) * .85)" data-from="0.32" data-to="1.0">
         <div class="carve sun"><span class="pn">1단계</span><h3>클라이언트 광장</h3><p>학회 광장 · 순위 변화 · 캐주얼</p></div>
       </div>
-      <div class="mark" style="left:80%;top:32%;font-size:calc(var(--u) * .85)" data-from="0.5" data-to="1.0">
+      <div class="mark dawnrise" style="left:50%;top:44%;font-size:calc(var(--u) * .85)" data-from="0.5" data-to="1.0">
         <div class="carve sun"><span class="pn">2단계</span><h3>광장 확장</h3><p>경기 같이 보기 · 숨은 소환사 찾기</p></div>
       </div>
-      <div class="mark" style="left:53%;top:46%;font-size:calc(var(--u) * .95)" data-from="0.68" data-to="1.0">
+      <div class="mark dawnrise" style="left:80%;top:44%;font-size:calc(var(--u) * .85)" data-from="0.68" data-to="1.0">
         <div class="carve sun"><span class="pn">3단계</span><h3>룬테라 여행</h3><p>3인칭 도시 · 포탈 여행</p></div>
       </div>
     </div>
