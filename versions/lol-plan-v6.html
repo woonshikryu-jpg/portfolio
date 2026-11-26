@@ -249,6 +249,30 @@ canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
 .frame .world>img{box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
 .plaque{top:calc(100% + var(--fb,40px) + 3%);background:none;box-shadow:none;padding:0;color:#3B2A1A}
 .plaque b{color:#7A5634}
+
+/* v6: 연출 글귀를 크게 + 진한 테두리로 */
+.mark>.carve{font-size:1.32em}
+.door .carve{font-size:clamp(15px,1.6vw,26px)}
+.doors-title{font-size:clamp(17px,2vw,30px)}
+.mark .carve h2,.door .carve h3,.doors-title .carve h2{color:#FFF3D6;text-shadow:0.045em 0.000em 0 rgba(30,18,6,.92),-0.045em 0.000em 0 rgba(30,18,6,.92),0.000em 0.045em 0 rgba(30,18,6,.92),0.000em -0.045em 0 rgba(30,18,6,.92),0.032em 0.032em 0 rgba(30,18,6,.92),-0.032em 0.032em 0 rgba(30,18,6,.92),0.032em -0.032em 0 rgba(30,18,6,.92),-0.032em -0.032em 0 rgba(30,18,6,.92),0 .08em .3em rgba(0,0,0,.6),0 0 .9em rgba(0,0,0,.45)}
+.mark .carve h3{color:#FFF3D6;text-shadow:0.050em 0.000em 0 rgba(30,18,6,.92),-0.050em 0.000em 0 rgba(30,18,6,.92),0.000em 0.050em 0 rgba(30,18,6,.92),0.000em -0.050em 0 rgba(30,18,6,.92),0.035em 0.035em 0 rgba(30,18,6,.92),-0.035em 0.035em 0 rgba(30,18,6,.92),0.035em -0.035em 0 rgba(30,18,6,.92),-0.035em -0.035em 0 rgba(30,18,6,.92),0 .08em .3em rgba(0,0,0,.6),0 0 .9em rgba(0,0,0,.45)}
+.mark .carve p,.doors-title .carve p{color:#FBE9C4;text-shadow:0.060em 0.000em 0 rgba(30,18,6,.92),-0.060em 0.000em 0 rgba(30,18,6,.92),0.000em 0.060em 0 rgba(30,18,6,.92),0.000em -0.060em 0 rgba(30,18,6,.92),0.042em 0.042em 0 rgba(30,18,6,.92),-0.042em 0.042em 0 rgba(30,18,6,.92),0.042em -0.042em 0 rgba(30,18,6,.92),-0.042em -0.042em 0 rgba(30,18,6,.92),0 0 .8em rgba(0,0,0,.5)}
+.mark .carve .feel{color:#FFE2A6;text-shadow:0.050em 0.000em 0 rgba(30,18,6,.92),-0.050em 0.000em 0 rgba(30,18,6,.92),0.000em 0.050em 0 rgba(30,18,6,.92),0.000em -0.050em 0 rgba(30,18,6,.92),0.035em 0.035em 0 rgba(30,18,6,.92),-0.035em 0.035em 0 rgba(30,18,6,.92),0.035em -0.035em 0 rgba(30,18,6,.92),-0.035em -0.035em 0 rgba(30,18,6,.92),0 0 .8em rgba(0,0,0,.5)}
+.mark .carve .pn,.door .carve .pn,.doors-title .carve .pn{color:#FFD98A;text-shadow:0.070em 0.000em 0 rgba(30,18,6,.92),-0.070em 0.000em 0 rgba(30,18,6,.92),0.000em 0.070em 0 rgba(30,18,6,.92),0.000em -0.070em 0 rgba(30,18,6,.92),0.049em 0.049em 0 rgba(30,18,6,.92),-0.049em 0.049em 0 rgba(30,18,6,.92),0.049em -0.049em 0 rgba(30,18,6,.92),-0.049em -0.049em 0 rgba(30,18,6,.92),0 0 .6em rgba(0,0,0,.5)}
+.carve.ice h2,.carve.ice h3{color:#F7FBFF;text-shadow:0.045em 0.000em 0 rgba(14,30,56,.92),-0.045em 0.000em 0 rgba(14,30,56,.92),0.000em 0.045em 0 rgba(14,30,56,.92),0.000em -0.045em 0 rgba(14,30,56,.92),0.032em 0.032em 0 rgba(14,30,56,.92),-0.032em 0.032em 0 rgba(14,30,56,.92),0.032em -0.032em 0 rgba(14,30,56,.92),-0.032em -0.032em 0 rgba(14,30,56,.92),0 0 .9em rgba(10,25,50,.5)}
+.carve.ice p{color:#EAF4FF;text-shadow:0.060em 0.000em 0 rgba(14,30,56,.92),-0.060em 0.000em 0 rgba(14,30,56,.92),0.000em 0.060em 0 rgba(14,30,56,.92),0.000em -0.060em 0 rgba(14,30,56,.92),0.042em 0.042em 0 rgba(14,30,56,.92),-0.042em 0.042em 0 rgba(14,30,56,.92),0.042em -0.042em 0 rgba(14,30,56,.92),-0.042em -0.042em 0 rgba(14,30,56,.92)}
+.real-shot{width:23em}
+
+/* v6-2: 더 크게, 더 두껍게 */
+.mark>.carve{font-size:1.55em}
+.mark .carve h3{font-size:1.7em}
+.mark .carve h2{font-size:2.05em}
+.mark .carve h2,.mark .carve h3{-webkit-text-stroke:.025em rgba(30,18,6,.9);paint-order:stroke fill;text-shadow:0.060em 0.000em 0 rgba(30,18,6,.95),-0.060em 0.000em 0 rgba(30,18,6,.95),0.000em 0.060em 0 rgba(30,18,6,.95),0.000em -0.060em 0 rgba(30,18,6,.95),0.042em 0.042em 0 rgba(30,18,6,.95),-0.042em 0.042em 0 rgba(30,18,6,.95),0.042em -0.042em 0 rgba(30,18,6,.95),-0.042em -0.042em 0 rgba(30,18,6,.95),0 .1em .35em rgba(0,0,0,.65),0 0 1em rgba(0,0,0,.45)}
+.mark .carve p{font-size:1.1em;text-shadow:0.070em 0.000em 0 rgba(30,18,6,.95),-0.070em 0.000em 0 rgba(30,18,6,.95),0.000em 0.070em 0 rgba(30,18,6,.95),0.000em -0.070em 0 rgba(30,18,6,.95),0.049em 0.049em 0 rgba(30,18,6,.95),-0.049em 0.049em 0 rgba(30,18,6,.95),0.049em -0.049em 0 rgba(30,18,6,.95),-0.049em -0.049em 0 rgba(30,18,6,.95),0 0 .8em rgba(0,0,0,.55)}
+.mark .carve .feel{font-size:1.4em;text-shadow:0.060em 0.000em 0 rgba(30,18,6,.95),-0.060em 0.000em 0 rgba(30,18,6,.95),0.000em 0.060em 0 rgba(30,18,6,.95),0.000em -0.060em 0 rgba(30,18,6,.95),0.042em 0.042em 0 rgba(30,18,6,.95),-0.042em 0.042em 0 rgba(30,18,6,.95),0.042em -0.042em 0 rgba(30,18,6,.95),-0.042em -0.042em 0 rgba(30,18,6,.95),0 0 .8em rgba(0,0,0,.55)}
+.carve.ice h2,.carve.ice h3{-webkit-text-stroke-color:rgba(14,30,56,.9);text-shadow:0.060em 0.000em 0 rgba(14,30,56,.95),-0.060em 0.000em 0 rgba(14,30,56,.95),0.000em 0.060em 0 rgba(14,30,56,.95),0.000em -0.060em 0 rgba(14,30,56,.95),0.042em 0.042em 0 rgba(14,30,56,.95),-0.042em 0.042em 0 rgba(14,30,56,.95),0.042em -0.042em 0 rgba(14,30,56,.95),-0.042em -0.042em 0 rgba(14,30,56,.95),0 0 1em rgba(10,25,50,.5)}
+.real-shot{width:19em}
+.mark .carve h2,.mark .carve h3,.mark .carve p,.mark .carve .feel{white-space:nowrap}
 </style>
 </head>
 <body>
@@ -305,7 +329,7 @@ canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
       <div class="mark" style="left:56%;top:46%;font-size:calc(var(--u) * .9)" data-from="0.38" data-to="0.51">
         <div class="carve"><h3>패치 공부</h3><p>매 패치 챔피언 · 아이템 변경</p><div class="feel">“또 바뀌었어? 뭐부터 봐야 하지.”</div></div>
       </div>
-      <div class="mark" style="left:80%;top:40%;font-size:calc(var(--u) * .9)" data-from="0.54" data-to="0.67">
+      <div class="mark" style="left:72%;top:40%;font-size:calc(var(--u) * .9)" data-from="0.54" data-to="0.67">
         <div class="carve"><h3>복귀 격차</h3><p>바뀐 메타 · 손 감각 차이</p><div class="feel">“나만 예전 게임을 하고 있다.”</div></div>
       </div>
       <div class="mark" style="left:50%;top:50%;font-size:calc(var(--u) * .9)" data-from="0.7" data-to="0.85">
@@ -818,10 +842,10 @@ canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none
       <div class="mark" style="left:53%;top:58%;font-size:var(--u)" data-from="0.0" data-to="0.29">
         <div class="carve sun"><span class="pn">PART 05 · 슈리마 사막</span><h2>다시 떠오르는 태양</h2><p>작게 시작해, 증명하며 넓힌다</p></div>
       </div>
-      <div class="mark" style="left:19%;top:30%;font-size:calc(var(--u) * .85)" data-from="0.32" data-to="1.0">
+      <div class="mark" style="left:20%;top:30%;font-size:calc(var(--u) * .85)" data-from="0.32" data-to="1.0">
         <div class="carve sun"><span class="pn">1단계</span><h3>클라이언트 광장</h3><p>학회 광장 · 순위 변화 · 캐주얼</p></div>
       </div>
-      <div class="mark" style="left:84%;top:32%;font-size:calc(var(--u) * .85)" data-from="0.5" data-to="1.0">
+      <div class="mark" style="left:80%;top:32%;font-size:calc(var(--u) * .85)" data-from="0.5" data-to="1.0">
         <div class="carve sun"><span class="pn">2단계</span><h3>광장 확장</h3><p>경기 같이 보기 · 숨은 소환사 찾기</p></div>
       </div>
       <div class="mark" style="left:53%;top:46%;font-size:calc(var(--u) * .95)" data-from="0.68" data-to="1.0">
