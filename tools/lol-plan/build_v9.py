@@ -75,6 +75,26 @@ s = s[:A] + s[A:B].replace('<p>관객만 아는 긴장. 아레나처럼 새 모�
 s = s.replace('<span class="who-l">누구를 위해</span>', '<span class="who-l">이런 사람을 위해</span>')
 s = s.replace('<span class="who-l">먼저 알아 둘 두 단어</span>', '<span class="who-l">롤을 모른다면</span>')
 
+# ---------- 4. 연출 장면엔 글 하나만 (제목). 나머지 글은 설명 부분이 맡는다 ----------
+HEIGHT = {'mist': 300, 'frame': 480, 'doors': 320, 'harbor': 300, 'dawn': 360}
+for mode in ['mist', 'frame', 'doors', 'harbor', 'dawn']:
+    a = s.index(f'data-mode="{mode}"'); a = s.rfind('<div class="scene', 0, a); b = bal(s, a)
+    sc = s[a:b]
+    pos = [m.start() for m in re.finditer(r'<div class="mark', sc)]
+    for st in reversed(pos[1:]):
+        sc = sc[:st] + sc[bal(sc, st):]
+    WIN = {'mist': ('0.42', '1.0'), 'frame': ('0.33', '0.46'), 'dawn': ('0.55', '1.0')}
+    if pos:
+        f, t = WIN.get(mode, (None, '1.0'))
+        if f:
+            sc = re.sub(r'(<div class="mark[^"]*"[^>]*data-from=")[\d.]+(" data-to=")[\d.]+(")', lambda m: m.group(1) + f + m.group(2) + t + m.group(3), sc, count=1)
+        else:
+            sc = re.sub(r'(<div class="mark[^"]*"[^>]*data-from="[\d.]+" data-to=")[\d.]+(")', r'\g<1>1.0\2', sc, count=1)
+    if mode == 'doors':
+        sc = re.sub(r'<div class="carve"><span class="pn">[^<]*학회</span>.*?</div>', '', sc, flags=re.S)
+    sc = re.sub(r'style="height:\d+vh"', f'style="height:{HEIGHT[mode]}vh"', sc, count=1)
+    s = s[:a] + sc + s[b:]
+
 css = '''
 /* ===== v9 ===== */
 /* 글이 뜨면 배경이 물러난다 */
@@ -85,6 +105,10 @@ css = '''
 .scene[data-mode="snow"] .sticky:has(.mark.on) .world>img{filter:blur(4px) brightness(.8) saturate(.85)}
 .scene .fx-light{transition:opacity .7s}
 .scene .sticky:has(.mark.on) .fx-light{opacity:.25!important}
+/* 필터를 스크립트가 쓰는 장면(안개·해돋이)은 막을 덮어 물러나게 */
+.scene[data-mode="mist"] .world .mark,.scene[data-mode="dawn"] .world .mark{z-index:3}
+.scene[data-mode="mist"] .world::after,.scene[data-mode="dawn"] .world::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at 50% 55%,rgba(24,16,8,.5),rgba(24,16,8,.25) 60%,rgba(24,16,8,.12));backdrop-filter:blur(4px);opacity:0;transition:opacity .7s}
+.scene[data-mode="mist"] .sticky:has(.mark.on) .world::after,.scene[data-mode="dawn"] .sticky:has(.mark.on) .world::after{opacity:1}
 /* 촘촘한 설명 */
 .flat{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
 .flat4{grid-template-columns:repeat(4,1fr)}
