@@ -144,6 +144,18 @@ walls_sec = ('<div class="ex r-shurima walls-ex"><div class="ex-bg" aria-hidden=
              '</div></section></div>\n')
 s = s[:a] + B + walls_sec + s[b:]
 
+# ---------- 진행 표시 목차 (오른쪽 가장자리) ----------
+rail = ('<nav class="rail" aria-label="목차"><div class="rail-line"><i></i></div>'
+        + ''.join(f'<a href="#" data-go="{sel}"><span>{name}</span></a>' for sel, name in [
+            ('.scene[data-mode=sweep]', 'PART 01 · 문제 정의'),
+            ('.scene[data-mode=frame]', 'PART 02 · 핵심 콘셉트'),
+            ('.scene[data-mode=harbor]', 'PART 03 · 1단계 설계'),
+            ('.scene[data-mode=snow]', 'PART 03·04 · 캐주얼과 하루'),
+            ('.scene[data-mode=dawn]', 'PART 05 · 단계별 확장'),
+            ('#compare', '결론')])
+        + '</nav>')
+_k = s.rindex('<script>'); s = s[:_k] + rail + '\n' + s[_k:]
+
 css = '''
 /* ===== v8 ===== */
 /* (1) 장면 그림이 설명 뒤에 남는다 */
@@ -219,10 +231,35 @@ css = '''
 .wtxt .pn{font:700 13px/1.2 'Pretendard Variable',Pretendard,sans-serif;letter-spacing:.06em;color:var(--accent)}
 .wtxt .feel{font:800 22px/1.45 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent);margin-top:16px}
 .wtxt .ev{display:inline-block;margin-top:14px;font:600 13.5px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470;background:rgba(255,255,255,.85);border:1px solid #E6E8EB;border-radius:999px;padding:6px 12px}
+
+/* 진행 표시 목차 */
+.rail{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:90;display:flex;flex-direction:column;gap:22px;padding:10px 6px;opacity:.35;transition:opacity .4s}
+.rail.lit,.rail:hover{opacity:1}
+.rail-line{position:absolute;right:11px;top:14px;bottom:14px;width:2px;background:rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(0,0,0,.08);border-radius:2px;overflow:hidden}
+.rail-line i{position:absolute;left:0;right:0;top:0;height:var(--fill,0%);background:#C9A24E}
+.rail a{position:relative;display:block;width:12px;height:12px;margin-right:6px;border-radius:50%;background:rgba(255,255,255,.9);border:2px solid rgba(60,50,40,.35);box-sizing:border-box;transition:transform .3s,background .3s,border-color .3s}
+.rail a.on{background:#C9A24E;border-color:#fff;transform:scale(1.35)}
+.rail a span{position:absolute;right:22px;top:50%;transform:translate(6px,-50%);white-space:nowrap;font:700 12.5px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#fff;background:rgba(30,26,22,.78);padding:7px 10px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+.rail:hover a span,.rail a:focus-visible span{opacity:1;transform:translate(0,-50%)}
+.rail a.on span{background:#8A5A1E}
+@media(max-width:700px){.rail{right:6px}.rail a span{display:none}}
 @media(max-width:900px){.story{grid-template-columns:1fr}.story-vis{position:relative;top:0;height:auto}.step{min-height:auto;padding:18px 0;opacity:1;transform:none}.story.day .q{position:static;opacity:1;transform:none;font-size:22px}}
 '''
 j = s.rindex('</style>'); s = s[:j] + css + s[j:]
 
+js2 = r'''
+  // 진행 표시 목차
+  (function(){
+    var rail=document.querySelector('.rail'); if(!rail)return;
+    var links=[].slice.call(rail.querySelectorAll('a')),tg=links.map(function(a){return document.querySelector(a.dataset.go)});
+    links.forEach(function(a,i){a.addEventListener('click',function(e){e.preventDefault();if(tg[i])scrollTo({top:tg[i].getBoundingClientRect().top+scrollY,behavior:'smooth'})})});
+    function upd(){var y=scrollY+innerHeight*.4,cur=-1;tg.forEach(function(t,i){if(t&&t.getBoundingClientRect().top+scrollY<=y)cur=i});
+      links.forEach(function(a,i){a.classList.toggle('on',i===cur)});
+      var h=document.documentElement.scrollHeight-innerHeight;rail.style.setProperty('--fill',(h>0?scrollY/h*100:0)+'%');
+      var inEx=document.elementFromPoint(innerWidth/2,innerHeight/2);rail.classList.toggle('lit',!!(inEx&&inEx.closest&&inEx.closest('.ex')))}
+    addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+  })();
+'''
 js = '''
   // v8: 스크롤 이야기 — 화면 가운데 온 단계를 켠다
   document.querySelectorAll('.story').forEach(function(st){
@@ -231,6 +268,6 @@ js = '''
     steps.forEach(function(x){io.observe(x)});
   });
 '''
-k = s.rindex('})();'); s = s[:k] + js + s[k:]
+k = s.rindex('})();'); s = s[:k] + js + js2 + s[k:]
 open('versions/lol-plan-v8.html', 'w', encoding='utf-8').write(s)
 print('ok')
