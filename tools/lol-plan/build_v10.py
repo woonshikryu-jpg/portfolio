@@ -97,6 +97,15 @@ academy = f'''<section class="cs" id="academy">
 </section>'''
 s = s[:A] + academy + s[B:]
 
+# ---------- 2-2 · 왜 지금인가 (따로 강조, 본문은 tools/lol-plan/whynow.html) ----------
+A, B = section('loop'); lp = s[A:B]
+for x in accs(lp):
+    if '왜 지금인가' in x:
+        lp = lp.replace(x, '')
+why = open('tools/lol-plan/whynow.html', encoding='utf-8').read()
+s = s[:A] + lp + why + s[B:]
+s = s.replace('<div class="sec-no">2-2 · 세계관</div>', '<div class="sec-no">2-3 · 세계관</div>', 1)
+
 # ---------- 3. 3-1 광장 (Crazy Splash 03 '원작 계승' 방식: 지금 vs 이 기획 비교표, 줄을 누르면 이유) ----------
 A, B = section('plaza'); old = s[A:B]
 pa = accs(old)
@@ -127,6 +136,23 @@ s = s[:A] + plaza + s[B:]
 
 css = '''
 /* ===== v10: Crazy Splash 방식 설명 ===== */
+.ex section.cs.cs-tint{background:#F3F7F1!important}
+#whynow .why-hero{margin:6px 0 28px}
+#whynow .why-hero .to{font-size:76px}
+#whynow .why3{gap:16px}
+#whynow .wc{background:#fff!important;padding:24px 20px;gap:8px}
+#whynow .wc .lab{font:700 13px/1.3 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+#whynow .wc b{font-size:44px}
+#whynow .wc .what{font:800 17px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#111418}
+#whynow .wc em{font-size:15.5px}
+#whynow .wc.hot{background:#1F3A5F!important;border-color:#1F3A5F}
+#whynow .wc.hot .lab{color:#A9C4E8}
+#whynow .wc.hot b{color:#fff}
+#whynow .wc.hot .what{color:#FFE08A}
+#whynow .wc.hot em{color:#fff;border-top-color:rgba(255,255,255,.25)}
+#whynow .wc.hot em::before{color:#FFE08A}
+#whynow .src{margin-top:12px;text-align:right;font:500 12.5px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+
 /* PART 01 모래바람 */
 .scene[data-mode="sweep"] .fx-light,.scene[data-mode="sweep"] .fx-shade{display:none!important}
 .scene[data-mode="sweep"] .world .mark{z-index:4}

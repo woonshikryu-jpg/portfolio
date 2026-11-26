@@ -561,6 +561,23 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 .step{opacity:.38}
 
 /* ===== v10: Crazy Splash 방식 설명 ===== */
+.ex section.cs.cs-tint{background:#F3F7F1!important}
+#whynow .why-hero{margin:6px 0 28px}
+#whynow .why-hero .to{font-size:76px}
+#whynow .why3{gap:16px}
+#whynow .wc{background:#fff!important;padding:24px 20px;gap:8px}
+#whynow .wc .lab{font:700 13px/1.3 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+#whynow .wc b{font-size:44px}
+#whynow .wc .what{font:800 17px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#111418}
+#whynow .wc em{font-size:15.5px}
+#whynow .wc.hot{background:#1F3A5F!important;border-color:#1F3A5F}
+#whynow .wc.hot .lab{color:#A9C4E8}
+#whynow .wc.hot b{color:#fff}
+#whynow .wc.hot .what{color:#FFE08A}
+#whynow .wc.hot em{color:#fff;border-top-color:rgba(255,255,255,.25)}
+#whynow .wc.hot em::before{color:#FFE08A}
+#whynow .src{margin-top:12px;text-align:right;font:500 12.5px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+
 /* PART 01 모래바람 */
 .scene[data-mode="sweep"] .fx-light,.scene[data-mode="sweep"] .fx-shade{display:none!important}
 .scene[data-mode="sweep"] .world .mark{z-index:4}
@@ -757,15 +774,7 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 <li>순위는 숫자가 아니라 광장의 장식(깃발·노점·비계·꽃가루)으로 보입니다. 클라이언트를 켤 때마다 '조금 달라졌다'는 변화가 먼저 눈에 들어옵니다.</li>
 <li>한 주에 한 칸씩만 바뀌어서, 다음 주를 기다리게 됩니다.</li></ul>
 <span class="note">세 장치 모두 새 화면을 만들지 않고, 이미 있는 순간(로딩·결과·클라이언트 첫 화면)의 의미를 바꾸는 방식입니다.</span></div></div></div></div>
-      <div class="acc"><button class="acc-btn" aria-expanded="false"><span>왜 지금인가<span class="sum">게임을 하는 사람이 3년 만에 4명 중 3명 → 2명 중 1명</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner why">
-<div class="why-hero"><span class="from">74.4%</span><span class="arr">→</span><span class="to">50.2%</span><p>게임 이용률 · 2022 → 2025 · 역대 최저</p></div>
-<div class="why3">
-<div class="wc"><b>44%</b><span>시간이 없어서</span><em>3~5분 한 판</em></div>
-<div class="wc"><b>36%</b><span>재미가 줄어서</span><em>매주 바뀌는 광장</em></div>
-<div class="wc"><b>86.3%</b><span>떠난 뒤엔 '보는' 여가</span><em>보기만 해도 되는 포로 경주</em></div>
-</div>
-<p class="src">출처 · 한국콘텐츠진흥원 「2025 게임이용자 실태조사」</p>
-</div></div></div></div>
+      
       <div class="acc"><button class="acc-btn" aria-expanded="false"><span>벽마다 어떤 장치가 대응하나<span class="sum">PART 01의 네 벽 → 해결 장치</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><table>
         <tr><th style="width:30%">벽</th><th>장치</th><th>어디서</th></tr>
         <tr><td>한 판의 피로 · 갈등</td><td>관전형 캐주얼 · 머무는 광장</td><td>3-1 · 4-2 포로 경주</td></tr>
@@ -774,7 +783,23 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
         <tr><td>남는 건 점수뿐</td><td>학회 순위 · 광장 · 외형</td><td>3-2 · 3-3</td></tr></table></div></div></div></div>
     </div>
   </div>
-</section></div>
+</section><section class="cs cs-tint" id="whynow">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-2 · 왜 지금인가</div><h2>사람들은 게임을 떠나,<br>영상을 보고 있다</h2></div>
+      <p>게임을 하는 사람이 3년 만에 4명 중 3명에서 2명 중 1명으로 줄었습니다.</p>
+    </div>
+    <div class="why-hero"><span class="from">74.4%</span><span class="arr">→</span><span class="to">50.2%</span><p>국내 게임 이용률 · 2022 → 2025 · 2015년 집계 이래 최저</p></div>
+    <div class="why3">
+      <div class="wc"><span class="lab">게임을 그만둔 이유 1위</span><b>44%</b><span class="what">시간이 없어서</span><em>3~5분이면 끝나는 한 판</em></div>
+      <div class="wc"><span class="lab">게임을 그만둔 이유 2위</span><b>36%</b><span class="what">재미가 줄어서</span><em>매주 모습이 바뀌는 광장</em></div>
+      <div class="wc hot"><span class="lab">게임 대신 즐기는 여가</span><b>86.3%</b><span class="what">OTT · 영화 · TV 등 영상 시청</span><em>보기만 해도 참여하는 포로 경주</em></div>
+    </div>
+    <div class="cs-band">게임과 시간을 다투지 않는다. <em>짧은 틈과 '보는 시간'</em>을 게임 안으로 가져온다.</div>
+    <p class="src">출처 · 한국콘텐츠진흥원 「2025 게임이용자 실태조사」(전국 10~69세 1만 명) · 그만둔 이유는 중복 응답</p>
+  </div>
+</section>
+</div>
 
 <!-- 학회 · 세 개의 문 -->
 <div class="scene" data-mode="doors" style="height:320vh">
@@ -790,7 +815,7 @@ h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
 <div class="ex r-ionia"><div class="ex-bg" aria-hidden="true"><img src="img/lol/noxus-city-hq.jpg" alt=""></div><section class="cs" id="academy">
   <div class="wrap">
     <div class="sec-head">
-      <div><div class="sec-no">2-2 · 세계관</div><h2>전쟁의 학회가 사라진 뒤,<br>소환사들은 숨어 살았다</h2></div>
+      <div><div class="sec-no">2-3 · 세계관</div><h2>전쟁의 학회가 사라진 뒤,<br>소환사들은 숨어 살았다</h2></div>
       <p>롤의 옛 설정을 이어받아, 협곡에서 싸울 이유를 다시 만듭니다.</p>
     </div>
     <div class="cs-two">
