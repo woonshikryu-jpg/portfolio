@@ -115,6 +115,35 @@ old = "if(mode==='race'){var r1=ease(Math.min(1,p/0.32));var ri=sc.querySelector
 assert old in s
 s = s.replace(old, "if(mode==='race'){var r1=ease(Math.min(1,p/0.38));var ri=sc.querySelector('.race-img');ri.style.clipPath='circle('+(4+r1*78)+'% at 52% 58%)';ri.querySelector('img').style.transform='scale('+(1.18-0.18*r1)+')';marks(sc,p);return}")
 
+# ---------- PART 01: 제목은 사막 장면, 네 벽은 다음 화면에서 '왼쪽 그림 고정 · 오른쪽 글' ----------
+a = s.index('data-mode="sweep"'); a = s.rfind('<div class="scene', 0, a); b = s.index('<div class="hall">', a)
+B = s[a:b]
+w2 = B.index('    <div class="world world2"'); end = B.rindex('    </div>\n  </div>\n</div>')
+walls_html = B[w2:end]
+B = B[:w2] + B[end:]
+B = B.replace('<img src="img/lol/d1-hq.jpg" alt="정오의 슈리마 사구">\n', '<img src="img/lol/d1-hq.jpg" alt="정오의 슈리마 사구">\n      <div class="fx fx-shade"></div>\n      <div class="fx fx-light"></div>\n', 1)
+B = B.replace('style="height:780vh"', 'style="height:240vh"', 1).replace('data-from="0.0" data-to="0.14"', 'data-from="0.0" data-to="1.0"', 1)
+def wall(h3):
+    i = walls_html.index(f'<h3>{h3}</h3>'); j = walls_html.index('</div>\n      </div>', i)
+    return walls_html[i:j]
+shot = re.search(r'<figure class="real-shot">[\s\S]*?</figure>', walls_html).group(0)
+vis = ('<div class="wall-vis">'
+       '<div class="wv" data-k="1"><div class="ph">게임하는 모습 일러스트 자리<br>늦은 밤, 모니터 앞에서 30분째 집중하는 플레이어</div></div>'
+       '<div class="wv" data-k="2"><figure class="real-shot"><img src="img/lol/patch-notes.png" alt="실제 LoL 26.23 패치 노트 — 챔피언 수치 변경 목록"><figcaption>실제 패치 노트 · 26.23 · 2주마다 이만큼씩</figcaption></figure></div>'
+       '<div class="wv" data-k="3"><div class="ph">복귀 격차 이미지 자리<br>시즌 변경 안내 · 처음 보는 아이템/지도</div></div>'
+       f'<div class="wv" data-k="4">{shot}</div>'
+       '<div class="wv" data-k="5"><div class="q-big">?</div></div>'
+       '</div>')
+items = [wall('한 판의 피로'), wall('패치 공부'), wall('복귀 격차'), wall('남는 건 점수뿐'),
+         '<span class="pn">핵심 질문</span><h2>한 판을 하지 않아도<br>머물 이유가 있는 LoL은 가능할까?</h2><p>경쟁은 협곡에 → 쉼과 기록은 그 바깥에</p>']
+steps = ''.join(f'<div class="step" data-k="{k+1}"><div class="wtxt">{t}</div></div>' for k, t in enumerate(items))
+walls_sec = ('<div class="ex r-shurima walls-ex"><div class="ex-bg" aria-hidden="true"><img src="img/lol/noxus-hq.jpg" alt=""></div>'
+             '<section class="r-shurima" id="walls"><div class="wrap">'
+             '<div class="sec-head"><div><div class="sec-no">1-1 · 네 개의 벽</div><h2>왜 남는 게 없을까</h2></div><p>이겨도 져도 점수 하나. 그 앞에 놓인 네 개의 벽.</p></div>'
+             f'<div class="story pair walls" data-k="1"><div class="story-vis">{vis}</div><div class="story-steps">{steps}</div></div>'
+             '</div></section></div>\n')
+s = s[:a] + B + walls_sec + s[b:]
+
 css = '''
 /* ===== v8 ===== */
 /* (1) 장면 그림이 설명 뒤에 남는다 */
@@ -171,6 +200,23 @@ css = '''
 .ex .acc.peek{z-index:60!important}
 .ex .step:has(.acc.peek),.ex .story:has(.acc.peek){position:relative;z-index:60}
 .ex .acc.peek .acc-btn[aria-expanded="false"]+.acc-body{background:#fff!important;backdrop-filter:none}
+
+/* PART 01 네 벽 스크롤 이야기 */
+.wall-vis{position:relative;width:100%;height:100%}
+.wv{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(16px) scale(.98);transition:opacity .55s ease,transform .55s ease}
+.story.walls[data-k="1"] .wv[data-k="1"],.story.walls[data-k="2"] .wv[data-k="2"],.story.walls[data-k="3"] .wv[data-k="3"],.story.walls[data-k="4"] .wv[data-k="4"],.story.walls[data-k="5"] .wv[data-k="5"]{opacity:1;transform:none}
+.wv .ph{width:100%;height:78%}
+.wv .real-shot{width:96%;max-width:640px;margin:0;transform:rotate(-1.2deg);background:#fff;padding:8px 8px 6px;border-radius:8px;box-shadow:0 22px 44px rgba(17,20,24,.22)}
+.wv .real-shot img{display:block;width:100%;border-radius:4px}
+.wv .real-shot figcaption{font:600 13px/1.6 'Pretendard Variable',Pretendard,sans-serif;color:#3A424C;padding-top:6px;text-align:center}
+.wv .real-shot figcaption b{color:#B3322A}
+.q-big{font:900 220px/1 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent);opacity:.18}
+.wtxt h3{font:800 34px/1.25 'Pretendard Variable',Pretendard,sans-serif;color:#111418;letter-spacing:-.02em}
+.wtxt h2{font:800 34px/1.35 'Pretendard Variable',Pretendard,sans-serif;color:#111418;letter-spacing:-.02em;margin-top:8px}
+.wtxt p{font:600 17px/1.6 'Pretendard Variable',Pretendard,sans-serif;color:#3A424C;margin-top:10px}
+.wtxt .pn{font:700 13px/1.2 'Pretendard Variable',Pretendard,sans-serif;letter-spacing:.06em;color:var(--accent)}
+.wtxt .feel{font:800 22px/1.45 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent);margin-top:16px}
+.wtxt .ev{display:inline-block;margin-top:14px;font:600 13.5px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470;background:rgba(255,255,255,.85);border:1px solid #E6E8EB;border-radius:999px;padding:6px 12px}
 @media(max-width:900px){.story{grid-template-columns:1fr}.story-vis{position:relative;top:0;height:auto}.step{min-height:auto;padding:18px 0;opacity:1;transform:none}.story.day .q{position:static;opacity:1;transform:none;font-size:22px}}
 '''
 j = s.rindex('</style>'); s = s[:j] + css + s[j:]
