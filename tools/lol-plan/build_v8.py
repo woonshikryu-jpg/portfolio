@@ -146,13 +146,14 @@ s = s[:a] + B + walls_sec + s[b:]
 
 # ---------- 진행 표시 목차 (오른쪽 가장자리) ----------
 rail = ('<nav class="rail" aria-label="목차"><b class="rail-t">PART</b><div class="rail-line"><i></i></div>'
-        + ''.join(f'<a href="#" data-go="{sel}"><span><em>{name.split(" ",1)[0] if name!="결론" else "07"}</em><i>{name.split(" ",1)[1] if name!="결론" else "결론"}</i></span></a>' for sel, name in [
+        + ''.join(f'<a href="#" data-go="{sel}"><span><em>{name.split(" ",1)[0]}</em><i>{name.split(" ",1)[1]}</i></span></a>' for sel, name in [
             ('.scene[data-mode=sweep]', '01 문제 정의'),
             ('.scene[data-mode=frame]', '02 핵심 콘셉트'),
             ('.scene[data-mode=harbor]', '03 1단계 설계'),
-            ('.scene[data-mode=snow]', '03·04 캐주얼·하루'),
+            ('.scene[data-mode=snow]', '04 캐주얼 모드와 하루'),
             ('.scene[data-mode=dawn]', '05 단계별 확장'),
-            ('#compare', '결론')])
+            ('#feasible', '06 실행 가능성'),
+            ('#compare', '07 결론')])
         + '</nav>')
 _k = s.rindex('<script>'); s = s[:_k] + rail + '\n' + s[_k:]
 
