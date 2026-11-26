@@ -90,8 +90,6 @@ for mode in ['mist', 'frame', 'doors', 'harbor', 'dawn']:
             sc = re.sub(r'(<div class="mark[^"]*"[^>]*data-from=")[\d.]+(" data-to=")[\d.]+(")', lambda m: m.group(1) + f + m.group(2) + t + m.group(3), sc, count=1)
         else:
             sc = re.sub(r'(<div class="mark[^"]*"[^>]*data-from="[\d.]+" data-to=")[\d.]+(")', r'\g<1>1.0\2', sc, count=1)
-    if mode == 'doors':
-        sc = re.sub(r'<div class="carve"><span class="pn">[^<]*학회</span>.*?</div>', '', sc, flags=re.S)
     sc = re.sub(r'style="height:\d+vh"', f'style="height:{HEIGHT[mode]}vh"', sc, count=1)
     s = s[:a] + sc + s[b:]
 
