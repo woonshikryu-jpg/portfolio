@@ -17,7 +17,7 @@ rep('''<li>같은 채널에는 <b>온라인 친구</b>와 같은 학회원이 �
 rep('<li>광장 채팅 · 거래 → 광장이 또 하나의 갈등 공간이 되지 않도록.</li>', '<li>유저 간 거래 → 롤에 원래 없는 기능이라 만들지 않습니다.</li>')
 rep('<tr><td>학회 쏠림</td><td>1인당 평균 기여로 순위</td></tr>',
     '<tr><td>광장 채팅 갈등</td><td>기존 채팅 필터 · 차단 · 신고 · 제재 그대로 · 말풍선 채팅은 끌 수 있음</td></tr>\n      <tr><td>학회 쏠림</td><td>1인당 평균 기여로 순위</td></tr>')
-assert '감정표현만' not in s and '갈등 공간이 되지' not in s
+assert '모르는 사람과는' not in s and '갈등 공간이 되지' not in s
 s = s.replace('lol-plan-v25', 'lol-plan-v26')
 open('versions/lol-plan-v26.html', 'w', encoding='utf-8').write(s)
 print('ok')
