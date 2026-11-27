@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>숨어 사는 소환사들 · 리그 오브 레전드 신규 콘텐츠 제안서 v48</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Hahmlet:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700&family=Gaegu:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#EFE6D2;color:#2A2118;font:16px/1.7 'Noto Sans KR',sans-serif;word-break:keep-all}
+p,h1,h2,h3{margin:0}
+.back{position:fixed;left:14px;top:14px;z-index:60;background:rgba(255,250,238,.9);color:#3A2C1C;font:700 13.5px/1 'Noto Sans KR',sans-serif;padding:9px 15px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.credit{position:fixed;right:14px;top:14px;z-index:60;background:rgba(40,30,20,.55);color:#FFF8EA;font-size:12px;padding:4px 12px;border-radius:999px}
+
+/* scene */
+.scene{position:relative}
+.sticky{position:sticky;top:0;height:100vh;overflow:hidden}
+.world{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+.world>img{position:absolute;inset:0;width:100%;height:100%}
+.mark{position:absolute;transform:translate(-50%,-50%);opacity:0;transition:opacity .6s ease;pointer-events:none}
+.mark.on{opacity:1;pointer-events:auto}
+
+/* wooden sign */
+.sign{display:flex;flex-direction:column;align-items:center}
+.plank{padding:1.1em 1.6em 1em;border-radius:.5em;text-align:center;color:#FCEFD2;
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 2px,transparent 2px 9px),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 1px,transparent 1px 5px),
+    linear-gradient(180deg,#8A5A32,#6B4122 55%,#5A361C);
+  box-shadow:0 .5em 1.2em rgba(40,20,5,.45), inset 0 0 0 .12em rgba(30,15,5,.45), inset 0 .15em 0 rgba(255,220,170,.25);
+  transform:rotate(-2deg)}
+.plank .en{font:900 2.1em/1 'Cinzel',serif;letter-spacing:.05em;color:#FFE7A8;text-shadow:0 .06em 0 #3A220E,0 -.03em 0 rgba(255,240,200,.4)}
+.plank .kr{font:800 1.55em/1.3 'Hahmlet',serif;margin-top:.25em;text-shadow:0 .05em 0 #3A220E}
+.plank .sub{font:700 .62em/1.4 'Noto Sans KR',sans-serif;margin-top:.5em;color:#F3DDB0;letter-spacing:.04em}
+.post{width:1.1em;height:4.2em;background:linear-gradient(90deg,#5A361C,#7A4C28,#4E2E17);box-shadow:0 .4em .8em rgba(40,20,5,.4)}
+
+/* paper tag (handwriting) */
+.tag{background:linear-gradient(160deg,#FFF6DF,#F1DFB8);color:#5A3A1A;font:700 1.35em/1.35 'Gaegu',sans-serif;padding:.7em 1em;border-radius:.3em;box-shadow:0 .4em 1em rgba(40,20,5,.35);transform:rotate(4deg);max-width:13em;text-align:center}
+.tag::before{content:'';display:block;width:.5em;height:.5em;border-radius:50%;background:#8A5A32;margin:0 auto .4em;box-shadow:inset 0 .1em .1em rgba(0,0,0,.4)}
+
+/* inscribed text (그림 위에 직접 새긴 글) */
+.carve{text-align:center;color:#F4E4BE;padding:1.4em 2.2em;background:radial-gradient(ellipse at center,rgba(25,18,8,.56),rgba(25,18,8,.26) 48%,rgba(25,18,8,0) 74%)}
+.carve h2{font:800 1.9em/1.3 'Hahmlet',serif;text-shadow:0 -.04em 0 rgba(0,0,0,.75),0 .05em .02em rgba(255,240,200,.2),0 0 .6em rgba(0,0,0,.45)}
+.carve h3{font:800 1.25em/1.3 'Hahmlet',serif;text-shadow:0 -.04em 0 rgba(0,0,0,.75),0 0 .5em rgba(0,0,0,.45)}
+.carve p{font:700 .9em/1.6 'Hahmlet',serif;margin-top:.5em;color:#EAD7AC;text-shadow:0 -.04em 0 rgba(0,0,0,.75),0 0 .5em rgba(0,0,0,.5)}
+.carve .pn{display:block;font:900 .72em/1.2 'Cinzel','Hahmlet',serif;letter-spacing:.16em;color:#F2CF84;text-shadow:0 0 .5em rgba(0,0,0,.6);margin-bottom:.3em}
+.carve .en{font:900 1.6em/1 'Cinzel',serif;letter-spacing:.08em;color:#F6DFA4;text-shadow:0 -.04em 0 rgba(0,0,0,.7),0 0 .6em rgba(0,0,0,.45);margin-bottom:.25em}
+.carve.title h2{font-size:2.3em}
+.carve.pair{background:radial-gradient(ellipse at center,rgba(25,18,8,.62),rgba(25,18,8,.3) 50%,rgba(25,18,8,0) 75%);display:flex;gap:1.6em;align-items:center;text-align:left}
+.carve.pair .arr{font:800 1.6em/1 'Hahmlet',serif;color:#F2CF84;text-shadow:0 0 .5em rgba(0,0,0,.6)}
+.rune{cursor:pointer;border:0;background:radial-gradient(ellipse at center,rgba(25,18,8,.45),rgba(25,18,8,0) 72%);padding:.8em 1.6em;color:#F4E4BE;font:800 1em/1.3 'Hahmlet',serif;text-shadow:0 0 .5em rgba(0,0,0,.6);display:inline-flex;align-items:center;gap:.6em}
+.rune i{font-style:normal;width:1.6em;height:1.6em;border-radius:50%;border:.12em solid #F2CF84;color:#F2CF84;display:grid;place-items:center;font:900 1em/1 'Noto Sans KR',sans-serif;box-shadow:0 0 .8em rgba(242,207,132,.55);animation:glow 2.4s ease-in-out infinite}
+.rune:hover i{background:#F2CF84;color:#3A2814}
+@keyframes glow{50%{box-shadow:0 0 1.4em rgba(242,207,132,.9)}}
+/* cloth banner */
+.cloth{background:linear-gradient(175deg,#E9A13B,#D47F1E 60%,#B9650F);color:#3B1F05;padding:.8em 1.6em .9em;text-align:center;
+  clip-path:polygon(0 0,100% 0,100% 88%,92% 100%,84% 88%,76% 100%,68% 88%,60% 100%,52% 88%,44% 100%,36% 88%,28% 100%,20% 88%,12% 100%,4% 88%,0 100%);
+  box-shadow:0 .4em 1em rgba(60,30,5,.35);transform:rotate(-3deg)}
+.cloth .pn{font:900 .7em/1 'Cinzel',serif;letter-spacing:.14em;color:#5A2E05}
+.cloth h2{font:800 1.5em/1.3 'Hahmlet',serif;margin-top:.3em}
+.cloth.pair{display:flex;gap:1.2em;align-items:stretch;padding:1em 1.4em 1.4em;transform:rotate(-1.5deg)}
+.cloth.pair div{text-align:left;max-width:11em}
+.cloth.pair b{display:block;font:900 .65em/1 'Cinzel','Noto Sans KR',serif;letter-spacing:.1em;color:#5A2E05;margin-bottom:.35em}
+.cloth.pair h3{font:800 1.05em/1.3 'Hahmlet',serif}
+.cloth.pair p{font:700 .72em/1.5 'Noto Sans KR',sans-serif;margin-top:.3em}
+.cloth.pair .arr{align-self:center;font:900 1.4em/1 'Hahmlet',serif}
+
+/* pinned note -> opens scroll */
+.note{cursor:pointer;background:linear-gradient(160deg,#FFF7E2,#EBD7AE);color:#4A3015;border:0;font:700 .8em/1.3 'Noto Sans KR',sans-serif;padding:.7em .9em .7em 2.3em;border-radius:.3em;box-shadow:0 .35em .9em rgba(40,20,5,.35);transform:rotate(-3deg);position:relative;text-align:left}
+.note::before{content:'+';position:absolute;left:.55em;top:50%;transform:translateY(-50%);width:1.3em;height:1.3em;border-radius:50%;background:#9C2F22;color:#FFF3DA;display:grid;place-items:center;font:900 1em/1 'Noto Sans KR',sans-serif;box-shadow:0 .1em 0 #5E1A12}
+.note:hover{transform:rotate(-3deg) translateY(-.2em)}
+
+/* scroll modal */
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;background:rgba(40,28,14,.35);opacity:0;pointer-events:none;transition:opacity .3s}
+.modal.open{opacity:1;pointer-events:auto}
+.scroll{position:relative;width:min(720px,92vw);max-height:84vh;display:flex;flex-direction:column;transform:scaleY(.2);transform-origin:top;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+.modal.open .scroll{transform:none}
+.rod{height:22px;border-radius:11px;background:linear-gradient(180deg,#8A5A32,#5A361C);box-shadow:0 4px 10px rgba(0,0,0,.3);margin:0 -14px;position:relative;z-index:2}
+.paper{overflow:auto;padding:28px 36px 30px;background:radial-gradient(ellipse at 50% 30%,#FFF8E6,#F3E2BC 70%,#E6CF9E);box-shadow:inset 0 0 40px rgba(140,100,40,.25);color:#3A2814}
+.paper h3{font:800 24px/1.3 'Hahmlet',serif;color:#6B3A12;margin-bottom:12px}
+.paper ul{margin:0;padding-left:20px;font-size:15.5px}
+.paper li+li{margin-top:8px}
+.paper .seal{display:block;margin-top:14px;padding:10px 14px;border-radius:10px;background:rgba(156,47,34,.1);color:#7A2318;font-weight:700;font-size:14px}
+.close{position:absolute;right:-6px;top:-8px;z-index:3;width:36px;height:36px;border-radius:50%;border:0;background:#9C2F22;color:#FFF3DA;font:900 20px/1 'Noto Sans KR',sans-serif;cursor:pointer;box-shadow:0 3px 0 #5E1A12}
+
+
+.mark{transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1);transform:translate(-50%,calc(-50% + 1.2em))}
+.mark.on{transform:translate(-50%,-50%)}
+.wall{background:
+  repeating-linear-gradient(0deg,rgba(150,130,100,.10) 0 2px,transparent 2px 120px),
+  repeating-linear-gradient(90deg,rgba(150,130,100,.07) 0 2px,transparent 2px 240px),
+  radial-gradient(ellipse at 50% 35%,#FBF6EA,#EDE3CF 70%,#E2D5BA)}
+.frame .world::before{content:'';position:absolute;inset:-3.2%;z-index:-1;border-radius:6px;
+  background:linear-gradient(135deg,#F3D98C,#B8862F 30%,#F6E2A2 50%,#A97424 72%,#E9C978);
+  box-shadow:0 30px 60px rgba(60,40,10,.35),inset 0 0 0 6px rgba(120,80,20,.35)}
+.frame .world>img{box-shadow:inset 0 0 0 2px rgba(0,0,0,.2)}
+.plaque{position:absolute;left:50%;top:107%;transform:translateX(-50%);background:linear-gradient(180deg,#E9CF8A,#C59A45);color:#3B2608;padding:.9% 2.2%;border-radius:4px;text-align:center;font-size:calc(var(--u) * 1.1);box-shadow:0 6px 14px rgba(60,40,10,.3);white-space:nowrap}
+.plaque b{display:block;font:900 .7em/1.2 'Cinzel','Noto Sans KR',serif;letter-spacing:.12em}
+.plaque span{display:block;font:800 1em/1.4 'Hahmlet',serif}
+.hall{height:46vh;display:grid;place-items:center;text-align:center;background:linear-gradient(180deg,#E9E2D0,#F3ECDD);color:#5A4630;font:800 clamp(18px,2.2vw,26px)/1.5 'Hahmlet',serif}
+.hall span{display:block;font:500 14.5px/1.6 'Noto Sans KR',sans-serif;color:#7A6648;margin-top:6px}
+
+/* scroll hint & between */
+.hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);background:rgba(255,248,232,.85);color:#4A3015;font:700 13px/1 'Noto Sans KR',sans-serif;padding:8px 14px;border-radius:999px;transition:opacity .4s}
+.between{height:30vh;background:linear-gradient(180deg,#EFE6D2,#E2EDD6);display:grid;place-items:center;color:#5A4630;font:700 15px 'Hahmlet',serif;letter-spacing:.1em}
+.end{padding:60px 20px 80px;text-align:center;background:#E2EDD6;color:#3A4A30;font-size:15px}
+
+/* 장면별 효과 */
+.world>img{transition:none}
+.fx{position:absolute;inset:0;pointer-events:none}
+.fx-mist{background:
+  radial-gradient(ellipse at 30% 60%,rgba(255,255,255,.88),rgba(255,255,255,.6) 45%,rgba(255,255,255,.2) 80%),
+  linear-gradient(180deg,rgba(245,248,255,.9),rgba(255,255,255,.75));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.fx-light{mix-blend-mode:screen;background:radial-gradient(circle at var(--lx,30%) var(--ly,40%),rgba(255,236,180,.85),rgba(255,214,140,.35) var(--lr,14%),rgba(255,200,120,0) calc(var(--lr,14%) * 2.2))}
+.fx-shade{background:rgba(70,48,20,.28);transition:opacity .2s}
+.fx-glow{mix-blend-mode:screen;background:radial-gradient(circle at 53% 9%,rgba(255,240,190,.95),rgba(255,214,140,.55) 16%,rgba(255,190,110,0) 46%)}
+canvas.snow{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mark.frost{filter:blur(10px);transform:translate(-50%,-50%) scale(1.06);transition:opacity 1s ease,filter 1.2s ease,transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.mark.frost.on{filter:blur(0);transform:translate(-50%,-50%) scale(1)}
+.carve .feel{font:700 1.15em/1.4 'Gaegu',sans-serif;color:#F6D9A0;margin-top:.5em;text-shadow:0 0 .6em rgba(0,0,0,.55)}
+.carve.ice{color:#F4FAFF;background:radial-gradient(ellipse at center,rgba(20,40,70,.45),rgba(20,40,70,.18) 50%,rgba(20,40,70,0) 74%)}
+.carve.ice .pn{color:#CFE6FF}
+.carve.ice p{color:#E3F0FF}
+.carve.sun .pn{color:#FFE6A8}
+.spacer{height:26vh;background:linear-gradient(180deg,#EFE6D2,#F6EFE2)}
+
+/* ── 설명 부분 (밝은 양피지 톤) ── */
+.ex{--bg:#F6EFDF;--accent:#8A5A1E;--soft:#EFE2C4;--spark:#A8402F;color:#2E2418;font:16px/1.7 'Noto Sans KR',sans-serif}
+.ex.r-ionia{--bg:#F1F3E4;--accent:#3E6B3A;--soft:#E1E9CF;--spark:#B4466F}
+.ex.r-shurima{--bg:#F8EEDA;--accent:#94500F;--soft:#F1E0BC;--spark:#A8402F}
+.ex.r-demacia{--bg:#EEF2EE;--accent:#1E5E66;--soft:#DCE9E6;--spark:#B6492F}
+.ex.r-frel{--bg:#EEF2F6;--accent:#2D5D86;--soft:#DCE6F0;--spark:#6E4FA0}
+.ex section{padding:80px 0;background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.65),rgba(255,255,255,0) 60%),linear-gradient(180deg,var(--bg),color-mix(in srgb,var(--bg) 88%,#C9A96A))}
+.ex section.alt{background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 92%,#fff),var(--bg))}
+.ex .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.ex .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:30px;flex-wrap:wrap}
+.ex .sec-no{font:900 14px/1.2 'Cinzel','Hahmlet',serif;letter-spacing:.14em;color:var(--accent)}
+.ex .sec-head h2{font:800 clamp(28px,3.8vw,42px)/1.25 'Hahmlet',serif;color:#2A2118;margin-top:8px}
+.ex .sec-head h2::after{content:'';display:block;width:84px;height:3px;margin-top:14px;background:linear-gradient(90deg,#C9A24E,rgba(201,162,78,0))}
+.ex .sec-head p{max-width:420px;color:#5A4A36;font-weight:500}
+.ex .grid{display:grid;gap:18px}
+.ex .g2{grid-template-columns:repeat(2,1fr)}.ex .g3{grid-template-columns:repeat(3,1fr)}.ex .g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:820px){.ex .g2,.ex .g3,.ex .g4{grid-template-columns:1fr}}
+.ex .card{background:linear-gradient(180deg,#FFFCF4,#FBF3E2);border:1px solid #E3CF9F;border-radius:14px;padding:24px 24px 22px;display:flex;flex-direction:column;gap:6px;box-shadow:inset 0 1px 0 #fff,0 8px 22px rgba(90,60,20,.08)}
+.ex .card.tint{background:linear-gradient(180deg,var(--soft),color-mix(in srgb,var(--soft) 80%,#fff))}
+.ex .num{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:900 17px/1 'Cinzel',serif;color:#FFF6DE;background:radial-gradient(circle at 35% 30%,#E8C46E,#A9792A 70%);box-shadow:0 2px 0 #7A5418,inset 0 0 0 2px rgba(255,240,200,.4);margin-bottom:6px}
+.ex .steps .num{width:auto;height:auto;padding:6px 14px;border-radius:999px;font:800 15px/1 'Hahmlet',serif}
+.ex .card h3{font:800 21px/1.3 'Hahmlet',serif;color:#2A2118}
+.ex .one{font-weight:700;font-size:15.5px;color:#3A2E20}
+.ex .feel{font:700 21px/1.35 'Gaegu',sans-serif;color:var(--spark)}
+.ex .tag{font:900 12.5px/1.2 'Cinzel','Noto Sans KR',serif;letter-spacing:.12em;color:var(--accent)}
+.ex .banner{margin-top:24px;border-radius:14px;padding:18px 24px;text-align:center;font:800 20px/1.4 'Hahmlet',serif;color:#FFF6DE;background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 88%,#fff),var(--accent));box-shadow:0 6px 18px rgba(90,60,20,.18),inset 0 0 0 1px rgba(255,230,170,.35)}
+.ex .small{font-size:13.5px;color:#6A5A44;margin-top:12px}
+.ex table{width:100%;border-collapse:separate;border-spacing:0;background:#FFFCF4;border:1px solid #E3CF9F;border-radius:14px;overflow:hidden;font-size:15.5px}
+.ex th,.ex td{text-align:left;padding:13px 18px;border-bottom:1px solid #EFE2C4}
+.ex th{background:var(--soft);font:800 15px 'Hahmlet',serif;color:var(--accent)}
+.ex tr:last-child td{border-bottom:none}
+.ex .acc{background:linear-gradient(180deg,#FFFCF4,#FBF3E2);border:1px solid #E3CF9F;border-radius:14px;overflow:hidden;box-shadow:0 6px 16px rgba(90,60,20,.06)}
+.ex .acc + .acc{margin-top:10px}
+.ex .acc-btn{width:100%;display:flex;align-items:center;gap:14px;text-align:left;background:none;border:0;padding:16px 20px;cursor:pointer;font:800 16.5px/1.4 'Hahmlet',serif;color:#2A2118}
+.ex .acc-btn .sum{display:block;font:500 14px/1.5 'Noto Sans KR',sans-serif;color:#6A5A44;margin-top:2px}
+.ex .acc-btn .n{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:900 15px/1 'Cinzel',serif;color:#FFF6DE;background:radial-gradient(circle at 35% 30%,#E8C46E,#A9792A 70%);box-shadow:0 2px 0 #7A5418}
+.ex .plus{margin-left:auto;flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:900 19px/1 'Noto Sans KR',sans-serif;color:#A9792A;border:2px solid #D7B567;transition:transform .35s,background .3s,color .3s}
+.ex .acc-btn[aria-expanded="true"] .plus{transform:rotate(45deg);background:#A9792A;color:#FFF6DE;border-color:#A9792A}
+.ex .acc-btn:hover .plus{background:#F3E1B2}
+.ex .acc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s cubic-bezier(.2,.8,.2,1)}
+.ex .acc-body>div{overflow:hidden}
+.ex .acc-btn[aria-expanded="true"]+.acc-body{grid-template-rows:1fr}
+.ex .acc-inner{font-size:15.5px;color:#2E2418;border-top:1px dashed #E3CF9F;margin:0 18px;padding:14px 4px 22px}
+.ex .acc-inner ul{margin:0;padding-left:20px}
+.ex .acc-inner li+li{margin-top:7px}
+.ex .acc-inner h4{font:800 15px 'Hahmlet',serif;margin:16px 0 6px;color:var(--accent)}
+.ex .acc-inner h4:first-child{margin-top:0}
+.ex .acc-inner table{font-size:14.5px;margin:6px 0}
+.ex .acc-inner th,.ex .acc-inner td{padding:9px 12px}
+.ex .note{display:block;margin-top:12px;padding:10px 14px;background:#FFF1CF;border-left:3px solid #C9A24E;border-radius:8px;font-weight:700;font-size:14px}
+.ex .k{color:var(--accent);font-weight:800}
+.ex .split{display:grid;grid-template-columns:1fr 1.1fr;gap:26px;align-items:start}
+@media(max-width:820px){.ex .split{grid-template-columns:1fr}}
+.ex .ph{border:2px dashed #CDB27A;border-radius:14px;background:rgba(255,252,244,.7);min-height:280px;display:grid;place-items:center;text-align:center;color:#8A6A2E;font-weight:700;font-size:14.5px;padding:20px}
+.ex .flow4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:820px){.ex .flow4{grid-template-columns:1fr 1fr}}
+.ex .timeline{display:grid;background:#FFFCF4;border:1px solid #E3CF9F;border-radius:14px;overflow:hidden}
+.ex .tl{display:grid;grid-template-columns:130px 1fr 1fr;gap:18px;padding:15px 22px;border-bottom:1px solid #EFE2C4;align-items:center;font-weight:700}
+.ex .tl:last-child{border-bottom:none}
+.ex .tl b{font:800 18px 'Hahmlet',serif;color:var(--accent)}
+.ex .tl .f{font:700 21px/1.3 'Gaegu',sans-serif;color:var(--spark)}
+@media(max-width:820px){.ex .tl{grid-template-columns:1fr}}
+.ex .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:end}
+.ex .steps .card:nth-child(2){margin-bottom:40px}.ex .steps .card:nth-child(3){margin-bottom:80px}
+@media(max-width:820px){.ex .steps{grid-template-columns:1fr}.ex .steps .card{margin-bottom:0!important}}
+
+/* ── 새 연출 ── */
+.doors{display:grid;grid-template-columns:repeat(3,1fr);height:100%;gap:6px;background:#E9E0CC;padding:6px}
+.door{position:relative;overflow:hidden;border-radius:4px}
+.door img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.door::before,.door::after{content:'';position:absolute;top:0;bottom:0;width:50%;z-index:1;transition:transform 1.4s cubic-bezier(.7,0,.2,1);box-shadow:inset 0 0 0 1px rgba(150,120,70,.25)}
+.door::before{left:0;background:linear-gradient(90deg,#D9C9A3,#EADDBF)}
+.door::after{right:0;background:linear-gradient(270deg,#D9C9A3,#EADDBF)}
+.door.open::before{transform:translateX(-101%)}.door.open::after{transform:translateX(101%)}
+.door .carve{position:absolute;left:50%;bottom:9%;transform:translate(-50%,20px);opacity:0;transition:opacity 1s .9s,transform 1s .9s;z-index:2;font-size:clamp(12px,1.25vw,20px);width:92%}
+.door.open .carve{opacity:1;transform:translate(-50%,0)}
+.doors-title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;transition:opacity .8s;font-size:clamp(14px,1.6vw,24px);pointer-events:none}
+.doors-title .carve{background:none}
+.doors-title .carve h2,.doors-title .carve p{color:#4A3517;text-shadow:0 1px 0 rgba(255,255,255,.6)}
+.doors-title .carve .pn{color:#8A5A1E;text-shadow:none}
+.harbor-frame{position:absolute;left:50%;top:48%;transform-origin:50% 50%}
+.harbor-frame::before{content:'';position:absolute;inset:-3%;z-index:-1;border-radius:6px;background:linear-gradient(135deg,#F3D98C,#B8862F 30%,#F6E2A2 50%,#A97424 72%,#E9C978);box-shadow:0 30px 60px rgba(60,40,10,.35),inset 0 0 0 6px rgba(120,80,20,.35)}
+.harbor-frame>img{display:block;width:100%;height:100%}
+.ripple.on{filter:url(#ripple)}
+.race-img{position:absolute;inset:0}
+.race-img img{width:100%;height:100%;object-fit:cover}
+.race-lines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,0) 0 22px,rgba(255,255,255,.55) 22px 24px);mix-blend-mode:screen;pointer-events:none}
+.scene-cap{z-index:3}
+
+/* v6: 글귀를 더 또렷하게 */
+.carve{background:radial-gradient(ellipse at center,rgba(25,18,8,.72),rgba(25,18,8,.42) 52%,rgba(25,18,8,0) 78%)}
+.carve h3{font-size:1.45em}
+.carve p{font-size:1.02em;color:#F3E2BC}
+.carve .feel{font-size:1.3em}
+.mark{transition:opacity 1.1s ease,transform 1.1s cubic-bezier(.2,.8,.2,1)}
+.real-shot{margin:0 auto 1em;width:30em;max-width:62vw;transform:rotate(-1.2deg);background:#F4E4BE;padding:.45em .45em .3em;border-radius:6px;box-shadow:0 1.2em 2.4em rgba(0,0,0,.45),0 0 0 1px rgba(176,138,60,.8)}
+.real-shot img{display:block;width:100%;border-radius:3px}
+.real-shot figcaption{font:700 .8em/1.6 'Noto Sans KR',sans-serif;color:#5A4220;text-shadow:none;padding-top:.25em}
+.real-shot figcaption b{color:#B3322A}
+.carve.shot-carve{padding-top:1em}
+.carve.shot-carve{background:radial-gradient(ellipse 60% 30% at 50% 84%,rgba(25,18,8,.75),rgba(25,18,8,0) 100%)}
+.shot-carve h3,.shot-carve>p,.shot-carve .feel{text-shadow:0 0 .4em rgba(0,0,0,.85),0 0 1.2em rgba(0,0,0,.6)}
+
+/* v6: 학회별 진짜 문짝 */
+.door::before,.door::after{content:none}
+.door .leaf{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;z-index:1;transition:transform 1.6s cubic-bezier(.7,0,.2,1)}
+.door .leaf.l{left:0}.door .leaf.r{right:0}
+.door .leaf img{position:absolute;top:0;bottom:auto;height:100%;width:200%;object-fit:cover;inset:auto}
+.door .leaf.l img{left:0;top:0}.door .leaf.r img{right:0;left:auto;top:0}
+.door.open .leaf.l{transform:translateX(-101%)}
+.door.open .leaf.r{transform:translateX(101%)}
+.door .leaf.l::after,.door .leaf.r::after{content:'';position:absolute;top:0;bottom:0;width:18%;pointer-events:none;opacity:0;transition:opacity .6s}
+.door .leaf.l::after{right:0;background:linear-gradient(270deg,rgba(40,25,10,.35),transparent)}
+.door .leaf.r::after{left:0;background:linear-gradient(90deg,rgba(40,25,10,.35),transparent)}
+.door.open .leaf::after{opacity:1}
+.doors-title .carve{background:radial-gradient(ellipse at center,rgba(25,18,8,.75),rgba(25,18,8,.45) 55%,rgba(25,18,8,0) 80%);padding:2em 3em}
+.doors-title .carve h2,.doors-title .carve p{color:#F6E6C2;text-shadow:0 0 .5em rgba(0,0,0,.7)}
+.doors-title .carve .pn{color:#F2CF84;text-shadow:0 0 .5em rgba(0,0,0,.6)}
+
+/* v6: 크림 회벽 + 고동색 나무 액자 (border-image 9칸 → 어떤 비율에도 모서리 장식 유지) */
+.wall{background:radial-gradient(ellipse at 50% 38%,#F5EBDD,#EEE2D0 65%,#E5D6C1)}
+.frame .world::before,.harbor-frame::before{inset:calc(-1 * var(--fb,40px) + 2px);background:none;border-radius:0;box-sizing:border-box;background:url(img/lol/frame-wood.png) center/100% 100% no-repeat;box-shadow:0 1.6em 3em rgba(60,40,20,.28),0 .3em .6em rgba(60,40,20,.25)}
+.frame .world>img{box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+.plaque{top:calc(100% + var(--fb,40px) + 3%);background:none;box-shadow:none;padding:0;color:#3B2A1A}
+.plaque b{color:#7A5634}
+
+/* v6: 연출 글귀를 크게 + 진한 테두리로 */
+.mark>.carve{font-size:1.32em}
+.door .carve{font-size:clamp(15px,1.6vw,26px)}
+.doors-title{font-size:clamp(17px,2vw,30px)}
+.mark .carve h2,.door .carve h3,.doors-title .carve h2{color:#FFF3D6;text-shadow:0.045em 0.000em 0 rgba(30,18,6,.92),-0.045em 0.000em 0 rgba(30,18,6,.92),0.000em 0.045em 0 rgba(30,18,6,.92),0.000em -0.045em 0 rgba(30,18,6,.92),0.032em 0.032em 0 rgba(30,18,6,.92),-0.032em 0.032em 0 rgba(30,18,6,.92),0.032em -0.032em 0 rgba(30,18,6,.92),-0.032em -0.032em 0 rgba(30,18,6,.92),0 .08em .3em rgba(0,0,0,.6),0 0 .9em rgba(0,0,0,.45)}
+.mark .carve h3{color:#FFF3D6;text-shadow:0.050em 0.000em 0 rgba(30,18,6,.92),-0.050em 0.000em 0 rgba(30,18,6,.92),0.000em 0.050em 0 rgba(30,18,6,.92),0.000em -0.050em 0 rgba(30,18,6,.92),0.035em 0.035em 0 rgba(30,18,6,.92),-0.035em 0.035em 0 rgba(30,18,6,.92),0.035em -0.035em 0 rgba(30,18,6,.92),-0.035em -0.035em 0 rgba(30,18,6,.92),0 .08em .3em rgba(0,0,0,.6),0 0 .9em rgba(0,0,0,.45)}
+.mark .carve p,.doors-title .carve p{color:#FBE9C4;text-shadow:0.060em 0.000em 0 rgba(30,18,6,.92),-0.060em 0.000em 0 rgba(30,18,6,.92),0.000em 0.060em 0 rgba(30,18,6,.92),0.000em -0.060em 0 rgba(30,18,6,.92),0.042em 0.042em 0 rgba(30,18,6,.92),-0.042em 0.042em 0 rgba(30,18,6,.92),0.042em -0.042em 0 rgba(30,18,6,.92),-0.042em -0.042em 0 rgba(30,18,6,.92),0 0 .8em rgba(0,0,0,.5)}
+.mark .carve .feel{color:#FFE2A6;text-shadow:0.050em 0.000em 0 rgba(30,18,6,.92),-0.050em 0.000em 0 rgba(30,18,6,.92),0.000em 0.050em 0 rgba(30,18,6,.92),0.000em -0.050em 0 rgba(30,18,6,.92),0.035em 0.035em 0 rgba(30,18,6,.92),-0.035em 0.035em 0 rgba(30,18,6,.92),0.035em -0.035em 0 rgba(30,18,6,.92),-0.035em -0.035em 0 rgba(30,18,6,.92),0 0 .8em rgba(0,0,0,.5)}
+.mark .carve .pn,.door .carve .pn,.doors-title .carve .pn{color:#FFD98A;text-shadow:0.070em 0.000em 0 rgba(30,18,6,.92),-0.070em 0.000em 0 rgba(30,18,6,.92),0.000em 0.070em 0 rgba(30,18,6,.92),0.000em -0.070em 0 rgba(30,18,6,.92),0.049em 0.049em 0 rgba(30,18,6,.92),-0.049em 0.049em 0 rgba(30,18,6,.92),0.049em -0.049em 0 rgba(30,18,6,.92),-0.049em -0.049em 0 rgba(30,18,6,.92),0 0 .6em rgba(0,0,0,.5)}
+.carve.ice h2,.carve.ice h3{color:#F7FBFF;text-shadow:0.045em 0.000em 0 rgba(14,30,56,.92),-0.045em 0.000em 0 rgba(14,30,56,.92),0.000em 0.045em 0 rgba(14,30,56,.92),0.000em -0.045em 0 rgba(14,30,56,.92),0.032em 0.032em 0 rgba(14,30,56,.92),-0.032em 0.032em 0 rgba(14,30,56,.92),0.032em -0.032em 0 rgba(14,30,56,.92),-0.032em -0.032em 0 rgba(14,30,56,.92),0 0 .9em rgba(10,25,50,.5)}
+.carve.ice p{color:#EAF4FF;text-shadow:0.060em 0.000em 0 rgba(14,30,56,.92),-0.060em 0.000em 0 rgba(14,30,56,.92),0.000em 0.060em 0 rgba(14,30,56,.92),0.000em -0.060em 0 rgba(14,30,56,.92),0.042em 0.042em 0 rgba(14,30,56,.92),-0.042em 0.042em 0 rgba(14,30,56,.92),0.042em -0.042em 0 rgba(14,30,56,.92),-0.042em -0.042em 0 rgba(14,30,56,.92)}
+.real-shot{width:23em}
+
+/* v6-2: 더 크게, 더 두껍게 */
+.mark>.carve{font-size:1.55em}
+.mark .carve h3{font-size:1.7em}
+.mark .carve h2{font-size:2.05em}
+.mark .carve h2,.mark .carve h3{-webkit-text-stroke:.025em rgba(30,18,6,.9);paint-order:stroke fill;text-shadow:0.060em 0.000em 0 rgba(30,18,6,.95),-0.060em 0.000em 0 rgba(30,18,6,.95),0.000em 0.060em 0 rgba(30,18,6,.95),0.000em -0.060em 0 rgba(30,18,6,.95),0.042em 0.042em 0 rgba(30,18,6,.95),-0.042em 0.042em 0 rgba(30,18,6,.95),0.042em -0.042em 0 rgba(30,18,6,.95),-0.042em -0.042em 0 rgba(30,18,6,.95),0 .1em .35em rgba(0,0,0,.65),0 0 1em rgba(0,0,0,.45)}
+.mark .carve p{font-size:1.1em;text-shadow:0.070em 0.000em 0 rgba(30,18,6,.95),-0.070em 0.000em 0 rgba(30,18,6,.95),0.000em 0.070em 0 rgba(30,18,6,.95),0.000em -0.070em 0 rgba(30,18,6,.95),0.049em 0.049em 0 rgba(30,18,6,.95),-0.049em 0.049em 0 rgba(30,18,6,.95),0.049em -0.049em 0 rgba(30,18,6,.95),-0.049em -0.049em 0 rgba(30,18,6,.95),0 0 .8em rgba(0,0,0,.55)}
+.mark .carve .feel{font-size:1.4em;text-shadow:0.060em 0.000em 0 rgba(30,18,6,.95),-0.060em 0.000em 0 rgba(30,18,6,.95),0.000em 0.060em 0 rgba(30,18,6,.95),0.000em -0.060em 0 rgba(30,18,6,.95),0.042em 0.042em 0 rgba(30,18,6,.95),-0.042em 0.042em 0 rgba(30,18,6,.95),0.042em -0.042em 0 rgba(30,18,6,.95),-0.042em -0.042em 0 rgba(30,18,6,.95),0 0 .8em rgba(0,0,0,.55)}
+.carve.ice h2,.carve.ice h3{-webkit-text-stroke-color:rgba(14,30,56,.9);text-shadow:0.060em 0.000em 0 rgba(14,30,56,.95),-0.060em 0.000em 0 rgba(14,30,56,.95),0.000em 0.060em 0 rgba(14,30,56,.95),0.000em -0.060em 0 rgba(14,30,56,.95),0.042em 0.042em 0 rgba(14,30,56,.95),-0.042em 0.042em 0 rgba(14,30,56,.95),0.042em -0.042em 0 rgba(14,30,56,.95),-0.042em -0.042em 0 rgba(14,30,56,.95),0 0 1em rgba(10,25,50,.5)}
+.real-shot{width:19em}
+.mark .carve h2,.mark .carve h3,.mark .carve p,.mark .carve .feel{white-space:nowrap}
+
+/* v6: PART 05 해돋이 — 글이 햇살이 훑고 지나가듯 왼쪽부터 드러남 (슈리마의 '떠오름'과 다르게) */
+.mark.dawnrise{transform:translate(-50%,-50%);transition:opacity .35s ease}
+.mark.dawnrise .carve{position:relative;clip-path:inset(-20% 130% -20% -30%);transition:clip-path 1.5s cubic-bezier(.45,0,.2,1)}
+.mark.dawnrise.on .carve{clip-path:inset(-20% -30% -20% -30%)}
+.mark.dawnrise .carve{background:none;padding:.6em 1em}
+.mark.dawnrise .carve p{font-size:1em}
+.mark.dawnrise .carve::after{content:'';position:absolute;top:-10%;bottom:-10%;left:0;width:28%;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,236,170,0),rgba(255,244,205,.85),rgba(255,236,170,0));mix-blend-mode:screen;filter:blur(6px);
+  transform:translateX(-120%);opacity:0;transition:transform 1.5s cubic-bezier(.45,0,.2,1),opacity .4s ease 1.2s}
+.mark.dawnrise.on .carve::after{transform:translateX(380%);opacity:0}
+.mark.dawnrise.on .carve::after{animation:dawnsheen 1.5s cubic-bezier(.45,0,.2,1)}
+@keyframes dawnsheen{0%{opacity:0}10%{opacity:1}85%{opacity:1}100%{opacity:0}}
+
+/* v7: PART 01 네 벽 — 2×2 자리에 차례로 쌓임, 같은 크기·같은 간격 */
+.mark.wall4 .carve{background:radial-gradient(ellipse at center,rgba(25,18,8,.6),rgba(25,18,8,.3) 55%,rgba(25,18,8,0) 78%);padding:1em 1.6em}
+.mark.wall4 .real-shot{width:12em;margin-bottom:.5em}
+.mark.wall4 .real-shot figcaption{font-size:.7em}
+.mark.wall4 .carve.shot-carve{background:radial-gradient(ellipse at center,rgba(25,18,8,.6),rgba(25,18,8,.3) 55%,rgba(25,18,8,0) 78%)}
+
+.mark.wall4 .real-shot{position:absolute;left:50%;bottom:calc(100% - .6em);transform:translateX(-50%) rotate(-1.2deg);width:10em;margin:0}
+.mark.wall4 .real-shot figcaption{white-space:nowrap}
+.mark.wall4 .carve.shot-carve{padding-top:1em}
+.mark .carve .ev{margin-top:.55em;font:700 .78em/1.4 'Noto Sans KR',sans-serif;color:#F7E6C0;white-space:nowrap;display:inline-block;padding:.25em .8em;border-radius:999px;background:rgba(30,18,6,.55);box-shadow:inset 0 0 0 1px rgba(242,207,132,.35)}
+.mark.shotmark .real-shot{position:static;transform:rotate(-1.5deg);width:13em;margin:0}
+.mark.shotmark .real-shot figcaption{white-space:nowrap;font-size:.75em}
+
+/* v7 설명 부분 */
+.who,.rules{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 22px}
+.who .acc{flex-basis:100%;margin-top:6px}
+.who-l{font:900 13px/1 'Cinzel','Hahmlet',serif;letter-spacing:.14em;color:var(--accent);margin-right:6px}
+.chip{font:700 15px/1 'Noto Sans KR',sans-serif;color:#3A2E20;background:#FFF8E8;border:1px solid #E3CF9F;border-radius:999px;padding:10px 16px}
+.g5{grid-template-columns:repeat(5,1fr)}
+@media(max-width:980px){.g5{grid-template-columns:repeat(2,1fr)}}
+.loop-wrap{display:grid;grid-template-columns:1.5fr 1fr;gap:26px;align-items:center}
+@media(max-width:900px){.loop-wrap{grid-template-columns:1fr}}
+svg.loop{width:100%;height:auto}
+svg.loop .node rect{fill:#FFFCF4;stroke:#C9A24E;stroke-width:2}
+svg.loop .node text{font:800 20px 'Hahmlet',serif;fill:#2A2118;text-anchor:middle}
+svg.loop .node text.s{font:600 14px 'Noto Sans KR',sans-serif;fill:#6A5A44}
+svg.loop .imm circle{fill:#A9792A}
+svg.loop .imm text{font:900 16px 'Cinzel',serif;fill:#FFF6DE;text-anchor:middle}
+svg.loop text.mid{font:800 19px 'Hahmlet',serif;fill:#8A5A1E;text-anchor:middle}
+.imm-list{display:flex;flex-direction:column;gap:12px}
+.imm-item{display:flex;gap:14px;align-items:flex-start;background:linear-gradient(180deg,#FFFCF4,#FBF3E2);border:1px solid #E3CF9F;border-radius:14px;padding:16px 18px}
+.imm-item .b{flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:900 15px/1 'Cinzel',serif;color:#FFF6DE;background:radial-gradient(circle at 35% 30%,#E8C46E,#A9792A 70%)}
+.imm-item h3{font:800 18px/1.3 'Hahmlet',serif;color:#2A2118;margin-bottom:4px}
+h3.sub{font:800 22px/1.3 'Hahmlet',serif;color:#2A2118;margin:34px 0 12px}
+/* 필수 상세: 처음부터 펼쳐 둠 */
+.acc.must{border-color:#C9A24E;box-shadow:0 8px 22px rgba(90,60,20,.10)}
+.acc.must .acc-btn::before{content:'핵심';flex:none;font:800 11px/1 'Noto Sans KR',sans-serif;color:#FFF6DE;background:#A9792A;border-radius:999px;padding:5px 8px}
+/* 나머지 상세: 마우스를 올리면 떠오르고, 누르면 그 자리에 고정 */
+.acc,.ex .acc{overflow:visible!important;position:relative}
+.acc:not(.must) .acc-btn .plus::after{content:''}
+.acc.peek .acc-btn[aria-expanded="false"]+.acc-body{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:40;grid-template-rows:1fr;
+  background:#FFFCF4;border:1px solid #C9A24E;border-radius:14px;box-shadow:0 22px 48px rgba(60,40,10,.28);max-height:min(62vh,560px);overflow:auto;animation:peekin .22s ease}
+.acc.peek .acc-btn[aria-expanded="false"]+.acc-body .acc-inner{border-top:0;padding-top:16px}
+@keyframes peekin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.peek-hint{font:600 13px/1.4 'Noto Sans KR',sans-serif;color:#8A7458;margin:0 0 10px}
+.ex:has(.acc.peek),section:has(.acc.peek){position:relative;z-index:60}
+.acc-inner .note,.who .note{transform:none!important;cursor:auto;box-shadow:none;padding:10px 14px;font:700 14px/1.6 'Noto Sans KR',sans-serif;background:#FFF1CF;border-left:3px solid #C9A24E;border-radius:8px}
+.acc-inner .note::before,.who .note::before{content:none}
+.world2>img{object-fit:cover}
+.world2 .mark{white-space:nowrap}
+.hide-top{align-items:stretch}
+.hide-top>div:first-child{display:flex;flex-direction:column}
+.hide-top>div:first-child>.ph:first-child{flex:1}
+.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;align-items:start}
+.acc-grid .acc+.acc{margin-top:0}
+@media(max-width:900px){.acc-grid{grid-template-columns:1fr}}
+/* v7: 그림 자리와 오른쪽 목록 높이 맞춤 */
+#plaza .split,#reward .split,#poro .split{align-items:stretch}
+#plaza .split>.ph,#reward .split>.ph,#poro .split>.ph{height:auto;min-height:100%}
+.acc-grid>.acc:last-child:nth-child(odd){grid-column:1/-1}
+.shot-carve .real-shot figcaption{white-space:nowrap;font-size:.72em}
+.acc-inner.why{padding-top:20px}
+.why-hero{text-align:center;margin-bottom:22px}
+.why-hero .from{font:800 34px/1 'Hahmlet',serif;color:#9A8A70;text-decoration:line-through;text-decoration-thickness:2px}
+.why-hero .arr{font:800 28px/1 'Hahmlet',serif;color:#C9A24E;margin:0 14px}
+.why-hero .to{font:900 58px/1 'Hahmlet',serif;color:#9C2F22}
+.why-hero p{margin-top:10px;font:700 14px/1.4 'Noto Sans KR',sans-serif;color:#6A5A44}
+.why3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:800px){.why3{grid-template-columns:1fr}}
+.wc{background:#FFF8E8;border:1px solid #E3CF9F;border-radius:14px;padding:18px 16px;text-align:center;display:flex;flex-direction:column;gap:6px}
+.wc b{font:900 32px/1 'Hahmlet',serif;color:#2A2118}
+.wc span{font:700 14.5px/1.4 'Noto Sans KR',sans-serif;color:#5A4A36}
+.wc em{font-style:normal;margin-top:6px;padding-top:10px;border-top:1px dashed #D9C08A;font:800 15px/1.4 'Hahmlet',serif;color:var(--accent)}
+.wc em::before{content:'→ ';color:#C9A24E}
+.acc-inner .src{margin-top:14px;text-align:right;font:600 12.5px/1.4 'Noto Sans KR',sans-serif;color:#8A7458}
+
+/* ===== v7: 설명 부분 = 깔끔한 흰 바탕 + 고딕 (연출 장면은 그대로) ===== */
+.ex{color:#1F2328;font:16px/1.7 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;--line:#E6E8EB;--mute:#5B6470}
+.ex section,.ex section.alt{background:#FFFFFF!important;padding:88px 0}
+.ex section.alt,.ex section:nth-of-type(even){background:#F7F8FA!important}
+.ex .sec-no{font:700 13px/1.2 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;letter-spacing:.08em;color:var(--accent)}
+.ex .sec-head h2{font:800 clamp(28px,3.6vw,40px)/1.3 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#111418;letter-spacing:-.02em}
+.ex .sec-head h2::after{width:40px;height:3px;background:var(--accent)}
+.ex .sec-head p{font:500 15.5px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--mute)}
+.ex .card,.ex .imm-item,.ex .wc{background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:none}
+.ex section.alt .card,.ex section:nth-of-type(even) .card{background:#fff}
+.ex .tint{background:color-mix(in srgb,var(--accent) 6%,#fff)!important;border-color:color-mix(in srgb,var(--accent) 25%,#fff)}
+.ex .card h3,.ex .imm-item h3{font:800 19px/1.35 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#111418;letter-spacing:-.01em}
+.ex .one{font:600 15px/1.55 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#3A424C}
+.ex .num,.ex .acc-btn .n,.ex .imm-item .b{background:var(--accent)!important;box-shadow:none!important;color:#fff;font:800 15px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif}
+.ex .num{width:36px;height:36px;font-size:14px}
+.ex .tag{all:unset;display:inline-block;font:700 12.5px/1.2 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;letter-spacing:.06em;color:var(--accent);margin-bottom:4px}
+.ex .tag::before{content:none}
+.ex .banner{background:var(--accent)!important;box-shadow:none;border-radius:12px;font:700 18px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#fff}
+.ex .acc{background:#fff!important;border:1px solid var(--line)!important;border-radius:12px;box-shadow:none!important}
+.ex .acc.must{border-color:color-mix(in srgb,var(--accent) 45%,#fff)!important}
+.ex .acc.must .acc-btn::before{background:var(--accent);font-family:'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif}
+.ex .acc-btn{font:700 16px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#111418}
+.ex .acc-btn .sum{font:500 14px/1.5 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--mute)}
+.ex .acc-btn .plus{border-color:var(--line)!important;color:var(--accent)!important;background:#fff!important}
+.ex .acc-btn[aria-expanded="true"] .plus{background:var(--accent)!important;color:#fff!important;border-color:var(--accent)!important}
+.ex .acc-inner{font:15px/1.75 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#2A3038;border-top:1px solid var(--line)}
+.ex .acc-inner h4{font:700 15px 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--accent)}
+.ex .acc.peek .acc-btn[aria-expanded="false"]+.acc-body{background:#fff!important;border:1px solid var(--line)!important;box-shadow:0 18px 40px rgba(17,20,24,.14)!important}
+.ex .acc-inner .note,.ex .who .note{background:#F4F6F8!important;border-left:3px solid var(--accent)!important;font:600 14px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif!important;color:#3A424C}
+.ex table{background:#fff;border:1px solid var(--line);border-radius:12px;font:15px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif}
+.ex th{background:#F4F6F8!important;font:700 14px 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif!important;color:#3A424C!important}
+.ex td{border-bottom:1px solid var(--line)}
+.ex .chip{background:#fff;border:1px solid var(--line);font:600 14.5px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#2A3038}
+.ex .who-l{font:700 12.5px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;letter-spacing:.06em;color:var(--accent)}
+.ex .ph{border:1.5px dashed #C9CED4;background:#F7F8FA;color:#7A838E;font:600 14px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;border-radius:12px}
+.ex .timeline{background:#fff;border:1px solid var(--line);border-radius:12px}
+.ex .tl{border-bottom:1px solid var(--line);font:600 15px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif}
+.ex .tl b{font:800 16px 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--accent)}
+.ex .tl .f{font:600 15px/1.5 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#5B6470;font-style:normal}
+.ex h3.sub{font:800 21px/1.3 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#111418}
+.ex svg.loop ellipse{stroke:#E6E8EB}
+.ex svg.loop .node rect{fill:#fff;stroke:#C9CED4;stroke-width:1.5}
+.ex svg.loop .node text{font-family:'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;font-weight:800;fill:#111418}
+.ex svg.loop .node text.s{font-family:'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;font-weight:500;fill:#5B6470}
+.ex svg.loop path{stroke:var(--accent)}
+.ex svg.loop marker path{fill:var(--accent)}
+.ex svg.loop .imm circle{fill:var(--accent)}
+.ex svg.loop .imm text{font-family:'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;font-weight:800}
+.ex svg.loop text.mid{font-family:'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;font-weight:700;fill:var(--accent)}
+/* 왜 지금인가 */
+.ex .why-hero .from{font:700 32px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#A3AAB3}
+.ex .why-hero .arr{font:600 26px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#C9CED4}
+.ex .why-hero .to{font:900 60px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--accent);letter-spacing:-.03em}
+.ex .why-hero p{font:600 14px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--mute)}
+.ex .wc b{font:900 34px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#111418;letter-spacing:-.02em}
+.ex .wc span{font:600 14.5px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--mute)}
+.ex .wc em{font:700 15px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--accent);border-top:1px solid var(--line)}
+.ex .wc em::before{color:var(--accent)}
+.ex .acc-inner .src{font:500 12.5px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#8A929C}
+
+.pan{position:absolute;inset:0;overflow:hidden}
+.pan img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pan img:first-child{transform:translateX(calc(var(--t,0) * -100%))}
+.pan img:last-child{transform:translateX(calc((1 - var(--t,0)) * 100%))}
+.mark .carve .ev{white-space:normal}
+.gloss{display:grid;grid-template-columns:auto 1fr 1fr;gap:10px 14px;align-items:stretch;margin:0 0 18px}
+.gloss .who-l{align-self:center}
+.gl{background:rgba(255,255,255,.9);border:1px solid #E6E8EB;border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+.gl b{font:800 16px/1.3 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:var(--accent)}
+.gl span{font:500 14px/1.6 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#3A424C}
+.gl em{font-style:normal;font-weight:800;color:#111418}
+@media(max-width:900px){.gloss{grid-template-columns:1fr}}
+.door .carve p{font-size:.85em;margin-top:.35em;white-space:nowrap}
+.door .carve h3{white-space:normal}
+.door .carve .pn{font-size:1.25em!important;letter-spacing:.1em;margin-bottom:.45em}
+
+/* ===== v8 ===== */
+/* (1) 장면 그림이 설명 뒤에 남는다 */
+.ex{position:relative;isolation:isolate}
+.ex-bg{position:sticky;top:0;height:100vh;margin-bottom:-100vh;z-index:-1;overflow:hidden;pointer-events:none}
+.ex-bg img{width:100%;height:100%;object-fit:cover;filter:blur(14px) saturate(1.05);transform:scale(1.08)}
+.ex-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.58),rgba(255,255,255,.74) 40%,rgba(255,255,255,.80))}
+.ex section,.ex section.alt,.ex section:nth-of-type(even){background:transparent!important}
+.ex .card,.ex .acc,.ex table,.ex .timeline,.ex .chip,.ex .wc{background:rgba(255,255,255,.9)!important;backdrop-filter:blur(6px)}
+.ex .ph{background:rgba(255,255,255,.55);border-color:rgba(120,130,140,.45)}
+.ex section+section{border-top:1px solid rgba(17,20,24,.06)}
+/* (2) 한 화면 한 생각 */
+.story{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:start}
+.story-vis{position:sticky;top:12vh;height:76vh;display:grid;place-items:center}
+.story-steps{padding:16vh 0 26vh}
+.step{min-height:46vh;display:flex;flex-direction:column;justify-content:center;opacity:.28;transition:opacity .5s ease,transform .5s ease;transform:translateX(8px)}
+.step.on{opacity:1;transform:none}
+.step .sk{font:700 13px/1.2 'Pretendard Variable',Pretendard,sans-serif;letter-spacing:.06em;color:var(--accent)}
+.step .sl{font:800 26px/1.45 'Pretendard Variable',Pretendard,sans-serif;color:#111418;letter-spacing:-.02em;margin-top:10px}
+.step .sm{font:500 16px/1.6 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470;margin-top:10px}
+.story svg.loop{width:100%}
+.story svg.loop .node rect{transition:fill .4s,stroke .4s,stroke-width .4s}
+.story svg.loop .node{transition:opacity .4s}
+.story:not([data-k="0"]) svg.loop .node{opacity:.4}
+.story[data-k="1"] .n1,.story[data-k="2"] .n2,.story[data-k="3"] .n3,.story[data-k="4"] .n4{opacity:1!important}
+.story[data-k="1"] .n1 rect,.story[data-k="2"] .n2 rect,.story[data-k="3"] .n3 rect,.story[data-k="4"] .n4 rect{stroke:var(--accent)!important;stroke-width:3!important;fill:color-mix(in srgb,var(--accent) 8%,#fff)!important}
+.story.day .quotes{position:relative;width:100%;height:100%}
+.story.day .q{position:absolute;inset:0;display:grid;place-items:center;text-align:center;margin:0;font:800 clamp(30px,3.4vw,46px)/1.35 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent);letter-spacing:-.03em;opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}
+.story.day[data-k="1"] .q[data-k="1"],.story.day[data-k="2"] .q[data-k="2"],.story.day[data-k="3"] .q[data-k="3"],.story.day[data-k="4"] .q[data-k="4"],.story.day[data-k="5"] .q[data-k="5"],.story.day[data-k="6"] .q[data-k="6"]{opacity:1;transform:none}
+
+.story.pair{grid-template-columns:1fr 1fr}
+.story.pair .story-vis{height:70vh}
+.story-vis>.ph{width:100%;height:100%;min-height:0!important}
+.story-vis>div:not(.ph){width:100%}
+.story.pair .step{min-height:40vh}
+.story.pair .step>.acc,.story.pair .step>.card{width:100%}
+.story.season .story-vis .grid{grid-template-columns:1fr;gap:10px}
+.story.season .story-vis .card{flex-direction:row;align-items:center;gap:14px;padding:12px}
+.story.season .story-vis .card .ph{min-height:90px!important;width:42%;flex:none}
+.story.road .num{width:auto!important;height:auto!important;border-radius:999px!important;padding:7px 14px}
+.stair{display:flex;flex-direction:column;gap:14px;width:100%}
+.stair b{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;border-radius:12px;border:1px solid #E6E8EB;background:rgba(255,255,255,.85);font:800 22px/1 'Pretendard Variable',Pretendard,sans-serif;color:#9AA1AA;transition:all .4s}
+.stair b span{font:600 16px/1 'Pretendard Variable',Pretendard,sans-serif}
+.stair b:nth-child(2){margin-left:12%}.stair b:nth-child(3){margin-left:24%}
+.story.road[data-k="1"] .stair b[data-k="1"],.story.road[data-k="2"] .stair b[data-k="2"],.story.road[data-k="3"] .stair b[data-k="3"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* 포로 경주: 아이리스 + 통 튀는 글 */
+.scene[data-mode="race"] .sticky{background:radial-gradient(ellipse at 50% 60%,#FFFFFF,#E8F0F8)}
+.race-img img{transition:none;will-change:transform}
+.mark.pop{transform:translate(-50%,-50%) scale(.55);transition:opacity .35s ease,transform .75s cubic-bezier(.34,1.9,.5,1)}
+.mark.pop.on{transform:translate(-50%,-50%) scale(1)}
+
+/* 떠오르는 상세가 아래 칸 뒤로 숨지 않게 */
+.ex .acc.peek{z-index:60!important}
+.ex .step:has(.acc.peek),.ex .story:has(.acc.peek){position:relative;z-index:60}
+.ex .acc.peek .acc-btn[aria-expanded="false"]+.acc-body{background:#fff!important;backdrop-filter:none}
+
+/* PART 01 네 벽 스크롤 이야기 */
+.wall-vis{position:relative;width:100%;height:100%}
+.wv{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(16px) scale(.98);transition:opacity .55s ease,transform .55s ease}
+.story.walls[data-k="1"] .wv[data-k="1"],.story.walls[data-k="2"] .wv[data-k="2"],.story.walls[data-k="3"] .wv[data-k="3"],.story.walls[data-k="4"] .wv[data-k="4"],.story.walls[data-k="5"] .wv[data-k="5"]{opacity:1;transform:none}
+.wv .ph{width:100%;height:78%}
+.wv .real-shot{width:96%;max-width:640px;margin:0;transform:rotate(-1.2deg);background:#fff;padding:8px 8px 6px;border-radius:8px;box-shadow:0 22px 44px rgba(17,20,24,.22)}
+.wv .real-shot img{display:block;width:100%;border-radius:4px}
+.wv .real-shot figcaption{font:600 13px/1.6 'Pretendard Variable',Pretendard,sans-serif;color:#3A424C;padding-top:6px;text-align:center}
+.wv .real-shot figcaption b{color:#B3322A}
+.wv .illu{width:100%;margin:0;border-radius:14px;overflow:hidden;box-shadow:0 22px 44px rgba(17,20,24,.22)}
+.wv .illu img{display:block;width:100%}
+.q-big{font:900 220px/1 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent);opacity:.18}
+.wtxt h3{font:800 34px/1.25 'Pretendard Variable',Pretendard,sans-serif;color:#111418;letter-spacing:-.02em}
+.wtxt h2{font:800 34px/1.35 'Pretendard Variable',Pretendard,sans-serif;color:#111418;letter-spacing:-.02em;margin-top:8px}
+.wtxt p{font:600 17px/1.6 'Pretendard Variable',Pretendard,sans-serif;color:#3A424C;margin-top:10px}
+.wtxt .pn{font:700 13px/1.2 'Pretendard Variable',Pretendard,sans-serif;letter-spacing:.06em;color:var(--accent)}
+.wtxt .feel{font:800 22px/1.45 'Pretendard Variable',Pretendard,sans-serif;color:var(--accent);margin-top:16px}
+.wtxt .ev{display:inline-block;margin-top:14px;font:600 13.5px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470;background:rgba(255,255,255,.85);border:1px solid #E6E8EB;border-radius:999px;padding:6px 12px}
+
+/* 진행 표시 목차 */
+.rail{position:fixed;left:18px;top:50%;transform:translateY(-50%);z-index:90;display:flex;flex-direction:column;gap:22px;padding:10px 6px;opacity:.35;transition:opacity .4s}
+.rail.lit,.rail:hover{opacity:1}
+.rail-line{position:absolute;left:11px;top:14px;bottom:14px;width:2px;background:rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(0,0,0,.08);border-radius:2px;overflow:hidden}
+.rail-line i{position:absolute;left:0;right:0;top:0;height:var(--fill,0%);background:#C9A24E}
+.rail a{position:relative;display:block;width:12px;height:12px;margin-left:6px;border-radius:50%;background:rgba(255,255,255,.9);border:2px solid rgba(60,50,40,.35);box-sizing:border-box;transition:transform .3s,background .3s,border-color .3s}
+.rail a.on{background:#C9A24E;border-color:#fff;transform:scale(1.35)}
+.rail a span{position:absolute;left:22px;top:50%;transform:translate(-6px,-50%);white-space:nowrap;font:700 12.5px/1 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif;color:#fff;background:rgba(30,26,22,.78);padding:7px 10px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+.rail:hover a span,.rail a:focus-visible span{opacity:1;transform:translate(0,-50%)}
+.rail a.on span{background:#8A5A1E}
+@media(max-width:700px){.rail{left:6px}.rail a span{display:none}}
+
+/* 목차 이름 항상 보이기 */
+.rail{opacity:.9!important;gap:20px}
+.rail-t{font:800 11px/1 'Pretendard Variable',Pretendard,sans-serif;letter-spacing:.14em;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);margin:0 0 -4px 2px}
+.rail-line{top:34px!important;left:17px!important;width:2px}
+.rail a{margin-left:6px!important;width:12px;height:12px}
+.rail a.on{transform:scale(1.25)!important;transform-origin:center}
+.rail a span{opacity:1!important;transform:translate(0,-50%)!important;background:rgba(30,26,22,.55);font-size:11.5px;padding:5px 9px}
+.rail a.on span{background:#8A5A1E}
+.rail a.on{transform:scale(1.2)}
+.rail a.on span{transform:translate(0,-50%) scale(.84)!important;transform-origin:left center}
+
+/* 평소엔 번호만, 올리거나 누르면 이름 */
+.rail a span em{font-style:normal}
+.rail a span i{font-style:normal;display:inline-block;max-width:0;overflow:hidden;white-space:nowrap;vertical-align:bottom;opacity:0;transition:max-width .3s ease,opacity .25s ease,margin .3s}
+.rail a:hover span i,.rail a.open span i,.rail a:focus-visible span i{max-width:160px;opacity:1;margin-left:5px}
+@media(max-width:900px){.story{grid-template-columns:1fr}.story-vis{position:relative;top:0;height:auto}.step{min-height:auto;padding:18px 0;opacity:1;transform:none}.story.day .q{position:static;opacity:1;transform:none;font-size:22px}}
+
+/* ===== v9 ===== */
+/* 촘촘한 설명 */
+.flat{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.flat4{grid-template-columns:repeat(4,1fr)}
+.flat .fi>.acc,.flat .fi>.card{width:100%;height:100%}
+.flat .fi:has(.acc.must){grid-column:1/-1}
+.flat-rank{margin-top:22px}
+.flat-rank .grid{grid-template-columns:repeat(3,1fr)!important}
+.flat-rank .card{flex-direction:column!important;align-items:flex-start!important;padding:20px!important}
+@media(max-width:900px){.flat,.flat4,.flat-rank .grid{grid-template-columns:1fr!important}}
+/* 스크롤 이야기 빈 공간 줄이기 */
+.story-steps{padding:8vh 0 14vh}
+.story.pair .step{min-height:30vh}
+.story.walls .step{min-height:62vh}
+.wv{transition:opacity .35s ease,transform .35s ease!important}
+.step{opacity:.38}
+
+/* ===== v10: Crazy Splash 방식 설명 ===== */
+.story.road .wv{position:absolute}
+.story.road[data-k="1"] .wv[data-k="1"],.story.road[data-k="2"] .wv[data-k="2"],.story.road[data-k="3"] .wv[data-k="3"]{opacity:1;transform:none}
+.stage-shot{margin:0;width:100%}
+.ss-img{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:16/9;background:#F2F3F5;box-shadow:0 20px 44px rgba(17,20,24,.2)}
+.ss-img img{display:block;width:100%;height:100%;object-fit:cover}
+.ss-img .ph-t{display:none}
+.ss-img.empty{border:1.5px dashed #C9CED4;box-shadow:none}
+.ss-img.empty img{display:none}
+.ss-img.empty .ph-t{display:grid;position:absolute;inset:0;place-items:center;font:600 14px 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+.stage-shot figcaption{margin-top:10px;font:700 14px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#3A424C;text-align:center}
+
+.ex section.cs.cs-tint{background:#F3F7F1!important}
+#whynow .why-hero{margin:6px 0 28px}
+#whynow .why-hero .to{font-size:76px}
+#whynow .why3{gap:16px}
+#whynow .wc{background:#fff!important;padding:24px 20px;gap:8px}
+#whynow .wc .lab{font:700 13px/1.3 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+#whynow .wc b{font-size:44px}
+#whynow .wc .what{font:800 17px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#111418}
+#whynow .wc em{font-size:15.5px}
+#whynow .wc.hot{background:#1F3A5F!important;border-color:#1F3A5F}
+#whynow .wc.hot .lab{color:#A9C4E8}
+#whynow .wc.hot b{color:#fff}
+#whynow .wc.hot .what{color:#FFE08A}
+#whynow .wc.hot em{color:#fff;border-top-color:rgba(255,255,255,.25)}
+#whynow .wc.hot em::before{color:#FFE08A}
+#whynow .src{margin-top:12px;text-align:right;font:500 12.5px/1.4 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+
+/* PART 01 모래바람 */
+.scene[data-mode="sweep"] .fx-light,.scene[data-mode="sweep"] .fx-shade{display:none!important}
+.scene[data-mode="sweep"] .world .mark{z-index:4}
+.dust{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+.haze{position:absolute;left:0;right:0;bottom:0;height:46%;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(100deg,rgba(225,196,150,0) 0 120px,rgba(225,196,150,.3) 190px,rgba(225,196,150,0) 300px),linear-gradient(0deg,rgba(214,182,132,.55),rgba(214,182,132,0));
+  background-size:600px 100%,100% 100%;animation:hazeMove 9s linear infinite}
+@keyframes hazeMove{from{background-position:0 0,0 0}to{background-position:600px 0,0 0}}
+/* 머무는 고리 도식 크게 */
+.story:has(svg.loop){grid-template-columns:1.9fr 1fr!important;gap:28px;width:min(1340px,calc(100vw - 200px));margin-left:calc(50% - min(1340px,calc(100vw - 200px))/2 + 40px)}
+.story:has(svg.loop) .story-vis{height:84vh;top:8vh;display:flex;align-items:center}
+.story:has(svg.loop) .story-vis svg.loop{width:100%!important;max-width:none!important;height:auto}
+.story svg.loop .node text{font-size:23px!important}
+.story svg.loop .node text.s{font-size:16px!important}
+.story svg.loop text.mid{font-size:22px!important}
+.story svg.loop .imm text{font-size:18px!important}
+.story:not([data-k="0"]) svg.loop .node{opacity:.72!important}
+
+
+.cs-hq-box{display:flex;flex-direction:column;gap:12px}
+.cs-hq-img .win{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
+.cs-hq-img[data-v="1"] .win{opacity:1}
+.cs-hq-tabs{display:flex;gap:8px}
+.cs-hq-tabs button{flex:1;padding:11px 14px;border-radius:999px;border:1.5px solid #E6E8EB;background:#fff;cursor:pointer;font:700 14.5px/1 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470;transition:all .25s}
+.cs-hq-tabs button.on{background:#2C55A8;border-color:#2C55A8;color:#fff}
+.cs-hq-tabs button:first-child.on{background:#3A424C;border-color:#3A424C}
+.cs-hq{display:grid;grid-template-columns:1.35fr 1fr;gap:26px;align-items:center}
+.cs-hq-img{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:16/9;background:#F2F3F5;border:1.5px solid #E6E8EB}
+.cs-hq-img img{display:block;width:100%;height:100%;object-fit:cover}
+.cs-hq-img .ph-t{display:none}
+.cs-hq-img.empty img{display:none}
+.cs-hq-img.empty{border-style:dashed;display:grid;place-items:center}
+.cs-hq-img.empty .ph-t{display:block;font:600 14px 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+.cs-hq-txt p{font:500 16px/1.75 'Pretendard Variable',Pretendard,sans-serif;color:#2A3038;margin:0 0 10px}
+.cs-hq-txt p b{color:#111418;font-weight:800}
+.cs-punch.small{margin-top:14px;padding:18px 20px}
+.cs-punch.small b{font-size:21px}
+@media(max-width:900px){.cs-hq{grid-template-columns:1fr}}
+
+.pan.one img{transform:none!important}
+.ex section.cs{position:relative;z-index:1;background:#fff!important;padding:96px 0}
+.ex section.cs+section{border-top:0}
+.cs .sec-head h2{font-size:clamp(30px,4vw,44px)!important}
+.cs-two{display:grid;grid-template-columns:1.15fr 1fr;gap:28px;align-items:start}
+.cs-tl{list-style:none;margin:0;padding:0;position:relative}
+.cs-tl::before{content:'';position:absolute;left:11px;top:12px;bottom:12px;width:3px;background:#E6E8EB;border-radius:3px}
+.cs-tl li{position:relative;padding:0 0 24px 44px;display:flex;flex-direction:column;gap:3px}
+.cs-tl li::before{content:'';position:absolute;left:2px;top:4px;width:21px;height:21px;border-radius:50%;background:#fff;border:4px solid #B9C0C8;box-sizing:border-box}
+.cs-tl li.mine::before{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,#fff)}
+.cs-tl .when{font:700 13px/1.3 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+.cs-tl li.mine .when{color:var(--accent)}
+.cs-tl b{font:800 21px/1.35 'Pretendard Variable',Pretendard,sans-serif;color:#111418}
+.cs-tl .what{font:500 15px/1.55 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470}
+.cs-side{display:flex;flex-direction:column;gap:14px}
+.cs-punch{border:1.5px solid #E6E8EB;border-radius:18px;padding:24px 26px;display:flex;flex-direction:column;gap:6px;box-shadow:0 10px 26px rgba(17,20,24,.06)}
+.cs-punch .k{font:700 13px/1 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+.cs-punch b{font:900 28px/1.3 'Pretendard Variable',Pretendard,sans-serif;color:#111418;letter-spacing:-.02em}
+.cs-punch b em{font-style:normal;color:#C2412D}
+.cs-punch>span:last-child{font:500 14.5px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470}
+.cs-quote{background:var(--accent);color:#fff;border-radius:18px;padding:22px 26px;display:flex;flex-direction:column;gap:6px}
+.cs-quote b{font:800 22px/1.3 'Pretendard Variable',Pretendard,sans-serif}
+.cs-quote span{font:500 14.5px/1.6 'Pretendard Variable',Pretendard,sans-serif;opacity:.92}
+.cs-sub{font:800 22px/1.35 'Pretendard Variable',Pretendard,sans-serif;color:#111418;margin:44px 0 14px}
+.cs-cities{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.cs-cities figure{margin:0;border-radius:16px;overflow:hidden;border:1.5px solid #E6E8EB;background:#fff}
+.cs-cities img{display:block;width:100%;height:170px;object-fit:cover}
+.cs-cities figcaption{padding:14px 16px;font:500 14px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470}
+.cs-cities figcaption b{display:block;font:800 17px/1.3 'Pretendard Variable',Pretendard,sans-serif;color:#111418;margin-bottom:2px}
+.cs-line{margin:24px 0 0;font:800 20px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#111418}
+.cs-line em,.cs-band em{font-style:normal;color:var(--accent);background:linear-gradient(transparent 62%,color-mix(in srgb,var(--accent) 18%,#fff) 62%)}
+.cmp{border-radius:20px;overflow:hidden;border:1.5px solid #E6E8EB;background:#fff}
+.cmp-head,.cmp-row>button{display:grid;grid-template-columns:110px 1fr 1.2fr 40px;align-items:center;gap:12px;padding:17px 22px;text-align:left}
+.cmp-head{background:#111418;color:#fff;font:700 14px/1.3 'Pretendard Variable',Pretendard,sans-serif}
+.cmp-head span:nth-child(3){color:#F2CF84}
+.cmp-row{border-top:1px solid #E6E8EB}
+.cmp-row>button{width:100%;background:#fff;border:0;cursor:pointer;font:500 15.5px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470}
+.cmp-row>button:hover{background:#F7F8FA}
+.cmp-row .c0{font-weight:800;color:var(--accent)}
+.cmp-row .c2{font-weight:800;color:#111418}
+.cmp-row .pl{width:28px;height:28px;border-radius:50%;border:1.5px solid #E6E8EB;display:grid;place-items:center;color:var(--accent);font-weight:800;transition:transform .3s}
+.cmp-row>button[aria-expanded="true"] .pl{transform:rotate(45deg);background:var(--accent);color:#fff;border-color:var(--accent)}
+.cmp-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
+.cmp-body>div{overflow:hidden}
+.cmp-row>button[aria-expanded="true"]+.cmp-body{grid-template-rows:1fr}
+.cmp-in{padding:4px 22px 22px 144px;font:15px/1.75 'Pretendard Variable',Pretendard,sans-serif;color:#2A3038}
+.cmp-in ul{margin:0;padding-left:18px}
+.cs-band{margin-top:22px;border-radius:14px;padding:18px 24px;background:#FFF4CC;font:800 19px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#111418}
+@media(max-width:900px){.cs-two,.cs-cities{grid-template-columns:1fr}.cmp-head{display:none}.cmp-row>button{grid-template-columns:1fr 32px}.cmp-row .c0,.cmp-row .c1{grid-column:1}.cmp-in{padding-left:22px}}
+@media (min-width:900px){#reward .flat{grid-template-columns:repeat(3,1fr)}#reward .flat .fi:has(.acc.must){grid-column:1/-1}}
+</style>
+<style>
+.plan3{margin-top:24px;border-radius:14px;background:var(--accent);color:#fff;padding:22px 24px 24px}
+.p3-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.p3-head b{font:800 20px/1.4 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif}
+.p3-head span{font-size:14px;opacity:.82}
+.p3-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:none}
+.p3-steps li{position:relative;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.p3-steps li+li::before{content:"→";position:absolute;left:-22px;top:50%;transform:translateY(-50%);font-weight:800;opacity:.8}
+.p3-n{font-size:13px;font-weight:700;opacity:.85}
+.p3-steps b{font:800 18px/1.35 'Pretendard Variable',Pretendard,'Noto Sans KR',sans-serif}
+.p3-d{font-size:14px;line-height:1.5;opacity:.85}
+@media(max-width:760px){.p3-steps{grid-template-columns:1fr;gap:12px}.p3-steps li+li::before{display:none}}
+</style>
+<style>.why-t{width:100%;border-collapse:collapse;background:#fff;border:1px solid #E6E8EB;border-radius:14px;overflow:hidden;font-size:15px}.why-t th,.why-t td{padding:12px 16px;border-top:1px solid #EEF0F2;text-align:left}.why-t th{background:#F7F8FA;border-top:0}</style>
+<style>
+.cs-hq{align-items:stretch}
+.cs-hq-txt{display:flex;flex-direction:column;gap:12px}
+.cs-hq-txt .cs-punch.small{margin-top:0;flex:1;justify-content:center}
+.cs-fact{background:#fff;border:1.5px solid #E6E8EB;border-radius:16px;padding:16px 20px;display:flex;flex-direction:column;gap:5px}
+.cs-fact .k{font:700 13px/1 'Pretendard Variable',Pretendard,sans-serif;color:#8A929C}
+.cs-fact b{font:800 19px/1.35 'Pretendard Variable',Pretendard,sans-serif;color:#111418;letter-spacing:-.01em}
+.cs-fact>span:last-child{font:500 14.5px/1.5 'Pretendard Variable',Pretendard,sans-serif;color:#5B6470}
+.plus,.cmp-row .pl{position:relative;font-size:0!important;line-height:0!important}.plus::before,.cmp-row .pl::before{content:'';position:absolute;inset:0;margin:auto;width:12px;height:12px;background:linear-gradient(currentColor,currentColor) center/12px 2.4px no-repeat,linear-gradient(currentColor,currentColor) center/2.4px 12px no-repeat}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 버전 모음</a>
+<span class="credit" style="position:fixed">이미지 출처: Riot Games</span>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="ripple"><feTurbulence id="turb" type="fractalNoise" baseFrequency="0.008 0.05" numOctaves="2" seed="4"/><feDisplacementMap id="disp" in="SourceGraphic" in2="turb" scale="0"/></filter></svg>
+
+<!-- 1 · 안개가 걷힘 -->
+<div class="scene still" data-mode="mist" data-w="1832" data-h="837" style="height:300vh">
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/cover-hq.jpg" alt="아이오니아 들판을 걷는 여행자">
+      <div class="mark" style="left:40%;top:52%;font-size:var(--u)" data-from="0.42" data-to="1.0">
+        <div class="carve title"><div class="en">HIDDEN SUMMONERS</div><h2>숨어 사는 소환사들</h2><p>리그 오브 레전드 신규 콘텐츠 제안서 · 게임기획 포트폴리오</p></div>
+      </div>
+      
+    </div>
+    <div class="fx fx-mist"></div>
+    <div class="hint">스크롤 ↓</div>
+  </div>
+</div>
+
+<div class="ex r-ionia"><div class="ex-bg" aria-hidden="true"><img src="img/lol/cover-hq.jpg" alt=""></div><section id="summary" class="r-ionia">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">한 장 요약</div><h2>LoL에 머무는 광장과<br>쉬어 가는 모드를 더한다</h2></div>
+    </div>
+    <div class="gloss"><span class="who-l">용어 정리</span><div class="gl"><b>소환사</b><span>리그 오브 레전드(롤)에서 <em>플레이어(유저)</em>를 부르는 이름. 소환사가 챔피언을 불러 싸운다는 설정에서 왔습니다.</span></div><div class="gl"><b>전쟁의 학회</b><span>초창기 롤 설정 속 <em>소환사들의 조직</em>. 나라끼리 전쟁 대신 협곡 대결로 분쟁을 정하게 했던 곳으로, 지금 공식 설정에서는 사라졌습니다.</span></div></div>
+    <div class="who"><span class="who-l">타깃 유저</span><span class="chip">지친 기존 유저</span><span class="chip">석 달 쉬다 온 복귀 유저</span><span class="chip">랭크가 부담스러운 캐주얼 유저</span><span class="chip">e스포츠를 보고 처음 시작한 신규 유저</span><div class="acc"><button class="acc-btn" aria-expanded="false"><span>유저의 하루<span class="sum">같은 광장, 다른 이유로 들어온다</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><table><tr><th style="width:26%">누구</th><th>지금</th><th>이 기획에서</th></tr><tr><td>지친 기존 유저</td><td>퇴근 후 30분 집중할 힘이 없어 접속을 미룬다</td><td>광장에서 친구를 만나고, 보기만 해도 되는 포로 경주로 쉬다 간다</td></tr><tr><td>복귀 유저</td><td>바뀐 메타·아이템 앞에서 첫 판부터 무너진다</td><td>숨바꼭질에서 바뀐 협곡 지형 · 아이템과 내 챔피언 조작을 랭크 점수 부담 없이 다시 익히고, 1:1 구역에서 손을 푼 뒤 협곡으로 간다</td></tr><tr><td>캐주얼 유저</td><td>랭크의 긴장과 팀원 갈등이 부담스럽다</td><td>학회원으로 이름만 올려도 시즌 리그에 참여하고, 랭크 대신 숨바꼭질 · 광장 즉석 놀이 같은 캐주얼 모드로 부담 없이 즐긴다</td></tr><tr><td>신규 유저</td><td>e스포츠를 보고 시작했지만, 첫 판부터 배울 것이 많아 막막해진다. TFT · 레전드 오브 룬테라는 조작이 달라 다른 게임처럼 느껴진다</td><td>숨바꼭질로 협곡 지도 · 와드 · 렌즈를, 광장 놀이로 조작 감각을 부담 없이 먼저 익히고, 학회로 소속감이 생긴다</td></tr></table><span class="note">떠나려는 기존 유저에게는 머물 이유를, e스포츠로 관심이 생긴 신규 유저에게는 학습 없이 롤을 즐기는 입구를 만듭니다.</span></div></div></div></div></div>
+    <div class="grid g3">
+      <div class="card"><span class="num">01</span><h3>한 판 할 이유</h3><p class="one">승리 → 학회 순위 · 광장 축제 · 챔피언 외형</p></div>
+      <div class="card"><span class="num">02</span><h3>지친 날도 접속</h3><p class="one">광장 놀이 &amp; 소통 · 숨바꼭질 모드</p></div>
+      <div class="card"><span class="num">03</span><h3>협곡을 덜 해도 손해 없음</h3><p class="one">광장 · 놀이 모두 내 스킨으로 · 스킨이 보일 무대</p></div>
+    </div>
+    <div class="plan3">
+      <div class="p3-head"><b>작게 시작해서, 반응을 확인하고 잇는다</b><span>다음 단계는 1단계의 지표가 좋아진 것을 확인한 뒤에 엽니다</span></div>
+      <ol class="p3-steps" style="grid-template-columns:repeat(2,1fr)">
+        <li><span class="p3-n">1단계 · 롤 안의 광장 모드</span><b>학회 본단에서 놀다가,<br>큐가 잡히면 떠난다</b><span class="p3-d">전투 없는 광장 · 즉석 놀이 2종 · 숨바꼭질 정식 모드</span></li>
+        <li><span class="p3-n">다음 · 잇기</span><b>라이엇 MMO에<br>기록을 넘긴다</b><span class="p3-d">새로 만들지 않고 · 내 소환사와 학회 기록이 이어짐</span></li>
+      </ol>
+    </div>
+  </div>
+</section></div>
+
+<!-- 2 · 햇빛이 훑고 지나감 -->
+<div class="scene still" data-mode="sweep" data-w="2083" data-h="1080" style="height:240vh"
+  data-light='[{"p":0,"x":50,"y":50,"r":60},{"p":0.14,"x":50,"y":50,"r":60},{"p":0.24,"x":25,"y":50,"r":16},{"p":0.32,"x":25,"y":50,"r":16},{"p":0.38,"x":50,"y":50,"r":16},{"p":0.48,"x":50,"y":50,"r":16},{"p":0.54,"x":75,"y":50,"r":16},{"p":0.64,"x":75,"y":50,"r":16},{"p":0.7,"x":50,"y":50,"r":34},{"p":0.8,"x":50,"y":50,"r":34},{"p":0.9,"x":50,"y":50,"r":70},{"p":1,"x":50,"y":50,"r":70}]'>
+  <div class="sticky"><canvas class="dust" aria-hidden="true"></canvas><div class="haze" aria-hidden="true"></div>
+    <div class="world">
+      <img src="img/lol/d1-hq.jpg" alt="정오의 슈리마 사구">
+      <div class="fx fx-shade"></div>
+      <div class="fx fx-light"></div>
+      <div class="mark" style="left:50%;top:48%;font-size:var(--u)" data-from="0.0" data-to="1.0">
+        <div class="carve sun"><span class="pn">PART 01 · 문제 정의</span><h2>경쟁에 지친 소환사</h2><p>30분을 쏟아도, 돌아오는 건 점수 하나.</p></div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+<div class="ex r-shurima walls-ex"><div class="ex-bg" aria-hidden="true"><img src="img/lol/noxus-hq.jpg" alt=""></div><section class="r-shurima" id="walls"><div class="wrap"><div class="sec-head"><div><div class="sec-no">1-1 · 네 가지 문제</div><h2>왜 남는 게 없을까</h2></div></div><div class="story pair walls" data-k="1"><div class="story-vis"><div class="wall-vis"><div class="wv" data-k="1"><figure class="illu"><img src="img/lol/fatigue.jpg" alt="늦은 밤 퇴근 복장 그대로 모니터 앞에 웅크려 게임하는 사람"></figure></div><div class="wv" data-k="2"><figure class="real-shot"><img src="img/lol/patch-notes.png" alt="실제 LoL 26.23 패치 노트 — 챔피언 수치 변경 목록"><figcaption>실제 패치 노트 · 26.23 · 2주마다 이만큼씩</figcaption></figure></div><div class="wv" data-k="3"><figure class="real-shot"><img src="img/lol/solokill.jpg" alt="실제 LoL 게임 화면 — 시작 2분 43초, 라인전에서 상대 다리우스에게 솔킬당해 회색 화면으로 부활을 기다리는 모습"><figcaption>실제 게임 화면 · 2분 43초 · 라인전 솔킬 → <b>부활 대기</b></figcaption></figure></div><div class="wv" data-k="4"><figure class="real-shot"><img src="img/lol/result-screen.png" alt="실제 LoL 랭크 게임 결과 화면 — 31분 29초 경기, S+ 등급인데 패배로 −23 LP"><figcaption>실제 결과 화면 · 31분 29초 · 최고 등급 S+ · <b>점수 −23</b></figcaption></figure></div><div class="wv" data-k="5"><div class="q-big">?</div></div></div></div><div class="story-steps"><div class="step" data-k="1"><div class="wtxt"><h3>한 판의 피로</h3><p>30분 집중 · 팀원 갈등</p><div class="feel">“오늘은 30분 집중할 자신이 없다.”</div><div class="ev">근거 · 실제 랭크 한 판 31분 29초 (결과 화면)</div></div></div><div class="step" data-k="2"><div class="wtxt"><h3>패치 공부</h3><p>매 패치 챔피언 · 아이템 변경</p><div class="feel">“또 바뀌었어? 뭐부터 봐야 하지.”</div><div class="ev">근거 · 2026년 패치 24회, 2주마다 (라이엇 공식 일정)</div></div></div><div class="step" data-k="3"><div class="wtxt"><h3>복귀 격차</h3><p>바뀐 메타 · 손 감각 차이</p><div class="feel">“나만 예전 게임을 하고 있다.”</div><div class="ev">근거 · 2026 시즌 1, 목표물·시야·포탑·아이템 규칙 개편 (라이엇 개발 노트)</div></div></div><div class="step" data-k="4"><div class="wtxt"><h3>남는 건 점수뿐</h3><p>30분의 긴장 · 스트레스 → 보상은 숫자 하나</p><div class="feel">“30분을 버텼는데 남은 게 −23점.”</div><div class="ev">근거 · 최고 등급(S+)을 받고도 랭크 점수 −23 (실제 결과 화면)</div></div></div><div class="step" data-k="5"><div class="wtxt"><span class="pn">핵심 질문</span><h2>한 판을 하지 않아도<br>머물 이유가 있는 LoL은 가능할까?</h2></div></div></div></div></div></section></div>
+<div class="hall"><p>숨은 소환사들의 학회 기록관<br><span>벽에 걸린 그림은 소환사들이 아끼는 룬테라의 풍경입니다</span></p></div>
+
+<!-- 3 · 액자 속으로 -->
+<div class="scene frame" data-mode="frame" data-w="1920" data-h="1080" style="height:380vh"
+  data-keys='[{"p":0,"x":50,"y":50,"s":0},{"p":0.1,"x":50,"y":50,"s":0},{"p":0.38,"x":50,"y":46,"s":1.06},{"p":1,"x":50,"y":46,"s":1.06}]'>
+  <div class="sticky wall">
+    <div class="world">
+      <div class="pan one"><img src="img/lol/ionia-rest.jpg" alt="벚꽃 큰 나무 아래 탁 트인 쉼터"></div>
+      <div class="plaque"><b>PART 02 · 핵심 콘셉트</b><span>탁 트인 쉼터를 세운다</span></div>
+      <div class="mark inside" style="left:50%;top:40%;font-size:var(--u)" data-from="0.42" data-to="0.92">
+        <div class="carve"><div class="pn">PART 02 · 핵심 콘셉트</div><h2>탁 트인 쉼터를 세운다</h2></div>
+      </div>
+      
+      
+    </div>
+  </div>
+</div>
+
+<div class="ex r-ionia"><div class="ex-bg" aria-hidden="true"><img src="img/lol/ionia-rest.jpg" alt=""></div><section class="r-ionia" id="loop">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-1 · 머무는 고리</div><h2>경쟁은 협곡에서,<br>쉼과 기록은 소환사의 도시에서</h2></div>
+    </div>
+    <div class="story" data-k="1"><div class="story-vis"><svg class="loop" viewBox="0 0 900 430" role="img" aria-label="머무는 고리: 광장 접속, 한 판, 학회 기여, 광장 변화가 다시 접속으로 이어진다">
+  <defs><marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#A9792A"/></marker></defs>
+  <ellipse cx="450" cy="215" rx="300" ry="150" fill="none" stroke="#E3CF9F" stroke-width="14"/>
+  <path d="M575 62 Q690 70 735 145" fill="none" stroke="#A9792A" stroke-width="3" marker-end="url(#ah)"/>
+  <path d="M765 225 Q745 330 578 372" fill="none" stroke="#A9792A" stroke-width="3" marker-end="url(#ah)"/>
+  <path d="M322 372 Q160 335 140 228" fill="none" stroke="#A9792A" stroke-width="3" marker-end="url(#ah)"/>
+  <path d="M140 145 Q170 62 325 52" fill="none" stroke="#A9792A" stroke-width="3" marker-end="url(#ah)"/>
+  <g class="node n1"><rect x="330" y="20" width="240" height="70" rx="16"/><text x="450" y="50">① 광장에 접속</text><text class="s" x="450" y="74">큐 대기 = 산책 · 친구가 서 있다</text></g>
+  <g class="node n2"><rect x="640" y="150" width="240" height="70" rx="16"/><text x="760" y="180">② 한 판</text><text class="s" x="760" y="204">협곡 또는 쉬어 가는 캐주얼</text></g>
+  <g class="node n3"><rect x="330" y="340" width="240" height="70" rx="16"/><text x="450" y="370">③ 학회 기여</text><text class="s" x="450" y="394">이겨도 져도 이름이 남는다</text></g>
+  <g class="node n4"><rect x="20" y="150" width="240" height="70" rx="16"/><text x="140" y="180">④ 광장이 바뀐다</text><text class="s" x="140" y="204">시즌이 끝나면 우승 학회 양식으로</text></g>
+  <g class="imm"><circle cx="690" cy="78" r="17"/><text x="690" y="84">A</text></g>
+  <g class="imm"><circle cx="712" cy="318" r="17"/><text x="712" y="324">B</text></g>
+  <g class="imm"><circle cx="188" cy="318" r="17"/><text x="188" y="324">C</text></g>
+  <text class="mid" x="450" y="205">다시 접속할 이유가</text><text class="mid" x="450" y="235">풍경으로 보인다</text>
+</svg></div><div class="story-steps"><div class="step" data-k="1"><span class="sk">① 광장에 접속</span><p class="sl">큐를 돌려 놓고 광장을 걷습니다. 친구가 저기 서 있습니다.</p><p class="sm">메뉴 화면 대신, 사람이 있는 장소에서 시작한다.</p></div><div class="step" data-k="2"><span class="sk">② 한 판 — A</span><p class="sl">큐가 잡히면 광장을 떠나 협곡으로. 안 잡혀도 즉석 놀이 한 판.</p><p class="sm">기다리던 시간이 노는 시간이 된다.</p></div><div class="step" data-k="3"><span class="sk">③ 학회 기여 — B</span><p class="sl">이겨도 져도, 내 이름이 우리 학회의 기록에 더해집니다.</p><p class="sm">직접 뛰지 않는 날에도 결과가 궁금해진다.</p></div><div class="step" data-k="4"><span class="sk">④ 광장이 바뀐다 — C</span><p class="sl">시즌이 끝나면, 광장이 우승 학회의 모습으로 바뀌어 있습니다.</p><p class="sm">점수 대신 풍경이 결과를 보여 준다.</p></div></div></div>
+    <div style="margin-top:18px">
+      <div class="acc must"><button class="acc-btn" aria-expanded="true"><span>몰입을 만드는 세 장치<span class="sum">안내문 대신, 공간과 카메라가 다음 행동을 알려 준다</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner">
+<h4>A · 언제 와도 바로 놀고, 큐가 잡히면 떠난다</h4><ul>
+<li>광장에 들어오면 내 챔피언 · 스킨으로 바로 놀 수 있습니다. 즉석 놀이는 1~3분이고, 큐가 잡히면 언제 떠나도 남에게 피해가 없습니다.</li>
+<li>영상처럼 아무 때나 켜고 끌 수 있으면서, 영상과 달리 내 손짓에 바로 반응이 옵니다(2-2 참고).</li></ul>
+<h4>B · 우리 학회의 경기</h4><ul>
+<li>내 한 판은 학회 기여가 되어 학회 순위에 더해집니다. e스포츠에서 응원하는 팀처럼, 직접 뛰지 않는 날에도 '우리 학회의 경기'라서 결과가 궁금해집니다.</li>
+<li>소속감이 이길 이유를 만들기 때문에, 보상을 크게 덧붙이지 않아도 됩니다.</li></ul>
+<h4>C · 눈에 보이는 결과</h4><ul>
+<li>순위표는 매주 광장 게시판에 오르내리고, 광장 모습은 시즌이 끝날 때 우승 학회의 양식으로 바뀌어 다음 시즌 내내 유지됩니다.</li>
+<li>지금의 순위가 다음 시즌 광장의 모습을 정하니, 시즌 내내 이길 이유가 있습니다.</li></ul>
+<span class="note">세 장치 모두 협곡 규칙은 건드리지 않고, 협곡 바깥의 시간(대기 · 결과 · 쉬는 날)에 의미를 더하는 방식입니다.</span></div></div></div></div>
+      
+      <div class="acc"><button class="acc-btn" aria-expanded="false"><span>문제마다 어떤 장치가 대응하나<span class="sum">PART 01의 네 가지 문제 → 해결 장치</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><table>
+        <tr><th style="width:30%">문제</th><th>장치</th><th>어디서</th></tr>
+        <tr><td>한 판의 피로 · 갈등</td><td>놀다가 큐가 잡히면 떠나는 광장 · 보기만 해도 되는 포로 경주</td><td>3-1 · 4-1</td></tr>
+        <tr><td>패치 공부</td><td>지금 패치의 챔피언 · 아이템을 그대로 쓰는 숨바꼭질. 랭크 점수 걱정 없이 바뀐 점을 직접 써 본다</td><td>4-2</td></tr>
+        <tr><td>복귀 격차</td><td>바뀐 협곡 규칙 · 시야를 다시 익히는 숨바꼭질 · Q 하나로 손 감각을 되찾는 1:1 구역</td><td>4-1 · 4-2</td></tr>
+        <tr><td>남는 건 점수뿐</td><td>학회 순위 · 시즌 광장 · 외형</td><td>3-2 · 3-3</td></tr></table></div></div></div></div>
+    </div>
+  </div>
+</section><section class="cs cs-tint" id="whynow">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-2 · 왜 지금인가</div><h2>사람들은 게임을 떠나,<br>영상을 보고 있다</h2></div>
+    </div>
+    <div class="why-hero"><span class="from">74.4%</span><span class="arr">→</span><span class="to">50.2%</span><p>국내 게임 이용률 · 2022 → 2025 · 2015년 집계 이래 최저</p></div>
+    <div class="why3">
+      <div class="wc"><span class="lab">게임을 그만둔 이유 1위</span><b>44%</b><span class="what">시간이 없어서</span><em>1~3분이면 끝나는 즉석 놀이</em></div>
+      <div class="wc"><span class="lab">게임을 그만둔 이유 2위</span><b>36%</b><span class="what">재미가 줄어서</span><em>매주 순위가 오르내리는 학회 리그</em></div>
+      <div class="wc hot"><span class="lab">게임 대신 즐기는 여가</span><b>86.3%</b><span class="what">OTT · 영화 · TV 등 영상 시청</span><em>보기만 해도 참여하는 포로 경주</em></div>
+    </div>
+    <table class="why-t" style="margin-top:18px">
+      <tr><th style="width:38%">사람들이 영상으로 간 이유</th><th>광장이 갖춘 것</th></tr>
+      <tr><td>아무 때나 켜고 끈다</td><td>언제 들어와도 되고, 큐가 잡혀 떠나도 손해 없음</td></tr>
+      <tr><td>누워서도 본다</td><td>클릭 몇 번이면 되는 놀이</td></tr>
+      <tr><td>짧게 끊어 본다</td><td>1~3분 즉석 놀이</td></tr>
+      <tr><td>남 탓할 일이 없다</td><td>혼자 해도 되는 놀이 · 진 사람도 참여분</td></tr>
+      <tr><td><b>그런데 내가 한 일에 반응이 없다</b></td><td><b>누르면 바로 반응 · 관객도 한 번씩 개입 · 결과가 학회 기록에 남음</b></td></tr>
+    </table>
+    <div class="cs-band">영상의 편함에, 게임의 반응을 더한다. <em>보는 사람을 하는 사람으로.</em></div>
+    <p class="src">출처 · 한국콘텐츠진흥원 「2025 게임이용자 실태조사」(전국 10~69세 1만 명) · 그만둔 이유는 여러 개를 고를 수 있는 질문이라 합이 100%를 넘습니다</p>
+  </div>
+</section>
+</div>
+
+<!-- 학회 · 세 개의 문 -->
+<div class="scene" data-mode="doors" style="height:320vh">
+  <div class="sticky">
+    <div class="doors">
+      <div class="door" data-at="0.25"><img src="img/lol/demacia-hq.jpg" alt="데마시아 왕궁 전경"><div class="leaf l"><img src="img/lol/door-demacia.jpg" alt=""></div><div class="leaf r"><img src="img/lol/door-demacia.jpg" alt="데마시아 학회의 닫힌 문"></div><div class="carve"><span class="pn">데마시아 학회</span><h3>정의는<br>협곡에서 증명한다</h3><p>명예로 싸우는 소환사들</p></div></div>
+      <div class="door" data-at="0.45"><img src="img/lol/noxus-city-hq.jpg" alt="안개 속 녹서스 성벽 도시"><div class="leaf l"><img src="img/lol/door-noxus.jpg" alt=""></div><div class="leaf r"><img src="img/lol/door-noxus.jpg" alt="녹서스 학회의 닫힌 문"></div><div class="carve"><span class="pn">녹서스 학회</span><h3>강한 자가<br>길을 연다</h3><p>승리로 말하는 소환사들</p></div></div>
+      <div class="door" data-at="0.65"><img src="img/lol/piltover-hq.jpg" alt="필트오버 거리"><div class="leaf l"><img src="img/lol/door-piltover.jpg" alt=""></div><div class="leaf r"><img src="img/lol/door-piltover.jpg" alt="필트오버 학회의 닫힌 문"></div><div class="carve"><span class="pn">필트오버 학회</span><h3>판을 바꾸는 건<br>새로운 수</h3><p>한 수 앞을 짜는 소환사들</p></div></div>
+    </div>
+    <div class="doors-title"><div class="carve"><span class="pn">세 개의 학회</span><h2>이번 시즌,<br>어느 문을 여시겠습니까</h2><p>고른 세력의 이름을 걸고<br>한 시즌 동안 협곡에 섭니다</p></div></div>
+  </div>
+</div>
+<div class="ex r-ionia"><div class="ex-bg" aria-hidden="true"><img src="img/lol/noxus-city-hq.jpg" alt=""></div><section class="cs" id="academy">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">2-3 · 세계관</div><h2>전쟁의 학회가 사라진 뒤,<br>소환사들은 자기들만의 도시로 물러났다</h2></div>
+    </div>
+    <div class="cs-two">
+      <ol class="cs-tl">
+        <li><span class="when">초창기 롤 설정</span><b>전쟁의 학회</b><span class="what">나라끼리 전쟁 대신, 소환사의 협곡 대결로 분쟁을 정했다</span></li>
+        <li><span class="when">2014년 무렵</span><b>공식 설정에서 삭제</b><span class="what">룬테라는 소환사 없이 고유의 이야기로 · "협곡에서 왜 싸우는가"가 비었다</span></li>
+        <li class="mine"><span class="when">이 기획</span><b>소환사들은 자기들만의 도시에 산다</b><span class="what">밴들 시티가 요들의 차원이듯 · 룬테라와 닿지 않는 소환사의 차원 · 룬테라 이야기에 끼어들지 않는다</span></li>
+        <li class="mine"><span class="when">그래서</span><b>협곡은 소환사들의 경기장</b><span class="what">아끼는 세력의 이름을 건 학회로, 스포츠처럼 겨룬다</span></li>
+      </ol>
+      <div class="cs-side">
+        <div class="cs-punch"><span class="k">이길 이유</span><b>내 한 판 = <em>우리 학회의 경기</em></b><span>프로 경기도 내 솔로 랭크도, 같은 협곡 · 같은 인터넷 위에서 열린다</span></div>
+        <div class="cs-quote"><b>플레이어 = 소환사</b><span>롤은 원래 플레이어를 '소환사'라고 부릅니다. 여기에 몸(광장의 아바타)과 소속(학회)만 붙입니다.</span></div>
+      </div>
+    </div>
+    <h3 class="cs-sub">시즌마다 아끼는 세력을 고르면, 그 이름의 학회원이 된다</h3>
+    <div class="cs-cities">
+      <figure><img src="img/lol/demacia-hq.jpg" alt="데마시아"><figcaption><b>데마시아 학회</b>흰 석회암 · 푸른 깃발</figcaption></figure>
+      <figure><img src="img/lol/noxus-city-hq.jpg" alt="녹서스"><figcaption><b>녹서스 학회</b>붉은 깃발 · 데마시아의 맞수</figcaption></figure>
+      <figure><img src="img/lol/piltover-hq.jpg" alt="필트오버"><figcaption><b>필트오버 학회</b>황동 · 톱니 · 발명</figcaption></figure>
+    </div>
+    <h3 class="cs-sub">소환사들만의 도시, 학회 본단</h3>
+    <div class="cs-hq">
+      <div class="cs-hq-box"><div class="cs-hq-img" data-v="0"><img src="img/lol/hq.jpg" alt="소환사들의 도시 한가운데, 덩굴과 안개에 싸인 학회 본단 안뜰"><img class="win" src="img/lol/hq-demacia.jpg" alt="데마시아 학회가 우승한 시즌, 푸른 깃발과 흰 백합으로 꾸며진 본단 안뜰"></div>
+        <div class="cs-hq-tabs"><button class="on" data-v="0">평소의 본단</button><button data-v="1">데마시아 우승 시즌</button></div></div>
+      <div class="cs-hq-txt">
+        <div class="cs-fact"><span class="k">어디에 있나</span><b>룬테라 바깥, 소환사들만의 차원</b><span>밴들 시티가 요들만의 도시이듯. 룬테라 이야기와 닿지 않습니다.</span></div>
+        <div class="cs-fact"><span class="k">무엇을 하는 곳인가</span><b>협곡으로 가는 문이 있는 곳</b><span>광장 모드에 들어가면 펼쳐지는 곳이 바로 본단입니다. 협곡의 약 2배 넓이에, 가운데 광장과 세 학회 구역이 있습니다.</span></div>
+        <div class="cs-punch small"><span class="k">시즌 보상이 눈에 보이는 곳</span><b>지난 시즌 우승 학회가 <em>본단 전체를 자기 세력 양식으로</em> 꾸민다</b><span>데마시아가 이기면 흰 석회암과 푸른 깃발, 녹서스가 이기면 붉은 깃발과 철 장식. 세 학회 구역만 각자 양식을 지키고, 나머지 본단은 모두 우승 학회 양식이 됩니다. 모든 소환사가 다음 시즌 내내 그 모습을 봅니다.</span></div>
+      </div>
+    </div>
+    <p class="cs-line">룬테라 이야기는 하나도 바꾸지 않고 → <em>그 바깥에 소환사들의 도시와 리그만 더한다</em></p>
+    <div style="margin-top:18px"><div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>왜 세계관을 이렇게 잡았나<span class="sum">룬테라에 영향 없이, 이길 이유를 소속감에서 가져온다</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <ul>
+            <li><b>빈자리를 채운다</b>: 초창기 LoL에는 "나라들이 전쟁 대신 정의의 전장에서 분쟁을 결정하고, 소환사가 챔피언을 불러 싸운다"는 설정이 있었습니다. 지금 공식 이야기에서는 빠져 있어서, 협곡에서 <span class="k">왜 싸우는지</span>에 대한 답이 비어 있습니다.</li>
+            <li><b>다른 차원 = 룬테라에 영향이 없다</b>: 공허나 밴들 시티처럼 룬테라에는 원래 다른 차원이 있습니다. 소환사들의 도시도 그중 하나라서, 룬테라의 인물 · 사건 · 지역을 하나도 바꾸지 않습니다. 협곡은 소환사들끼리 겨루는 경기장일 뿐입니다.</li>
+            <li><b>유저 = 소환사</b>: 플레이어는 원래 "소환사"라고 불립니다. 설정에서 학회가 사라져도 소환사는 화면 앞에 그대로 있습니다. 이 기획은 그 소환사에게 몸(광장의 아바타)과 소속(학회)을 붙여 줄 뿐이라, 새로 배울 설정이 거의 없습니다.</li>
+            <li><b>이길 이유는 소속감에서 온다</b>: 프로 경기도 솔로 랭크도 같은 협곡, 같은 인터넷 위에서 열립니다. 다른 스포츠와 달리 팬과 선수가 같은 경기장에 서는 셈입니다. 응원하는 팀이 있을 때의 소속감을, 내 솔로 랭크 한 판에도 붙입니다.</li>
+          </ul>
+          <span class="note">학회 이름은 유저가 애착을 가진 세력 이름을 빌려 올 뿐, 룬테라 이야기에는 끼어들지 않습니다.</span>
+        </div></div></div>
+      </div><div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>학회 소속 규칙<span class="sum">언제 고르고, 쏠리면 어떻게 하나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <h4>고르기</h4>
+          <ul>
+            <li><b>시즌 시작 때 한 번</b> 학회를 고릅니다. 고른 학회의 학회원이 되고, <b>시즌이 끝날 때까지 바꿀 수 없습니다</b>. 한 번 고른 학회와 끝까지 함께하기 때문에 응원할 이유가 흔들리지 않습니다.</li>
+            <li>고르지 않은 유저는 <b>가장 많이 플레이한 챔피언의 출신 지역</b>으로 임시 배정합니다. 첫 접속에서 선택 화면을 한 번 더 보여 줍니다.</li>
+          </ul>
+          <h4>쏠림 대비</h4>
+          <ul>
+            <li>학회 순위는 <b>학회원 1인당 평균 기여</b>로 정합니다. 사람이 많다고 이기지 않으니, 인기 학회로 몰릴 이유가 줄어듭니다.</li>
+            <li>다른 학회 구역은 언제든 이동탑으로 가서 <b>구경</b>할 수 있습니다. 소속은 하나지만, 보는 건 자유입니다.</li>
+          </ul>
+          <span class="note">처음에는 인지도가 높은 세 지역의 학회로 시작합니다. 데마시아 · 녹서스는 초창기부터 서로 맞서 온, 가장 널리 알려진 두 나라이고, 필트오버는 넷플릭스 시리즈 「아케인」으로 인지도가 크게 높아졌습니다.</span>
+        </div></div></div>
+      </div></div>
+  </div>
+</section></div>
+
+<!-- PART 03 · 데마시아 항구 (수면에 비친 글) -->
+<div class="scene" data-mode="harbor" data-w="1000" data-h="562" style="height:300vh">
+  <div class="sticky wall">
+    <div class="harbor-frame">
+      <img src="img/lol/harbor-hq.jpg" alt="데마시아 항구와 푸른 돛의 함대">
+      <div class="mark ripple" style="left:50%;top:72%;font-size:var(--u)" data-from="0.18" data-to="1.0">
+        <div class="carve"><span class="pn">PART 03 · 광장 모드 설계</span><h2>사람이 모이는 항구</h2><p>학회 광장과 학회 시즌</p></div>
+      </div>
+      
+      
+    </div>
+  </div>
+</div>
+<div class="ex r-demacia"><div class="ex-bg" aria-hidden="true"><img src="img/lol/harbor-hq.jpg" alt=""></div><section class="r-demacia" id="build">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-0 · 만드는 것</div><h2>새 게임이 아니라,<br>롤 안의 모드 하나</h2></div>
+    </div>
+    <div class="grid g5">
+      <div class="card"><span class="num">1</span><h3>광장 모드</h3><p class="one">본단 맵 1종 · 이동탑 · 채널 · 전투 없음</p></div>
+      <div class="card"><span class="num">2</span><h3>큐 연결</h3><p class="one">광장 안에서 큐 · 수락</p></div>
+      <div class="card"><span class="num">3</span><h3>놀이</h3><p class="one">즉석 놀이 2종 · 숨바꼭질</p></div>
+      <div class="card"><span class="num">4</span><h3>시즌 집계</h3><p class="one">기여 계산 · 주간 정산 · 게시판</p></div>
+      <div class="card"><span class="num">5</span><h3>승리 이펙트</h3><p class="one">챔피언 오라 · 귀환 · 우물</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc must"><button class="acc-btn" aria-expanded="true"><span>만드는 것과 다시 쓰는 것<span class="sum">1단계 개발 범위를 한눈에</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><table>
+        <tr><th style="width:16%">항목</th><th>새로 만드는 것</th><th>그대로 다시 쓰는 것</th></tr>
+        <tr><td>광장 모드</td><td>본단 맵 1종(협곡의 약 2배 · 가운데 광장 + 학회 구역 3) · 우승 학회 양식 3세트 · 학회 구역 분위기 3단계 · 이동탑 · 채널</td><td>협곡 포탑 텔레포트 · 아레나처럼 '새 모드' 추가 경로 · 탑다운 이동 · 감정표현 · 귀환 · 같은 팀끼리는 스킬이 안 맞는 규칙(그래서 전투 판정이 없음)</td></tr>
+        <tr><td>큐 연결</td><td>광장과 클라이언트를 잇는 큐 통로 · 광장 화면의 큐 버튼과 수락 창</td><td>기존 큐 · 매칭 · 챔피언 선택 · 상점처럼 클릭하는 게임 내 창</td></tr>
+        <tr><td>스킨 표시</td><td>광장용 가벼운 스킨을 자동으로 뽑는 도구(겉모습 · 걷기 · 감정표현 · 귀환만)</td><td>기존 스킨 · 저사양 품질 옵션 · MMO 마을의 채널 · 표시 인원 제한 방식</td></tr>
+        <tr><td>놀이</td><td>1:1 구역 안에서 챔피언 바꾸기 · 포로 트랙 · 숨바꼭질 규칙(복제 · 목표)</td><td>아레나의 경기장 벽 · 라운드 초기화 · 한 게임 여러 팀 구조, 협곡 맵 · 미니언 · 와드 · 렌즈</td></tr>
+        <tr><td>시즌 집계</td><td>학회 기여 계산 · 주간 정산 · 모드별 순위표 · 광장 게시판</td><td>기존 경기 결과 데이터 · 시즌 일정</td></tr>
+        <tr><td>승리 이펙트</td><td>학회 색 오라 · 귀환 문양 · 우물 깃발 연출</td><td>기존 스킨 (덮어쓰지 않고 위에 얹음)</td></tr></table>
+        <h4>만들지 않는 것</h4><ul>
+        <li>협곡의 규칙 · 매칭 → 건드리지 않습니다. 광장은 협곡 바깥만 바꿉니다.</li>
+        <li>룬테라 도시 → 만들지 않고 라이엇 MMO로 잇습니다.</li>
+        <li>유저 간 거래 → 롤에 원래 없는 기능이라 만들지 않습니다.</li></ul></div></div></div></div>
+    </div>
+  </div>
+</section><section class="cs" id="plaza">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-1 · 학회 광장</div><h2>메뉴 화면 대신, 놀다 가는 광장</h2></div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-head"><span></span><span>지금 롤</span><span>광장 모드</span><span></span></div>
+      <div class="cmp-row"><button aria-expanded="false"><span class="c0">들어가기</span><span class="c1">메뉴 화면</span><span class="c2">광장 모드 입장 · 내 챔피언과 스킨으로 걷는다</span><span class="pl">+</span></button><div class="cmp-body"><div><div class="cmp-in"><ul>
+            <li>광장은 롤의 <b>게임 모드 하나</b>입니다. 들어가면 학회 본단이 펼쳐지고, 내가 고른 챔피언을 스킨째 소환해 <b>내 학회 구역</b>에서 시작합니다.</li><li><b>맵 구성</b>: 협곡의 약 2배 넓이입니다. 가운데 광장에 1:1 구역 · 포로 트랙 · 게시판 · 소환진이 모여 있어 모든 소환사가 지나가고, 그 둘레에 데마시아 · 녹서스 · 필트오버 학회 구역이 있습니다.</li><li><b>이동탑</b>: 넓어진 만큼 곳곳에 포탑 모양의 이동탑을 세웁니다. 협곡에서 포탑으로 텔레포트하듯, 이동탑을 누르면 잠깐 뒤 원하는 이동탑으로 옮겨 갑니다. 큐가 잡혀도 걸어서 돌아올 필요가 없습니다.</li>
+            <li><b>챔피언 선택</b>: 다른 모드처럼 클라이언트에서 고르고 들어갑니다. <b>보유한 챔피언 · 스킨만</b> 쓸 수 있고, 시간 제한도 상대도 없습니다. 지난번에 쓴 챔피언이 미리 골라져 있어 입장 버튼 하나로 들어갈 수 있습니다.</li>
+            <li><b>소환진에서 바꾸기</b>: 광장 한가운데 소환진에 서면 보유 챔피언 · 스킨 중에서 바꿀 수 있습니다. 나갔다 들어오지 않고도 스킨을 바꿔 가며 보여 줄 수 있고, 소환사가 소환진에서 챔피언을 불러낸다는 설정이 그대로 행동이 됩니다.</li>
+            <li>조작은 협곡 그대로입니다. 탑다운 · 우클릭 이동 · 감정표현 · 귀환. <b>새로 배울 것이 없습니다.</b></li>
+            <li>광장에서는 <b>모두 같은 팀</b>입니다. 롤은 같은 팀끼리 스킬이 맞지 않으니, 따로 막지 않아도 전투가 일어나지 않습니다. 서버는 걷기와 감정표현만 전하면 됩니다.</li>
+            <li>세 학회 구역을 뺀 본단 전체가 지난 시즌 우승 학회의 양식으로 꾸며져 있습니다(2-3 참고).</li>
+          </ul></div></div></div></div><div class="cmp-row"><button aria-expanded="false"><span class="c0">큐 대기</span><span class="c1">타이머만 보며 기다린다</span><span class="c2">광장에서 놀며 기다린다</span><span class="pl">+</span></button><div class="cmp-body"><div><div class="cmp-in"><ul>
+            <li>광장 화면 구석에 큐 버튼과 대기 시간이 있습니다. 롤 게임 화면에는 이미 마우스 커서와 상점 창이 있어, 창 하나를 더하는 수준입니다.</li>
+            <li><b>새로 만드는 것은 하나</b>: 광장의 큐 신호를 뒤에서 대기 중인 클라이언트로 전하는 연결 통로입니다. 지금은 게임 중이면 큐가 막히는데, 광장만 예외로 둡니다.</li>
+            <li>매칭이 잡히면 수락 창이 광장에 뜨고, 수락하면 광장을 닫고 챔피언 선택으로 넘어갑니다. 원래 있던 챔피언 선택 시간 외에 늘어나는 건 광장을 닫는 몇 초입니다.</li>
+            <li><b>왜</b>: 매칭 대기는 롤에서 가장 할 일이 없는 시간입니다. 그 시간을 노는 시간으로 바꿉니다.</li>
+          </ul></div></div></div></div><div class="cmp-row"><button aria-expanded="false"><span class="c0">할 것</span><span class="c1">없음</span><span class="c2">즉석 놀이 · 스킨 무대 · 학회 게시판</span><span class="pl">+</span></button><div class="cmp-body"><div><div class="cmp-in"><ul>
+            <li><b>즉석 놀이</b>: 1:1 구역 · 포로 경주(4-1). 1~3분, 언제 빠져도 남에게 피해가 없습니다.</li>
+            <li><b>스킨 무대</b>: 귀환 무대에 서면 카메라가 다가가 내 스킨의 귀환 모션을 크게 보여 줍니다. 협곡에서는 한순간 지나가는 장면이 여기서는 주인공입니다.</li>
+            <li><b>학회 게시판</b>: 이번 주 학회 순위와 내 기여가 보입니다.</li>
+          </ul></div></div></div></div><div class="cmp-row"><button aria-expanded="false"><span class="c0">친구</span><span class="c1">목록 속 이름 한 줄</span><span class="c2">친구도, 처음 보는 소환사도 · 대화하고 친구가 된다</span><span class="pl">+</span></button><div class="cmp-body"><div><div class="cmp-in"><ul>
+            <li>채널에는 <b>친구 · 같은 학회원 · 처음 보는 소환사</b>가 함께 있습니다. 친구가 있는 채널로 바로 따라갈 수도 있고, 늘 새로운 사람도 섞여 있습니다.</li>
+            <li>누구든 클릭하면 <b>대화 · 친구 추가 · 파티 초대 · 프로필</b> 메뉴가 뜹니다. 같이 놀다 마음이 맞으면 친구가 되고, 그대로 같이 큐를 잡습니다.</li>
+            <li><b>채팅은 열어 둡니다.</b> 주변에 말풍선으로 뜨는 광장 채팅과 귓속말이 있고, 처음 보는 사람과도 대화할 수 있습니다. 광장은 새 친구를 만드는 곳입니다.</li>
+            <li><b>갈등 대비</b>: 롤에 이미 있는 채팅 필터 · 차단 · 신고 · 제재를 그대로 씁니다. 말풍선 채팅은 설정에서 끌 수 있습니다.</li>
+          </ul></div></div></div></div><div class="cmp-row"><button aria-expanded="false"><span class="c0">사람이 많으면</span><span class="c1">협곡은 10명</span><span class="c2">채널 40~60명 · 가까운 사람만 자세히</span><span class="pl">+</span></button><div class="cmp-body"><div><div class="cmp-in"><ul>
+            <li><b>MMO 마을 방식 그대로</b>: 광장을 채널로 나누고(예시 40~60명, 맵이 협곡의 약 2배라 이 정도여야 붐벼 보입니다. 테스트로 확정), 내 주변 사람의 움직임만 자주 받습니다. 가까운 10~15명만 스킨 그대로, 멀리 있는 사람은 가벼운 모습으로 보입니다.</li>
+            <li><b>한곳에 몰려도</b>: 축제나 포로 경주처럼 수십 명이 한 화면에 모여도 자세히 그리는 건 가까운 15명까지입니다(친구 · 파티원 · 1:1 대결 중인 두 명 먼저). 나머지는 미니언처럼 가벼운 모델로, 말풍선 · 이름표도 가까운 사람 것만 보입니다. 전투 계산이 없어 오가는 데이터는 협곡 한타보다 적습니다.</li>
+            <li><b>덜 몰리게 배치</b>: 포로 경주 관람석은 트랙을 두른 고리 모양, 1:1 구역은 가운데 광장 둘레에 여러 개. 한 구역이 너무 붐비면 새로 들어오는 사람은 덜 붐비는 채널로 보냅니다.</li>
+            <li><b>광장용 가벼운 스킨</b>: 광장에서는 싸우지 않으니 스킬 · 평타 · 피격 부분은 빼고 겉모습 · 걷기 · 감정표현 · 귀환만 불러옵니다. 1,000개가 넘는 스킨에 맞춰 도구로 자동 생성합니다.</li>
+            <li><b>이펙트 제한</b>: 동시에 터지는 화려한 이펙트 수를 제한하고, 귀환 무대처럼 보여 주는 자리에서만 전부 보여 줍니다.</li>
+          </ul></div></div></div></div>
+    </div>
+    <div class="cs-band">새로 배울 것은 없습니다. 기다리던 시간이 <em>노는 시간</em>이 됩니다.</div>
+  </div>
+</section><section class="r-demacia" id="season">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-2 · 시즌과 광장 변화</div><h2>협곡의 결과가 학회의 기록으로</h2></div>
+    </div>
+    <div class="flat flat4"><div class="fi"><div class="card"><span class="num">01</span><h3>시즌 개막</h3><p class="one">세 학회가 0점에서 출발</p></div></div><div class="fi"><div class="card"><span class="num">02</span><h3>플레이</h3><p class="one">협곡 · 캐주얼 모두, 이기면 더</p></div></div><div class="fi"><div class="card"><span class="num">03</span><h3>주간 순위표</h3><p class="one">게시판에 순위 · 기여 공개</p></div></div><div class="fi"><div class="card"><span class="num">04</span><h3>시즌 종료</h3><p class="one">축제 · 일상 · 격려</p></div></div></div><div class="flat-rank"><div class="grid g3">
+      <div class="card"><span class="tag">1위</span><h3>축제</h3><p class="one">본단 전체가 우리 양식 · 꽃가루 · 음악</p></div>
+      <div class="card"><span class="tag">2위</span><h3>활기찬 일상</h3><p class="one">우리 구역에 장터</p></div>
+      <div class="card"><span class="tag">3위</span><h3>격려</h3><p class="one">우리 구역에 격려 현수막</p></div>
+    </div></div>
+    <div style="margin-top:18px">
+      <div class="acc must">
+        <button class="acc-btn" aria-expanded="true"><span>학회 기여 계산<span class="sum">한 판이 몇 점이 되고, 순위는 어떻게 정하나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <h4>한 판의 기여 (예시 수치)</h4>
+          <table>
+            <tr><th>결과</th><th>랭크</th><th>일반 · 칼바람 등</th><th>숨바꼭질</th><th>1:1 구역</th><th>포로 경주</th></tr>
+            <tr><td>승리 (포로 경주는 예측 적중)</td><td>10</td><td>7</td><td>5</td><td>2</td><td>2</td></tr>
+            <tr><td>패배 (포로 경주는 예측 빗나감)</td><td>3</td><td>2</td><td>2</td><td>1</td><td>1</td></tr>
+            <tr><td>탈주 · 자리 비움</td><td>0</td><td>0</td><td>0</td><td>0</td><td>–</td></tr>
+          </table>
+          <ul>
+            <li><b>이기면 크게, 져도 조금</b>: 패배도 참여분이 쌓여 허무하지 않지만, 승리와의 차이가 커서 이길 이유는 분명합니다.</li>
+            <li><b>캐주얼도 이기면 더</b>: 숨바꼭질 · 1:1 구역 · 포로 경주 모두 이긴 판(포로 경주는 예측이 맞은 판)이 진 판보다 많이 쌓입니다. 한 판이 짧은 만큼 점수는 협곡보다 작게 둡니다.</li>
+            <li><b>한 팀에 학회가 섞여도 괜찮다</b>: 매칭은 지금과 같고, 이기면 각자 자기 학회에 기여합니다. 그래서 팀원끼리 이해관계가 완전히 같습니다.</li>
+          </ul>
+          <h4>모드별 순위표</h4>
+          <ul>
+            <li>숨바꼭질 · 1:1 구역 · 포로 경주는 모드마다 <b>등급(티어) · 승률(포로 경주는 적중률) · 판 수</b>로 순위를 매겨 광장 게시판에 올립니다.</li>
+            <li><b>주간 상위권 추가 기여</b>: 모드별 순위표 상위 10% 안에 든 학회원은 그 주에 학회 기여를 따로 보탭니다(예: +20). 잘하는 모드 하나만 있어도 학회에 보탬이 됩니다.</li>
+            <li><b>시즌 등급 꾸밈</b>: 시즌이 끝나면 모드별 등급에 맞는 테두리 · 칭호를 받습니다. 광장에서 다른 소환사에게 보입니다.</li>
+          </ul>
+          <h4>순위 정하기</h4>
+          <ul>
+            <li>학회 순위 = <b>학회원 1인당 평균 기여</b>. 사람이 많은 학회가 숫자로 이기지 않습니다.</li>
+            <li>평균은 그 주에 한 판 이상 플레이한 학회원만으로 계산합니다. 접속하지 않는 학회원이 평균을 깎지 않게 하기 위해서입니다.</li>
+            <li><b>하루 첫 1~2판은 크게</b>: 그날 첫 두 판의 기여를 크게 쳐 주고, 그 뒤로는 점점 줄어듭니다. 협곡 한두 판만 몰입해서 해도 학회에 확실히 보탬이 됩니다.</li>
+            <li><b>1인 하루 상한</b>: 하루 기여는 예시로 협곡 10판분까지만 셉니다. 한 판이 짧은 1:1 구역 · 포로 경주는 하루 20점까지만 셉니다. 시간이 많은 소수가 학회 순위를 좌우하지 않게 하고, 과몰입도 막습니다.</li>
+          </ul>
+          <h4>어뷰징 막기</h4>
+          <ul>
+            <li>고의 패배는 승리보다 항상 손해라 할 이유가 없습니다. 탈주·자리 비움은 0점이고, 신고가 확정된 판은 기여를 되돌립니다.</li>
+            <li>1:1 구역에서 같은 상대와 연달아 붙은 판은 기여와 순위 반영이 점점 줄어, 친구끼리 승패를 주고받아도 얻을 것이 없습니다.</li>
+            <li>학회는 시즌 시작 때 한 번만 고르고 시즌 중에는 바꿀 수 없어, 이기는 학회로 몰려가는 일이 생기지 않습니다.</li>
+          </ul>
+          <span class="note">수치는 구조를 보여 주는 예시이며, 실제 값은 테스트로 확정합니다.</span>
+        </div></div></div>
+      </div>
+    </div>
+    
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>시즌 리그 진행<span class="sum">개막 → 주간 순위 → 우승, 기록이 쌓인다</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>시즌 시작</b>: 광장 소식판에 이번 시즌 리그가 열립니다. 세 학회 모두 0점에서 출발하고, 지난 시즌 순위는 이어지지 않습니다.</li>
+          <li><b>매주</b>: 정산 결과가 광장 게시판에 주간 순위표로 실립니다. 광장 모습은 바뀌지 않고, 시즌이 끝날 때 한 번 바뀝니다.</li>
+          <li><b>시즌 종료</b>: 1위 학회는 세 학회 구역을 뺀 본단 전체를 자기 세력 양식으로 꾸미고 축제를 엽니다. 2위 학회 구역에는 장터가 서고, 3위 학회 구역에는 학회원을 응원하는 격려 현수막이 걸립니다. 결과는 학회의 역대 기록으로 남습니다.</li>
+          <li><b>룬테라 이야기와의 관계</b>: 승부 결과는 룬테라의 사건을 바꾸지 않습니다. e스포츠 리그처럼 순위와 우승 기록만 쌓이고, 바뀌는 것은 소환사들의 도시 풍경뿐입니다.</li>
+        </ul></div></div></div>
+      </div>
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>광장은 어떻게 바뀌나<span class="sum">시즌이 끝날 때 한 번, 본단 전체는 우승 학회 양식으로</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>같은 맵, 다른 장식</b>: 맵 구조는 그대로 두고 장식 세트(깃발, 조명, 노점, 현수막, 배경음)만 바꿉니다. 우승 학회 양식은 학회 수만큼 3세트, 학회 구역은 같은 틀(학회관 · 광장 · 길)에 장식만 바꿔 씁니다. 새 맵을 만드는 게 아니라 비용이 낮습니다.</li>
+          <li><b>시즌이 끝날 때 한 번</b>: 매주 맵을 바꾸는 건 업데이트 부담이 커서, 광장 모습은 시즌이 끝날 때 한 번만 바뀝니다. 본단 전체는 우승 학회 양식과 축제로, 2위 구역은 장터, 3위 구역은 격려 현수막이 걸린 모습으로 다음 시즌 내내 유지됩니다. 학회 구역은 순위와 관계없이 자기 학회 양식을 지킵니다. 매주 바뀌는 건 게시판의 순위표뿐입니다.</li>
+          <li><b>낮은 순위도 밝게</b>: 꼴찌 구역이 쓸쓸하면 그 학회원은 광장에 들어올 때마다 기분이 나빠집니다. 그래서 3위 구역에는 「고생했다, 다음 시즌 더 힘내자」 현수막을 걸어, 진 학회를 깎아내리지 않고 응원합니다. 함께 고생한 학회원끼리 다음 시즌을 다시 해 볼 이유가 됩니다.</li>
+          <li><b>매일 보는 우승 양식</b>: 진 학회도 가운데 광장을 오갈 때마다 상대 학회 양식으로 바뀐 본단을 봅니다. 내 구역 밖이 전부 남의 색이라, 다음 시즌엔 이기고 싶은 마음이 생깁니다.</li>
+        </ul></div></div></div>
+      </div>
+    </div>
+  </div>
+</section><section class="r-demacia" id="reward">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">3-3 · 승리 보상</div><h2>이긴 학회는 협곡에서 보인다</h2></div>
+    </div>
+    <div class="flat"><div class="fi"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">1</span><span>학회 챔피언 특수 효과 · 스킨<span class="sum">이긴 학회 × 그 도시 출신 챔피언</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li><b>누가</b>: 지난 시즌 1위 학회의 학회원 중, 시즌 동안 최소 참여(예시 20판)를 채운 소환사.</li>
+            <li><b>어떤 챔피언</b>: 공식 설정의 출신 지역이 그 도시인 챔피언. 예: 데마시아가 이기면 가렌, 럭스 등.</li>
+            <li><b>무엇이</b>: 지금 낀 스킨 위에 학회 색의 오라·테두리 효과가 얹힙니다. 스킨을 대체하지 않아 기존 스킨 판매와 부딪히지 않습니다. 시즌 대표 챔피언에는 한정 특수 스킨을 줍니다.</li>
+            <li><b>얼마나</b>: 다음 시즌 동안 유지됩니다. 다음 시즌에 다시 이겨야 이어집니다.</li>
+          </ul></div></div></div></div></div><div class="fi"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>귀환 이펙트<span class="sum">학회 문양 · 빛</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>승리 학회의 학회원은 <b>모든 챔피언</b>으로 귀환할 때 바닥에 학회 문양이 빛납니다.</li>
+            <li>귀환 시간과 판정은 그대로입니다. 보이는 모습만 바뀝니다.</li>
+          </ul></div></div></div></div></div><div class="fi"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>우물 연출<span class="sum">깃발 · 병사 환호</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li>승리 학회의 학회원이 <b>부활하거나 귀환할 때</b>, 우물 옆에 학회 깃발과 병사들이 나타나 환호합니다.</li>
+            <li>한 팀에 여러 학회가 섞여 있으므로 우물 전체를 바꾸지 않고, 그 소환사 개인의 연출로만 보여 줍니다.</li>
+            <li>회복량·속도 등 우물의 기능은 그대로입니다.</li>
+          </ul></div></div></div></div></div><div class="fi"><div class="acc must"><button class="acc-btn" aria-expanded="true"><span>왜 능력치가 아니라 외형인가<span class="sum">공정성 · 악순환 방지 · LoL 수익 구조와 정합</span></span><span class="plus" aria-hidden="true">+</span></button>
+          <div class="acc-body"><div><div class="acc-inner"><ul>
+            <li><b>공정성</b>: 시즌에서 진 학회가 협곡에서까지 불리해지면, 지는 쪽이 계속 지는 악순환이 생깁니다.</li>
+            <li><b>보여야 동기가 된다</b>: 외형은 상대 9명이 모두 봅니다. "저 학회 이번에 이겼구나"가 경기 중에 드러나고, 다음 시즌에 이기고 싶은 이유가 됩니다.</li>
+            <li><b>진 학회도 빈손은 아니다</b>: 시즌 참여 기념 아이콘 테두리를 받습니다. 승리 보상보다 훨씬 작게 둬서 이길 이유는 지킵니다.</li>
+            <li><b>LoL과 같은 방향</b>: LoL은 능력치가 아닌 외형으로 수익을 냅니다. 보상도 같은 원칙을 따릅니다.</li>
+          </ul></div></div></div></div></div></div>
+  
+  </div>
+</section></div>
+
+<!-- 4 · 눈이 내리고 글이 서리처럼 -->
+<div class="scene still" data-mode="snow" data-w="1920" data-h="1080" style="height:300vh">
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/d4-snowdown.jpg" alt="눈싸움을 하며 노는 챔피언들">
+      <div class="mark frost" style="left:27%;top:24%;font-size:var(--u)" data-from="0.0" data-to="1.0">
+        <div class="carve ice"><span class="pn">PART 04 · 캐주얼 모드</span><h2>배울 것 없이, 바로 노는 롤</h2><p>광장의 즉석 놀이, 협곡의 숨바꼭질</p></div>
+      </div>
+      
+      
+      
+      
+      
+    </div>
+    <canvas class="snow"></canvas>
+  </div>
+</div>
+
+<div class="ex r-frel"><div class="ex-bg" aria-hidden="true"><img src="img/lol/d4-snowdown.jpg" alt=""></div><section class="r-frel alt" id="poro">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">4-1 · 광장 즉석 놀이</div><h2>1:1 구역, 포로 경주</h2></div>
+    </div>
+    <div class="grid g2" style="margin-bottom:18px">
+      <div class="card"><span class="tag">붙기</span><h3>1:1 구역</h3><p class="one">문도 피구 · 카서스 1:1 · 둘만 가둬 놓고 죽일 때까지</p></div>
+      <div class="card"><span class="tag">보기</span><h3>포로 경주</h3><p class="one">응원 · 예측 · 관객도 한 번씩 개입</p></div>
+    </div>
+    <div class="flat"><div class="fi"><div class="acc must"><button class="acc-btn" aria-expanded="true"><span class="n">1</span><span>1:1 구역<span class="sum">둘만 가둬 놓고, 죽일 때까지</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><table>
+              <tr><th style="width:22%">항목</th><th>규칙</th></tr>
+              <tr><td>종목</td><td>문도 피구 · 카서스 1:1. 유저들이 사용자 설정 게임으로 직접 만들어 즐겨 온 놀이를 정식으로</td></tr>
+              <tr><td>가두기</td><td>대결이 시작되면 원형 구역에 벽이 올라와 두 명만 가둠. 밖에서는 끼어들 수 없고 구경만</td></tr>
+              <tr><td>전투 판정</td><td>원 안의 두 명만 잠시 서로 다른 팀으로 나뉘어 스킬이 맞음. 한 게임 여러 팀 구조는 아레나가 이미 씀</td></tr>
+              <tr><td>스펙</td><td>1레벨 · Q 하나만 · 신발 + 수정 하나(카서스 사파이어, 문도 루비) · 패시브 끔</td></tr>
+              <tr><td>자원</td><td>문도 체력 소모 · 카서스 마나 그대로, 자연 회복은 켬. 언제 던질지가 실력</td></tr>
+              <tr><td>승패</td><td>죽이면 승리. 3분이 지나면 남은 체력 비율이 높은 쪽</td></tr>
+              <tr><td>줄 서기</td><td>구역 앞에 서면 대기열. 이긴 사람은 남고 다음 도전자가 들어옴(○연승 표시)</td></tr>
+              <tr><td>끝난 뒤</td><td>이긴 사람의 내 챔피언 · 스킨이 구역 위에 서서 감정표현</td></tr>
+              <tr><td>보상</td><td>이기면 학회 기여 2, 지면 1. 종목별 등급 · 승률 · 판 수 순위표, 주간 상위권은 학회 기여 추가</td></tr>
+            </table><span class="note">새로 만드는 것은 "구역 안에서만 챔피언을 바꾸는 처리" 하나입니다. 큐가 잡히면 바로 나갈 수 있고, 상대 승리로 처리합니다.</span></div></div></div></div></div><div class="fi" style="grid-column:1/-1"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>포로 경주<span class="sum">보기만 해도, 한 번은 내가 개입한다</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><ul><li>포로들이 트랙을 자동으로 달리는 약 90초 레이스. 광장 한쪽에서 정해진 간격으로 열립니다.</li><li>경주 전 1등 포로를 <b>무료 포인트</b>로 예측합니다. 포인트는 돈으로 살 수 없고 현금으로 바꿀 수 없습니다.</li><li><b>예측 순위표</b>: 적중하면 학회 기여 2, 빗나가도 1. 등급 · 적중률 · 참여 수로 순위를 매기고, 주간 상위권은 학회 기여를 따로 보탭니다.</li><li><b>관객 개입</b>: 모든 관객이 한 판에 한 번씩 눈덩이를 던지거나 갈림길 지름길에 투표할 수 있습니다. 누구나 똑같이 한 번이라 공정하면서, 영상과 달리 "내가 한 일"이 생깁니다.</li></ul></div></div></div></div></div></div>
+  </div>
+</section></div>
+
+
+<!-- 숨바꼭질 · 숨어 있던 포로가 드러남 -->
+<div class="scene" data-mode="race" style="height:390vh">
+  <div class="sticky">
+    <div class="race-img"><img src="img/lol/poro-hq.jpg" alt="눈밭에서 모습을 드러낸 포로들"></div>
+    <div class="mark scene-cap pop" style="left:76%;top:24%;font-size:clamp(12px,1.2vw,19px)" data-from="0.45" data-to="1.0">
+      <div class="carve ice"><span class="pn">4-2 · 정식 모드</span><h2>숨바꼭질</h2><p>협곡에서, 모두가 니코가 된다</p></div>
+    </div>
+  </div>
+</div>
+<div class="ex r-frel"><div class="ex-bg" aria-hidden="true"><img src="img/lol/poro-hq.jpg" alt=""></div><section class="r-frel" id="hide">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">4-2 · 정식 모드</div><h2>숨바꼭질: 협곡에서,<br>모두가 니코가 된다</h2></div>
+    </div>
+    <div class="grid g4" style="margin-bottom:18px">
+      <div class="card"><span class="tag">맵</span><h3>협곡 그대로</h3><p class="one">미니언 · 포탑 기존대로 · 라인 부쉬 추가</p></div>
+      <div class="card"><span class="tag">숨기</span><h3>사물 복제</h3><p class="one">니코처럼 · 미니언 웨이브에 섞이기</p></div>
+      <div class="card"><span class="tag">찾기</span><h3>무적 술래</h3><p class="one">골드가 많아 템이 앞선다 · 잡히면 술래가 된다</p></div>
+      <div class="card"><span class="tag">승패</span><h3>5명 다 잡으면 교대</h3><p class="one">2라운드 · 버틴 시간 + 미션 점수</p></div>
+    </div>
+    <div class="flat"><div class="fi"><div class="acc must"><button class="acc-btn" aria-expanded="true"><span class="n">1</span><span>한 판 흐름<span class="sum">라운드 최대 5분, 전체 최대 약 11분</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><table>
+              <tr><th>단계</th><th>시간</th><th>일어나는 일</th></tr>
+              <tr><td>챔피언 선택</td><td>약 1분</td><td>투명 · 위장 스킬이 있는 챔피언은 고를 수 없음</td></tr>
+              <tr><td>숨기</td><td>30초</td><td>1라운드는 블루팀이 숨음. 술래 팀은 우물에서 화면이 가려진 채 대기</td></tr>
+              <tr><td>수색</td><td>최대 4분 30초</td><td>잡힌 도망자는 술래 팀 우물에서 술래로 부활. 술래가 점점 늘어남. 마지막 1분은 바깥쪽부터 구역이 닫힘</td></tr>
+              <tr><td>교대</td><td>즉시</td><td>도망자 5명을 다 잡거나 시간이 끝나면 바로 역할을 바꿔 2라운드</td></tr>
+              <tr><td>결과</td><td>15초</td><td>두 라운드 점수 비교 · 마지막 생존자의 귀환 무대</td></tr>
+            </table><span class="note">빨리 다 잡을수록 판이 짧아집니다. 시간은 예시이며 테스트로 확정합니다.</span></div></div></div></div></div><div class="fi"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">2</span><span>도망자 팀<span class="sum">니코처럼 숨고, 스킬로 도망친다</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><ul><li><b>[복제]</b>: 가까운 사물을 클릭하면 그 모습이 됩니다. 와드 · 정글 몹 · 식물 · 미니언. 니코 패시브와 같아서 챔피언에게 피해를 받으면 풀립니다. 쿨타임 10초.</li><li><b>미니언 웨이브에 섞이기</b>: 미니언은 기존처럼 싸우고 죽습니다. 웨이브가 다 죽었는데 나만 남아 있거나, 혼자 걸음이 다르면 들킵니다. 웨이브가 어디서 부딪히느냐가 매번 달라서 숨을 자리도 매번 바뀝니다.</li><li><b>들키면 도망친다</b>: 술래는 무적이라 맞서 싸워도 소용없습니다. 돌진 · 둔화 · 점멸로 시야 밖으로 빠져나가 다시 숨습니다.</li><li><b>와드 · 렌즈</b>: 술래가 오는 길목에 와드를 박고, 렌즈로 술래의 와드를 지웁니다.</li></ul></div></div></div></div></div><div class="fi"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">3</span><span>술래 팀<span class="sum">무적 · 골드가 많아 템이 앞선다</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><ul><li><b>무적</b>: 술래 팀만 체력이 줄지 않습니다. 잡는 데만 집중합니다.</li><li><b>잡기 = 협곡 전투 그대로</b>: 스킬과 공격으로 도망자의 체력을 0으로 만들면 잡힙니다. 따로 배울 규칙이 없습니다.</li><li><b>찾기</b>: 렌즈로 복제한 사람을 드러내고, 의심 가는 사물 · 미니언을 스킬로 때려 봅니다. 마나와 쿨타임이 있어 아무 데나 난사할 수는 없습니다.</li><li><b>잡힌 사람이 합류</b>: 잡힌 도망자는 <b>술래 팀 우물</b>에서 술래로 부활합니다. 잡힌 자리에서 바로 술래가 되면 근처에 숨은 동료를 곧장 덮칠 수 있어, 우물에서 다시 출발하게 합니다. 잡힌 사람도 쉬지 않고 계속 플레이합니다.</li></ul></div></div></div></div></div><div class="fi"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">4</span><span>협곡 맵에서 바꾸는 것<span class="sum">미니언 · 포탑은 그대로, 챔피언만 안 때린다</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><ul><li><b>미니언 · 포탑은 기존 시스템 그대로</b>: 웨이브끼리 싸우고, 포탑도 부서집니다. 포탑이 무너지면 그 주변 지형이 열려 숨는 판도가 바뀝니다.</li><li><b>단, 미니언 · 포탑은 챔피언을 공격하지 않습니다.</b> 한쪽 팀 미니언이 숨은 사람을 때려 위치를 알려 주거나, 포탑이 한 팀만 막아 주는 일을 막습니다.</li><li><b>골드 · 경험치</b>: 미니언 · 정글 몹으로는 얻지 않습니다. 레벨은 양 팀 같게 고정(예: 11레벨)합니다.</li><li><b>라인 부쉬 추가</b> · <b>이동 속도는 협곡보다 조금 빠르게, 모두 같게</b>.</li></ul></div></div></div></div></div><div class="fi"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">5</span><span>골드<span class="sum">술래가 더 벌고, 미니언으로는 안 번다</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><table>
+              <tr><th style="width:22%"></th><th>술래 팀</th><th>도망자 팀</th></tr>
+              <tr><td>시작 골드</td><td>1,400</td><td>500</td></tr>
+              <tr><td>시간당</td><td>초당 4</td><td>초당 1</td></tr>
+              <tr><td>추가</td><td>잡을 때 +300(도운 사람과 나눔)</td><td>미션 완료 +150</td></tr>
+              <tr><td>상점</td><td colspan="2">협곡과 같이 우물에서 삽니다</td></tr>
+            </table><span class="note">수치는 예시이며 테스트로 확정합니다. 술래는 시간이 갈수록 템이 앞서 후반엔 들키면 거의 잡힙니다.</span></div></div></div></div></div><div class="fi"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">6</span><span>승패와 점수<span class="sum">버틴 시간 + 미션 점수</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><ul><li><b>도망자의 미션 = 끝까지 안 잡히기.</b> 한 명이 1초 버틸 때마다 1점입니다.</li><li><b>추가 미션</b>: 정찰 열매 따기, 정해진 자리에 와드 박기, 미니언 웨이브와 함께 라인 끝까지 가기. 하나에 30점 + 골드 150. 숨은 자리에서 나와야 해서, 한곳에 박혀만 있는 판이 되지 않습니다.</li><li><b>술래의 미션 = 다 잡기.</b> 빨리 다 잡을수록 상대 점수가 낮아지고 바로 우리 차례가 옵니다. 잡을 이유가 분명합니다.</li><li><b>라운드 점수 = 도망자 팀의 버틴 시간 + 미션 점수.</b> 두 라운드에서 각 팀이 도망자로서 얻은 점수를 비교합니다.</li></ul></div></div></div></div></div><div class="fi"><div class="acc"><button class="acc-btn" aria-expanded="false"><span class="n">7</span><span>일반전과 랭크전<span class="sum">랭크는 따로, 잘 안 깎이게</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><ul><li><b>일반전</b>이 기본입니다. 신규 유저는 여기서 시작합니다.</li><li><b>랭크전</b>은 따로 둡니다. 시즌제 등급이고, 이기면 크게 오르고 져도 조금만 내려갑니다.</li><li>랭크전은 레벨 · 일반전 판 수 조건을 둡니다. 보상은 학회 기여와 등급별 꾸밈입니다.</li><li>광장 게시판에 <b>등급 · 승률 · 판 수 순위표</b>가 올라가고, 주간 상위권은 학회 기여를 따로 보탭니다.</li></ul></div></div></div></div></div><div class="fi"><div class="acc must"><button class="acc-btn" aria-expanded="true"><span>놀면서 익히는 협곡<span class="sum">숨바꼭질이 협곡의 입구가 되는 이유</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><table>
+              <tr><th style="width:30%">숨바꼭질에서</th><th>협곡에서 쓰는 감각</th></tr>
+              <tr><td>와드 박을 길목 고르기</td><td>시야 장악</td></tr>
+              <tr><td>렌즈로 숨은 사람 찾기</td><td>상대 와드 지우기</td></tr>
+              <tr><td>미니언 웨이브에 섞여 다니기</td><td>라인 · 웨이브가 부딪히는 자리</td></tr>
+              <tr><td>정글 몹으로 복제하기</td><td>정글 캠프 위치</td></tr>
+              <tr><td>들키면 스킬로 빠져나가기</td><td>내 챔피언의 돌진 · 둔화 쓰임새</td></tr>
+              <tr><td>협곡 전체를 누비기</td><td>라인 · 강 · 정글 · 부쉬 지도</td></tr>
+            </table></div></div></div></div></div></div>
+  </div>
+</section></div>
+
+<!-- 5 · 해가 떠오름 -->
+<div class="scene still" data-mode="dawn" data-w="1920" data-h="1080" style="height:360vh">
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/d5-hq.jpg" alt="슈리마 사막 위로 떠오른 태양 원반">
+      <div class="fx fx-glow"></div>
+      <div class="mark dawnrise" style="left:50%;top:58%;font-size:var(--u)" data-from="0.55" data-to="1.0">
+        <div class="carve sun"><span class="pn">PART 05 · 확장 계획</span><h2>다시 떠오르는 태양</h2><p>작게 시작해, 증명하며 넓힌다</p></div>
+      </div>
+      
+      
+      
+    </div>
+  </div>
+</div>
+
+<div class="ex r-shurima"><div class="ex-bg" aria-hidden="true"><img src="img/lol/d5-hq.jpg" alt=""></div><section class="r-shurima" id="roadmap">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">PART 05 · 확장 계획</div><h2>롤 안에서 증명하고, MMO로 잇는다</h2></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><span class="tag">1단계</span><h3>롤 안의 광장 모드</h3><p class="one">학회 본단 · 즉석 놀이 2종 · 숨바꼭질 정식 모드 · 시즌 학회 순위</p></div>
+      <div class="card tint"><span class="tag">다음</span><h3>라이엇 MMO로 잇기</h3><p class="one">새로 만들지 않는다 · 내 소환사 · 학회 소속 · 시즌 기록이 MMO로 넘어간다</p></div>
+    </div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>다음으로 넘어가는 기준<span class="sum">무엇이 좋아져야 MMO 연결을 제안하나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner">
+          <ul>
+            <li>광장을 쓴 그룹이 안 쓴 그룹보다 <b>주간 접속일, 스킨 구매 · 착용, 복귀 유저 재이탈</b> 중 둘 이상에서 나아질 것.</li>
+            <li>협곡을 하지 않고 광장 · 놀이만 이용한 접속이 꾸준히 생길 것. "머물 이유"가 증명된 상태입니다.</li>
+            <li>MMO 연결은 새로 만드는 게임이 아닙니다. 라이엇이 개발 중인 롤 MMO가 나올 때, 쌓인 소환사 · 학회 기록을 넘겨주는 연결입니다.</li>
+          </ul>
+          <span class="note">기준의 구체적인 목표치는 1단계 출시 전 데이터로 정합니다.</span>
+        </div></div></div>
+      </div>
+      <div class="acc"><button class="acc-btn" aria-expanded="false"><span>1단계에 만든 것은 버려지지 않는다<span class="sum">소환사 · 학회 기록이 MMO로 그대로</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><div class="timeline">
+      <div class="tl" style="grid-template-columns:160px 1fr"><b>학회 기록</b><span>시즌 기록 → MMO 속 학회의 역사</span></div>
+      <div class="tl" style="grid-template-columns:160px 1fr"><b>본단 디자인</b><span>본단 맵 → MMO의 소환사들의 도시</span></div>
+    </div><p style="margin-top:10px"><b>회사에게</b> 1단계 비용 = 다음의 기반 · <b>라이엇에게</b> MMO가 나오기 전까지 유저를 붙잡고, MMO 수요를 미리 확인 · <b>유저에게</b> 처음부터 함께한 학회가 MMO로</p></div></div></div></div>
+    </div>
+  </div>
+</section><section class="r-shurima alt" id="feasible">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="sec-no">PART 06 · 실행 가능성</div><h2>협곡을 덜 해도,<br>회사는 손해 보지 않는다</h2></div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><span class="tag">수익</span><h3>스킨이 보일 무대가 늘어난다</h3><p class="one">롤은 능력치가 아니라 외형을 판다 · 지금은 협곡 30분 안에서만 보이는 스킨이, 광장 · 숨바꼭질 · 1:1 구역에서도 보인다</p></div>
+      <div class="card"><span class="tag">지표</span><h3>판 수가 아니라, 남아 있는가</h3><p class="one">접속일 · 스킨 구매와 착용 · 협곡 한 판의 질(항복 · 탈주) · 복귀 재이탈 · 신규 정착</p></div>
+      <div class="card"><span class="tag">리스크</span><h3>먼저 물을 질문에, 먼저 답한다</h3><p class="one">큐는 어떻게 · 저사양 PC · 개발 비용 · 방플 · 랭크 스트레스</p></div>
+    </div>
+    <div class="banner" style="margin-top:18px">협곡 판 수가 줄어도, 접속 · 스킨 · 한 판의 질이 유지되면 성공이다</div>
+    <div style="margin-top:18px">
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>판매 구조<span class="sum">무엇을, 어떻게 팔고, 무엇은 팔지 않나</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>스킨이 주인공</b>: 광장 · 즉석 놀이 · 숨바꼭질 모두 내 챔피언 · 스킨으로 합니다. 협곡을 덜 해도 스킨을 살 이유가 줄지 않습니다. 롤의 주 수익원을 그대로 지키는 구조입니다.</li>
+          <li><b>스킨 무대</b>: 귀환 무대 · 1:1 구역 시상 · 숨바꼭질 생존자 무대처럼, 스킨의 귀환 모션과 이펙트가 크게 보이는 자리를 곳곳에 둡니다.</li>
+          <li><b>상점 단품</b>: 광장용 감정표현 · 걸음 이펙트를 단품으로 팝니다.</li>
+          <li><b>시즌 한정 학회 장식</b>: 학회 색 · 문양을 담은 감정표현 · 깃발. 승리 보상(협곡 외형)과는 별개입니다.</li>
+          <li><b>무료로도 얻는다</b>: 시즌 참여, 포로 경주 포인트 교환으로 기본 꾸밈을 얻습니다.</li>
+          <li><b>팔지 않는 것</b>: 학회 기여, 순위, 협곡 능력치, 예측 포인트. 경쟁과 결과에 닿는 것은 팔지 않습니다.</li>
+        </ul></div></div></div>
+      </div>
+      <div class="acc"><button class="acc-btn" aria-expanded="false"><span>지표 가설 표<span class="sum">무엇을 성공으로 보나</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><table>
+      <tr><th style="width:22%">지표</th><th>가설</th><th style="width:30%">비교</th></tr>
+      <tr><td>주간 접속일</td><td>협곡을 안 하는 날에도 들른다</td><td>광장 이용 그룹 vs 아닌 그룹</td></tr>
+      <tr><td>스킨 구매 · 착용</td><td>보여 줄 무대가 늘면 협곡을 덜 해도 줄지 않는다</td><td>광장 이용 그룹 vs 아닌 그룹</td></tr>
+      <tr><td>협곡 한 판의 질</td><td>짧게 몰입하면 끝까지 한다 → 항복 · 탈주 · 신고 감소</td><td>도입 전후</td></tr>
+      <tr><td>복귀 재이탈</td><td>캐주얼로 감을 되찾으면 덜 떠난다</td><td>캐주얼 경험 유무</td></tr>
+      <tr><td>신규 정착</td><td>쉬운 입구가 있으면 협곡까지 간다</td><td>첫 주 캐주얼 경험 유무</td></tr>
+      <tr><td>협곡 판 수</td><td><b>목표가 아니다.</b> 줄어도 위 지표가 유지되면 성공</td><td>참고로만 본다</td></tr>
+    </table></div></div></div></div>
+      <div class="acc">
+        <button class="acc-btn" aria-expanded="false"><span>측정 방법<span class="sum">광장을 쓴 그룹과 안 쓴 그룹을 나란히 본다</span></span><span class="plus" aria-hidden="true">+</span></button>
+        <div class="acc-body"><div><div class="acc-inner"><ul>
+          <li><b>나눠서 연다</b>: 1단계는 일부 서버·일부 계정에 먼저 열고, 같은 기간의 나머지 그룹과 비교합니다. 패치나 이벤트 같은 다른 변수의 영향을 줄입니다.</li>
+          <li><b>기간</b>: 시즌 효과를 보려면 최소 한 시즌(정산 여러 번)을 지켜봅니다. 첫 주의 신기함만 보고 판단하지 않습니다.</li>
+          <li><b>복귀 유저 따로 보기</b>: 일정 기간 접속하지 않았다 돌아온 유저만 묶어, 캐주얼을 먼저 한 그룹과 바로 협곡으로 간 그룹의 재이탈을 비교합니다.</li>
+          <li><b>부작용도 본다</b>: 광장에서 큐가 잡혔을 때 수락을 놓치는 비율, 신고율, 랭크 매칭 시간이 나빠지지 않는지 함께 봅니다.</li>
+        </ul></div></div></div>
+      </div>
+      <div class="acc"><button class="acc-btn" aria-expanded="false"><span>리스크와 대응<span class="sum">먼저 묻게 될 질문에, 먼저 답한다</span></span><span class="plus" aria-hidden="true">+</span></button><div class="acc-body"><div><div class="acc-inner"><table>
+      <tr><th style="width:30%">우려</th><th>대응</th></tr>
+      <tr><td>개발 비용</td><td>새 게임이 아니라 롤 안의 모드 하나 · 아레나의 경기장 · 라운드 초기화 · 여러 팀 구조와 협곡 맵 · 와드 · 렌즈를 다시 씀 · 룬테라 도시는 만들지 않고 MMO로</td></tr>
+      <tr><td>큐는 어떻게?</td><td>광장과 클라이언트를 잇는 큐 통로 하나 · 잡히면 광장을 닫고 챔피언 선택으로 · 늘어나는 건 광장 종료 몇 초</td></tr>
+      <tr><td>스킨 여러 개, 저사양 PC</td><td>MMO 마을 방식(채널 예시 40~60명 · 가까운 15명만 자세히, 나머지는 가벼운 모델 · 이펙트 · 말풍선 상한 · 붐비면 채널 자동 분리) · 광장용 가벼운 스킨(겉모습 · 걷기 · 감정표현 · 귀환만)</td></tr>
+      <tr><td>방플</td><td>숨바꼭질은 같은 파티가 같은 팀 · 잡히면 술래 팀으로 합류 · 1:1 구역은 개인전이라 영향 작음</td></tr>
+      <tr><td>랭크 스트레스</td><td>숨바꼭질 일반전이 기본 · 랭크는 따로, 져도 조금만 내려감 · 신규 유저는 조건을 채운 뒤</td></tr>
+      <tr><td>경쟁 공정성</td><td>보상은 외형뿐 · 놀이는 이동 속도 · 스펙을 모두 같게</td></tr>
+      <tr><td>협곡 시간 잠식</td><td>대기 시간 활용 · 협곡 한두 판의 기여를 크게 · 복귀 · 신규 유입</td></tr>
+      <tr><td>라이엇 MMO와 겹침</td><td>경쟁하지 않는다 · MMO 전까지 유저를 붙잡고, 기록을 MMO로 넘긴다</td></tr>
+      <tr><td>광장 채팅 갈등</td><td>기존 채팅 필터 · 차단 · 신고 · 제재 그대로 · 말풍선 채팅은 끌 수 있음</td></tr>
+      <tr><td>학회 쏠림</td><td>1인당 평균 기여로 순위</td></tr>
+    </table></div></div></div></div>
+    </div>
+  </div>
+</section><section class="r-shurima" id="compare">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="sec-no">PART 07 · 결론</div><h2>경기로 끝나던 LoL에서, 머무는 LoL로</h2></div></div>
+    <table>
+      <tr><th></th><th>기존 LoL</th><th>본 기획</th></tr>
+      <tr><td>한 판의 결과</td><td>랭크 점수 하나</td><td>학회 순위 · 광장 · 외형</td></tr>
+      <tr><td>협곡 밖</td><td>메뉴 화면</td><td>친구가 있는 광장 · 내 스킨의 무대</td></tr>
+      <tr><td>대기 시간</td><td>타이머만 본다</td><td>광장에서 놀다가 떠난다</td></tr>
+      <tr><td>지친 날</td><td>접속 이유 없음 · 영상으로</td><td>포로 경주 관전 · 캐주얼 모드 플레이(숨바꼭질)</td></tr>
+      <tr><td>복귀</td><td>실력 격차</td><td>캐주얼로 감 되찾기</td></tr>
+      <tr><td>세계관</td><td>읽는 이야기</td><td>직접 겪는 이야기</td></tr>
+    </table>
+    <h3 class="sub">비슷한 시도와 다른 점</h3>
+    <table class="cmp"><tr><th style="width:24%">비슷한 시도</th><th>같은 점</th><th>이 기획이 다른 점</th></tr><tr><td>유저가 만든 사용자 설정 놀이</td><td>문도 피구 · 카서스 1:1 같은 규칙</td><td>방을 만들고 사람을 모을 필요 없이, 광장에서 줄 서면 바로 한다</td></tr><tr><td>LoL 아레나 등 기간 모드</td><td>새 모드로 추가 · 경기장 · 라운드 초기화</td><td>전투 없는 광장이 바탕 · 놀이는 짧고 언제 떠나도 된다</td></tr><tr><td>MMO의 마을 · 소셜 허브</td><td>활동 사이에 머무는 공간</td><td>새 게임 없이 롤 안의 모드 하나 · 시즌 순위로 학회 광장이 바뀐다</td></tr></table>
+    <div class="banner">접속 유지 · 스킨이 보일 무대 · 복귀와 신규의 입구 · IP 확장</div>
+  </div>
+</section></div>
+
+<!-- 결말 · 뒤로 멀어짐 -->
+<div class="scene still" data-mode="pull" data-w="2334" data-h="1080" style="height:390vh">
+  <div class="sticky">
+    <div class="world">
+      <img src="img/lol/ionia-hq.jpg" alt="안개 낀 아이오니아 절벽 도시">
+      <div class="mark" style="left:34%;top:28%;font-size:calc(var(--u) * 1.1)" data-from="0.4" data-to="1.0">
+        <div class="carve"><span class="pn">HIDDEN SUMMONERS</span><h2>점수 하나 대신,<br>머물 이유를 남긴다.</h2><p>한 판을 하지 않아도 들르고 싶은 롤<br>유운식 · 게임 기획</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="end">본 기획서는 라이엇 게임즈와 무관한 개인 기획안이며, 수록된 룬테라 이미지의 저작권은 Riot Games에 있습니다.</div>
+<nav class="rail" aria-label="목차"><b class="rail-t">PART</b><div class="rail-line"><i></i></div><a href="#" data-go=".scene[data-mode=sweep]"><span><em>01</em><i>문제 정의</i></span></a><a href="#" data-go=".scene[data-mode=frame]"><span><em>02</em><i>핵심 콘셉트</i></span></a><a href="#" data-go=".scene[data-mode=harbor]"><span><em>03</em><i>광장 모드 설계</i></span></a><a href="#" data-go=".scene[data-mode=snow]"><span><em>04</em><i>캐주얼 모드</i></span></a><a href="#" data-go=".scene[data-mode=dawn]"><span><em>05</em><i>확장 계획</i></span></a><a href="#" data-go="#feasible"><span><em>06</em><i>실행 가능성</i></span></a><a href="#" data-go="#compare"><span><em>07</em><i>결론</i></span></a></nav>
+<script>
+(function(){
+  var scenes=[].slice.call(document.querySelectorAll('.scene'));
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+  function seg(list,p){var a=list[0],b=list[list.length-1];for(var i=0;i<list.length-1;i++){if(p>=list[i].p&&p<=list[i+1].p){a=list[i];b=list[i+1];break}}var t=b.p===a.p?1:ease((p-a.p)/(b.p-a.p));return{a:a,b:b,t:t}}
+  function lerp(a,b,t){return a+(b-a)*t}
+  function layout(sc){
+    var vw=innerWidth,vh=innerHeight,iw=+sc.dataset.w,ih=+sc.dataset.h;
+    if(sc.dataset.mode==='doors'||sc.dataset.mode==='race'){sc._w=vw;sc._h=vh;return}
+    if(sc.dataset.mode==='harbor'){var fw=Math.min(vw*.78,iw,vh*.74*iw/ih),fh=fw*ih/iw;var hf=sc.querySelector('.harbor-frame');hf.style.width=fw+'px';hf.style.height=fh+'px';hf.style.marginLeft=(-fw/2)+'px';hf.style.marginTop=(-fh/2)+'px';hf.style.setProperty('--u',(fh/562*14)+'px');hf.style.setProperty('--fb',(fw*0.0745)+'px');sc._w=fw;return}
+    var k=Math.max(vw/iw,vh/ih),w=iw*k,h=ih*k;
+    if(sc.dataset.mode==='frame')sc._k0=Math.min(.62*vw/w,.6*vh/h);
+    sc._w=w;sc._h=h;
+    var world=sc.querySelector('.world');world.style.width=w+'px';world.style.height=h+'px';
+    world.style.setProperty('--u',(h/1080*22)+'px');world.style.setProperty('--fb',(w*0.0745)+'px');
+    var w2=sc.querySelector('.world2');if(w2){sc._w2=vw;sc._h2=vh;w2.style.width=vw+'px';w2.style.height=vh+'px';w2.style.setProperty('--u',(vh/1080*22)+'px')}
+    if(sc.dataset.keys)sc._keys=JSON.parse(sc.dataset.keys);
+    if(sc.dataset.light)sc._light=JSON.parse(sc.dataset.light);
+    var cv=sc.querySelector('canvas.snow');if(cv){cv.width=vw*devicePixelRatio;cv.height=vh*devicePixelRatio}
+  }
+  function prog(sc){var r=sc.getBoundingClientRect(),span=sc.offsetHeight-innerHeight;return Math.min(1,Math.max(0,-r.top/span))}
+  var rippleT=0,disp=document.getElementById('disp'),turb=document.getElementById('turb');
+  function rip(){var t=(performance.now()-rippleT)/1800;if(t>1){disp.setAttribute('scale',0);return}var k=Math.pow(1-t,2);disp.setAttribute('scale',(36*k).toFixed(2));turb.setAttribute('baseFrequency',(0.008+0.004*Math.sin(t*9)).toFixed(4)+' 0.05');requestAnimationFrame(rip)}
+  function marks(sc,p){sc.querySelectorAll('.mark').forEach(function(m){var v=p>=+m.dataset.from&&p<=+m.dataset.to;if(m.classList.contains('inside'))v=v&&sc._inside;if(v&&!m.classList.contains('on')&&m.classList.contains('ripple')){rippleT=performance.now();rip()}m.classList.toggle('on',v)})}
+  function render(sc,p){
+    var vw=innerWidth,vh=innerHeight,world=sc.querySelector('.world'),mode=sc.dataset.mode;
+    if(mode==='doors'){sc.querySelectorAll('.door').forEach(function(d){d.classList.toggle('open',p>=+d.dataset.at)});sc.querySelector('.doors-title').style.opacity=p<0.2?1:0;return}
+    if(mode==='harbor'){var g2=ease(Math.min(1,p/0.3)),s2=0.72+0.28*g2;sc.querySelector('.harbor-frame').style.transform='scale('+s2+')';marks(sc,p);return}
+    if(mode==='race'){var r1=ease(Math.min(1,p/0.38));var ri=sc.querySelector('.race-img');ri.style.clipPath='circle('+(4+r1*78)+'% at 52% 58%)';ri.querySelector('img').style.transform='scale('+(1.18-0.18*r1)+')';marks(sc,p);return}
+    if(mode==='frame'){
+      var g=seg(sc._keys,p),sa=g.a.s||sc._k0,sb=g.b.s||sc._k0,s=lerp(sa,sb,g.t),x=lerp(g.a.x,g.b.x,g.t),y=lerp(g.a.y,g.b.y,g.t);
+      var W=sc._w*s,H=sc._h*s,tx=vw/2-sc._w*x/100*s,ty=vh/2-sc._h*y/100*s;
+      if(W>=vw)tx=Math.min(0,Math.max(vw-W,tx));else tx=(vw-W)/2;
+      if(H>=vh)ty=Math.min(0,Math.max(vh-H,ty));else ty=(vh-H)/2-vh*.04;
+      var pan=null;if(pan){var pt=ease(Math.min(1,Math.max(0,(p-0.47)/0.06)));pan.style.setProperty('--t',pt)}
+      sc._inside=s>=.99;world.style.transform='translate('+tx+'px,'+ty+'px) scale('+s+')';
+    }else{
+      world.style.transform='translate('+(vw-sc._w)/2+'px,'+(vh-sc._h)/2+'px)';
+    }
+    if(mode==='mist'){
+      var q=Math.min(1,p/0.42),e=ease(q);
+      sc.querySelector('.fx-mist').style.opacity=1-e;
+      world.querySelector('img').style.filter='blur('+((1-e)*5)+'px) saturate('+(0.7+0.3*e)+')';
+    }
+    if(mode==='sweep'){
+      var w2el=sc.querySelector('.world2');if(w2el){var sl=ease(Math.min(1,Math.max(0,(p-0.15)/0.08)));
+      var x1=(vw-sc._w)/2;world.style.transform='translate('+(x1-sl*(sc._w+x1))+'px,'+(vh-sc._h)/2+'px)';
+      w2el.style.transform='translate('+((1-sl)*vw)+'px,0)';}
+      var L=seg(sc._light,p),lx=lerp(L.a.x,L.b.x,L.t),ly=lerp(L.a.y,L.b.y,L.t),lr=lerp(L.a.r,L.b.r,L.t);
+      var lf=sc.querySelector('.fx-light');lf.style.setProperty('--lx',lx+'%');lf.style.setProperty('--ly',ly+'%');lf.style.setProperty('--lr',lr+'%');
+      var focus=lr<30?1:Math.max(0,1-(lr-30)/30);
+      sc.querySelector('.fx-shade').style.opacity=focus;lf.style.opacity=0.3+0.7*focus;
+    }
+    if(mode==='pull'){var pz=ease(Math.min(1,p/0.6)),zs=1.16-0.16*pz;world.style.transformOrigin='50% 50%';world.style.transform='translate('+(vw-sc._w)/2+'px,'+(vh-sc._h)/2+'px) scale('+zs+')';}
+    if(mode==='dawn'){
+      var d=ease(Math.min(1,p/0.7));
+      world.querySelector('img').style.filter='brightness('+(0.72+0.28*d)+') saturate('+(0.55+0.45*d)+') sepia('+(0.25*(1-d))+')';
+      sc.querySelector('.fx-glow').style.opacity=0.15+0.85*d;
+    }
+    marks(sc,p);
+    var hh=sc.querySelector('.hint');if(hh)hh.style.opacity=p>0.04?0:1;
+  }
+  function tick(){var moving=false;scenes.forEach(function(sc){var tg=prog(sc);if(sc._cur==null)sc._cur=tg;var d=tg-sc._cur;if(Math.abs(d)>0.0005){sc._cur+=d*0.12;moving=true}else sc._cur=tg;render(sc,sc._cur)});if(moving)requestAnimationFrame(tick);else running=false}
+  var running=false;function kick(){if(!running){running=true;requestAnimationFrame(tick)}}
+  function all(){scenes.forEach(layout);kick()}
+  addEventListener('resize',all);addEventListener('scroll',kick,{passive:true});all();
+  // snow
+  scenes.filter(function(sc){return sc.dataset.mode==='snow'}).forEach(function(sc){
+    var cv=sc.querySelector('canvas.snow'),cx=cv.getContext('2d'),flakes=[];
+    for(var i=0;i<140;i++)flakes.push({x:Math.random(),y:Math.random(),r:Math.random()*2.2+.6,v:Math.random()*.0012+.0006,w:Math.random()*Math.PI*2});
+    function draw(){var r=sc.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight){var W=cv.width,H=cv.height,dpr=devicePixelRatio;cx.clearRect(0,0,W,H);cx.fillStyle='rgba(255,255,255,.9)';flakes.forEach(function(f){f.y+=f.v;f.w+=.01;if(f.y>1.02){f.y=-.02;f.x=Math.random()}cx.beginPath();cx.arc((f.x+Math.sin(f.w)*.01)*W,f.y*H,f.r*dpr,0,7);cx.fill()})}requestAnimationFrame(draw)}
+    draw();
+  });
+  document.querySelectorAll('.acc-btn').forEach(function(b){b.addEventListener('click',function(){b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')})});
+  document.querySelectorAll('[data-open]').forEach(function(b){b.addEventListener('click',function(){document.getElementById(b.dataset.open).classList.add('open')})});
+  document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m||e.target.classList.contains('close'))m.classList.remove('open')})});
+  addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.modal.open').forEach(function(m){m.classList.remove('open')})});
+
+  // v7: 마우스를 올리면 상세가 떠오르고(밀어내지 않음), 누르면 그 자리에 고정
+  var canHover=matchMedia('(hover:hover)').matches;
+  document.querySelectorAll('.acc:not(.must)').forEach(function(a){
+    if(!canHover)return; var t;
+    a.addEventListener('mouseenter',function(){clearTimeout(t);t=setTimeout(function(){a.classList.add('peek')},140)});
+    a.addEventListener('mouseleave',function(){clearTimeout(t);t=setTimeout(function(){a.classList.remove('peek')},120)});
+    a.querySelector('.acc-btn').addEventListener('click',function(){a.classList.remove('peek')});
+  });
+
+  // 스크롤 이야기: 매 스크롤마다 '화면 가운데에 가장 가까운 칸'을 계산 (건너뜀·늦은 반응 없음)
+  (function(){
+    var stories=[].slice.call(document.querySelectorAll('.story')),ticking=false;
+    function upd(){ticking=false;var line=innerHeight*.5;
+      stories.forEach(function(st){var steps=st.querySelectorAll('.step'),k=0;
+        var best=1e9;for(var i=0;i<steps.length;i++){var r=steps[i].getBoundingClientRect(),d=Math.abs(r.top+r.height/2-line);if(d<best){best=d;k=i}}
+        var cur=st.getAttribute('data-k');if(cur!==String(k+1)){st.setAttribute('data-k',k+1);for(var j=0;j<steps.length;j++)steps[j].classList.toggle('on',j===k)}})}
+    function req(){if(!ticking){ticking=true;requestAnimationFrame(upd)}}
+    addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
+    stories.forEach(function(st){var f=st.querySelector('.step');if(f)f.classList.add('on')});upd();
+  })();
+
+  // 진행 표시 목차
+  (function(){
+    var rail=document.querySelector('.rail'); if(!rail)return;
+    var links=[].slice.call(rail.querySelectorAll('a')),tg=links.map(function(a){return document.querySelector(a.dataset.go)});
+    links.forEach(function(a,i){a.addEventListener('click',function(e){e.preventDefault();a.classList.add('open');clearTimeout(a._t);a._t=setTimeout(function(){a.classList.remove('open')},2500);if(tg[i])scrollTo({top:tg[i].getBoundingClientRect().top+scrollY,behavior:'smooth'})})});
+    function upd(){var y=scrollY+innerHeight*.4,cur=-1;tg.forEach(function(t,i){if(t&&t.getBoundingClientRect().top+scrollY<=y)cur=i});
+      links.forEach(function(a,i){a.classList.toggle('on',i===cur)});
+      var h=document.documentElement.scrollHeight-innerHeight;rail.style.setProperty('--fill',(h>0?scrollY/h*100:0)+'%');
+      var inEx=document.elementFromPoint(innerWidth/2,innerHeight/2);rail.classList.toggle('lit',!!(inEx&&inEx.closest&&inEx.closest('.ex')))}
+    addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);upd();
+  })();
+
+  // 모래바람
+  document.querySelectorAll('.scene[data-mode=sweep] canvas.dust').forEach(function(cv){
+    var cx=cv.getContext('2d'),P=[],dpr=Math.min(2,devicePixelRatio||1);
+    function rs(){cv.width=cv.clientWidth*dpr;cv.height=cv.clientHeight*dpr}rs();addEventListener('resize',rs);
+    for(var i=0;i<280;i++)P.push({x:Math.random(),y:.45+Math.random()*.55,v:.0012+Math.random()*.003,r:.7+Math.random()*2.2,a:.3+Math.random()*.5,w:Math.random()*6.28,l:Math.random()<.25});
+    (function f(){var r=cv.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight){var W=cv.width,H=cv.height;cx.clearRect(0,0,W,H);
+      P.forEach(function(p){p.x+=p.v;p.w+=.02;if(p.x>1.05){p.x=-.05;p.y=.5+Math.random()*.5}var y=(p.y+Math.sin(p.w)*.012)*H,x=p.x*W;
+        if(p.l){cx.strokeStyle='rgba(232,206,160,'+p.a*.6+')';cx.lineWidth=p.r*dpr*.6;cx.beginPath();cx.moveTo(x,y);cx.lineTo(x-38*dpr*p.v*400,y+2*dpr);cx.stroke()}
+        else{cx.fillStyle='rgba(236,212,170,'+p.a+')';cx.beginPath();cx.arc(x,y,p.r*dpr,0,7);cx.fill()}})}
+      requestAnimationFrame(f)})();
+  });
+
+  document.querySelectorAll('.cs-hq-tabs button').forEach(function(b){b.addEventListener('click',function(){var box=b.closest('.cs-hq-box');box.querySelector('.cs-hq-img').setAttribute('data-v',b.dataset.v);box.querySelectorAll('.cs-hq-tabs button').forEach(function(x){x.classList.toggle('on',x===b)})})});
+  document.querySelectorAll('.cmp-row>button').forEach(function(b){b.addEventListener('click',function(){b.setAttribute('aria-expanded',b.getAttribute('aria-expanded')==='true'?'false':'true')})});
+})();
+</script>
+</body>
+</html>
