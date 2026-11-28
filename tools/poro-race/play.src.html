@@ -463,24 +463,31 @@ function spriteAt(k, w, gy, ph, col, num, s) {   // 발 위치(gy) 기준, 종�
 }
 function shade(hex, k) { const n = parseInt(hex.slice(1), 16), f = c => Math.max(0, Math.min(255, Math.round(c + (k > 0 ? (255 - c) * k : c * k)))); return `rgb(${f(n >> 16)},${f(n >> 8 & 255)},${f(n & 255)})`; }
 function gait(i, p) { return vt * (p.boosting ? 21 : 17) + i * 1.3; }   // 짧은 다리라 종종걸음          // 갤럽 주기: 가속 중엔 더 빨리
+// 프로토타입용 임시 캐릭터 「눈뭉치」: 흰 동그란 몸, 짧은 네 발, 레인 색 털모자 · 목도리(번호)
 function runnerSide(x, y, s, i, p, mv) {
-  const ph = gait(i, p) * mv, col = entries[i].color, dark = shade(col, -.35), legC = shade(col, -.5);
-  const air = Math.abs(Math.sin(ph)) * 2.6 * s * mv, pitch = Math.sin(ph * 2) * .05 * mv;
-  cx.save(); cx.translate(x, y - air); if (p.slip > 0) cx.rotate(Math.sin(vt * 22) * .45); cx.rotate(pitch);
+  const ph = gait(i, p) * mv, col = entries[i].color, dark = shade(col, -.3), R0 = 11 * s;
+  const hop = Math.abs(Math.sin(ph)) * 3 * s * mv, sq = 1 + Math.cos(ph * 2) * .07 * mv, lean = p.boosting ? .18 : .06;
+  cx.save(); cx.translate(x, y - hop); if (p.slip > 0) cx.rotate(Math.sin(vt * 22) * .45); cx.rotate(lean);
   if (SPR.side) { spriteAt('side', 34 * s, 11 * s, ph, col, i + 1, s); cx.restore(); return; }
-  // 다리 4개: 뒷다리 둘(0, .15), 앞다리 둘(.5, .65) — 모았다 뻗는 갤럽
-  const leg = (hx, off, front) => { const a = Math.sin(ph + off * Math.PI * 2) * .7, lift = Math.max(0, Math.cos(ph + off * Math.PI * 2)) * 1.8 * s, fx = hx + Math.sin(a) * 4 * s, fy = 9.5 * s - lift;
-    cx.strokeStyle = legC; cx.lineWidth = 4.6 * s; cx.lineCap = 'round'; cx.beginPath(); cx.moveTo(hx, 5 * s); cx.lineTo(fx, fy); cx.stroke(); cx.fillStyle = dark; cx.beginPath(); cx.ellipse(fx + (front ? .8 : -.8) * s, fy + 1 * s, 3 * s, 2 * s, 0, 0, 7); cx.fill(); };
-  leg(-9 * s, .15, false); leg(8 * s, .65, true);            // 먼 쪽 다리(뒤에 그림)
-  cx.fillStyle = col; cx.beginPath(); cx.ellipse(0, 0, 14 * s, 10.5 * s, 0, 0, 7); cx.fill();
-  cx.fillStyle = shade(col, .35); cx.beginPath(); cx.ellipse(1 * s, 3.5 * s, 11 * s, 4.5 * s, 0, 0, 7); cx.fill();
-  cx.fillStyle = col; cx.beginPath(); cx.ellipse(15 * s, -5 * s, 6.5 * s, 5.5 * s, -.2, 0, 7); cx.fill();       // 머리
-  cx.fillStyle = dark; cx.beginPath(); cx.ellipse(12 * s, -10.5 * s, 2 * s, 3.2 * s, -.4, 0, 7); cx.fill();    // 귀
-  cx.fillStyle = '#1B1F26'; cx.beginPath(); cx.arc(17.5 * s, -6 * s, 1.3 * s, 0, 7); cx.fill();
-  cx.strokeStyle = dark; cx.lineWidth = 2 * s; cx.beginPath(); cx.moveTo(-14 * s, -2 * s); cx.quadraticCurveTo(-20 * s, -6 * s + Math.sin(ph) * 2 * s, -19 * s, -10 * s); cx.stroke();  // 꼬리
-  cx.fillStyle = '#fff'; cx.beginPath(); cx.roundRect(-8 * s, -7 * s, 13 * s, 9 * s, 2 * s); cx.fill();      // 번호 천
-  cx.fillStyle = col; cx.font = `900 ${Math.max(7, Math.round(8 * s))}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, -1.5 * s, -.2 * s);
-  leg(-6 * s, 0, false); leg(11 * s, .5, true);              // 가까운 쪽 다리
+  const foot = (fx, off, far) => { const sw = Math.sin(ph + off * Math.PI * 2) * 3.2 * s, up = Math.max(0, Math.cos(ph + off * Math.PI * 2)) * 2 * s; cx.fillStyle = far ? '#D9DEE6' : '#F2F4F8'; cx.strokeStyle = 'rgba(110,125,150,.55)'; cx.lineWidth = 1; cx.beginPath(); cx.ellipse(fx + sw, R0 * .82 - up, 3.6 * s, 3 * s, 0, 0, 7); cx.fill(); cx.stroke(); };
+  foot(-5 * s, .15, true); foot(5 * s, .65, true);
+  cx.save(); cx.scale(1 / Math.sqrt(sq), sq);
+  const g = cx.createRadialGradient(-3 * s, -4 * s, 2 * s, 0, 0, R0 * 1.1); g.addColorStop(0, '#FFFFFF'); g.addColorStop(1, '#E4E9F1');
+  cx.fillStyle = g; cx.beginPath(); cx.arc(0, 0, R0, 0, 7); cx.fill(); cx.strokeStyle = 'rgba(120,135,160,.45)'; cx.lineWidth = 1; cx.stroke();
+  // 털모자(레인 색) + 방울
+  cx.fillStyle = col; cx.beginPath(); cx.ellipse(1 * s, -R0 * .72, R0 * .72, R0 * .42, -.15, Math.PI, 0); cx.fill();
+  cx.fillStyle = dark; cx.fillRect(-R0 * .62, -R0 * .76, R0 * 1.35, 2.4 * s);
+  const bob = Math.sin(ph) * 2.5 * s; cx.fillStyle = '#fff'; cx.beginPath(); cx.arc(-R0 * .45 - bob * .4, -R0 * 1.12, 2.6 * s, 0, 7); cx.fill(); cx.strokeStyle = dark; cx.lineWidth = 1; cx.stroke();
+  // 얼굴(앞쪽 = 오른쪽)
+  cx.fillStyle = '#2A2F3A'; cx.beginPath(); cx.ellipse(R0 * .55, -R0 * .12, 1.3 * s, 1.7 * s, 0, 0, 7); cx.fill();
+  cx.fillStyle = 'rgba(255,140,150,.55)'; cx.beginPath(); cx.ellipse(R0 * .58, R0 * .22, 2.4 * s, 1.5 * s, 0, 0, 7); cx.fill();
+  cx.strokeStyle = '#2A2F3A'; cx.lineWidth = 1 * s; cx.beginPath(); cx.arc(R0 * .8, R0 * .08, 1.4 * s, .2, 1.6); cx.stroke();
+  // 목도리(번호) — 뒤로 펄럭임
+  cx.fillStyle = col; cx.beginPath(); cx.moveTo(-R0 * .3, R0 * .25); cx.quadraticCurveTo(-R0 * 1.2, R0 * .1 + Math.sin(ph * 1.5) * 3 * s, -R0 * 1.55, R0 * .35 + Math.sin(ph * 1.5 + 1) * 3 * s); cx.lineTo(-R0 * 1.45, R0 * .6); cx.quadraticCurveTo(-R0 * 1.0, R0 * .5, -R0 * .3, R0 * .55); cx.fill();
+  cx.fillStyle = '#fff'; cx.beginPath(); cx.roundRect(-R0 * .45, -R0 * .05, R0 * .7, R0 * .58, 2 * s); cx.fill(); cx.strokeStyle = col; cx.lineWidth = 1.4; cx.stroke();
+  cx.fillStyle = col; cx.font = `900 ${Math.max(7, Math.round(7.5 * s))}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, -R0 * .1, R0 * .4);
+  cx.restore();
+  foot(-3 * s, 0, false); foot(7 * s, .5, false);
   cx.restore();
 }
 function tags(x, y, p) {
@@ -524,14 +531,13 @@ function renderDrone(W, H, tgt, ord) {
     cx.save(); cx.translate(sx, sy); cx.rotate(r + (p.slip > 0 ? Math.sin(vt * 20) * .8 : 0));
     const ph = gait(i, p) * (p.slip > 0 ? 0 : 1), col = entries[i].color, dark = shade(col, -.45);
     if (SPR.top) { cx.rotate(Math.PI / 2); spriteAt('top', sz * 2.6, sz * 1.2, ph, col, i + 1, sz / 10); cx.restore(); return; }
-    cx.fillStyle = 'rgba(60,80,110,.2)'; cx.beginPath(); cx.ellipse(2, 3, sz * 1.4, sz * .95, 0, 0, 7); cx.fill();
-    [[-.7, -1, .15], [-.7, 1, 0], [.75, -1, .65], [.75, 1, .5]].forEach(([fx, side, off]) => { const reach = Math.sin(ph + off * Math.PI * 2) * sz * .25; cx.fillStyle = dark; cx.beginPath(); cx.ellipse(fx * sz + reach, side * sz * .78, sz * .3, sz * .24, 0, 0, 7); cx.fill(); });
-    cx.fillStyle = col; cx.beginPath(); cx.ellipse(0, 0, sz * 1.3, sz * .85, 0, 0, 7); cx.fill();
-    cx.beginPath(); cx.ellipse(sz * 1.35, 0, sz * .55, sz * .5, 0, 0, 7); cx.fill();
-    cx.fillStyle = dark; cx.beginPath(); cx.ellipse(sz * 1.15, -sz * .42, sz * .18, sz * .26, 0, 0, 7); cx.fill(); cx.beginPath(); cx.ellipse(sz * 1.15, sz * .42, sz * .18, sz * .26, 0, 0, 7); cx.fill();
-    cx.fillStyle = '#fff'; cx.beginPath(); cx.roundRect(-sz * .6, -sz * .5, sz * 1.1, sz, 3); cx.fill();
+    cx.fillStyle = 'rgba(60,80,110,.2)'; cx.beginPath(); cx.arc(2, 3, sz * 1.1, 0, 7); cx.fill();
+    [[-.55, -1, .15], [-.55, 1, 0], [.55, -1, .65], [.55, 1, .5]].forEach(([fx, side, off]) => { const reach = Math.sin(ph + off * Math.PI * 2) * sz * .25; cx.fillStyle = '#EEF1F6'; cx.strokeStyle = 'rgba(110,125,150,.5)'; cx.lineWidth = 1; cx.beginPath(); cx.ellipse(fx * sz + reach, side * sz * .85, sz * .32, sz * .26, 0, 0, 7); cx.fill(); cx.stroke(); });
+    const g = cx.createRadialGradient(-sz * .3, -sz * .3, 1, 0, 0, sz * 1.1); g.addColorStop(0, '#fff'); g.addColorStop(1, '#E4E9F1'); cx.fillStyle = g; cx.beginPath(); cx.arc(0, 0, sz, 0, 7); cx.fill(); cx.strokeStyle = 'rgba(120,135,160,.5)'; cx.stroke();
+    cx.fillStyle = col; cx.beginPath(); cx.arc(-sz * .15, 0, sz * .62, 0, 7); cx.fill(); cx.fillStyle = '#fff'; cx.beginPath(); cx.arc(-sz * .15, 0, sz * .22, 0, 7); cx.fill();
+    cx.fillStyle = col; cx.beginPath(); cx.moveTo(-sz * .7, -sz * .2); cx.lineTo(-sz * 1.6, -sz * .05 + Math.sin(ph) * sz * .2); cx.lineTo(-sz * 1.5, sz * .25); cx.lineTo(-sz * .7, sz * .15); cx.fill();
     cx.restore();
-    cx.fillStyle = entries[i].color; cx.font = `900 ${Math.round(sz * .85)}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, sx - Math.cos(r) * sz * .05, sy + sz * .3);
+    cx.fillStyle = '#fff'; cx.font = `900 ${Math.round(sz * .8)}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, sx + sz * 1.2, sy - sz * 1.1);
     if (i === mine) { cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.arc(sx, sy, sz * 1.7, 0, 7); cx.stroke(); }
     if (i === mine || i === tgt || p.rank <= 3) { cx.font = '800 11px Noto Sans KR'; const t = `${p.rank}위 ${p.name}`, w = cx.measureText(t).width + 12; cx.fillStyle = i === mine ? '#6C5CE7' : 'rgba(12,18,28,.75)'; cx.beginPath(); cx.roundRect(sx + sz * 1.9, sy - 9, w, 18, 9); cx.fill(); cx.fillStyle = '#fff'; cx.textAlign = 'left'; cx.fillText(t, sx + sz * 1.9 + 6, sy + 4); }
     tags(sx - sz, sy - sz * 1.8, p);
@@ -581,14 +587,18 @@ function renderFront(W, H, tgt, ord) {
     cx.save(); cx.translate(x, y - 12 * s - bob); if (p.slip > 0) cx.rotate(Math.sin(vt * 22) * .5);
     const ph = gait(i, p) * mv, col = entries[i].color, dark = shade(col, -.45);
     if (SPR.front) { spriteAt('front', 32 * s, 13 * s, ph, col, i + 1, s); cx.restore(); return; }
-    [[-8, .15, 1], [8, 0, 1], [-6, .65, 0], [6, .5, 0]].forEach(([lx, off, back]) => { const lift = Math.max(0, Math.sin(ph + off * Math.PI * 2)) * 3 * s; if (back) { cx.fillStyle = shade(col, -.3); cx.beginPath(); cx.ellipse(lx * s, 9 * s - lift * .6, 3 * s, 4 * s, 0, 0, 7); cx.fill(); } });
-    cx.fillStyle = col; cx.beginPath(); cx.ellipse(0, 0, 14 * s, 11 * s, 0, 0, 7); cx.fill();
-    cx.fillStyle = shade(col, .25); cx.beginPath(); cx.ellipse(0, -7 * s, 8 * s, 6.5 * s, 0, 0, 7); cx.fill();
-    cx.fillStyle = dark; cx.beginPath(); cx.ellipse(-6 * s, -12 * s, 2.2 * s, 3.2 * s, -.4, 0, 7); cx.fill(); cx.beginPath(); cx.ellipse(6 * s, -12 * s, 2.2 * s, 3.2 * s, .4, 0, 7); cx.fill();
-    cx.fillStyle = '#1B1F26'; cx.beginPath(); cx.arc(-2.8 * s, -7.5 * s, 1.2 * s, 0, 7); cx.arc(2.8 * s, -7.5 * s, 1.2 * s, 0, 7); cx.fill();
-    cx.fillStyle = '#fff'; cx.beginPath(); cx.roundRect(-6.5 * s, -1 * s, 13 * s, 9 * s, 2 * s); cx.fill();
-    cx.fillStyle = col; cx.font = `900 ${Math.max(7, Math.round(8 * s))}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, 0, 6 * s);
-    [[-6, .65], [6, .5]].forEach(([lx, off]) => { const lift = Math.max(0, Math.sin(ph + off * Math.PI * 2)) * 3 * s; cx.fillStyle = dark; cx.beginPath(); cx.ellipse(lx * s, 10 * s - lift, 3.6 * s, 3 * s, 0, 0, 7); cx.fill(); });
+    const hop = Math.abs(Math.sin(ph)) * 2.5 * s, sq = 1 + Math.cos(ph * 2) * .07 * mv; cx.translate(0, -hop);
+    [[-6, .65], [6, .5]].forEach(([lx, off]) => { const lift = Math.max(0, Math.sin(ph + off * Math.PI * 2)) * 2.5 * s; cx.fillStyle = '#E6EAF0'; cx.beginPath(); cx.ellipse(lx * s, 10 * s - lift * .5, 3.4 * s, 2.6 * s, 0, 0, 7); cx.fill(); });
+    cx.save(); cx.scale(1 / Math.sqrt(sq), sq);
+    const g = cx.createRadialGradient(-3 * s, -4 * s, 2 * s, 0, 0, 13 * s); g.addColorStop(0, '#fff'); g.addColorStop(1, '#E4E9F1'); cx.fillStyle = g; cx.beginPath(); cx.arc(0, 0, 12 * s, 0, 7); cx.fill(); cx.strokeStyle = 'rgba(120,135,160,.45)'; cx.lineWidth = 1; cx.stroke();
+    cx.fillStyle = col; cx.beginPath(); cx.ellipse(0, -8.5 * s, 8.5 * s, 5 * s, 0, Math.PI, 0); cx.fill(); cx.fillStyle = dark; cx.fillRect(-8.5 * s, -9.2 * s, 17 * s, 2.2 * s);
+    cx.fillStyle = '#fff'; cx.beginPath(); cx.arc(Math.sin(ph) * 1.5 * s, -14.5 * s, 2.4 * s, 0, 7); cx.fill();
+    cx.fillStyle = '#2A2F3A'; cx.beginPath(); cx.ellipse(-3.6 * s, -2.5 * s, 1.2 * s, 1.6 * s, 0, 0, 7); cx.ellipse(3.6 * s, -2.5 * s, 1.2 * s, 1.6 * s, 0, 0, 7); cx.fill();
+    cx.fillStyle = 'rgba(255,140,150,.55)'; cx.beginPath(); cx.ellipse(-6.5 * s, 1 * s, 2.2 * s, 1.4 * s, 0, 0, 7); cx.ellipse(6.5 * s, 1 * s, 2.2 * s, 1.4 * s, 0, 0, 7); cx.fill();
+    cx.strokeStyle = '#2A2F3A'; cx.lineWidth = 1 * s; cx.beginPath(); cx.arc(0, -.5 * s, 1.6 * s, .3, Math.PI - .3); cx.stroke();
+    cx.fillStyle = col; cx.beginPath(); cx.roundRect(-7 * s, 3.5 * s, 14 * s, 6 * s, 3 * s); cx.fill(); cx.fillStyle = '#fff'; cx.font = `900 ${Math.max(7, Math.round(6.5 * s))}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, 0, 8.6 * s);
+    cx.restore();
+    [[-7, 0], [7, .15]].forEach(([lx, off]) => { const lift = Math.max(0, Math.sin(ph + off * Math.PI * 2)) * 3 * s; cx.fillStyle = '#F4F6FA'; cx.strokeStyle = 'rgba(110,125,150,.5)'; cx.lineWidth = 1; cx.beginPath(); cx.ellipse(lx * s, 11 * s - lift, 3.6 * s, 2.8 * s, 0, 0, 7); cx.fill(); cx.stroke(); });
     cx.restore();
     if (i === mine) { cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.ellipse(x, y, 20 * s, 7 * s, 0, 0, 7); cx.stroke(); }
     if (s > .35 && (i === mine || p.rank <= 3 || i === tgt)) { cx.font = '800 11px Noto Sans KR'; const t = `${p.rank}위 ${p.name}`, w = cx.measureText(t).width + 12; cx.fillStyle = i === mine ? '#6C5CE7' : 'rgba(12,18,28,.75)'; cx.beginPath(); cx.roundRect(x - w / 2, y - 34 * s - 22, w, 18, 9); cx.fill(); cx.fillStyle = '#fff'; cx.textAlign = 'center'; cx.fillText(t, x, y - 34 * s - 9); }
