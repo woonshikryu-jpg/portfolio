@@ -147,7 +147,7 @@ canvas{width:100%;display:block}
       <canvas id="cv"></canvas>
       <div class="tv-ctl">
         <div class="speed">배속 <button data-s="1" class="on">1배</button><button data-s="2">2배</button><button data-s="4">4배</button></div>
-        <div class="speed cam">카메라 <button data-c="auto" class="on">🎬 자동 중계</button><button data-c="side">옆</button><button data-c="drone">드론</button><button data-c="front">정면</button><button data-c="close">근접</button></div>
+        <div class="speed cam">카메라 <button data-c="auto" class="on">🎬 자동 중계</button><button data-c="side">옆</button><button data-c="drone">드론 · 위</button><button data-c="front">드론 · 정면</button><button data-c="close">근접</button></div>
         <div class="speed tgt">따라갈 포로 <button data-t="lead" class="on">선두</button><button data-t="mine">내 포로</button><span style="font-size:11.5px">· 아래 순위 띠를 누르면 그 포로</span></div>
       </div>
     </div>
@@ -313,7 +313,7 @@ function start() {
   $('pickWrap').style.display = 'none'; $('raceWrap').style.display = 'block'; setStep(2);
   const e = entries[mine]; $('meName').innerHTML = `<span class="tok" style="background:${e.color}">${mine + 1}</span>내 포로 · ${e.name} <span class="st" style="margin-left:6px">${e.apt}형 · ${e.style}</span>`;
   $('snackBtn').disabled = false; $('snackBtn').classList.remove('ready');
-  buildMap(); initSnow(); phase = 'gate'; countdown = 3.4; vt = 0; dir = { auto: true, angle: 'side', tgt: 'lead', until: 0, cutAt: -9, prio: 0 }; view = { side: { x: 0, span: 150 }, pip: { x: 0, span: 70 } }; syncCamUI();
+  buildMap(); initSnow(); phase = 'gate'; countdown = 3.4; vt = 0; dir = { auto: true, angle: 'side', tgt: 'lead', until: 0, cutAt: -9, prio: 0 }; view = { side: { x: 0, span: 150 }, pip: { x: 0, span: 120 } }; syncCamUI();
   caption(`${ctypeName}, 출발 게이트에 포로 8마리가 들어섭니다. 내 포로는 ${mine + 1}번 ${e.name}!`, 3.4, 'gate');
   last = performance.now(); acc = 0; cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
   $('tv').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -357,7 +357,7 @@ function loop(now) {
     slow = lead.d > tot - 45 && race.finished.length < 2;            // 결승 직전 슬로모션
     const eff = slow ? .3 : 1; acc += dtw * speed * eff; vt += dtw * speed * eff;
     while (acc >= P.dt && !race.done) {
-      acc -= P.dt; E.step(race, share());
+      acc -= P.dt; race.poros.forEach(p => p.pd = p.d); E.step(race, share());
       myBoost = Math.max(0, myBoost - P.dt * 4); if (cheerCd > 0) cheerCd -= P.dt;
       race.poros.forEach((p, i) => {
         if (p.tired && !p.recovered && i !== mine && race.t - p.tiredAt >= crowdDelay[i]) E.giveSnack(race, i);
@@ -396,7 +396,7 @@ function crowdTile(h) {
   return (crowdTiles[h] = t);
 }
 // ── 카메라: 포로마다 4대(옆 · 드론 · 정면 · 근접) + 자동 중계
-const ANG = { side: '옆 카메라', drone: '드론', front: '정면 카메라', close: '근접 카메라' };
+const ANG = { side: '옆 카메라', drone: '드론(위)', front: '드론(정면)', close: '근접 카메라' };
 const CAMNO = { side: 1, drone: 2, front: 3, close: 4 };
 let dir = { auto: true, angle: 'side', tgt: 'lead', until: 0, cutAt: -9, lastPi: -1, prio: 0 }, view = { side: { x: 0, span: 160 }, pip: { x: 0, span: 70 } }, flash = 0;
 function tgtIdx(t, ord) { return t === 'lead' ? ord[0].i : t === 'mine' ? mine : t; }
@@ -566,53 +566,70 @@ function renderDrone(W, H, tgt, ord) {
   // 그림자 구름(드론 높이감)
   cx.fillStyle = 'rgba(255,255,255,.18)'; for (let k = 0; k < 3; k++) { cx.beginPath(); cx.ellipse((W * (hash(k + 3) + vt * .01 * (k + 1))) % (W + 200) - 100, H * hash(k + 9), 160, 60, 0, 0, 7); cx.fill(); }
 }
-// ── 정면: 대상 포로 앞에서 뒤를 돌아봄(다가오는 포로들)
+// ── 정면(공중): 드론이 대상 포로 앞 공중에 떠서 뒤를 돌아보며 함께 날아감. 실제 주로 모양(커브)을 따라감
+let fcam = null;
 function renderFront(W, H, tgt, ord) {
-  const tp = race.poros[tgt], camD = tp.d + 26, hz = H * .36, f = H * .95, camH = 3.2, tot = race.total, segL = P.L / P.seg;
-  const k0 = Math.floor(Math.max(0, camD - 10) / segL), inC = course.kinds[k0 % P.seg] === 'C', sway = inC ? W * .12 : 0;
-  const LX = i => (i - 3.5) * 2.6, camX = (tgt - 3.5) * 2.6 * .6;
-  const P2 = (lx, z) => [W / 2 + sway * (1 - Math.min(1, 6 / z)) + (lx - camX) * f / z, hz + camH * f / z];
-  let g = cx.createLinearGradient(0, 0, 0, hz); g.addColorStop(0, '#9CC3E6'); g.addColorStop(1, '#E7F0F8'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
-  cx.fillStyle = '#B9CCE0'; cx.beginPath(); cx.moveTo(0, hz); for (let x = 0; x <= W; x += 20) cx.lineTo(x, hz - H * (.06 + .03 * Math.sin(x / 90))); cx.lineTo(W, hz); cx.fill();
-  cx.fillStyle = '#F4F8FC'; cx.fillRect(0, hz, W, H - hz);
-  // 관중석: 왼쪽 난간 너머에 서 있는 계단식 스탠드(바닥은 난간을 따라, 위로 갈수록 뒤로 물러남)
-  const Q = (lx, z, h) => [W / 2 + sway * (1 - Math.min(1, 6 / z)) + (lx - camX) * f / z, hz + (camH - h) * f / z], ct = crowdTile(90);
-  const zs = []; for (let z = 260; z > 3.6; z /= 1.07) zs.push(z);
-  const BOT = -14.5, TOP = -27, HT = 11;
-  const outline = () => { cx.beginPath(); zs.forEach((z, k) => { const [x, y] = Q(BOT, z, 0); k ? cx.lineTo(x, y) : cx.moveTo(x, y); }); zs.slice().reverse().forEach(z => { const [x, y] = Q(TOP, z, HT); cx.lineTo(x, y); }); cx.closePath(); };
-  cx.save(); outline(); cx.fillStyle = '#5A6680'; cx.fill(); cx.clip();
-  for (let x = -240; x < W; x += 240) for (let y = -90; y < H; y += 90) cx.drawImage(ct, x, y);
-  for (let t = 1; t < 8; t++) { const lx = BOT + (TOP - BOT) * t / 8, h = HT * t / 8; cx.strokeStyle = 'rgba(30,38,52,.45)'; cx.lineWidth = 1.5; cx.beginPath(); zs.forEach((z, k) => { const [x, y] = Q(lx, z, h); k ? cx.lineTo(x, y) : cx.moveTo(x, y); }); cx.stroke(); }
-  const g2 = cx.createLinearGradient(0, hz - H * .1, 0, hz + H * .05); g2.addColorStop(0, 'rgba(200,215,232,.55)'); g2.addColorStop(1, 'rgba(200,215,232,0)'); cx.fillStyle = g2; cx.fillRect(0, 0, W, H);   // 멀수록 흐리게
-  cx.restore();
-  cx.strokeStyle = '#3E4A61'; cx.lineWidth = 4; cx.beginPath(); zs.forEach((z, k) => { const [x, y] = Q(TOP, z, HT); k ? cx.lineTo(x, y) : cx.moveTo(x, y); }); cx.stroke();   // 지붕선
-  cx.fillStyle = '#2C3445'; cx.beginPath(); zs.forEach((z, k) => { const [x, y] = Q(BOT, z, 0); k ? cx.lineTo(x, y) : cx.moveTo(x, y); }); zs.slice().reverse().forEach(z => { const [x, y] = Q(BOT, z, .7); cx.lineTo(x, y); }); cx.closePath(); cx.fill();   // 스탠드 앞 벽
-  // 주로 · 레인 · 난간
-  const edge = (lx) => { cx.beginPath(); for (let z = 3; z < 260; z *= 1.08) { const [x, y] = P2(lx, z); z === 3 ? cx.moveTo(x, y) : cx.lineTo(x, y); } };
-  cx.strokeStyle = 'rgba(150,170,195,.35)'; cx.lineWidth = 1; for (let l = -3; l <= 4; l++) { edge(LX(l) - 1.3); cx.stroke(); }
-  cx.strokeStyle = '#fff'; cx.lineWidth = 5; edge(-12); cx.stroke(); edge(12); cx.stroke();
-  for (let dz = 2; dz < 200; dz += 6) { const z = dz + ((camD % 6) + 6) % 6; [-12, 12].forEach(lx => { const [x, y] = P2(lx, z), h = 1.3 * f / z; cx.fillStyle = '#9AA8B8'; cx.fillRect(x - Math.max(1, 6 / z * 3), y - h, Math.max(2, 12 / z * 3), h); }); }
-  // 결승선이 보이면
-  const fz = camD - tot; if (fz > -200 && fz < 0) {} // 결승선은 앞쪽(카메라 뒤)
-  // 포로들(먼 것부터)
-  const list = race.poros.map((p, i) => ({ p, i, z: camD - p.d })).filter(o => o.z > 3.5 && o.z < 160).sort((a, b) => b.z - a.z);
-  list.forEach(({ p, i, z }) => {
-    const [x, y] = P2(LX(i), z), s = f / z * .12, mv = p.slip > 0 ? 0 : 1, bob = Math.abs(Math.sin(vt * 13 + i)) * 6 * s * mv;
-    cx.fillStyle = 'rgba(60,80,110,.18)'; cx.beginPath(); cx.ellipse(x, y, 16 * s, 4 * s, 0, 0, 7); cx.fill();
-    cx.save(); cx.translate(x, y - 14 * s - bob); if (p.slip > 0) cx.rotate(Math.sin(vt * 22) * .5);
+  const tp = race.poros[tgt], tot = race.total;
+  const wp = (d, off, z = 0) => { const [x, y, h] = trackPt(d), nx = Math.cos(h + Math.PI / 2), ny = Math.sin(h + Math.PI / 2); return [(x + nx * off) * U, (y + ny * off) * U, z]; };
+  const mid = TW / 2, base = Math.max(0, tp.d);
+  const C0 = wp(base + 42, TW + 14 / U, 26), T0 = wp(base - 14, mid, 0);
+  if (!fcam || vt - dir.cutAt < .05) fcam = { c: C0, t: T0 };
+  const lerp = (a, b, k) => a.map((v, i) => v + (b[i] - v) * k);
+  fcam.c = lerp(fcam.c, C0, .12); fcam.t = lerp(fcam.t, T0, .12);
+  const C = fcam.c, T = fcam.t, sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]], dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]], nrm = a => { const l = Math.hypot(...a) || 1; return a.map(v => v / l); };
+  const fw = nrm(sub(T, C)), rt = nrm(cross(fw, [0, 0, 1])), up = cross(rt, fw), f = W * .95;
+  const proj = p => { const v = sub(p, C), z = dot(v, fw); if (z < 1) return null; return [W / 2 + dot(v, rt) * f / z, H * .5 - dot(v, up) * f / z, z]; };
+  // 하늘 · 땅
+  const pitch = Math.asin(-fw[2]), hy = H * .5 - Math.tan(pitch) * f;
+  cx.fillStyle = '#EEF3F8'; cx.fillRect(0, 0, W, H);
+  if (hy > 0) { const g = cx.createLinearGradient(0, 0, 0, hy); g.addColorStop(0, '#9CC3E6'); g.addColorStop(1, '#E7F0F8'); cx.fillStyle = g; cx.fillRect(0, 0, W, hy); cx.fillStyle = '#B9CCE0'; cx.beginPath(); cx.moveTo(0, hy); for (let x = 0; x <= W; x += 20) cx.lineTo(x, hy - H * (.03 + .02 * Math.sin(x / 80))); cx.lineTo(W, hy); cx.fill(); }
+  // 주로 · 관중석을 띠로(멀리서부터)
+  const ds = []; for (let d = base + 26; d > base - 170; d -= 2.5) ds.push(d);
+  ds.reverse();   // 먼 곳(뒤쪽)부터
+  const quad = (a, b, c, d, fill) => { if (!a || !b || !c || !d) return; cx.fillStyle = fill; cx.beginPath(); cx.moveTo(a[0], a[1]); cx.lineTo(b[0], b[1]); cx.lineTo(c[0], c[1]); cx.lineTo(d[0], d[1]); cx.closePath(); cx.fill(); };
+  const segL = P.L / P.seg, ct = crowdTile(90);
+  for (let k = 0; k < ds.length - 1; k++) {
+    const d0 = ds[k], d1 = ds[k + 1]; if (d1 < -20) continue;
+    const kind = course.kinds[Math.floor((((d0 % P.L) + P.L) % P.L) / segL)];
+    // 안쪽 눈밭 · 주로 · 바깥 길
+    quad(proj(wp(d0, TW, 0)), proj(wp(d1, TW, 0)), proj(wp(d1, TW + 40 / U, 0)), proj(wp(d0, TW + 40 / U, 0)), '#E6F0E6');
+    quad(proj(wp(d0, 0, 0)), proj(wp(d1, 0, 0)), proj(wp(d1, TW, 0)), proj(wp(d0, TW, 0)), kind === 'C' ? '#DCE6F1' : '#E4EBF3');
+    // 관중석(바깥쪽에 서 있는 계단식 스탠드)
+    const b0 = proj(wp(d0, -4 / U, 0)), b1 = proj(wp(d1, -4 / U, 0)), t0 = proj(wp(d0, -16 / U, 10)), t1 = proj(wp(d1, -16 / U, 10));
+    if (b0 && b1 && t0 && t1) { cx.save(); cx.beginPath(); cx.moveTo(b0[0], b0[1]); cx.lineTo(b1[0], b1[1]); cx.lineTo(t1[0], t1[1]); cx.lineTo(t0[0], t0[1]); cx.closePath(); cx.fillStyle = '#7C88A0'; cx.fill(); cx.clip(); const mx = Math.min(b0[0], t0[0], b1[0], t1[0]), my = Math.min(b0[1], t0[1], b1[1], t1[1]); cx.drawImage(ct, mx - (((d0 * 3) % 240) + 240) % 240, my, 240, 90); cx.drawImage(ct, mx - (((d0 * 3) % 240) + 240) % 240 + 240, my, 240, 90); cx.restore(); }
+    quad(proj(wp(d0, -1 / U, 0)), proj(wp(d1, -1 / U, 0)), proj(wp(d1, -4 / U, .8)), proj(wp(d0, -4 / U, .8)), '#2C3445');
+    if (Math.floor(d0 / 100) !== Math.floor(d1 / 100) && d1 > 0 && d1 < tot) { const p = proj(wp(Math.floor(d1 / 100) * 100, -.5 / U, 0)), q = proj(wp(Math.floor(d1 / 100) * 100, -.5 / U, 3)); if (p && q) { cx.strokeStyle = '#C0392B'; cx.lineWidth = 3; cx.beginPath(); cx.moveTo(...p.slice(0, 2)); cx.lineTo(...q.slice(0, 2)); cx.stroke(); } }
+  }
+  // 레인 줄 · 난간 · 결승선
+  const lineAt = (off, z, col, w, dash) => { cx.strokeStyle = col; cx.lineWidth = w; cx.setLineDash(dash || []); cx.beginPath(); let on = false; ds.forEach(d => { const p = proj(wp(d, off, z)); if (!p) { on = false; return; } on ? cx.lineTo(p[0], p[1]) : cx.moveTo(p[0], p[1]); on = true; }); cx.stroke(); cx.setLineDash([]); };
+  for (let l = 1; l < 8; l++) lineAt(TW - laneOff(l) + LANE / 2, 0, 'rgba(140,160,190,.35)', 1, [6, 8]);
+  [[0, 1.1], [TW, 1.1]].forEach(([off, z]) => { lineAt(off, z, '#FFFFFF', 3); ds.forEach((d, k) => { if (k % 3) return; const a = proj(wp(d, off, 0)), b = proj(wp(d, off, z)); if (a && b) { cx.strokeStyle = '#9AA8B8'; cx.lineWidth = Math.max(1, 30 / a[2]); cx.beginPath(); cx.moveTo(a[0], a[1]); cx.lineTo(b[0], b[1]); cx.stroke(); } }); });
+  [[P.L, false], [tot, true]].forEach(([d, chk]) => { if (d < ds[0] || d > ds[ds.length - 1]) return; for (let k = 0; k < 10; k++) { const a = proj(wp(d, TW * k / 10, 0)), b = proj(wp(d, TW * (k + 1) / 10, 0)); if (!a || !b) continue; cx.strokeStyle = chk ? (k % 2 ? '#111' : '#fff') : 'rgba(20,30,40,.45)'; cx.lineWidth = chk ? Math.max(3, 400 / a[2]) : 2; cx.beginPath(); cx.moveTo(a[0], a[1]); cx.lineTo(b[0], b[1]); cx.stroke(); } });
+  // 포로(먼 것부터)
+  const list = race.poros.map((p, i) => { const pos = wp(Math.max(0, p.d), TW - laneOff(i), 0), pr = proj(pos), top = proj([pos[0], pos[1], 2.4]); return { p, i, pr, top }; }).filter(o => o.pr && o.top).sort((a, b) => b.pr[2] - a.pr[2]);
+  list.forEach(({ p, i, pr, top }) => {
+    const x = pr[0], y = pr[1], s = Math.max(.15, (pr[1] - top[1]) / 26), mv = p.slip > 0 ? 0 : 1, bob = Math.abs(Math.sin(vt * 13 + i)) * 5 * s * mv;
+    if (x < -60 || x > W + 60 || y < -60 || y > H + 80) return;
+    cx.fillStyle = 'rgba(60,80,110,.2)'; cx.beginPath(); cx.ellipse(x, y, 16 * s, 6 * s, 0, 0, 7); cx.fill();
+    if (p.dash > 0) { cx.strokeStyle = 'rgba(37,99,235,.55)'; cx.lineWidth = 2; for (let k = -1; k <= 1; k++) { cx.beginPath(); cx.moveTo(x + k * 10 * s, y - 30 * s); cx.lineTo(x + k * 14 * s, y - 60 * s); cx.stroke(); } }
+    cx.save(); cx.translate(x, y - 13 * s - bob); if (p.slip > 0) cx.rotate(Math.sin(vt * 22) * .5);
     cx.fillStyle = '#4A3A30'; for (let k = 0; k < 2; k++) { cx.beginPath(); cx.ellipse((k ? 7 : -7) * s, 11 * s + Math.sin(vt * 18 + k * 3 + i) * 2 * s * mv, 3.5 * s, 4 * s, 0, 0, 7); cx.fill(); }
-    cx.fillStyle = '#fff'; cx.beginPath(); cx.ellipse(0, 0, 15 * s, 14 * s, 0, 0, 7); cx.fill(); cx.strokeStyle = 'rgba(120,140,170,.45)'; cx.lineWidth = 1; cx.stroke();
-    cx.fillStyle = entries[i].color; cx.beginPath(); cx.roundRect(-8 * s, -6 * s, 16 * s, 13 * s, 3 * s); cx.fill();
-    cx.fillStyle = '#fff'; cx.font = `900 ${Math.max(7, Math.round(10 * s))}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, 0, 3.5 * s);
+    cx.fillStyle = '#fff'; cx.beginPath(); cx.ellipse(0, 0, 15 * s, 13 * s, 0, 0, 7); cx.fill(); cx.strokeStyle = 'rgba(120,140,170,.45)'; cx.lineWidth = 1; cx.stroke();
+    cx.fillStyle = entries[i].color; cx.beginPath(); cx.roundRect(-8 * s, -8 * s, 16 * s, 12 * s, 3 * s); cx.fill();
+    cx.fillStyle = '#fff'; cx.font = `900 ${Math.max(7, Math.round(10 * s))}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, 0, 1.5 * s);
     cx.restore();
-    if (i === mine) { cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.ellipse(x, y, 20 * s, 5 * s, 0, 0, 7); cx.stroke(); }
-    if (z < 60 && (i === mine || p.rank <= 3 || i === tgt)) { cx.font = '800 11px Noto Sans KR'; const t = `${p.rank}위 ${p.name}`, w = cx.measureText(t).width + 12; cx.fillStyle = i === mine ? '#6C5CE7' : 'rgba(12,18,28,.75)'; cx.beginPath(); cx.roundRect(x - w / 2, y - 34 * s - 22, w, 18, 9); cx.fill(); cx.fillStyle = '#fff'; cx.textAlign = 'center'; cx.fillText(t, x, y - 34 * s - 9); }
+    if (i === mine) { cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.ellipse(x, y, 20 * s, 7 * s, 0, 0, 7); cx.stroke(); }
+    if (s > .35 && (i === mine || p.rank <= 3 || i === tgt)) { cx.font = '800 11px Noto Sans KR'; const t = `${p.rank}위 ${p.name}`, w = cx.measureText(t).width + 12; cx.fillStyle = i === mine ? '#6C5CE7' : 'rgba(12,18,28,.75)'; cx.beginPath(); cx.roundRect(x - w / 2, y - 34 * s - 22, w, 18, 9); cx.fill(); cx.fillStyle = '#fff'; cx.textAlign = 'center'; cx.fillText(t, x, y - 34 * s - 9); }
     tags(x + 16 * s, y - 30 * s, p);
   });
-  // 눈보라 가까이
-  cx.fillStyle = 'rgba(255,255,255,.6)'; for (let k = 0; k < 40; k++) { const x = (hash(k) * W + vt * 60 * (1 + hash(k + 1))) % W, y = (hash(k + 2) * H + vt * 90) % H; cx.beginPath(); cx.arc(x, y, 1 + hash(k + 3) * 2.5, 0, 7); cx.fill(); }
 }
 function draw(dtw) {
+  const real = race.poros.map(p => p.d), al = phase === 'run' ? Math.max(0, Math.min(1, acc / P.dt)) : 1;
+  race.poros.forEach(p => { if (p.pd !== undefined && p.fin === null) p.d = p.pd + (p.d - p.pd) * al; });
+  try { drawFrame(dtw); } finally { race.poros.forEach((p, i) => p.d = real[i]); }
+}
+function drawFrame(dtw) {
   const [W, H] = fit(), ord = E.ranks(race), tot = race.total;
   director(ord);
   const angle = phase === 'gate' ? 'side' : dir.angle, tgt = phase === 'gate' ? mine : tgtIdx(dir.tgt, ord);
@@ -626,7 +643,7 @@ function draw(dtw) {
   // ── 내 포로 화면 속 화면(PIP)
   if (phase === 'run' && tgt !== mine && race.poros[mine].fin === null) {
     const pw = Math.round(W * .27), ph = Math.round(pw * 9 / 16), px = W - pw - 14, py = H - ph - 54;
-    cx.save(); cx.translate(px, py); cx.beginPath(); cx.roundRect(0, 0, pw, ph, 10); cx.clip(); renderSide(pw, ph, mine, 70, view.pip, ord, dtw, true); cx.restore();
+    cx.save(); cx.translate(px, py); cx.beginPath(); cx.roundRect(0, 0, pw, ph, 10); cx.clip(); renderSide(pw, ph, mine, 120, view.pip, ord, dtw, true); cx.restore();
     cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.roundRect(px, py, pw, ph, 10); cx.stroke();
     cx.fillStyle = '#6C5CE7'; cx.beginPath(); cx.roundRect(px + 8, py + 8, 112, 20, 10); cx.fill(); cx.fillStyle = '#fff'; cx.font = '900 11px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText(`내 포로 · ${race.poros[mine].rank}위 ${entries[mine].name}`, px + 16, py + 22);
   }
@@ -645,18 +662,28 @@ function draw(dtw) {
   cx.strokeStyle = 'rgba(255,255,255,.55)'; cx.lineWidth = 5; cx.beginPath(); map.pts.forEach((p, k) => { const [a, b] = mapPt(k / map.pts.length * P.L, mx + 10, my + 10, mw - 20, mh - 20); k ? cx.lineTo(a, b) : cx.moveTo(a, b); }); cx.closePath(); cx.stroke();
   const [fx, fy] = mapPt(0, mx + 10, my + 10, mw - 20, mh - 20); cx.fillStyle = '#D4A106'; cx.fillRect(fx - 2, fy - 6, 4, 12);
   race.poros.forEach((p, i) => { const [a, b] = mapPt(p.d, mx + 10, my + 10, mw - 20, mh - 20); cx.fillStyle = entries[i].color; cx.beginPath(); cx.arc(a, b, i === mine ? 5 : 3.6, 0, 7); cx.fill(); if (i === mine || i === tgt) { cx.strokeStyle = '#fff'; cx.lineWidth = 1.5; cx.stroke(); } });
-  const th = 30, ty = H - th - 10, tw = Math.min(W - 24, 640), tx0 = (W - tw) / 2;
-  cx.fillStyle = 'rgba(12,18,28,.86)'; cx.beginPath(); cx.roundRect(tx0, ty, tw, th, 8); cx.fill();
-  cx.fillStyle = '#D4A106'; cx.font = '900 11px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText('순위', tx0 + 10, ty + 19.5);
-  const cw = (tw - 56) / 8; tickerHit = [];
-  ord.forEach((p, k) => { const x = tx0 + 46 + k * cw; tickerHit.push([x, ty, cw - 6, th, p.i]); cx.fillStyle = entries[p.i].color; cx.beginPath(); cx.roundRect(x, ty + 5, cw - 6, th - 10, 4); cx.fill(); if (p.i === mine || p.i === tgt) { cx.strokeStyle = p.i === mine ? '#fff' : '#FFC24D'; cx.lineWidth = 2; cx.stroke(); } cx.fillStyle = '#fff'; cx.font = '900 11.5px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText(`${p.i + 1} ${p.name}`, x + (cw - 6) / 2, ty + 19.5); });
+  // 왼쪽 아래 순위판(경마 중계식)
+  const rh = Math.max(17, Math.min(22, H * .034)), bw2 = 210, bh = rh * 8 + 50, bx = 12, by = 80;
+  cx.fillStyle = 'rgba(22,16,48,.88)'; cx.beginPath(); cx.roundRect(bx, by, bw2, bh, 10); cx.fill();
+  cx.fillStyle = '#fff'; cx.font = '900 12.5px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText(`포로 경주 · ${raceNo}경기`, bx + 12, by + 19);
+  cx.fillStyle = '#CBBEFF'; cx.font = '700 11px Noto Sans KR'; cx.fillText(ctypeName, bx + 12, by + 35);
+  cx.fillStyle = 'rgba(255,255,255,.12)'; cx.beginPath(); cx.roundRect(bx + bw2 - 92, by + 8, 82, 32, 16); cx.fill();
+  cx.fillStyle = '#fff'; cx.textAlign = 'center'; cx.font = '900 11px Noto Sans KR'; cx.fillText(`남은 ${left}`, bx + bw2 - 51, by + 21); cx.font = '800 11px Noto Sans KR'; cx.fillText(`${mm}:${ss}`, bx + bw2 - 51, by + 35);
+  tickerHit = [];
+  ord.forEach((p, k) => { const y = by + 44 + k * rh; tickerHit.push([bx, y, bw2, rh, p.i]);
+    cx.fillStyle = k % 2 ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,.1)'; cx.fillRect(bx + 6, y, bw2 - 12, rh - 2);
+    cx.fillStyle = entries[p.i].color; cx.fillRect(bx + 8, y + 1, 24, rh - 4); cx.fillStyle = '#fff'; cx.font = '900 11.5px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText(p.i + 1, bx + 20, y + rh * .68);
+    cx.textAlign = 'left'; cx.font = (p.i === mine ? '900 ' : '800 ') + '12px Noto Sans KR'; cx.fillStyle = p.i === mine ? '#FFD84D' : '#fff'; cx.fillText(p.name + (p.i === mine ? ' ★' : ''), bx + 40, y + rh * .68);
+    cx.textAlign = 'right'; cx.font = '700 11px Noto Sans KR'; cx.fillStyle = '#CBBEFF'; cx.fillText(p.fin !== null ? `${(race.finished.indexOf(p.i) + 1)}착` : k ? (p.d - ord[0].d).toFixed(0) : '선두', bx + bw2 - 12, y + rh * .68);
+    if (p.i === tgt) { cx.strokeStyle = '#FFC24D'; cx.lineWidth = 1.5; cx.strokeRect(bx + 6.5, y + .5, bw2 - 13, rh - 3); } });
+  const ty = H - 10;
   if (cap.t && vt < cap.until) {
     cx.font = '800 15px Noto Sans KR'; const w = Math.min(W - 40, cx.measureText(cap.t).width + 40), x = (W - w) / 2, y = ty - 46;
     cx.fillStyle = cap.k === 'win' ? 'rgba(212,161,6,.95)' : cap.k === 'tired' ? 'rgba(217,119,6,.95)' : 'rgba(255,255,255,.95)'; cx.beginPath(); cx.roundRect(x, y, w, 34, 8); cx.fill();
     cx.fillStyle = cap.k === 'win' || cap.k === 'tired' ? '#fff' : '#141820'; cx.textAlign = 'center'; cx.fillText(cap.t, W / 2, y + 22.5);
   }
   if (phase === 'gate') { const n = Math.ceil(countdown - .4); cx.fillStyle = 'rgba(12,18,28,.55)'; cx.beginPath(); cx.arc(W / 2, H * .42, 54, 0, 7); cx.fill(); cx.fillStyle = '#fff'; cx.font = '900 54px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText(n > 0 ? n : '출발!', W / 2, H * .42 + (n > 0 ? 19 : 14)); }
-  if (slow) { pill(12, 78, 128, 26, 'rgba(212,161,6,.95)'); cx.fillStyle = '#111'; cx.font = '900 12.5px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText('SLOW · 결승선', 26, 95.5); }
+  if (slow) { pill(W / 2 - 64, 50, 128, 26, 'rgba(212,161,6,.95)'); cx.fillStyle = '#111'; cx.font = '900 12.5px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText('SLOW · 결승선', W / 2 - 50, 67.5); }
 }
 let tickerHit = [];
 cv.addEventListener('click', e => { const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; const h = tickerHit.find(([a, b, w, hh]) => x >= a && x <= a + w && y >= b && y <= b + hh); if (h) setTarget(h[4]); });
