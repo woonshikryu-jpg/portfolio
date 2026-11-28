@@ -495,9 +495,18 @@ function renderFront(W, H, tgt, ord) {
   let g = cx.createLinearGradient(0, 0, 0, hz); g.addColorStop(0, '#9CC3E6'); g.addColorStop(1, '#E7F0F8'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
   cx.fillStyle = '#B9CCE0'; cx.beginPath(); cx.moveTo(0, hz); for (let x = 0; x <= W; x += 20) cx.lineTo(x, hz - H * (.06 + .03 * Math.sin(x / 90))); cx.lineTo(W, hz); cx.fill();
   cx.fillStyle = '#F4F8FC'; cx.fillRect(0, hz, W, H - hz);
-  // 관중석(왼쪽 안쪽 난간 너머)
-  const [a1x, a1y] = P2(-12, 4), [a2x, a2y] = P2(-12, 260), ct = crowdTile(80);
-  cx.save(); cx.beginPath(); cx.moveTo(-10, a1y - H * .55); cx.lineTo(a2x, a2y - H * .05); cx.lineTo(a2x, a2y); cx.lineTo(-10, a1y); cx.closePath(); cx.clip(); for (let x = -10; x < a2x; x += 240) for (let y = a1y - H * .6; y < a1y; y += 80) cx.drawImage(ct, x, y); cx.restore();
+  // 관중석: 왼쪽 난간 너머에 서 있는 계단식 스탠드(바닥은 난간을 따라, 위로 갈수록 뒤로 물러남)
+  const Q = (lx, z, h) => [W / 2 + sway * (1 - Math.min(1, 6 / z)) + (lx - camX) * f / z, hz + (camH - h) * f / z], ct = crowdTile(90);
+  const zs = []; for (let z = 260; z > 3.6; z /= 1.07) zs.push(z);
+  const BOT = -14.5, TOP = -27, HT = 11;
+  const outline = () => { cx.beginPath(); zs.forEach((z, k) => { const [x, y] = Q(BOT, z, 0); k ? cx.lineTo(x, y) : cx.moveTo(x, y); }); zs.slice().reverse().forEach(z => { const [x, y] = Q(TOP, z, HT); cx.lineTo(x, y); }); cx.closePath(); };
+  cx.save(); outline(); cx.fillStyle = '#5A6680'; cx.fill(); cx.clip();
+  for (let x = -240; x < W; x += 240) for (let y = -90; y < H; y += 90) cx.drawImage(ct, x, y);
+  for (let t = 1; t < 8; t++) { const lx = BOT + (TOP - BOT) * t / 8, h = HT * t / 8; cx.strokeStyle = 'rgba(30,38,52,.45)'; cx.lineWidth = 1.5; cx.beginPath(); zs.forEach((z, k) => { const [x, y] = Q(lx, z, h); k ? cx.lineTo(x, y) : cx.moveTo(x, y); }); cx.stroke(); }
+  const g2 = cx.createLinearGradient(0, hz - H * .1, 0, hz + H * .05); g2.addColorStop(0, 'rgba(200,215,232,.55)'); g2.addColorStop(1, 'rgba(200,215,232,0)'); cx.fillStyle = g2; cx.fillRect(0, 0, W, H);   // 멀수록 흐리게
+  cx.restore();
+  cx.strokeStyle = '#3E4A61'; cx.lineWidth = 4; cx.beginPath(); zs.forEach((z, k) => { const [x, y] = Q(TOP, z, HT); k ? cx.lineTo(x, y) : cx.moveTo(x, y); }); cx.stroke();   // 지붕선
+  cx.fillStyle = '#2C3445'; cx.beginPath(); zs.forEach((z, k) => { const [x, y] = Q(BOT, z, 0); k ? cx.lineTo(x, y) : cx.moveTo(x, y); }); zs.slice().reverse().forEach(z => { const [x, y] = Q(BOT, z, .7); cx.lineTo(x, y); }); cx.closePath(); cx.fill();   // 스탠드 앞 벽
   // 주로 · 레인 · 난간
   const edge = (lx) => { cx.beginPath(); for (let z = 3; z < 260; z *= 1.08) { const [x, y] = P2(lx, z); z === 3 ? cx.moveTo(x, y) : cx.lineTo(x, y); } };
   cx.strokeStyle = 'rgba(150,170,195,.35)'; cx.lineWidth = 1; for (let l = -3; l <= 4; l++) { edge(LX(l) - 1.3); cx.stroke(); }
