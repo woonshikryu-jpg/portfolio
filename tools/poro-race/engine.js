@@ -9,7 +9,7 @@
     accel: 0.22,                                            // 속도 변화는 부드럽게
     track: { start: 24, narrow: 10, taper: [20, 90] },       // 길 폭: 출발선만 8마리가 나란히(24), 그 뒤로 서킷마다 3~4마리 폭으로 좁아짐
     body: { len: 3.4, wid: 2.4, side: 7 },                  // 포로 크기 · 옆으로 비키는 속도(초당)
-    cheer: { minRank: 5, rate: 1.2, cap: 1.6 },             // 응원: 5~8위일 때만, 응원 비율만큼 기운 충전(평균 초당 1.2, 몰려도 최대 1.9)
+    cheer: { cap: 1.6, front: 0.3, wind: 0.5, draft: 0.5, squeeze: 0.2, side: 0.6 },   // 응원 = 기세(기운은 안 채움). 순위와 상관없이 상황에 따라: 선두면 맞바람 덜 · 뒤따르면 슬립스트림 거리 늘어남 · 막히면 틈을 더 잘 찾음. 효과 크기 = 받은 응원 비율(×8, 최대 1.6)/1.6 × 순위 배수(1위 0.3 → 8위 1.0)
     snack: 100,                                             // 간식: 기운을 가득(100) 충전(최대 100 — 넘치는 만큼은 버려짐)
     form: 0.03, noise: 0.015
   };
@@ -62,7 +62,7 @@
     const R = rng(seed);
     return { R, course, t: 0, done: false, total: P.L * P.laps, finished: [], passes: 0, leadChanges: 0, lastLead: -1,
       poros: entries.map((e, i) => ({ i, name: e.name, apt: e.apt, style: e.style, d: 0, y: (i - 3.5) * 2.8, ty: (i - 3.5) * 2.8 * .3, blocked: false, passWait: 0, e: P.energy.start, boosting: false, drafting: false, snacked: false,
-        fin: null, v: 0, nz: 0, form: 1 + (R() * 2 - 1) * P.form, cheerE: 0, snackAt: null, snackGain: 0, rank: i + 1 })) };
+        fin: null, v: 0, nz: 0, form: 1 + (R() * 2 - 1) * P.form, cheerK: 0, cheerHelp: null, snackAt: null, snackGain: 0, rank: i + 1 })) };
   }
   function halfW(d, course) { const T = P.track, n = course ? course.width : T.narrow, k = Math.max(0, Math.min(1, (d - T.taper[0]) / (T.taper[1] - T.taper[0]))); return (T.start + (n - T.start) * k) / 2; }
   function ranks(race) { return race.poros.slice().sort((a, b) => (a.fin ?? 1e9) - (b.fin ?? 1e9) || b.d - a.d); }
@@ -78,32 +78,31 @@
       p.nz += ((R() * 2 - 1) - p.nz) * .15;
       let m = p.form * (1 + p.nz * P.noise * 2);
       m *= (p.apt === '직진') === (seg === 'S') ? 1 + P.apt : 1 - P.apt;
+      const ck = cheerShare ? Math.min(P.cheer.cap, (cheerShare[p.i] || 0) * race.poros.length) / P.cheer.cap * (P.cheer.front + (1 - P.cheer.front) * (p.rank - 1) / (race.poros.length - 1)) : 0; p.cheerK = ck; p.cheerHelp = null;   // 응원 기세 0~1
       // 기운: 직선에서 각질 전략대로 쓰면 빨라지고, 코너에서 찬다
       p.boosting = seg === 'S' && p.e > 0 && (STRAT[p.style](prog, p.e) || (p.chance && p.e > 25));   // 앞이 막혔다가 옆이 열리면 아껴 둔 기운으로 치고 나감
       if (p.boosting) { m *= 1 + E.boost + E.burst * p.e / E.cap;   // 기운이 많이 남아 있을수록 더 세게 치고 나감
         p.e = Math.max(0, p.e - E.use * dt); }
       if (seg === 'C') p.e = Math.min(E.cap, p.e + E.charge * (p.apt === '코너' ? E.cornerCharge : 1) * dt);   // 코너형은 코너에서 더 빨리 참
       // 슬립스트림: 직선에서 바로 앞 포로 뒤에 붙으면 빨라짐
-      let f = null; for (const q of live) { const g = q.d - p.d; if (q !== p && g > 0 && g < P.slip.gap && Math.abs(q.y - p.y) < P.body.wid * 1.3 && (!f || g < f.d - p.d)) f = q; }
+      let f = null; for (const q of live) { const g = q.d - p.d; if (q !== p && g > 0 && g < P.slip.gap * (1 + P.cheer.draft * ck) && Math.abs(q.y - p.y) < P.body.wid * 1.3 && (!f || g < f.d - p.d)) f = q; }
       p.drafting = seg === 'S' && !!f;
-      if (p.drafting) m *= 1 + P.slip.bonus;
+      if (p.drafting) { m *= 1 + P.slip.bonus; if (ck > .05 && f.d - p.d > P.slip.gap) p.cheerHelp = '슬립'; }
       p.headwind = seg === 'S' && p.rank === 1;          // 맨 앞은 바람을 정면으로 맞음
-      if (p.headwind) m *= 1 - P.slip.wind;
-      // 응원: 5~8위일 때만 기운 충전
-      if (cheerShare && p.rank >= P.cheer.minRank) { const c = Math.min(P.cheer.cap, (cheerShare[p.i] || 0) * race.poros.length) * P.cheer.rate * dt; const add = Math.min(E.cap - p.e, c); p.e += add; p.cheerE += add; }
+      if (p.headwind) { m *= 1 - P.slip.wind * (1 - P.cheer.wind * ck); if (ck > .05) p.cheerHelp = '바람'; }
       let tv = P.v0 * m;
       // 길막: 바로 앞에 겹쳐 달리는 포로가 있으면 빈 쪽으로 비켜 추월, 빈 곳이 없으면 뒤따라감
       const B = P.body, hw = halfW(p.d, race.course) - B.wid / 2;
       let fr = null; for (const q of live) { if (q === p) continue; const g = q.d - p.d; if (g > 0 && g < B.len * 1.6 && Math.abs(q.y - p.y) < B.wid) { if (!fr || g < fr.d - p.d) fr = q; } }
       p.blocked = false; if (!fr) p.chance = false;
       if (fr && tv > fr.v * .98) {
-        const clear = y => y >= -hw && y <= hw && !live.some(q => q !== p && Math.abs(q.y - y) < B.wid * .95 && q.d - p.d > -B.len * .6 && q.d - p.d < B.len * 1.2);
+        const tol = B.wid * .95 * (1 - P.cheer.squeeze * ck), clear = y => y >= -hw && y <= hw && !live.some(q => q !== p && Math.abs(q.y - y) < tol && q.d - p.d > -B.len * .6 && q.d - p.d < B.len * 1.2);
         const c1 = p.y + B.wid * 1.05, c2 = p.y - B.wid * 1.05, o1 = clear(c1), o2 = clear(c2);
         if (o1 || o2) p.ty = o1 && o2 ? (R() < .5 ? c1 : c2) : o1 ? c1 : c2;
-        p.chance = !!(o1 || o2);
+        p.chance = !!(o1 || o2); if (ck > .05) p.cheerHelp = '길막';
         if (fr.d - p.d < B.len * 1.15 && Math.abs(p.ty - p.y) > .2 ? true : fr.d - p.d < B.len * 1.15) { tv = Math.min(tv, fr.v); p.blocked = true; }
       }
-      p.ty = Math.max(-hw, Math.min(hw, p.ty)); const dy = p.ty - p.y; p.y += Math.max(-B.side * dt, Math.min(B.side * dt, dy)); p.y = Math.max(-hw, Math.min(hw, p.y));
+      p.ty = Math.max(-hw, Math.min(hw, p.ty)); const dy = p.ty - p.y; const sv = B.side * (1 + P.cheer.side * ck); p.y += Math.max(-sv * dt, Math.min(sv * dt, dy)); p.y = Math.max(-hw, Math.min(hw, p.y));
       p.v = race.t === 0 ? tv * .5 : p.v + (tv - p.v) * P.accel; if (p.blocked) p.v = Math.min(p.v, tv);
     }
     for (const p of race.poros) {

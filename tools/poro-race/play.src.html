@@ -113,7 +113,7 @@ canvas{width:100%;display:block}
 <div class="top"><img src="__IMG__" alt=""><div class="in">
   <div class="k">숨어 사는 소환사들 · 포로 경주</div>
   <h1>포로 경주 · 플레이 프로토타입</h1>
-  <p>출전표를 읽고 내 포로 한 마리를 고른 뒤, 중계로 지켜보며 응원과 간식으로 기운을 채워 주세요. 약 1분 20초.</p>
+  <p>출전표를 읽고 내 포로 한 마리를 고른 뒤, 중계로 지켜보며 간식으로 기운을 채우고, 응원으로 기세를 실어 주세요. 약 1분 20초.</p>
   <div class="links"><a href="./">상세 기획서</a><a href="../">제안서로</a></div>
 </div><span class="cr">이미지 출처: Riot Games</span></div>
 
@@ -136,6 +136,7 @@ canvas{width:100%;display:block}
           <li><b>적성</b> — 직진형은 직선에서 빠름, 코너형은 코너에서 빠르고 기운도 더 빨리 참</li>
           <li><b>각질</b> — 기운을 언제 쓰나: 깡총(처음부터) · 앞장(조금씩) · 눈치(중반부터) · 뒷심(마지막 바퀴에 몰아서)</li>
           <li>직선이 긴 <b>고속 서킷</b>은 직진형 · 뒷심, 코너가 이어지는 <b>테크니컬 서킷</b>은 코너형 · 깡총 · 앞장이 유리. 길이 좁을수록 앞자리를 잡은 포로가 유리</li>
+          <li><b>간식 🍪</b>은 기운(한 번, 가득) · <b>응원 📣</b>은 기세(언제든): 막혔을 땐 틈을 더 빨리 찾고, 선두면 맞바람을 덜 맞고, 뒤따를 땐 더 멀리서 슬립스트림. 뒤처질수록 크게</li>
           <li>고른 사람이 적은 4마리로 1등을 맞히면 <b>+3점</b></li>
         </ul>
       </div>
@@ -158,7 +159,7 @@ canvas{width:100%;display:block}
         <div class="bar" id="stBar"><i style="width:100%"></i></div>
         <div class="st" id="meState">기운</div>
         <div class="acts" style="margin-top:12px">
-          <button class="act cheer" id="cheerBtn">응원 📣<small>E 키 · 5~8위일 때 기운 충전</small><span class="cd" id="cheerCd"></span></button>
+          <button class="act cheer" id="cheerBtn">응원 📣<small>E 키 · 언제든, 뒤처질수록 크게</small><span class="cd" id="cheerCd"></span></button>
           <button class="act snack" id="snackBtn">간식 🍪<small>Q 키 · 한 번, 기운 가득</small></button>
         </div>
         <div class="st" id="tipLine" style="margin-top:10px">간식은 기운이 바닥났을 때(🪫) 줘야 손해가 없어요. 남아 있으면 넘치는 만큼 버려져요.</div>
@@ -263,7 +264,7 @@ function commentate() {
   race.poros.forEach((p, i) => {
     p.blkT = p.blocked ? Math.max(0, p.blkT || 0) + P.dt : p.blkT > 1 ? -1.2 : p.blkT > 0 ? 0 : Math.min(0, (p.blkT || 0) + P.dt);   // 막혀 있던 시간 → 풀린 직후 잠깐 음수
     if (p.blocked && p.blkT > 2 && p.blkT < 2.15 && (i === mine || p.rank <= 4) && !logged['k' + i + Math.floor(race.t / 15)]) { logged['k' + i + Math.floor(race.t / 15)] = 1; caption(`${nm(p)}, 앞이 막혔습니다! 길이 좁아 옆으로 못 나갑니다`, 2.2); }
-    if (p.blkT < 0 && p.boosting && (i === mine || p.rank <= 5) && !logged['o' + i + Math.floor(race.t / 10)]) { logged['o' + i + Math.floor(race.t / 10)] = 1; caption(`틈이 열렸다! ${nm(p)}, 막혀 있던 길을 뚫고 치고 나옵니다!`, 2.4, '', i, 'break'); }
+    if (p.blkT < 0 && p.boosting && (i === mine || p.rank <= 5) && !logged['o' + i + Math.floor(race.t / 10)]) { logged['o' + i + Math.floor(race.t / 10)] = 1; caption(`틈이 열렸다! ${nm(p)}, ` + (i === mine && p.cheerK > .15 ? '응원단의 기세를 업고 ' : '') + `막혀 있던 길을 뚫고 치고 나옵니다!`, 2.4, '', i, 'break'); }
     if (i === mine && p.e < 10 && !p.snacked && !logged['low']) { logged['low'] = 1; caption(`🪫 내 포로 ${p.name} 기운이 바닥! 지금 간식이면 가득 채워요`, 2.6, 'tired', i, 'tired'); }
     if (i === mine && p.e > 30) logged['low'] = 0;
     const bk = 'b' + i + Math.floor(race.t / 12);
@@ -463,6 +464,7 @@ function tags(x, y, p) {
   if (p.blocked && p.fin === null) t('길막!', '#D33A2C');
   else if (p.boosting) t('⚡가속', '#C98A00');
   if (p.drafting) t('슬립스트림', '#2563EB');
+  if (p.i === mine && p.cheerHelp && p.fin === null) t('📣', '#2563EB');
 }
 
 // ── 3D 중계 화면: 주로를 띠로 깔고(출발선만 넓고 곧 좁아짐), 포로는 엔진의 옆 위치(y) 그대로
@@ -582,6 +584,7 @@ function drawFrame(dtw) {
   if (slow) { pill(W / 2 - 64, 50, 128, 26, 'rgba(212,161,6,.95)'); cx.fillStyle = '#111'; cx.font = '900 12.5px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText('SLOW · 결승선', W / 2 - 50, 67.5); }
 }
 let tickerHit = [], curTgt = -1;
+const CHEER_TXT = { 길막: '📣 응원 덕에 틈을 찾는 중', 바람: '📣 응원으로 맞바람을 버티는 중', 슬립: '📣 응원으로 멀리서 슬립스트림' };
 function gapM(g) { const r = Math.round(g); return r === 0 ? '0m' : r + 'm'; }   // 선두와의 거리(−0m 대신 0m)
 cv.addEventListener('click', e => { const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; const h = tickerHit.find(([a, b, w, hh]) => x >= a && x <= a + w && y >= b && y <= b + hh); if (h) setTarget(h[4]); });
 function setTarget(i) { dir.auto = false; dir.tgt = i; flash = 1; dir.cutAt = vt; syncCamUI(); }
@@ -590,7 +593,7 @@ function syncCamUI() { document.querySelectorAll('.cam button').forEach(b => b.c
 function hud() {
   const p = race.poros[mine], pct = Math.max(0, p.e) / P.energy.cap * 100, seg = E.segAt(course, p.d);
   $('stBar').querySelector('i').style.width = pct + '%'; $('stBar').classList.toggle('low', pct < 20); $('stBar').classList.toggle('boost', !!p.boosting);
-  $('meState').textContent = phase === 'gate' ? '출발 대기 중 · 기운 가득' : `${p.rank}위 · 기운 ${Math.round(pct)} · ` + (p.fin !== null ? '골인!' : p.blocked ? '앞이 막혀 기다리는 중' : p.boosting ? '⚡ 기운을 쓰며 가속 중' : seg === 'C' ? '코너에서 기운 충전 중' : p.drafting ? '🌬 슬립스트림 타는 중' : '기운 아끼는 중') + (p.rank >= 5 && p.fin === null && phase !== 'gate' ? ' · 응원이 통하는 순위' : '');
+  $('meState').textContent = phase === 'gate' ? '출발 대기 중 · 기운 가득' : `${p.rank}위 · 기운 ${Math.round(pct)} · ` + (p.fin !== null ? '골인!' : p.blocked ? '앞이 막혀 기다리는 중' : p.boosting ? '⚡ 기운을 쓰며 가속 중' : seg === 'C' ? '코너에서 기운 충전 중' : p.drafting ? '🌬 슬립스트림 타는 중' : '기운 아끼는 중') + (p.fin === null && phase !== 'gate' && p.cheerHelp ? ' · ' + CHEER_TXT[p.cheerHelp] : '');
   $('snackBtn').classList.toggle('ready', !snackUsed && pct < 15 && p.fin === null);
   $('cheerCd').style.width = Math.max(0, cheerCd / 3 * 100) + '%'; $('cheerBtn').disabled = p.fin !== null || phase === 'gate';
   const ord = E.ranks(race);
@@ -598,7 +601,7 @@ function hud() {
 }
 function cheer() {
   if (!race || race.done || phase !== 'run' || cheerCd > 0 || race.poros[mine].fin !== null) return;
-  cheerCd = 3; myBoost = Math.min(12, myBoost + 6); myCheers++; const pm = race.poros[mine]; if (pm.rank < 5) say(`📣 응원! (지금 ${pm.rank}위 — 기운 충전은 5~8위일 때만)`);
+  cheerCd = 3; myBoost = Math.min(12, myBoost + 6); myCheers++; const pm = race.poros[mine]; say(`📣 응원! ` + (pm.blocked ? '막힌 길에서 틈을 더 빨리 찾아요' : pm.rank === 1 ? '선두가 맞바람을 덜 맞아요' : '앞 포로 뒤에 더 멀리서 붙어 슬립스트림을 타요') + (pm.rank <= 2 ? ' (앞설수록 효과는 작아요)' : ''));
 }
 function snack() {
   if (!race || snackUsed || race.done || phase !== 'run') return;
