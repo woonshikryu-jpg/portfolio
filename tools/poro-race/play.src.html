@@ -367,11 +367,11 @@ function trackPtS(d) {          // 카메라용: 앞뒤 구간을 평균해 방�
 let camD = { top: null, front: null }, lastDt = .016;
 function camFollow(key, d, dtw) {   // 포로 위치를 그대로 쓰지 않고 부드럽게 뒤따라감(대상이 바뀌어도 미끄러지듯 이동)
   if (camD[key] === null || Math.abs(d - camD[key]) > 400) camD[key] = d;
-  camD[key] += (d - camD[key]) * Math.min(1, (dtw || .016) * 5 * Math.max(1, speed * .8));
+  camD[key] += (d - camD[key]) * Math.min(1, (dtw || .016) * 14 * Math.max(1, speed * .8));
   return camD[key];
 }
-const U = P.L / P.seg, LANE = 2.6 / U, TW = 8 * LANE + 6 / U;     // 레인 폭 · 주로 폭(u)
-function laneOff(i) { return (i + .5) * LANE + 2 / U; }            // 안쪽 난간에서 떨어진 거리
+const U = P.L / P.seg, LANE = 1.35 / U, TW = 8 * LANE + 2.4 / U;     // 레인 폭 · 주로 폭(u)
+function laneOff(i) { return (i + .5) * LANE + 1.2 / U; }            // 안쪽 난간에서 떨어진 거리
 // ── 옆 카메라(근접 = 더 가깝게)
 function renderSide(W, H, tgt, span, st, ord, dtw, small) {
   const tot = race.total, tp = race.poros[tgt];
@@ -381,7 +381,7 @@ function renderSide(W, H, tgt, span, st, ord, dtw, small) {
   if (vt - dir.cutAt < .05 && !small) { st.x = tx; st.span = span; }
   st.x += (tx - st.x) * Math.min(1, .1 + dtw * 2); st.span += (span - st.span) * .08;
   const camX = st.x, sc = W / st.span, X = d => W * .5 + (d - camX) * sc;
-  const farY = H * .52, nearY = H * .9, laneY = i => farY + (i + .5) / 8 * (nearY - farY) + H * .01, laneS = i => (.95 + .45 * i / 7) * Math.max(1, Math.min(2.2, 150 / st.span));
+  const farY = H * .6, nearY = H * .82, laneY = i => farY + (i + .5) / 8 * (nearY - farY) + H * .01, laneS = i => (.95 + .45 * i / 7) * Math.max(1, Math.min(2.2, 150 / st.span));
   const bend = d => { if (d < 0 || d >= tot) return 0; const r = runAt(d); if (r.k !== 'C') return 0; const x = ((d % P.L) + P.L) % P.L; return Math.sin((x - r.from) / (r.to - r.from) * Math.PI) * Math.min(1, (r.to - r.from) / 60); }, BY = (d, f = 1) => -bend(d) * H * .11 * f, BS = d => 1 - .32 * bend(d);
   let g = cx.createLinearGradient(0, 0, 0, H * .5); g.addColorStop(0, '#9CC3E6'); g.addColorStop(1, '#E7F0F8'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
   const par = (k, w) => ((camX * sc * k) % w + w) % w;
@@ -482,8 +482,8 @@ function tags(x, y, p) {
 }
 // ── 드론: 위에서 따라가며 내려다봄(진행 방향이 화면 위쪽). 커브가 실제로 휘어 보임
 function renderDrone(W, H, tgt, ord) {
-  const tp = race.poros[tgt], cd = camFollow('top', Math.max(0, tp.d), lastDt), [cxw, cyw, hd] = trackPtS(cd), s = W / (58 / U), rot = -hd - Math.PI / 2;
-  const cs = Math.cos(rot), sn = Math.sin(rot), ox = W * .5, oy = H * .36;
+  const tp = race.poros[tgt], cd = camFollow('top', Math.max(0, tp.d), lastDt), [cxw, cyw, hd] = trackPtS(cd), s = W / (32 / U), rot = -hd - Math.PI / 2;
+  const cs = Math.cos(rot), sn = Math.sin(rot), ox = W * .5, oy = H * .58;
   const nx0 = Math.cos(hd + Math.PI / 2), ny0 = Math.sin(hd + Math.PI / 2), cxo = cxw + nx0 * TW * .5, cyo = cyw + ny0 * TW * .5;
   const S = (x, y) => { const dx = (x - cxo) * s, dy = (y - cyo) * s; return [ox + dx * cs - dy * sn, oy + dx * sn + dy * cs]; };
   cx.fillStyle = '#F3F7FB'; cx.fillRect(0, 0, W, H);
@@ -494,16 +494,16 @@ function renderDrone(W, H, tgt, ord) {
   // 관중석(바깥쪽 띠)
 
   // 주로
-  cx.strokeStyle = '#E3EAF2'; cx.lineWidth = TW * s; cx.lineJoin = 'round'; path(side(TW / 2)); cx.stroke();
+  cx.fillStyle = '#EAF3EA'; path(side(TW + .01)); cx.fill();
+  cx.strokeStyle = '#D4DFEB'; cx.lineWidth = TW * s; cx.lineJoin = 'round'; path(side(TW / 2)); cx.stroke();
   cx.strokeStyle = 'rgba(150,170,195,.28)'; cx.lineWidth = 1; cx.setLineDash([6, 8]); for (let l = 1; l < 8; l++) { path(side(2 / U + l * LANE)); cx.stroke(); } cx.setLineDash([]);
-  cx.fillStyle = '#EAF3EA'; path(side(TW + .01)); cx.fill();   // 안쪽(눈 덮인 잔디)
-  cx.strokeStyle = '#fff'; cx.lineWidth = 3; path(side(0)); cx.stroke(); path(side(TW)); cx.stroke();
+  cx.strokeStyle = '#8E9BAD'; cx.lineWidth = 3; path(side(0)); cx.stroke(); path(side(TW)); cx.stroke();
   // 커브 표시 · 결승선 · 거리 기둥
   const across = (d, chk) => { const [x, y, h] = trackPt(d), nx = Math.cos(h + Math.PI / 2), ny = Math.sin(h + Math.PI / 2); for (let k = 0; k < 10; k++) { const a = S(x + nx * TW * k / 10, y + ny * TW * k / 10), b = S(x + nx * TW * (k + 1) / 10, y + ny * TW * (k + 1) / 10); cx.strokeStyle = chk ? (k % 2 ? '#111' : '#fff') : 'rgba(20,30,40,.4)'; cx.lineWidth = chk ? 7 : 2; cx.beginPath(); cx.moveTo(...a); cx.lineTo(...b); cx.stroke(); } };
   across(0, true);
   for (let d = 100; d < P.L; d += 100) { const [x, y, h] = trackPt(d), p = S(x - Math.cos(h + Math.PI / 2) * .03, y - Math.sin(h + Math.PI / 2) * .03); cx.fillStyle = '#C0392B'; cx.beginPath(); cx.arc(p[0], p[1], 4, 0, 7); cx.fill(); }
   // 포로(위에서 본 모습)
-  const sz = Math.max(8, LANE * s * .5);
+  const sz = Math.max(8, LANE * s * .42);
   race.poros.forEach((p, i) => {
     const [x, y, h] = trackPt(Math.max(0, p.d)), off = TW - laneOff(i), [sx, sy] = S(x + Math.cos(h + Math.PI / 2) * off, y + Math.sin(h + Math.PI / 2) * off);
     if (sx < -40 || sx > W + 40 || sy < -40 || sy > H + 40) return;
