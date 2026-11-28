@@ -124,8 +124,8 @@ canvas{width:100%;display:block}
   <div id="pickWrap" class="row">
     <div class="card">
       <h2>출전표 <span id="raceNo" style="color:var(--sub);font-weight:700;font-size:15px"></span></h2>
-      <div class="cbox"><div id="courseSvg"></div><div class="cinfo"><div class="hint" style="margin:0">오늘의 서킷 · 2바퀴</div><div id="ctype" class="ctype" style="margin:4px 0 8px"></div><div id="cstats" class="cstats"></div>
-        <div class="legend" style="margin-top:8px"><span><b style="background:var(--st)"></b>직선: 기운을 써서 가속 · 앞 포로 뒤에 붙으면 슬립스트림</span><span><b style="background:var(--cv)"></b>코너: 기운 충전</span><span><b style="background:#8E9BAD"></b>길 폭: 출발선만 8마리, 그 뒤로 3~4마리 — 앞이 막히면 빈틈이 날 때까지 기다림</span></div></div></div>
+      <div class="cbox"><div id="courseSvg"></div><div class="cinfo"><div class="hint" style="margin:0">오늘의 서킷 · 2바퀴(2,000m)</div><div id="ctype" class="ctype" style="margin:4px 0 8px"></div><div id="cstats" class="cstats"></div>
+        <div class="legend" style="margin-top:8px"><span><b style="background:var(--st)"></b>직선: 기운을 써서 가속 · 앞 포로 뒤에 붙으면 슬립스트림</span><span><b style="background:var(--cv)"></b>코너: 기운 충전</span><span><b style="background:#8E9BAD"></b>길 폭: 출발선만 8마리(24m), 그 뒤로 3~4마리(8~11.5m) — 앞이 막히면 빈틈이 날 때까지 기다림</span></div></div></div>
       <table class="rc"><thead><tr><th>포로</th><th>적성</th><th>각질</th><th>최근 5경기</th><th style="text-align:right">고른 사람</th></tr></thead><tbody id="rcBody"></tbody></table>
       <div class="pickbar"><button class="big g" id="goBtn" disabled>내 포로를 골라 주세요</button><span id="pickInfo" class="st"></span></div>
     </div>
@@ -207,9 +207,9 @@ canvas{width:100%;display:block}
   };
   // ── 서킷: 직선(S 길이) · 코너(C 각도°, 반지름, +왼쪽 −오른쪽). 표시(1)한 두 직선 길이를 풀어 정확히 닫음
   const CIRCUITS = [
-    { key: 'fast', name: '고속 서킷', desc: '긴 직선 둘, 시케인 둘 · 길 폭 넉넉(4마리)', width: 11.5, segs: [['S', 8, 1], ['C', -90, 1.0], ['S', 3, 1], ['C', -30, .8], ['C', 30, .8], ['S', 2], ['C', -90, .9], ['S', 7], ['C', -90, 1.0], ['S', 1.5], ['C', 40, .6], ['C', -40, .6], ['S', 1], ['C', -90, .9]] },
-    { key: 'mid', name: '균형 서킷', desc: '헤어핀 하나, 직선과 코너가 고루 · 길 폭 3~4마리', width: 9.5, segs: [['S', 6, 1], ['C', -90, .8], ['S', 2.5, 1], ['C', -60, 1.0], ['S', 1.5], ['C', 80, .8], ['C', -150, .6], ['S', 3.5], ['C', -50, 1.3], ['S', 2], ['C', -60, .8], ['S', 2.5], ['C', 70, 1.0], ['C', -100, 1.1]] },
-    { key: 'tech', name: '테크니컬 서킷', desc: '좌우 코너가 쉬지 않고 이어짐 · 길 폭 좁음(3마리)', width: 8, segs: [['S', 4.5, 1], ['C', -100, .55], ['C', 70, .55], ['S', 1, 1], ['C', -90, .55], ['C', -60, .6], ['S', 1.5], ['C', 100, .5], ['C', -120, .55], ['S', 1.2], ['C', -80, .6], ['C', 60, .6], ['C', -90, .6], ['S', 1.4], ['C', -60, .6], ['S', .8], ['C', 40, .7], ['C', -30, .7]] }
+    { key: 'fast', name: '고속 서킷', desc: '긴 직선 둘, 시케인 둘 · 길 폭 11.5m(4마리)', width: 11.5, segs: [['S', 8, 1], ['C', -90, 1.0], ['S', 3, 1], ['C', -30, .8], ['C', 30, .8], ['S', 2], ['C', -90, .9], ['S', 7], ['C', -90, 1.0], ['S', 1.5], ['C', 40, .6], ['C', -40, .6], ['S', 1], ['C', -90, .9]] },
+    { key: 'mid', name: '균형 서킷', desc: '헤어핀 하나, 직선과 코너가 고루 · 길 폭 9.5m(3~4마리)', width: 9.5, segs: [['S', 6, 1], ['C', -90, .8], ['S', 2.5, 1], ['C', -60, 1.0], ['S', 1.5], ['C', 80, .8], ['C', -150, .6], ['S', 3.5], ['C', -50, 1.3], ['S', 2], ['C', -60, .8], ['S', 2.5], ['C', 70, 1.0], ['C', -100, 1.1]] },
+    { key: 'tech', name: '테크니컬 서킷', desc: '좌우 코너가 쉬지 않고 이어짐 · 길 폭 8m(3마리)', width: 8, segs: [['S', 4.5, 1], ['C', -100, .55], ['C', 70, .55], ['S', 1, 1], ['C', -90, .55], ['C', -60, .6], ['S', 1.5], ['C', 100, .5], ['C', -120, .55], ['S', 1.2], ['C', -80, .6], ['C', 60, .6], ['C', -90, .6], ['S', 1.4], ['C', -60, .6], ['S', .8], ['C', 40, .7], ['C', -30, .7]] }
   ];
   function walk(segs, extra) {
     let x = 0, y = 0, a = 0; const pts = [], kinds = [], sgn = [];
@@ -342,7 +342,7 @@ function newCard() {
   const sw = w.reduce((a, b) => a + b); crowd = w.map(x => Math.max(1, Math.round(x / sw * 48)));
   mine = null; snackUsed = false; snackRes = null; myCheers = 0; myBoost = 0; cheerCd = 0;
   $('raceNo').textContent = '· ' + raceNo + '경기'; $('ctype').textContent = `${ctypeName} — ${course.desc}`;
-  $('cstats').innerHTML = `<span>코너 ${course.corners}개</span><span>코너 비율 ${Math.round(course.curveRatio * 100)}%</span><span>가장 긴 직선 ${Math.round(course.longest)}</span>`;
+  $('cstats').innerHTML = `<span>코너 ${course.corners}개</span><span>코너 비율 ${Math.round(course.curveRatio * 100)}%</span><span>가장 긴 직선 ${Math.round(course.longest)}m</span><span>한 바퀴 1,000m</span>`;
   $('courseSvg').innerHTML = circuitSvg(course);
   const rare = rareSet();
   $('rcBody').innerHTML = entries.map((e, i) => `<tr class="p" data-i="${i}"><td><span class="tok" style="background:${e.color}">${i + 1}</span>${e.name}${rare.has(i) ? ' <span class="tag st" title="고른 사람이 적은 4마리">숨은 포로</span>' : ''}</td><td><span class="tag ${e.apt === '직진' ? 'S' : 'C'}">${e.apt}형</span></td><td><span class="tag st">${e.style}</span> <span class="st">${STYK[e.style]}</span></td><td class="form5">${e.recent.map(r => r <= 3 ? `<b>${r}</b>` : r).join(' ')}</td><td style="text-align:right">${crowd[i]}명</td></tr>`).join('');
@@ -392,7 +392,7 @@ function commentate() {
   if (flags.open && race.leadEvent !== undefined && race.leadEvent !== prevLead && race.t - leadAt > 3 && a.fin === null) { prevLead = race.leadEvent; leadAt = race.t; const q = race.poros[prevLead]; caption(`선두가 바뀝니다! ${nm(q)}` + (q.drafting ? ', 슬립스트림을 타고 추월!' : q.boosting ? ', 기운을 쏟아 앞으로!' : ' 앞으로 나옵니다'), 2.6, '', q.i, 'lead'); }
   if (!flags.lap && a.d >= P.L) { flags.lap = 1; caption(`1바퀴 통과! 선두 ${a.name}, 2위 ${b.name}, 3위 ${c.name}. 이제 마지막 바퀴`, 3.5); }
   if (!flags.home && a.d >= tot - homeL) { flags.home = 1; const closer = ord.slice(1, 5).find(p => p.style === '뒷심'); caption(`마지막 직선! ${a.name} 앞, ${b.name} 따라붙습니다` + (closer ? ` — 바깥에서 뒷심 ${closer.name}!` : ''), 3.2); }
-  if (!flags.f200 && a.d >= tot - 200 && flags.home) { flags.f200 = 1; caption(`결승까지 200! ${a.name} · ${b.name} · ${c.name}`, 2.4); }
+  if (!flags.f200 && a.d >= tot - 200 && flags.home) { flags.f200 = 1; caption(`결승까지 200m! ${a.name} · ${b.name} · ${c.name}`, 2.4); }
   race.poros.forEach((p, i) => {
     p.blkT = p.blocked ? Math.max(0, p.blkT || 0) + P.dt : p.blkT > 1 ? -1.2 : p.blkT > 0 ? 0 : Math.min(0, (p.blkT || 0) + P.dt);   // 막혀 있던 시간 → 풀린 직후 잠깐 음수
     if (p.blocked && p.blkT > 2 && p.blkT < 2.15 && (i === mine || p.rank <= 4) && !logged['k' + i + Math.floor(race.t / 15)]) { logged['k' + i + Math.floor(race.t / 15)] = 1; caption(`${nm(p)}, 앞이 막혔습니다! 길이 좁아 옆으로 못 나갑니다`, 2.2); }
@@ -685,7 +685,7 @@ function drawFrame(dtw) {
   const lead = ord[0], lap = Math.min(2, Math.floor(lead.d / P.L) + 1), left = Math.max(0, Math.round(tot - lead.d));
   pill(W - 236, 12, 224, 30, 'rgba(12,18,28,.82)'); cx.fillStyle = '#fff'; cx.textAlign = 'right'; cx.font = '900 12.5px Noto Sans KR';
   const tm = race.t, mm = Math.floor(tm / 60), ss = (tm % 60).toFixed(1).padStart(4, '0');
-  cx.fillText(`${mm}:${ss}  ·  ${lap}/2바퀴  ·  남은 ${left}`, W - 24, 31.5);
+  cx.fillText(`${mm}:${ss}  ·  ${lap}/2바퀴  ·  남은 ${left}m`, W - 24, 31.5);
   const mw = Math.min(170, W * .2), mh = mw * .62, mx = W - mw - 12, my = 50;
   cx.fillStyle = 'rgba(12,18,28,.72)'; cx.beginPath(); cx.roundRect(mx, my, mw, mh, 10); cx.fill();
   cx.strokeStyle = 'rgba(255,255,255,.55)'; cx.lineWidth = 5; cx.beginPath(); map.pts.forEach((p, k) => { const [a, b] = mapPt(k / map.pts.length * P.L, mx + 10, my + 10, mw - 20, mh - 20); k ? cx.lineTo(a, b) : cx.moveTo(a, b); }); cx.closePath(); cx.stroke();
@@ -697,13 +697,13 @@ function drawFrame(dtw) {
   cx.fillStyle = '#fff'; cx.font = '900 12.5px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText(`포로 경주 · ${raceNo}경기`, bx + 12, by + 19);
   cx.fillStyle = '#CBBEFF'; cx.font = '700 11px Noto Sans KR'; cx.fillText(ctypeName, bx + 12, by + 35);
   cx.fillStyle = 'rgba(255,255,255,.12)'; cx.beginPath(); cx.roundRect(bx + bw2 - 92, by + 8, 82, 32, 16); cx.fill();
-  cx.fillStyle = '#fff'; cx.textAlign = 'center'; cx.font = '900 11px Noto Sans KR'; cx.fillText(`남은 ${left}`, bx + bw2 - 51, by + 21); cx.font = '800 11px Noto Sans KR'; cx.fillText(`${mm}:${ss}`, bx + bw2 - 51, by + 35);
+  cx.fillStyle = '#fff'; cx.textAlign = 'center'; cx.font = '900 11px Noto Sans KR'; cx.fillText(`남은 ${left}m`, bx + bw2 - 51, by + 21); cx.font = '800 11px Noto Sans KR'; cx.fillText(`${mm}:${ss}`, bx + bw2 - 51, by + 35);
   tickerHit = [];
   ord.forEach((p, k) => { const y = by + 44 + k * rh; tickerHit.push([bx, y, bw2, rh, p.i]);
     cx.fillStyle = k % 2 ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,.1)'; cx.fillRect(bx + 6, y, bw2 - 12, rh - 2);
     cx.fillStyle = entries[p.i].color; cx.fillRect(bx + 8, y + 1, 24, rh - 4); cx.fillStyle = '#fff'; cx.font = '900 11.5px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText(p.i + 1, bx + 20, y + rh * .68);
     cx.textAlign = 'left'; cx.font = (p.i === mine ? '900 ' : '800 ') + '12px Noto Sans KR'; cx.fillStyle = p.i === mine ? '#FFD84D' : '#fff'; cx.fillText(p.name + (p.i === mine ? ' ★' : ''), bx + 40, y + rh * .68);
-    cx.textAlign = 'right'; cx.font = '700 11px Noto Sans KR'; cx.fillStyle = '#CBBEFF'; cx.fillText(p.fin !== null ? `${(race.finished.indexOf(p.i) + 1)}착` : k ? (p.d - ord[0].d).toFixed(0) : '선두', bx + bw2 - 12, y + rh * .68);
+    cx.textAlign = 'right'; cx.font = '700 11px Noto Sans KR'; cx.fillStyle = '#CBBEFF'; cx.fillText(p.fin !== null ? `${(race.finished.indexOf(p.i) + 1)}착` : k ? gapM(p.d - ord[0].d) : '선두', bx + bw2 - 12, y + rh * .68);
     if (p.i === tgt) { cx.strokeStyle = '#FFC24D'; cx.lineWidth = 1.5; cx.strokeRect(bx + 6.5, y + .5, bw2 - 13, rh - 3); } });
   const ty = H - 10;
   if (cap.t && vt < cap.until) {
@@ -715,6 +715,7 @@ function drawFrame(dtw) {
   if (slow) { pill(W / 2 - 64, 50, 128, 26, 'rgba(212,161,6,.95)'); cx.fillStyle = '#111'; cx.font = '900 12.5px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText('SLOW · 결승선', W / 2 - 50, 67.5); }
 }
 let tickerHit = [], curTgt = -1;
+function gapM(g) { const r = Math.round(g); return r === 0 ? '0m' : r + 'm'; }   // 선두와의 거리(−0m 대신 0m)
 cv.addEventListener('click', e => { const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; const h = tickerHit.find(([a, b, w, hh]) => x >= a && x <= a + w && y >= b && y <= b + hh); if (h) setTarget(h[4]); });
 function setTarget(i) { dir.auto = false; dir.tgt = i; flash = 1; dir.cutAt = vt; syncCamUI(); }
 function setAngle(a) { if (a === 'auto') { dir.auto = true; dir.until = 0; dir.prio = 0; } else { dir.auto = false; dir.angle = a; flash = 1; dir.cutAt = vt; } syncCamUI(); }
@@ -726,7 +727,7 @@ function hud() {
   $('snackBtn').classList.toggle('ready', !snackUsed && pct < 15 && p.fin === null);
   $('cheerCd').style.width = Math.max(0, cheerCd / 3 * 100) + '%'; $('cheerBtn').disabled = p.fin !== null || phase === 'gate';
   const ord = E.ranks(race);
-  $('rankList').innerHTML = ord.map((q, k) => `<li data-i="${q.i}" style="cursor:pointer" class="${q.i === mine ? 'mine' : ''}"><span class="n">${k + 1}</span><span class="tok" style="background:${entries[q.i].color}">${q.i + 1}</span>${q.name} <span class="st">${q.style}</span>${q.boosting ? ' ⚡' : ''}${q.drafting ? ' 🌬' : ''}${q.e < 10 ? ' 🪫' : ''}<span class="gap">${k ? (q.d - ord[0].d).toFixed(0) : (q.fin !== null ? '골인' : '선두')}</span></li>`).join('');
+  $('rankList').innerHTML = ord.map((q, k) => `<li data-i="${q.i}" style="cursor:pointer" class="${q.i === mine ? 'mine' : ''}"><span class="n">${k + 1}</span><span class="tok" style="background:${entries[q.i].color}">${q.i + 1}</span>${q.name} <span class="st">${q.style}</span>${q.boosting ? ' ⚡' : ''}${q.drafting ? ' 🌬' : ''}${q.e < 10 ? ' 🪫' : ''}<span class="gap">${k ? gapM(q.d - ord[0].d) : (q.fin !== null ? '골인' : '선두')}</span></li>`).join('');
 }
 function cheer() {
   if (!race || race.done || phase !== 'run' || cheerCd > 0 || race.poros[mine].fin !== null) return;
