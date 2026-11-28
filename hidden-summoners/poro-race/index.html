@@ -80,6 +80,43 @@ code{font:600 13px/1.5 ui-monospace,Consolas,monospace;background:#F1F3F6;paddin
 #tip{position:fixed;pointer-events:none;background:#141820;color:#fff;font:600 12.5px/1.45 'Noto Sans KR';padding:7px 10px;border-radius:8px;opacity:0;transition:opacity .1s;z-index:20;max-width:240px}
 details{margin-top:8px;font-size:13px}
 details summary{cursor:pointer;color:var(--sub);font-weight:700}
+.sec-k{display:inline-block;font:900 12px/1 'Noto Sans KR';color:#fff;background:var(--g);padding:5px 9px;border-radius:8px;margin-right:8px;vertical-align:2px}
+.circ{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px 16px}
+.circ svg{display:block;width:100%;height:170px}
+.circ .nm{font:900 17px/1.3 'Noto Sans KR';margin-top:6px}
+.circ .ds{font-size:13.5px;color:var(--sub);margin:2px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font:800 12px/1 'Noto Sans KR';background:#F1F4F8;border-radius:999px;padding:6px 9px;color:#3B4453}
+.chips span.hi{background:#E8F6EE;color:#0E7A34}
+.fav{margin-top:10px;font-size:13.5px;border-top:1px dashed var(--line);padding-top:8px}
+.fav b{font-weight:900}
+.apt{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.apt .card{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center}
+.apt .ic{width:64px;height:64px;border-radius:16px;display:grid;place-items:center;font:900 26px/1 'Noto Sans KR';color:#fff}
+.sty{width:100%;border-collapse:separate;border-spacing:0}
+.sty td .dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:0}
+.diag{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.diag svg{display:block;width:100%}
+.diag .cap{font-size:13px;color:var(--sub);margin-top:6px}
+.formula{margin:14px 0 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;font:800 15.5px/1.7 'Noto Sans KR';text-align:center}
+.formula i{font-style:normal;display:inline-block;background:#F1F4F8;border-radius:8px;padding:1px 8px;margin:2px}
+.formula i.e{background:#FFF4D6}.formula i.s{background:#E6F0FF}.formula i.b{background:#FDE7E7}
+.cams{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cam{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.cam img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.cam .tx{padding:10px 14px 14px}
+.cam .tx b{display:block;font:900 15.5px/1.4 'Noto Sans KR'}
+.cam .tx .w{font:800 11.5px/1 'Noto Sans KR';color:var(--g);letter-spacing:.04em}
+.cam .tx p{margin:4px 0 0;font-size:13.5px;color:#3B4453;line-height:1.6}
+.steps{counter-reset:s;list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px}
+.steps li{counter-increment:s;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px 10px 46px;position:relative;font-size:14.5px}
+.steps li:before{content:counter(s);position:absolute;left:12px;top:10px;width:24px;height:24px;border-radius:8px;background:var(--g);color:#fff;font:900 13px/24px 'Noto Sans KR';text-align:center}
+.stat{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.stat .card .v{font:900 26px/1.2 'Noto Sans KR';font-variant-numeric:tabular-nums}
+.stat .card .l{font-size:12.5px;color:var(--sub)}
+#ec svg{display:block;width:100%}
+.tmp{margin-top:18px;display:flex;gap:12px;align-items:center;background:#fff;border:1px dashed #B9C3D0;border-radius:14px;padding:12px 16px;font-size:13.5px;color:var(--sub)}
+@media(max-width:860px){.cams,.apt,.stat{grid-template-columns:1fr}}
 @media(max-width:860px){.g2,.g3,.g4,.flow{grid-template-columns:1fr}.flow .st{border-radius:16px!important;border-left:1px solid var(--line)!important;margin-bottom:8px}.top h1{font-size:30px}}
 </style>
 </head>
@@ -87,22 +124,22 @@ details summary{cursor:pointer;color:var(--sub);font-weight:700}
 <div class="top"><img src="../../versions/img/lol/poro-hq.jpg" alt=""><div class="in">
   <div class="k">숨어 사는 소환사들 · 4-1 포로 경주</div>
   <h1>포로 경주 상세 기획서</h1>
-  <p>제안서의 포로 경주를 개발자에게 넘길 수 있는 수준으로 정리했습니다. 규칙, 화면 흐름, 수치, 예외 처리, 그리고 수치가 의도대로 움직이는지 <b>4,000판씩 시뮬레이션</b>으로 확인한 결과입니다.</p>
-  <div class="btns"><a class="play" href="play.html">▶ 프로토타입 해 보기 (약 1분 30초)</a><a href="../">← 제안서로 돌아가기</a></div>
+  <p>제안서의 포로 경주를 개발자에게 넘길 수 있는 수준으로 정리했습니다. 규칙, 화면, 수치, 예외 처리, 그리고 수치가 의도대로 움직이는지 서킷마다 <b>4,000판씩 시뮬레이션</b>으로 확인한 결과입니다.</p>
+  <div class="btns"><a class="play" href="play.html">▶ 프로토타입 해 보기 (약 1분 20초)</a><a href="../">← 제안서로 돌아가기</a></div>
 </div><span class="cr">이미지 출처: Riot Games</span></div>
-<nav class="toc"><div class="in"><a href="#goal">1 목표</a><a href="#flow">2 한 판 흐름</a><a href="#ui">3 화면</a><a href="#rule">4 규칙</a><a href="#num">5 수치</a><a href="#bal">6 밸런스 검증</a><a href="#exc">7 예외 처리</a><a href="#data">8 데이터 · 지표</a></div></nav>
+<nav class="toc"><div class="in"><a href="#goal">1 목표</a><a href="#flow">2 한 판 흐름</a><a href="#read">3 코스 · 적성 · 각질</a><a href="#rule">4 달리기 규칙</a><a href="#act">5 관객 · 보상</a><a href="#ui">6 중계 화면</a><a href="#num">7 수치</a><a href="#bal">8 밸런스 검증</a><a href="#exc">9 예외 처리</a><a href="#data">10 데이터 · 지표</a></div></nav>
 <main>
 
 <section id="goal">
   <div class="no">1 · 설계 목표</div>
-  <h2>보기만 해도 <em>내가 한 일</em>이 생기는 3분</h2>
+  <h2>보기만 해도 <em>내가 한 일</em>이 생기는 한 판</h2>
   <p class="lead">영상은 보기만 하고 끝납니다. 포로 경주는 고르고, 응원하고, 간식을 주는 세 번의 선택으로 관객을 참여자로 만듭니다.</p>
   <div class="g3">
-    <div class="card"><span class="k">읽는 재미</span><b class="t">출전표에 근거가 있다</b><p>적성 · 각질 · 최근 성적과 오늘의 코스를 읽으면 맞힐 확률이 올라갑니다. 하지만 정답은 없습니다.</p></div>
-    <div class="card"><span class="k">손대는 재미</span><b class="t">타이밍이 실력이 된다</b><p>간식은 지쳤을 때 줘야만 효과가 납니다. 응원은 뒤처졌을 때만 통합니다.</p></div>
+    <div class="card"><span class="k">읽는 재미</span><b class="t">출전표에 근거가 있다</b><p>오늘의 서킷과 포로의 적성 · 각질을 읽으면 맞힐 확률이 올라갑니다. 하지만 정답은 없습니다.</p></div>
+    <div class="card"><span class="k">보는 재미</span><b class="t">막혔다가 뚫고 나온다</b><p>길이 좁아 3~4마리만 나란히 달립니다. 뒤에 갇힌 포로가 틈이 열리는 순간 아껴 둔 기운으로 튀어나오는 장면이 경주의 볼거리입니다.</p></div>
     <div class="card"><span class="k">같이 보는 재미</span><b class="t">처음 보는 사람과 한편</b><p>같은 포로를 고른 사람끼리 응원단이 됩니다. 경쟁 상대가 아니라서 부담 없이 말을 걸 수 있습니다.</p></div>
   </div>
-  <div class="band">지켜야 할 선: <em>응원과 간식이 결과를 정하면 안 된다.</em> 둘 다 확률과 회복만 건드리고, 이긴다는 보장은 주지 않는다. (6장에서 숫자로 확인)</div>
+  <div class="band">지켜야 할 선: <em>응원과 간식이 결과를 정하면 안 된다.</em> 둘 다 포로의 기운을 채워 줄 뿐, 이긴다는 보장은 주지 않는다. (8장에서 숫자로 확인)</div>
 </section>
 
 <section id="flow">
@@ -110,40 +147,102 @@ details summary{cursor:pointer;color:var(--sub);font-weight:700}
   <h2>5분마다 열리는 <em>약 3분</em>짜리 한 판</h2>
   <p class="lead">광장의 포로 서킷에서 5분 간격으로 열립니다. 큐를 기다리는 동안 한 판을 보기에 알맞은 길이입니다.</p>
   <div class="flow">
-    <div class="st"><span class="tm">60초</span><b>출전표 · 내 포로 고르기</b><ul><li>오늘의 코스(커브 · 직선 배치) 공개</li><li>포로 8마리의 적성 · 각질 · 최근 5경기 · 고른 사람 수</li><li>한 마리를 골라 응원단에 들어감(무료)</li></ul></div>
-    <div class="st"><span class="tm">약 85초</span><b>경주 · 응원 · 간식</b><ul><li>서킷 2바퀴를 포로들이 알아서 달림</li><li>응원: 3초에 한 번, 5~8위일 때만 효과</li><li>간식: 한 판에 한 번, 지쳤을 때만 효과</li></ul></div>
+    <div class="st"><span class="tm">60초</span><b>출전표 · 내 포로 고르기</b><ul><li>오늘의 서킷(3종 중 하나) 공개</li><li>포로 8마리의 적성 · 각질 · 최근 5경기 · 고른 사람 수</li><li>한 마리를 골라 응원단에 들어감(무료)</li></ul></div>
+    <div class="st"><span class="tm">약 80초</span><b>경주 · 응원 · 간식</b><ul><li>서킷 2바퀴를 포로들이 알아서 달림</li><li>응원: 3초에 한 번, 내 포로가 5~8위일 때 기운 충전</li><li>간식: 한 판에 한 번, 기운을 가득 채움</li></ul></div>
     <div class="st"><span class="tm">20초</span><b>결과 · 정산</b><ul><li>내 포로 순위에 따라 학회 기여 · 포인트</li><li>숨은 포로로 1등이면 +3점</li><li>광장 게시판 순위표에 반영</li></ul></div>
   </div>
 </section>
 
-<section id="ui">
-  <div class="no">3 · 화면</div>
-  <h2>세 화면, <em>프로토타입</em> 그대로</h2>
-  <p class="lead">아래 그림은 실제로 동작하는 프로토타입의 화면입니다. 같은 엔진으로 시뮬레이션도 돌렸습니다.</p>
-  <figure class="shot"><img src="../../versions/img/lol/../poro/ui-1-card.jpg" alt="출전표 화면: 오늘의 코스 띠와 포로 8마리의 적성, 각질, 최근 5경기, 고른 사람 수" loading="lazy"><figcaption><b>① 출전표</b> · 위 띠가 오늘의 코스(초록 커브 · 주황 직선, 2바퀴). 고른 사람이 적은 4마리는 「숨은 포로」 표시. 오른쪽에 읽는 법을 늘 띄워 처음 보는 사람도 고를 수 있게 함.</figcaption></figure>
-  <figure class="shot"><img src="../../versions/img/lol/../poro/ui-2-race.jpg" alt="경주 중계 화면 네 가지 카메라: 옆, 드론, 정면, 근접" loading="lazy"><figcaption><b>② 경주 · 경마 중계 화면</b> · 포로마다 카메라 4대: <b>옆</b>(주로를 나란히 따라감, 커브에서는 주로가 멀리 돌아 들어가는 게 보임) · <b>드론 · 위</b>(바로 위에서 따라가며 내려다봄, 커브가 실제로 휘어 보임) · <b>드론 · 정면</b>(포로들 앞 공중에서 함께 날며 다가오는 무리를 내려다봄, 커브도 따라 돎) · <b>근접</b>. 기본은 <b>자동 중계</b> — 선두 다툼 · 미끄러짐 · 지침 · 질주가 생기면 그 포로로 컷이 넘어가고, 마지막 직선은 정면 · 결승은 슬로모션. 내 포로는 오른쪽 아래 작은 화면(PIP)으로 늘 보이고, 순위 띠를 누르면 그 포로를 따라감. 왼쪽 위 순위판(번호 · 이름 · 선두와의 차이)과 미니맵, 아래 해설 자막. 화면이 끊기지 않도록 계산 사이의 위치를 부드럽게 이어 그림.</figcaption></figure>
-  <figure class="shot"><img src="../../versions/img/lol/../poro/ui-3-result.jpg" alt="결과 화면: 내 포로 순위, 학회 기여와 포인트, 이번 판 해설, 전체 순위" loading="lazy"><figcaption><b>③ 결과</b> · 받은 점수와 「이번 판 내가 한 일」(응원 횟수 · 간식 성공 여부), 코스에 따라 왜 그 포로가 이겼는지 한 줄 해설. 다음 판에 출전표를 읽는 눈이 생기게 함.</figcaption></figure>
+<section id="read">
+  <div class="no">3 · 출전표에서 읽는 세 가지</div>
+  <h2><em>코스 · 적성 · 각질</em></h2>
+  <p class="lead">관객이 출전표에서 볼 수 있는 정보는 이 세 가지뿐입니다. 셋이 서로 맞물려야 「읽으면 유리하다」가 성립합니다.</p>
+
+  <h3><span class="sec-k">코스</span>서킷 3종 — 매 판 하나</h3>
+  <p style="margin:0 0 12px;color:#3B4453;font-size:14.5px">F1 서킷처럼 왼쪽 · 오른쪽 코너가 섞이고 긴 직선이 있습니다. <b style="color:#D9822B">주황 = 직선</b>, <b style="color:#2BA36B">초록 = 코너</b>, 검은 줄 = 출발 · 결승선. 서킷마다 <b>길 폭</b>이 달라 나란히 달릴 수 있는 포로 수가 다릅니다.</p>
+  <div class="g3" id="circs"></div>
+
+  <div class="diag" style="margin-top:14px">
+    <svg viewBox="0 0 900 150" aria-label="출발선은 8마리 폭, 그 뒤로 3~4마리 폭으로 좁아지는 주로">
+      <path d="M20,10 L170,10 Q300,10 360,45 L880,45 L880,105 L360,105 Q300,140 170,140 L20,140 Z" fill="#E6ECF4" stroke="#8E9BAD" stroke-width="2"/>
+      <line x1="170" y1="10" x2="170" y2="140" stroke="#111" stroke-width="4"/>
+      <g id="gridDots"></g>
+      <text x="40" y="78" font-size="13" font-weight="800" fill="#5B6573">출발선</text>
+      <text x="218" y="82" font-size="13" font-weight="800" fill="#5B6573">20~90에서 좁아짐 →</text>
+      <text x="610" y="130" font-size="13" font-weight="800" fill="#5B6573">여기부터 끝까지 3~4마리 폭</text>
+    </svg>
+    <div class="cap">출발선만 8마리가 나란히 설 수 있게 넓고, 출발 직후 좁아집니다. 첫 코너 전부터 자리싸움이 시작되고, 바깥에서 출발한 포로는 안쪽 무리에 막힙니다.</div>
+  </div>
+
+  <h3><span class="sec-k">적성</span>어디서 강한가 — 2종</h3>
+  <div class="apt">
+    <div class="card"><div class="ic" style="background:#D9822B">직</div><div><b class="t" style="margin-top:0">직진형</b><p>직선에서 <b>+2%</b>, 코너에서 −2%. 긴 직선이 있는 고속 서킷에서 유리합니다.</p></div></div>
+    <div class="card"><div class="ic" style="background:#2BA36B">코</div><div><b class="t" style="margin-top:0">코너형</b><p>코너에서 <b>+2%</b>, 직선에서 −2%. 그리고 코너에서 <b>기운이 1.6배 빨리</b> 찹니다. 코너가 이어지는 테크니컬 서킷에서 유리합니다.</p></div></div>
+  </div>
+
+  <h3><span class="sec-k">각질</span>기운을 언제 쓰나 — 4종</h3>
+  <p style="margin:0 0 10px;color:#3B4453;font-size:14.5px">경마의 도주 · 선행 · 선입 · 추입에서 가져왔습니다. 모든 포로는 똑같은 기운(최대 100)을 갖고, <b>각질은 그 기운을 경주의 어느 때에 쓰는지만</b> 정합니다.</p>
+  <table class="sty">
+    <tr><th style="width:18%">각질</th><th>기운을 쓰는 규칙(직선에서)</th><th style="width:30%">경주 모습</th></tr>
+    <tr><td><b><i class="dot" style="background:var(--s1)"></i>깡총</b> <span style="color:var(--sub)">도주</span></td><td>경주 절반까지는 있는 대로 다 씀. 그 뒤로는 50 넘게 남았을 때만</td><td>처음부터 앞으로 달아나 좁은 길에서 자리를 지킴</td></tr>
+    <tr><td><b><i class="dot" style="background:var(--s2)"></i>앞장</b> <span style="color:var(--sub)">선행</span></td><td>기운이 45 넘게 남아 있을 때만 씀 — 늘 반쯤 남김</td><td>선두 바로 뒤에서 슬립스트림을 타다 틈을 노림</td></tr>
+    <tr><td><b><i class="dot" style="background:var(--s3)"></i>눈치</b> <span style="color:var(--sub)">선입</span></td><td>경주 35%까지는 넘치는 만큼만, 그 뒤로는 20 넘게 남았을 때</td><td>무리 속에서 버티다 중반부터 올라옴</td></tr>
+    <tr><td><b><i class="dot" style="background:var(--s4)"></i>뒷심</b> <span style="color:var(--sub)">추입</span></td><td>경주 62%(마지막 바퀴 중반)까지 아꼈다가 남은 기운을 모두 씀</td><td>뒤에 있다가 막판 직선에서 한꺼번에 치고 나옴</td></tr>
+  </table>
+  <div class="chart" id="ec" style="margin-top:14px"></div>
+  <div class="note"><b>공통:</b> 앞이 막혀 있다가 옆이 열리면 각질과 상관없이 기운이 25 넘게 남은 포로는 그 순간 기운을 씁니다. 「아껴 둔 기운으로 뚫고 나오는」 장면이 각질마다 다른 때에 나오는 이유입니다.</div>
 </section>
 
 <section id="rule">
-  <div class="no">4 · 규칙</div>
-  <h2>순위를 정하는 <em>다섯 가지</em></h2>
-  <p class="lead">구간마다 아래 다섯 가지가 곱해져 속도가 정해집니다. 출전표에 보이는 것(적성 · 각질 · 코스)이 가장 크게, 보이지 않는 것(컨디션 · 미끄러짐)이 변수로 작용합니다.</p>
-  <table>
-    <tr><th style="width:17%">요소</th><th>규칙</th><th style="width:20%">출전표에</th></tr>
-    <tr><td><b>코스</b></td><td>바퀴당 8구간, 2바퀴. 매 판 <b>직선 많은 길(커브 25%) · 보통 길(50%) · 커브 많은 길(75%)</b> 중 하나. 바퀴마다 마지막 구간은 직선(홈 직선). 기본은 눈길</td><td>보임</td></tr>
-    <tr><td><b>적성</b></td><td>직진형은 직선에서 빠르고 커브에서 느림, 코너형은 그 반대. 빠르고 느린 폭은 같음(±2.5%)</td><td>보임</td></tr>
-    <tr><td><b>각질</b></td><td><b>깡총(도주)</b> 처음부터 앞으로, 빨리 지침 · <b>앞장(선행)</b> 선두 뒤를 따르다 막판에 앞섬 · <b>눈치(선입)</b> 중간에서 버티다 따라붙음 · <b>뒷심(추입)</b> 힘을 아끼다 마지막 직선에서 폭발(커브에서는 덜 폭발)</td><td>보임</td></tr>
-    <tr><td><b>자리</b></td><td><b>인코스</b>: 커브에서 1~3위는 안쪽을 잡아 +4% · <b>바람막이</b>: 직선에서 4위 아래는 앞 포로 뒤에 붙어 +4%. 그래서 커브가 많으면 앞에서 버티는 포로, 직선이 많으면 뒤에서 오는 포로가 유리</td><td>읽는 법으로 안내</td></tr>
-    <tr><td><b>변수</b></td><td><b>미끄러짐</b>: 눈길 커브에서 모든 포로가 같은 확률로 1.2초 동안 휘청(속도 30%) · <b>컨디션</b>: 판마다 포로별로 ±7%(보이지 않음)</td><td>안 보임</td></tr>
+  <div class="no">4 · 달리기 규칙</div>
+  <h2>속도를 정하는 <em>네 가지</em></h2>
+  <p class="lead">0.1초마다 포로의 목표 속도를 아래처럼 곱해서 정하고, 실제 속도는 목표를 부드럽게 따라갑니다(갑자기 빨라지거나 멈추지 않음).</p>
+  <div class="formula">속도 = 기본 24 × <i>적성 ±2%</i> × <i class="e">기운 가속 +8~22%</i> × <i class="s">슬립스트림 +10% · 맞바람 −2%</i> × <i>컨디션</i> → <i class="b">앞이 막히면 앞 포로 속도까지</i></div>
+
+  <h3>① 기운 — 배터리처럼</h3>
+  <div class="g2">
+    <div class="diag">
+      <svg viewBox="0 0 420 150" aria-label="직선에서는 기운을 써서 빨라지고 코너에서는 기운이 찬다">
+        <rect x="10" y="40" width="170" height="44" rx="10" fill="#FCEBD7"/><text x="95" y="68" text-anchor="middle" font-size="15" font-weight="900" fill="#9A5A12">직선 · 기운 씀</text>
+        <path d="M190,62 L230,62" stroke="#8E9BAD" stroke-width="3" marker-end="url(#ar)"/>
+        <rect x="240" y="40" width="170" height="44" rx="10" fill="#DDF3E6"/><text x="325" y="68" text-anchor="middle" font-size="15" font-weight="900" fill="#0E7A34">코너 · 기운 참</text>
+        <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#8E9BAD"/></marker></defs>
+        <text x="95" y="110" text-anchor="middle" font-size="13" fill="#3B4453">초당 −22 · 속도 +8%</text><text x="95" y="128" text-anchor="middle" font-size="13" fill="#3B4453">남은 기운만큼 최대 +14% 더</text>
+        <text x="325" y="110" text-anchor="middle" font-size="13" fill="#3B4453">초당 +9</text><text x="325" y="128" text-anchor="middle" font-size="13" fill="#3B4453">코너형은 초당 +14.4</text>
+        <text x="210" y="24" text-anchor="middle" font-size="13" font-weight="800" fill="#5B6573">한 바퀴 안에서 쓰고 채우기를 되풀이</text>
+      </svg>
+    </div>
+    <div class="card"><p style="font-size:14.5px"><b>지치는 일은 없습니다.</b> 기운이 0이 되면 더 빨라지지 못할 뿐, 기본 속도로 계속 달립니다. 기운은 100에서 시작하고 100을 넘지 않습니다.<br><br>기운이 많이 남아 있을수록 쓸 때 더 세게 나갑니다(가득일 때 +22%, 바닥 직전 +8%). 그래서 <b>아껴 둔 포로의 한 방</b>이 크고, 코너에서 채우는 기운이 다음 직선의 힘이 됩니다.</p></div>
+  </div>
+
+  <h3>② 자리싸움 — 좁은 길과 길막</h3>
+  <div class="diag">
+    <svg viewBox="0 0 900 200" aria-label="앞이 막힌 포로가 기다리다 틈이 열리자 치고 나오는 세 장면">
+      <g id="blk"></g>
+    </svg>
+    <div class="cap">정해진 레인은 없습니다. 포로는 길 폭 안에서 옆으로 움직이며(초당 7) 빈 쪽으로 비켜 추월합니다. 앞에 겹쳐 달리는 포로가 있고 양옆이 모두 막혀 있으면 <b>앞 포로 속도에 맞춰 기다려야 합니다(길막).</b> 틈이 열리는 순간 아껴 둔 기운을 쓰며 튀어나옵니다.</div>
+  </div>
+  <table style="margin-top:14px">
+    <tr><th style="width:20%">규칙</th><th>내용</th><th style="width:28%">왜</th></tr>
+    <tr><td><b>길 폭</b></td><td>출발선 8마리 폭(24) → 출발 뒤 20~90 사이에서 서킷 폭으로 좁아짐. 고속 11.5(약 4마리) · 균형 9.5(3~4마리) · 테크니컬 8(3마리)</td><td>넓은 서킷은 역전이, 좁은 서킷은 자리 지키기가 쉬움</td></tr>
+    <tr><td><b>길막</b></td><td>바로 앞(몸 길이 1.6배 안)에 옆으로 겹친 포로가 있으면 빈 쪽으로 비킴. 양옆이 막혔으면 앞 포로 속도로 따라감</td><td>뒤에 갇히는 긴장 → 뚫고 나오는 쾌감</td></tr>
+    <tr><td><b>슬립스트림</b></td><td>직선에서 같은 줄 앞 포로와 12 안쪽이면 +10%</td><td>뒤따르는 포로에게 추월 기회</td></tr>
+    <tr><td><b>맞바람</b></td><td>직선에서 1위는 −2%</td><td>혼자 달아나기만 해서는 끝까지 못 버팀</td></tr>
+    <tr><td><b>컨디션</b></td><td>판마다 포로별 ±3%(보이지 않음) · 0.1초마다 ±1.5% 흔들림</td><td>같은 출전표라도 결과가 달라짐</td></tr>
   </table>
-  <h3>관객이 할 수 있는 것</h3>
+  <div class="note">이전 안의 <b>미끄러짐 · 지침 · 인코스 보너스는 모두 뺐습니다.</b> 운으로 갑자기 무너지는 장면 대신, 자리와 기운 관리로 생기는 추월이 경주를 움직이도록 했습니다.</div>
+</section>
+
+<section id="act">
+  <div class="no">5 · 관객이 할 수 있는 것 · 보상</div>
+  <h2>손대는 건 <em>기운</em>뿐</h2>
+  <p class="lead">관객은 포로를 직접 조종하지 않습니다. 응원과 간식은 모두 기운을 채워 주는 것이고, 기운을 언제 쓸지는 포로의 각질이 정합니다.</p>
   <table>
-    <tr><th style="width:17%">행동</th><th>규칙</th><th style="width:28%">의도</th></tr>
+    <tr><th style="width:15%">행동</th><th>규칙</th><th style="width:28%">의도</th></tr>
     <tr><td><b>내 포로</b></td><td>출전표에서 한 마리를 고름. 무료, 한 판에 한 마리. 고르지 않으면 관전만</td><td>한 마리라 감정 이입이 쉬움</td></tr>
-    <tr><td><b>응원</b></td><td>감정표현 키(E), 3초에 한 번. 최근 3초 응원 비율이 높을수록 <b>5~8위일 때만</b> 1.6초 질주(+22%) 확률이 오름. 질주 뒤 6초는 다시 질주 못 함. 1~4위에서는 효과 없음</td><td>꼴찌를 구하는 응원, 1등을 만드는 응원은 아님</td></tr>
-    <tr><td><b>간식</b></td><td>한 판에 한 번. 내 포로가 <b>지쳤을 때(💦)</b> 주면 기운 25를 되찾고 원래 속도로 달림. 지치기 전에 주면 효과 없음(느려지지는 않음). 포로마다 회복은 한 번만 — 같은 응원단에서 먼저 준 사람이 「간식 성공」</td><td>지켜보다 타이밍을 잡는 손맛</td></tr>
-    <tr><td><b>관전</b></td><td>관람 구역에 서 있으면 내 캐릭터는 두고 카메라만 경주로로. 큐가 잡히면 그대로 떠나고, 고른 포로는 남아 자동 정산</td><td>떠나도 손해 없음</td></tr>
+    <tr><td><b>응원</b></td><td>감정표현 키(E), 3초에 한 번. 내 포로가 <b>5~8위일 때만</b> 기운이 참. 최근 3초 동안 이 포로가 받은 응원 비율에 비례(고르게 받으면 초당 1.2, 아무리 몰려도 초당 1.9까지). 1~4위에서는 효과 없음</td><td>뒤처진 포로를 구하는 응원, 1등을 만드는 응원은 아님</td></tr>
+    <tr><td><b>간식</b></td><td>한 판에 한 번. 기운을 <b>100까지 채움 — 넘치는 만큼은 버려짐.</b> 80 넘게 채우면 「간식 성공」, 40 넘게면 「반쯤 들어감」, 그 아래는 「거의 버려짐」 안내. 기운이 15 아래로 떨어지면 간식 버튼이 반짝임</td><td>기운이 바닥날 때까지 지켜보다 타이밍을 잡는 손맛</td></tr>
+    <tr><td><b>관전</b></td><td>관람 구역에 서 있으면 내 캐릭터는 두고 카메라만 서킷으로. 큐가 잡히면 그대로 떠나고, 고른 포로는 남아 자동 정산</td><td>떠나도 손해 없음</td></tr>
   </table>
   <h3>보상</h3>
   <table>
@@ -156,57 +255,90 @@ details summary{cursor:pointer;color:var(--sub);font-weight:700}
   </table>
 </section>
 
+<section id="ui">
+  <div class="no">6 · 중계 화면</div>
+  <h2>F1 중계처럼 <em>드론이 따라가며</em> 찍는다</h2>
+  <p class="lead">아래 그림은 모두 실제로 동작하는 프로토타입 화면입니다. 같은 엔진으로 8장의 시뮬레이션도 돌렸습니다.</p>
+
+  <h3><span class="sec-k">①</span>출전표</h3>
+  <figure class="shot" style="margin-top:6px"><img src="../../versions/img/lol/../poro/ui-1-card.jpg" alt="출전표 화면: 오늘의 서킷 그림과 코너 수, 포로 8마리의 적성, 각질, 최근 5경기, 고른 사람 수" loading="lazy"><figcaption>왼쪽 위에 오늘의 서킷 그림과 코너 수 · 코너 비율 · 가장 긴 직선. 고른 사람이 적은 4마리는 「숨은 포로」. 오른쪽에 읽는 법을 늘 띄워 처음 보는 사람도 고를 수 있게 함.</figcaption></figure>
+
+  <h3><span class="sec-k">②</span>경주 중계 — 카메라 7대</h3>
+  <p style="margin:0 0 12px;color:#3B4453;font-size:14.5px">모든 카메라가 같은 3D 서킷을 다른 자리에서 찍습니다. 실제 F1 중계의 추적 드론 · 헬기 · 코너 고정 카메라 · 온보드 구도를 참고했습니다. 대상은 <b>선두</b> 또는 <b>내 포로</b>, 왼쪽 순위판에서 다른 포로를 눌러 바꿀 수 있습니다.</p>
+  <div class="cams">
+    <div class="cam"><img src="../../versions/img/lol/../poro/cam-chase.jpg" alt="추적 드론 화면" loading="lazy"><div class="tx"><span class="w">CAM 1</span><b>추적 드론</b><p>뒤 위에서 따라가며 앞쪽 길을 보여 줌. 누가 막혀 있고 어디가 비었는지 가장 잘 보임</p></div></div>
+    <div class="cam"><img src="../../versions/img/lol/../poro/cam-front.jpg" alt="정면 드론 화면" loading="lazy"><div class="tx"><span class="w">CAM 2</span><b>정면 드론</b><p>앞 공중에서 뒤를 돌아보며 함께 날아감. 다가오는 무리와 선두 다툼을 정면으로</p></div></div>
+    <div class="cam"><img src="../../versions/img/lol/../poro/cam-heli.jpg" alt="헬기 옆 화면" loading="lazy"><div class="tx"><span class="w">CAM 3</span><b>헬기 · 옆</b><p>높은 곳에서 옆으로 나란히. 무리 전체의 간격과 코너의 휘어짐이 한눈에</p></div></div>
+    <div class="cam"><img src="../../versions/img/lol/../poro/cam-corner.jpg" alt="코너 카메라 화면" loading="lazy"><div class="tx"><span class="w">CAM 4</span><b>코너 카메라</b><p>다음 코너 바깥에 서서 지나가는 포로를 따라 고개만 돌림. 연석(빨강 · 흰)과 코너 진입이 잘 보임</p></div></div>
+    <div class="cam"><img src="../../versions/img/lol/../poro/cam-top.jpg" alt="수직 드론 화면" loading="lazy"><div class="tx"><span class="w">CAM 5</span><b>수직 드론</b><p>거의 바로 위에서 내려다봄. 출발 직후 8마리가 좁은 길로 몰려드는 장면에 씀</p></div></div>
+    <div class="cam"><img src="../../versions/img/lol/../poro/cam-onboard.jpg" alt="온보드 화면" loading="lazy"><div class="tx"><span class="w">CAM 6</span><b>온보드</b><p>포로 바로 뒤 낮은 곳. 앞이 막힌 답답함과 틈이 열려 튀어나가는 순간을 그 포로의 눈높이로</p></div></div>
+  </div>
+  <div class="g2" style="margin-top:14px">
+    <div class="cam"><img src="../../versions/img/lol/../poro/cam-grid.jpg" alt="출발 그리드 화면" loading="lazy"><div class="tx"><span class="w">CAM 7</span><b>출발 그리드</b><p>출발 전 카운트다운 동안 8마리 뒤에서. 넓은 출발선과 바로 앞에서 좁아지는 길을 함께 보여 줌</p></div></div>
+    <div class="card"><span class="k">자동 중계 규칙</span>
+      <ol class="steps">
+        <li>출발 전 그리드 → 출발 직후 6초는 수직 드론</li>
+        <li>평소엔 추적 → 헬기(코너가 가까우면 코너 카메라) → 정면 → 내 포로 온보드 → 수직 → 헬기 순으로 4~5초씩</li>
+        <li>선두 교체 · 길막을 뚫고 나옴 · 뒷심 질주 · 내 포로 기운 바닥이 생기면 그 포로로 바로 컷</li>
+        <li>컷은 최소 2.5초 유지(너무 자주 바뀌어 어지럽지 않게)</li>
+        <li>마지막 230은 접전이면 정면, 아니면 추적 · 결승 직전 슬로모션</li>
+      </ol>
+    </div>
+  </div>
+  <div class="note">화면 구성: 왼쪽 위 순위판(번호 · 이름 · 선두와의 차이, 누르면 그 포로를 따라감), 오른쪽 위 시간 · 바퀴 · 미니맵, 오른쪽 아래 <b>내 포로 작은 화면(PIP, 추적 드론)</b>, 아래 해설 자막. 대상 포로와 내 포로에는 「⚡가속 · 길막! · 슬립스트림 · 🪫」 표시가 붙습니다. 계산(0.1초) 사이의 위치는 부드럽게 이어 그려 끊기지 않습니다.</div>
+
+  <h3><span class="sec-k">③</span>결과</h3>
+  <figure class="shot" style="margin-top:6px"><img src="../../versions/img/lol/../poro/ui-3-result.jpg" alt="결과 화면: 내 포로 순위, 학회 기여와 포인트, 이번 판 내가 한 일, 해설, 전체 순위" loading="lazy"><figcaption>받은 점수와 「이번 판 내가 한 일」(응원 횟수 · 간식 결과), 서킷에 따라 왜 그 포로가 이겼는지 한 줄 해설. 다음 판에 출전표를 읽는 눈이 생기게 함.</figcaption></figure>
+</section>
+
 <section id="num">
-  <div class="no">5 · 수치</div>
+  <div class="no">7 · 수치</div>
   <h2>개발에 넘기는 <em>기본값</em></h2>
-  <p class="lead">0.1초마다 계산합니다. 아래 값은 6장의 시뮬레이션으로 조정한 결과입니다.</p>
+  <p class="lead">0.1초마다 계산합니다. 아래 값은 8장의 시뮬레이션으로 조정한 결과입니다. 거리 단위: 한 바퀴 = 1,000.</p>
   <div class="g2">
     <table>
       <tr><th>항목</th><th>값</th></tr>
-      <tr><td>바퀴 길이 · 바퀴 수 · 구간</td><td class="num">1,000 · 2바퀴 · 바퀴당 8구간</td></tr>
-      <tr><td>기본 속도</td><td class="num">초당 22 (우승 기록 약 84초)</td></tr>
-      <tr><td>적성</td><td class="num">맞는 구간 ×1.025 · 안 맞는 구간 ×0.975</td></tr>
-      <tr><td>인코스 · 바람막이</td><td class="num">커브 1~3위 ×1.04 · 직선 4~8위 ×1.04</td></tr>
-      <tr><td>미끄러짐</td><td class="num">커브에서 초당 1.2% · 1.2초 동안 속도 ×0.3</td></tr><tr><td>속도 변화</td><td class="num">0.1초마다 목표 속도의 22%씩 따라감(갑자기 빨라지거나 멈추지 않음)</td></tr>
-      <tr><td>컨디션 · 순간 흔들림</td><td class="num">판마다 ±7% · 0.1초마다 ±3%</td></tr>
+      <tr><td>바퀴 · 바퀴 수</td><td class="num">1,000 · 2바퀴</td></tr>
+      <tr><td>기본 속도</td><td class="num">초당 24 (우승 기록 약 79초)</td></tr>
+      <tr><td>속도 변화</td><td class="num">0.1초마다 목표의 22%씩 따라감</td></tr>
+      <tr><td>적성</td><td class="num">맞는 곳 ×1.02 · 안 맞는 곳 ×0.98</td></tr>
+      <tr><td>슬립스트림 · 맞바람</td><td class="num">12 안쪽 ×1.10 · 1위 ×0.98(직선만)</td></tr>
+      <tr><td>컨디션 · 흔들림</td><td class="num">판마다 ±3% · 0.1초마다 ±1.5%</td></tr>
+      <tr><td>포로 크기 · 옆 이동</td><td class="num">길이 3.4 · 폭 2.4 · 옆으로 초당 7</td></tr>
+      <tr><td>길 폭</td><td class="num">출발 24 → 고속 11.5 · 균형 9.5 · 테크니컬 8</td></tr>
     </table>
     <table>
-      <tr><th>각질</th><th class="num">초반 0~35%</th><th class="num">중반 ~75%</th><th class="num">막판</th></tr>
-      <tr><td><b>깡총</b></td><td class="num">×1.10</td><td class="num">×1.00</td><td class="num">×0.96</td></tr>
-      <tr><td><b>앞장</b></td><td class="num">×1.04</td><td class="num">×1.00</td><td class="num">×1.01</td></tr>
-      <tr><td><b>눈치</b></td><td class="num">×0.99</td><td class="num">×1.02</td><td class="num">×1.03</td></tr>
-      <tr><td><b>뒷심</b></td><td class="num">×0.94</td><td class="num">×1.00</td><td class="num">×1.16 (커브 ×0.92 추가)</td></tr>
+      <tr><th>기운</th><th>값</th></tr>
+      <tr><td>최대 · 시작</td><td class="num">100 · 100</td></tr>
+      <tr><td>쓸 때(직선)</td><td class="num">초당 −22 · 속도 ×(1.08 + 0.14 × 기운/100)</td></tr>
+      <tr><td>찰 때(코너)</td><td class="num">초당 +9 · 코너형 +14.4</td></tr>
+      <tr><td>막혔다 열릴 때</td><td class="num">기운 25 넘으면 각질과 상관없이 씀</td></tr>
+      <tr><td>응원</td><td class="num">5~8위만 · 초당 1.2 × (받은 비율 × 8), 최대 ×1.6</td></tr>
+      <tr><td>간식</td><td class="num">한 판 한 번 · 100까지 채움(넘치면 버려짐)</td></tr>
     </table>
   </div>
-  <h3>기운(지침)</h3>
-  <table>
-    <tr><th style="width:24%">항목</th><th>값</th></tr>
-    <tr><td>기운</td><td>100에서 시작. 초당 <code>1.0 × (각질 배수)^7</code>만큼 줄어듦(막판 폭발은 아껴 둔 힘이라 소모 없음). 빨리 달릴수록 훨씬 빨리 지침</td></tr>
-    <tr><td>지침</td><td>0이 되면 💦, 속도 ×0.84. 간식을 받기 전까지 계속</td></tr>
-    <tr><td>간식</td><td>지친 상태에서 받으면 기운 25로 회복, 지침 해제. 포로당 한 판에 한 번</td></tr>
-    <tr><td>결과(시뮬레이션 평균)</td><td>깡총은 거의 매 판 경주 중반 넘어 지침 → 간식이 승부를 가름. 앞장은 절반쯤, 뒷심은 거의 안 지침(대신 초반이 느림)</td></tr>
-  </table>
 </section>
 
 <section id="bal">
-  <div class="no">6 · 밸런스 검증</div>
+  <div class="no">8 · 밸런스 검증</div>
   <h2>의도대로 움직이는지, <em>4,000판씩</em> 돌려 봤다</h2>
-  <p class="lead">프로토타입과 같은 엔진으로 코스마다 4,000판을 시뮬레이션했습니다. 포로는 8마리, 한 마리의 평균 1등 확률은 <b>12.5%</b>입니다(점선).</p>
+  <p class="lead">프로토타입과 같은 엔진으로 서킷마다 4,000판을 시뮬레이션했습니다. 포로는 8마리, 한 마리의 평균 1등 확률은 <b>12.5%</b>입니다(점선).</p>
   <div class="g2">
     <div class="chart" id="c1"></div>
     <div class="chart" id="c2"></div>
   </div>
-  <div class="note"><b>읽힌다:</b> 커브 많은 길에서는 깡총 · 코너형이, 직선 많은 길에서는 뒷심 · 직진형이 1등을 가장 자주 합니다. <b>정해지지는 않는다:</b> 가장 유리한 조합(예: 커브 많은 길의 코너형 깡총)도 1등 확률은 <b>25.1%</b> — 4판에 1번 정도라, 근거를 읽은 사람이 유리하지만 결과는 끝까지 모릅니다.</div>
+  <div class="note" id="balNote"></div>
+  <div class="stat" id="stat"></div>
   <div class="g2" style="margin-top:14px">
     <div class="chart" id="c3"></div>
     <div class="chart" id="c4"></div>
   </div>
-  <div class="note"><b>간식:</b> 깡총 포로는 지친 순간 바로 간식을 주면 1등 확률이 안 줄 때의 2배 넘게 오르고, 늦을수록 효과가 줄어듭니다 — 타이밍이 실력입니다. <b>응원:</b> 응원의 70%를 몰아받아도 1등 확률은 거의 그대로지만, 꼴찌 확률은 크게 줄어듭니다. 응원은 뒤처진 포로를 구할 뿐 1등을 만들어 주지 않습니다.</div>
-  <details><summary>시뮬레이션 조건 자세히</summary><p>코스마다 4,000판. 포로 8마리의 적성 · 각질은 무작위, 관객 응원 비율도 무작위. 다른 응원단은 지친 뒤 0.5~4초 사이에 간식을 줌. 간식 실험은 보통 길의 코너형 깡총, 응원 실험은 보통 길의 직진형 눈치 한 마리를 두고 조건만 바꿔 각 4,000판. 엔진 코드는 저장소 <code>tools/poro-race/engine.js</code>.</p></details>
+  <div class="note" id="actNote"></div>
+  <details><summary>시뮬레이션 조건 자세히</summary><p>서킷마다 4,000판. 포로 8마리의 적성 · 각질은 무작위, 관객 응원 비율도 무작위. 다른 응원단은 기운이 20 아래로 떨어지고 0~3초 뒤에 간식을 줌. 간식 실험은 균형 서킷의 직진형 깡총, 응원 실험은 균형 서킷의 직진형 눈치 한 마리를 두고 조건만 바꿔 각 4,000판. 「추월」은 두 포로의 앞뒤가 2 넘게 벌어지며 바뀐 횟수. 엔진 코드는 저장소 <code>tools/poro-race/engine.js</code>.</p></details>
 </section>
 
 <section id="exc">
-  <div class="no">7 · 예외 처리</div>
+  <div class="no">9 · 예외 처리</div>
   <h2>경주 밖에서 생기는 <em>일들</em></h2>
   <table>
     <tr><th style="width:30%">상황</th><th>처리</th></tr>
@@ -214,8 +346,9 @@ details summary{cursor:pointer;color:var(--sub);font-weight:700}
     <tr><td>경주 중 접속이 끊김</td><td>위와 같음. 경주는 서버에서 계산하므로 결과에 영향 없음</td></tr>
     <tr><td>출전표 60초 안에 안 고름</td><td>관전만. 보상 없음(참여 1점도 없음)</td></tr>
     <tr><td>경주 중에 광장에 들어옴</td><td>관전만 가능, 다음 판 출전표부터 참여</td></tr>
-    <tr><td>같은 포로의 응원단 여럿이 간식</td><td>포로당 회복은 한 번. 지친 뒤 가장 먼저 준 사람에게 「간식 성공」, 늦게 준 사람에게는 「이미 먹었어요」 안내</td></tr>
-    <tr><td>지치기 전에 간식</td><td>효과 없음, 이번 판 간식은 쓴 것으로 처리. 「아직 안 지쳤어요 — 💦가 뜰 때가 타이밍」 안내</td></tr>
+    <tr><td>같은 포로의 응원단 여럿이 간식</td><td>포로당 간식은 한 판에 한 번. 가장 먼저 준 사람의 간식만 들어가고, 늦게 준 사람에게는 「이미 먹었어요」 안내(내 간식은 쓰지 않은 것으로 처리)</td></tr>
+    <tr><td>기운이 많이 남았을 때 간식</td><td>100까지만 채우고 나머지는 버려짐. 간식은 쓴 것으로 처리하고 「거의 버려졌어요 — 🪫가 뜰 때가 타이밍」 안내</td></tr>
+    <tr><td>내 포로가 1~4위일 때 응원</td><td>입력은 받되 효과 없음. 「앞서 있어서 응원이 필요 없어요」 안내 — 응원 횟수에는 셈</td></tr>
     <tr><td>동시 골인</td><td>0.1초 단위 기록. 같으면 공동 순위, 보상은 높은 순위 기준</td></tr>
     <tr><td>응원 매크로</td><td>3초 대기는 서버에서 판정. 대기 중 입력은 무시. 응원은 비율로 계산해 사람이 많아도 효과 크기는 같음</td></tr>
     <tr><td>광장 인원이 적음(10명 아래)</td><td>응원이 비율이라 효과는 그대로. 숨은 포로 +3점은 4마리가 동률이면 고른 수가 0명인 포로만 해당</td></tr>
@@ -224,31 +357,169 @@ details summary{cursor:pointer;color:var(--sub);font-weight:700}
 </section>
 
 <section id="data">
-  <div class="no">8 · 데이터 · 지표</div>
+  <div class="no">10 · 데이터 · 지표</div>
   <h2>만들 때 필요한 것, 출시 뒤 <em>볼 것</em></h2>
   <div class="g2">
     <table>
       <tr><th>데이터</th><th>필드</th></tr>
+      <tr><td><b>서킷</b></td><td>id · 이름 · 구간 목록(직선 길이 / 코너 각도 · 반지름) · 길 폭 · 출발선 위치</td></tr>
       <tr><td><b>포로</b></td><td>id · 이름 · 털 색 · 적성 · 각질 · 최근 5경기</td></tr>
-      <tr><td><b>경주</b></td><td>경주 id · 시작 시각 · 코스(16구간 배열) · 포로 8마리 · 컨디션 값 · 결과 순위 · 기록</td></tr>
-      <tr><td><b>참여</b></td><td>유저 id · 경주 id · 고른 포로 · 응원 횟수 · 간식 시각 · 간식 결과 · 받은 점수</td></tr>
+      <tr><td><b>경주</b></td><td>경주 id · 시작 시각 · 서킷 · 포로 8마리 · 컨디션 값 · 결과 순위 · 기록 · 추월 수 · 선두 교체 수</td></tr>
+      <tr><td><b>참여</b></td><td>유저 id · 경주 id · 고른 포로 · 응원 횟수 · 간식 시각 · 간식으로 채운 기운 · 받은 점수</td></tr>
     </table>
     <table>
       <tr><th>지표</th><th>보는 이유 · 목표</th></tr>
       <tr><td>광장 인원 중 참여율</td><td>보기만 하던 사람이 고르는가</td></tr>
-      <tr><td>간식 성공률</td><td>타이밍이 너무 쉽거나 어렵지 않은가</td></tr>
-      <tr><td>각질별 1등 비율</td><td>6장의 예상과 같은가(한 각질이 25%를 넘으면 조정)</td></tr>
+      <tr><td>간식으로 채운 기운 평균</td><td>타이밍을 배우는가(판이 쌓일수록 올라가야 함)</td></tr>
+      <tr><td>서킷별 · 각질별 1등 비율</td><td>8장의 예상과 같은가(한 각질이 25%를 넘으면 조정)</td></tr>
+      <tr><td>경주당 추월 · 선두 교체</td><td>보는 재미가 유지되는가(추월 20회 아래로 떨어지면 길 폭 조정)</td></tr>
       <tr><td>숨은 포로 선택 비율</td><td>출전표를 읽고 고르는가, 인기만 따라가는가</td></tr>
       <tr><td>큐 대기 중 이탈 감소</td><td>대기 시간을 즐겁게 바꿨는가(제안서 5-2 지표와 연결)</td></tr>
     </table>
   </div>
+  <div class="tmp"><b style="color:var(--ink)">참고</b> 프로토타입의 달리는 캐릭터 「눈뭉치」는 규칙 확인용 임시 캐릭터입니다. 실제 콘텐츠에서는 라이엇의 포로가 달립니다.</div>
 </section>
 </main>
 <div id="tip"></div>
+<script>// 포로 경주 엔진 v2 — 시뮬레이션(node)과 프로토타입(브라우저)이 같은 파일을 씀
+// 핵심: 기운(배터리처럼 생각). 직선에서 기운을 쓰면 더 빨라지고, 코너에서 기운이 찬다. 지치는 일은 없음.
+(function (root) {
+  const P = {
+    L: 1000, laps: 2, seg: 8, v0: 24, dt: 0.1,
+    apt: 0.02,                      // 적성: 직진형은 직선 +2% · 코너 −2%, 코너형은 반대
+    energy: { cap: 100, start: 100, boost: 0.08, burst: 0.14, use: 22, charge: 9, cornerCharge: 1.6 },   // 기운: 쓰는 동안 +8%에 남은 기운만큼 최대 +14% 더 · 초당 22 소모 · 코너에서 초당 9 충전(코너형 ×1.6)
+    slip: { gap: 12, bonus: 0.1, wind: 0.02 }, // 슬립스트림: 직선에서 같은 줄 앞 포로 12 안쪽이면 +10% · 맨 앞은 맞바람 −2%
+    accel: 0.22,                                            // 속도 변화는 부드럽게
+    track: { start: 24, narrow: 10, taper: [20, 90] },       // 길 폭: 출발선만 8마리가 나란히(24), 그 뒤로 서킷마다 3~4마리 폭으로 좁아짐
+    body: { len: 3.4, wid: 2.4, side: 7 },                  // 포로 크기 · 옆으로 비키는 속도(초당)
+    cheer: { minRank: 5, rate: 1.2, cap: 1.6 },             // 응원: 5~8위일 때만, 응원 비율만큼 기운 충전(평균 초당 1.2, 몰려도 최대 1.9)
+    snack: 100,                                             // 간식: 기운을 가득(100) 충전(최대 100 — 넘치는 만큼은 버려짐)
+    form: 0.03, noise: 0.015
+  };
+  // 각질 = 기운을 언제 쓰는가(경주 진행도 prog, 남은 기운 e)
+  const STRAT = {
+    '깡총': (prog, e) => prog < .5 ? e > 0 : e > 50,         // 처음부터 다 쓰며 달아남
+    '앞장': (prog, e) => e > 45,                              // 직선마다 조금씩, 늘 반쯤 남김
+    '눈치': (prog, e) => prog < .35 ? e >= 99 : e > 20,       // 초반엔 넘치는 만큼만, 중반부터 씀
+    '뒷심': (prog, e) => prog < .62 ? e >= 99 : e > 0         // 끝까지 아꼈다가 마지막 바퀴에 몰아 씀
+  };
+  // ── 서킷: 직선(S 길이) · 코너(C 각도°, 반지름, +왼쪽 −오른쪽). 표시(1)한 두 직선 길이를 풀어 정확히 닫음
+  const CIRCUITS = [
+    { key: 'fast', name: '고속 서킷', desc: '긴 직선 둘, 시케인 둘 · 길 폭 넉넉(4마리)', width: 11.5, segs: [['S', 8, 1], ['C', -90, 1.0], ['S', 3, 1], ['C', -30, .8], ['C', 30, .8], ['S', 2], ['C', -90, .9], ['S', 7], ['C', -90, 1.0], ['S', 1.5], ['C', 40, .6], ['C', -40, .6], ['S', 1], ['C', -90, .9]] },
+    { key: 'mid', name: '균형 서킷', desc: '헤어핀 하나, 직선과 코너가 고루 · 길 폭 3~4마리', width: 9.5, segs: [['S', 6, 1], ['C', -90, .8], ['S', 2.5, 1], ['C', -60, 1.0], ['S', 1.5], ['C', 80, .8], ['C', -150, .6], ['S', 3.5], ['C', -50, 1.3], ['S', 2], ['C', -60, .8], ['S', 2.5], ['C', 70, 1.0], ['C', -100, 1.1]] },
+    { key: 'tech', name: '테크니컬 서킷', desc: '좌우 코너가 쉬지 않고 이어짐 · 길 폭 좁음(3마리)', width: 8, segs: [['S', 4.5, 1], ['C', -100, .55], ['C', 70, .55], ['S', 1, 1], ['C', -90, .55], ['C', -60, .6], ['S', 1.5], ['C', 100, .5], ['C', -120, .55], ['S', 1.2], ['C', -80, .6], ['C', 60, .6], ['C', -90, .6], ['S', 1.4], ['C', -60, .6], ['S', .8], ['C', 40, .7], ['C', -30, .7]] }
+  ];
+  function walk(segs, extra) {
+    let x = 0, y = 0, a = 0; const pts = [], kinds = [], sgn = [];
+    segs.forEach(([t, v, r], i) => {
+      if (t === 'S') { const L = v + (extra[i] || 0), n = Math.max(2, Math.round(L * 40)); for (let k = 0; k < n; k++) { pts.push([x, y]); kinds.push('S'); sgn.push(0); x += Math.cos(a) * L / n; y += Math.sin(a) * L / n; } }
+      else { const ang = v * Math.PI / 180, L = Math.abs(ang) * r, n = Math.max(3, Math.round(L * 40)); for (let k = 0; k < n; k++) { pts.push([x, y]); kinds.push('C'); sgn.push(Math.sign(v)); a += ang / n * .5; x += Math.cos(a) * L / n; y += Math.sin(a) * L / n; a += ang / n * .5; } }
+    });
+    return { pts, kinds, sgn, end: [x, y] };
+  }
+  const N = 480;
+  function buildCircuit(c) {
+    const adj = c.segs.map((s, i) => s[0] === 'S' && s[2] === 1 ? i : -1).filter(i => i >= 0);
+    const b = walk(c.segs, {}), d1 = walk(c.segs, { [adj[0]]: 1 }), d2 = walk(c.segs, { [adj[1]]: 1 });
+    const ax = d1.end[0] - b.end[0], ay = d1.end[1] - b.end[1], bx = d2.end[0] - b.end[0], by = d2.end[1] - b.end[1], det = ax * by - ay * bx;
+    const u = (-b.end[0] * by + b.end[1] * bx) / det, v = (-ax * b.end[1] + ay * b.end[0]) / det;
+    const w = walk(c.segs, { [adj[0]]: u, [adj[1]]: v }), Pp = w.pts, cum = [0];
+    for (let i = 1; i <= Pp.length; i++) { const a = Pp[i - 1], q = Pp[i % Pp.length]; cum.push(cum[i - 1] + Math.hypot(q[0] - a[0], q[1] - a[1])); }
+    const Lt = cum[Pp.length]; let pts = [], kinds = [], sgn = [], j = 0;
+    for (let k = 0; k < N; k++) { const t = k / N * Lt; while (cum[j + 1] < t) j++; const a = Pp[j], q = Pp[(j + 1) % Pp.length], f = (t - cum[j]) / (cum[j + 1] - cum[j] || 1); pts.push([(a[0] + (q[0] - a[0]) * f) / Lt * 8, (a[1] + (q[1] - a[1]) * f) / Lt * 8]); kinds.push(w.kinds[j]); sgn.push(w.sgn[j]); }
+    // 출발 · 결승선을 가장 긴 직선의 3/4 지점에 둠(결승 앞에 긴 직선)
+    const runs = []; for (let k = 0; k < N; k++) if (kinds[k] !== kinds[(k - 1 + N) % N]) runs.push(k);
+    let best = { len: 0, s: 0 }; runs.forEach((s, r) => { const e = runs[(r + 1) % runs.length], len = ((e - s) + N) % N; if (kinds[s] === 'S' && len > best.len) best = { len, s }; });
+    const sh = (best.s + Math.round(best.len * .75)) % N, rot = arr => arr.slice(sh).concat(arr.slice(0, sh));
+    pts = rot(pts); kinds = rot(kinds); sgn = rot(sgn);
+    const rr = []; for (let k = 0; k < N; k++) if (k === 0 || kinds[k] !== kinds[k - 1]) rr.push({ from: k / N * P.L, k: kinds[k], sgn: sgn[k] });
+    rr.forEach((r, i) => r.to = i + 1 < rr.length ? rr[i + 1].from : P.L);
+    const longest = Math.max(...rr.filter(r => r.k === 'S').map(r => r.to - r.from));
+    return { key: c.key, name: c.name, desc: c.desc, width: c.width, pts, kinds, sgn, runs: rr, curveRatio: kinds.filter(k => k === 'C').length / N, corners: rr.filter(r => r.k === 'C').length, longest };
+  }
+  const BUILT = CIRCUITS.map(buildCircuit);
+  function rng(seed) { let s = (Math.imul(seed >>> 0 ^ 0x9E3779B9, 0x85EBCA6B) >>> 0) || 1; const f = () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; for (let k = 0; k < 8; k++) f(); return f; }
+  function makeCourse(idx) { return BUILT[idx]; }
+  function segAt(course, d) { const x = ((d % P.L) + P.L) % P.L; return course.kinds[Math.min(N - 1, Math.floor(x / P.L * N))]; }
+  function newRace(entries, course, seed) {
+    const R = rng(seed);
+    return { R, course, t: 0, done: false, total: P.L * P.laps, finished: [], passes: 0, leadChanges: 0, lastLead: -1,
+      poros: entries.map((e, i) => ({ i, name: e.name, apt: e.apt, style: e.style, d: 0, y: (i - 3.5) * 2.8, ty: (i - 3.5) * 2.8 * .3, blocked: false, passWait: 0, e: P.energy.start, boosting: false, drafting: false, snacked: false,
+        fin: null, v: 0, nz: 0, form: 1 + (R() * 2 - 1) * P.form, cheerE: 0, snackAt: null, snackGain: 0, rank: i + 1 })) };
+  }
+  function halfW(d, course) { const T = P.track, n = course ? course.width : T.narrow, k = Math.max(0, Math.min(1, (d - T.taper[0]) / (T.taper[1] - T.taper[0]))); return (T.start + (n - T.start) * k) / 2; }
+  function ranks(race) { return race.poros.slice().sort((a, b) => (a.fin ?? 1e9) - (b.fin ?? 1e9) || b.d - a.d); }
+  // cheerShare: 포로별 최근 응원 비율(합 1). 없으면 응원 없음
+  function step(race, cheerShare) {
+    const dt = P.dt, R = race.R, order = ranks(race), E = P.energy;
+    const prevRank = race.poros.map(p => p.rank);
+    order.forEach((p, k) => p.rank = k + 1);
+    const live = race.poros.filter(p => p.fin === null).sort((a, b) => b.d - a.d);
+    for (const p of race.poros) {
+      if (p.fin !== null) continue;
+      const prog = Math.max(0, p.d) / race.total, seg = segAt(race.course, p.d);
+      p.nz += ((R() * 2 - 1) - p.nz) * .15;
+      let m = p.form * (1 + p.nz * P.noise * 2);
+      m *= (p.apt === '직진') === (seg === 'S') ? 1 + P.apt : 1 - P.apt;
+      // 기운: 직선에서 각질 전략대로 쓰면 빨라지고, 코너에서 찬다
+      p.boosting = seg === 'S' && p.e > 0 && (STRAT[p.style](prog, p.e) || (p.chance && p.e > 25));   // 앞이 막혔다가 옆이 열리면 아껴 둔 기운으로 치고 나감
+      if (p.boosting) { m *= 1 + E.boost + E.burst * p.e / E.cap;   // 기운이 많이 남아 있을수록 더 세게 치고 나감
+        p.e = Math.max(0, p.e - E.use * dt); }
+      if (seg === 'C') p.e = Math.min(E.cap, p.e + E.charge * (p.apt === '코너' ? E.cornerCharge : 1) * dt);   // 코너형은 코너에서 더 빨리 참
+      // 슬립스트림: 직선에서 바로 앞 포로 뒤에 붙으면 빨라짐
+      let f = null; for (const q of live) { const g = q.d - p.d; if (q !== p && g > 0 && g < P.slip.gap && Math.abs(q.y - p.y) < P.body.wid * 1.3 && (!f || g < f.d - p.d)) f = q; }
+      p.drafting = seg === 'S' && !!f;
+      if (p.drafting) m *= 1 + P.slip.bonus;
+      p.headwind = seg === 'S' && p.rank === 1;          // 맨 앞은 바람을 정면으로 맞음
+      if (p.headwind) m *= 1 - P.slip.wind;
+      // 응원: 5~8위일 때만 기운 충전
+      if (cheerShare && p.rank >= P.cheer.minRank) { const c = Math.min(P.cheer.cap, (cheerShare[p.i] || 0) * race.poros.length) * P.cheer.rate * dt; const add = Math.min(E.cap - p.e, c); p.e += add; p.cheerE += add; }
+      let tv = P.v0 * m;
+      // 길막: 바로 앞에 겹쳐 달리는 포로가 있으면 빈 쪽으로 비켜 추월, 빈 곳이 없으면 뒤따라감
+      const B = P.body, hw = halfW(p.d, race.course) - B.wid / 2;
+      let fr = null; for (const q of live) { if (q === p) continue; const g = q.d - p.d; if (g > 0 && g < B.len * 1.6 && Math.abs(q.y - p.y) < B.wid) { if (!fr || g < fr.d - p.d) fr = q; } }
+      p.blocked = false; if (!fr) p.chance = false;
+      if (fr && tv > fr.v * .98) {
+        const clear = y => y >= -hw && y <= hw && !live.some(q => q !== p && Math.abs(q.y - y) < B.wid * .95 && q.d - p.d > -B.len * .6 && q.d - p.d < B.len * 1.2);
+        const c1 = p.y + B.wid * 1.05, c2 = p.y - B.wid * 1.05, o1 = clear(c1), o2 = clear(c2);
+        if (o1 || o2) p.ty = o1 && o2 ? (R() < .5 ? c1 : c2) : o1 ? c1 : c2;
+        p.chance = !!(o1 || o2);
+        if (fr.d - p.d < B.len * 1.15 && Math.abs(p.ty - p.y) > .2 ? true : fr.d - p.d < B.len * 1.15) { tv = Math.min(tv, fr.v); p.blocked = true; }
+      }
+      p.ty = Math.max(-hw, Math.min(hw, p.ty)); const dy = p.ty - p.y; p.y += Math.max(-B.side * dt, Math.min(B.side * dt, dy)); p.y = Math.max(-hw, Math.min(hw, p.y));
+      p.v = race.t === 0 ? tv * .5 : p.v + (tv - p.v) * P.accel; if (p.blocked) p.v = Math.min(p.v, tv);
+    }
+    for (const p of race.poros) {
+      if (p.fin !== null) continue;
+      p.d += p.v * dt;
+      if (p.d >= race.total) { p.d = race.total; p.fin = race.t + dt; race.finished.push(p.i); }
+    }
+    race.t += dt;
+    // 추월 · 선두 교체는 앞선 차이가 2 이상 벌어졌을 때만 셈(나란히 달리며 엎치락뒤치락하는 건 한 번)
+    const o2 = ranks(race), lead = o2[0];
+    if (race.lastLead < 0) race.lastLead = lead.i;
+    else if (lead.i !== race.lastLead && lead.d - race.poros[race.lastLead].d > 2 && race.t > 3) { race.leadChanges++; race.lastLead = lead.i; race.leadEvent = lead.i; }
+    if (!race.ahead) race.ahead = {};
+    for (let a = 0; a < o2.length; a++) for (let b = a + 1; b < o2.length; b++) { const x = o2[a], y = o2[b], key = x.i < y.i ? x.i + '-' + y.i : y.i + '-' + x.i, gap = x.d - y.d, cur = race.ahead[key];
+      if (cur === undefined) { race.ahead[key] = x.i; continue; }
+      if (cur !== x.i && gap > 2 && x.fin === null && race.t > 3) { race.ahead[key] = x.i; race.passes++; } }
+    if (race.finished.length === race.poros.length) race.done = true;
+  }
+  function giveSnack(race, i) {        // 한 판에 한 번, 기운을 가득 채움. 기운이 많이 남아 있으면 넘치는 만큼 버려짐
+    const p = race.poros[i];
+    if (p.snacked) return { res: 'used', gain: 0 };
+    const gain = Math.min(P.snack, P.energy.cap - p.e); p.e += gain; p.snacked = true; p.snackAt = race.t; p.snackGain = gain;
+    return { res: gain >= P.snack * .8 ? 'ok' : gain >= P.snack * .4 ? 'half' : 'waste', gain };
+  }
+  const api = { P, STRAT, halfW, CIRCUITS: BUILT, rng, makeCourse, segAt, newRace, step, ranks, giveSnack };
+  if (typeof module !== 'undefined') module.exports = api; else root.PoroEngine = api;
+})(this);
+</script>
 <script>
-const SIM = {"circuits": [{"key": "fast", "name": "고속 서킷", "curve": 28, "corners": 6, "win": {"눈치": 12.4, "직진": 18.5, "직진·눈치": 19.7, "깡총": 11.6, "직진·깡총": 16.6, "뒷심": 16.4, "직진·뒷심": 25.1, "앞장": 9.5, "직진·앞장": 12.8, "코너": 6.5, "코너·눈치": 5.3, "코너·앞장": 6.1, "코너·깡총": 6.7, "코너·뒷심": 7.8}, "winTime": 78.4, "passes": 33.8, "leadChanges": 3}, {"key": "mid", "name": "균형 서킷", "curve": 38, "corners": 6, "win": {"눈치": 13, "코너": 11.1, "코너·눈치": 11.8, "직진": 13.9, "직진·눈치": 14.2, "깡총": 14.6, "직진·깡총": 15.9, "앞장": 11.8, "코너·앞장": 10.7, "직진·앞장": 12.8, "코너·깡총": 13.3, "뒷심": 10.6, "코너·뒷심": 8.4, "직진·뒷심": 12.7}, "winTime": 78.2, "passes": 31.9, "leadChanges": 2.9}, {"key": "tech", "name": "테크니컬 서킷", "curve": 60, "corners": 6, "win": {"깡총": 18.8, "코너": 17.1, "코너·깡총": 24, "직진": 7.9, "직진·깡총": 13.7, "눈치": 11.5, "코너·눈치": 16.5, "뒷심": 3.4, "직진·뒷심": 1.9, "코너·뒷심": 5, "앞장": 16.3, "직진·앞장": 9.6, "직진·눈치": 6.3, "코너·앞장": 23.1}, "winTime": 78.3, "passes": 31.3, "leadChanges": 2.4}], "snack": {"기운이 바닥일 때": {"win": "27.3%", "top3": "47.3%"}, "절반쯤 남았을 때": {"win": "23.6%", "top3": "45.6%"}, "거의 가득일 때": {"win": "19.7%", "top3": "40.2%"}, "안 줌": {"win": "18.8%", "top3": "39.6%"}}, "cheer": {"0%": {"win": "19.5%", "top3": "36.5%", "last": "20.0%"}, "12.5%(고르게)": {"win": "21.7%", "top3": "41.4%", "last": "12.3%"}, "35%": {"win": "22.5%", "top3": "46.1%", "last": "8.2%"}, "70%(몰빵)": {"win": "22.7%", "top3": "45.9%", "last": "6.9%"}}};
-const C = { s1: '#257de0', s2: '#f47230', s3: '#00b894', s4: '#f2a600' };
+const SIM = {"circuits": [{"key": "fast", "name": "고속 서킷", "curve": 28, "corners": 6, "win": {"눈치": 9.6, "직진": 16.9, "직진·눈치": 13.1, "깡총": 15.6, "직진·깡총": 20.5, "뒷심": 10.8, "직진·뒷심": 15.4, "앞장": 14, "직진·앞장": 18.6, "코너": 8.1, "코너·눈치": 6.2, "코너·앞장": 9.3, "코너·깡총": 10.7, "코너·뒷심": 6.2}, "winTime": 78.7, "passes": 32.8, "leadChanges": 2.6}, {"key": "mid", "name": "균형 서킷", "curve": 38, "corners": 6, "win": {"눈치": 8.3, "코너": 9.6, "코너·눈치": 7.4, "직진": 15.3, "직진·눈치": 9.2, "깡총": 18.2, "직진·깡총": 22.1, "앞장": 16.8, "코너·앞장": 12.3, "직진·앞장": 21.2, "코너·깡총": 14.2, "뒷심": 6.7, "코너·뒷심": 4.4, "직진·뒷심": 8.8}, "winTime": 78.9, "passes": 26.9, "leadChanges": 2.2}, {"key": "tech", "name": "테크니컬 서킷", "curve": 60, "corners": 6, "win": {"깡총": 21, "코너": 13.9, "코너·깡총": 21.6, "직진": 11.1, "직진·깡총": 20.3, "눈치": 5.5, "코너·눈치": 7.8, "뒷심": 3, "직진·뒷심": 3, "코너·뒷심": 3.1, "앞장": 20.6, "직진·앞장": 17.7, "직진·눈치": 3.1, "코너·앞장": 23.6}, "winTime": 78.6, "passes": 21.4, "leadChanges": 1.4}], "snack": {"기운이 바닥일 때": {"win": "33.1%", "top3": "57.9%"}, "절반쯤 남았을 때": {"win": "34.0%", "top3": "58.1%"}, "거의 가득일 때": {"win": "30.0%", "top3": "52.9%"}, "안 줌": {"win": "29.5%", "top3": "52.3%"}}, "cheer": {"0%": {"win": "17.1%", "top3": "40.8%", "last": "15.2%"}, "12.5%(고르게)": {"win": "17.2%", "top3": "41.7%", "last": "10.3%"}, "35%": {"win": "18.1%", "top3": "44.6%", "last": "7.6%"}, "70%(몰빵)": {"win": "18.3%", "top3": "45.9%", "last": "5.5%"}}}, E = PoroEngine;
+const C = { s1: '#257de0', s2: '#f47230', s3: '#00b894', s4: '#f2a600' }, STY = ['깡총', '앞장', '눈치', '뒷심'], SC = [C.s1, C.s2, C.s3, C.s4];
 const tip = document.getElementById('tip');
+function showTip(e, t) { tip.innerHTML = t; tip.style.opacity = 1; tip.style.left = e.clientX + 12 + 'px'; tip.style.top = e.clientY + 12 + 'px'; }
 function bars(el, title, sub, groups, series, max, ref, refLab) {
   let h = `<div class="ttl">${title}</div><div class="sub">${sub}</div>`;
   if (series.length > 1) h += '<div class="legend">' + series.map(s => `<span><i style="background:${s.c}"></i>${s.n}</span>`).join('') + '</div>';
@@ -256,18 +527,82 @@ function bars(el, title, sub, groups, series, max, ref, refLab) {
     series.map((s, k) => { const v = g.v[k]; return `<div class="bar" data-t="${g.n} · ${s.n}: ${v}%"><i style="width:calc(${v / max * 100}% * .86);background:${s.c}"></i><span>${v}%</span></div>`; }).join('') + '</div></div>').join('');
   if (refLab) h += `<div class="reflab">┆ 점선 = ${refLab}</div>`;
   el.innerHTML = h;
-  el.querySelectorAll('.bar').forEach(b => { b.onmousemove = e => { tip.textContent = b.dataset.t; tip.style.opacity = 1; tip.style.left = e.clientX + 12 + 'px'; tip.style.top = e.clientY + 12 + 'px'; }; b.onmouseleave = () => tip.style.opacity = 0; });
+  el.querySelectorAll('.bar').forEach(b => { b.onmousemove = e => showTip(e, b.dataset.t); b.onmouseleave = () => tip.style.opacity = 0; });
 }
-const CN = [['0.3', '직선 많은 길'], ['0.5', '보통 길'], ['0.7', '커브 많은 길']];
-bars(document.getElementById('c1'), '코스별 · 각질별 1등 확률', '포로 한 마리 기준', CN.map(([k, n]) => ({ n, v: ['깡총', '앞장', '눈치', '뒷심'].map(s => SIM.course[k].win[s]) })),
+// ── 서킷 카드
+function circSvg(c) {
+  const xs = c.pts.map(p => p[0]), ys = c.pts.map(p => p[1]), mx = Math.min(...xs), my = Math.min(...ys), w = Math.max(...xs) - mx, h = Math.max(...ys) - my, s = Math.min(260 / w, 150 / h), ox = (300 - w * s) / 2, oy = (170 - h * s) / 2;
+  const P2 = k => [ox + (c.pts[k][0] - mx) * s, oy + (c.pts[k][1] - my) * s], n = c.pts.length; let path = '';
+  for (let k = 0; k < n; k++) { const [a, b] = P2(k), [e, f] = P2((k + 1) % n); path += `<line x1="${a.toFixed(1)}" y1="${b.toFixed(1)}" x2="${e.toFixed(1)}" y2="${f.toFixed(1)}" stroke="${c.kinds[k] === 'C' ? '#2BA36B' : '#E59A3C'}" stroke-width="${3 + c.width * .45}" stroke-linecap="round"/>`; }
+  const [sx, sy] = P2(0), [tx, ty] = P2(6), ang = Math.atan2(ty - sy, tx - sx) * 180 / Math.PI;
+  return `<svg viewBox="0 0 300 170" role="img" aria-label="${c.name} 모양">${path}<g transform="translate(${sx},${sy}) rotate(${ang})"><rect x="-2" y="-11" width="4" height="22" fill="#111"/><path d="M8,-6 L17,0 L8,6" fill="#111"/></g></svg>`;
+}
+const favOf = sim => { const st = STY.map(k => [k, sim.win[k]]).sort((a, b) => b[1] - a[1]), ap = ['직진', '코너'].map(k => [k, sim.win[k]]).sort((a, b) => b[1] - a[1]); return { st, ap }; };
+document.getElementById('circs').innerHTML = E.CIRCUITS.map((c, i) => { const sim = SIM.circuits[i], f = favOf(sim), side = Math.round(c.width / 2.4 * 10) / 10;
+  return `<div class="circ">${circSvg(c)}<div class="nm">${c.name}</div><div class="ds">${c.desc}</div><div class="chips"><span class="hi">나란히 약 ${side < 3.6 ? '3' : side < 4.2 ? '3~4' : '4'}마리</span><span>코너 ${c.corners}개</span><span>코너 비율 ${Math.round(c.curveRatio * 100)}%</span><span>가장 긴 직선 ${Math.round(c.longest)}</span></div>
+  <div class="fav">유리: <b>${f.ap[0][0]}형</b>(${f.ap[0][1]}%) · <b>${f.st[0][0]}</b>(${f.st[0][1]}%) · <b>${f.st[1][0]}</b>(${f.st[1][1]}%)<br><span style="color:var(--sub)">불리: ${f.st[3][0]}(${f.st[3][1]}%) — 1등 확률, 8장</span></div></div>`; }).join('');
+// 출발 그리드 점
+document.getElementById('gridDots').innerHTML = Array.from({ length: 8 }, (_, k) => `<circle cx="${150 - (k % 2) * 14}" cy="${21 + k * 15.4}" r="6" fill="#fff" stroke="#8E9BAD" stroke-width="1.5"/>`).join('') + [[420, 60], [420, 75], [420, 90], [470, 68], [470, 84], [515, 75], [560, 60], [560, 90]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="6" fill="#fff" stroke="#8E9BAD" stroke-width="1.5"/>`).join('');
+// 길막 세 장면
+(function () {
+  const lane = (x, y0) => `<rect x="${x}" y="${y0}" width="270" height="120" rx="12" fill="#E6ECF4" stroke="#8E9BAD" stroke-width="1.5"/>`;
+  const poro = (x, y, col, n, glow) => `${glow ? `<ellipse cx="${x}" cy="${y}" rx="17" ry="15" fill="rgba(255,200,40,.45)"/>` : ''}<circle cx="${x}" cy="${y}" r="11" fill="#fff" stroke="#8E9BAD" stroke-width="1.5"/><path d="M${x - 8},${y - 4} A8,6 0 0 1 ${x + 8},${y - 4} Z" fill="${col}"/><text x="${x}" y="${y + 6}" text-anchor="middle" font-size="9" font-weight="900" fill="${col}">${n}</text>`;
+  const t = (x, s, sub) => `<text x="${x + 135}" y="160" text-anchor="middle" font-size="14" font-weight="900" fill="#141820">${s}</text><text x="${x + 135}" y="180" text-anchor="middle" font-size="12.5" fill="#5B6573">${sub}</text>`;
+  const A = '#257de0', B = '#f47230', G = '#00b894', Y = '#f2a600';
+  let h = '';
+  [0, 315, 630].forEach(x => h += lane(x, 10) + `<text x="${x + 262}" y="30" text-anchor="end" font-size="11" font-weight="800" fill="#8E9BAD">진행 방향 →</text>`);
+  h += poro(130, 70, B, 2) + poro(135, 40, G, 3) + poro(135, 100, Y, 4) + poro(95, 70, A, 1) + `<text x="95" y="102" text-anchor="middle" font-size="12" font-weight="900" fill="#D33A2C">길막!</text>` + t(0, '① 막힘', '앞 · 양옆이 다 차서 2번 속도로 따라감');
+  h += poro(445, 70, B, 2) + poro(470, 40, G, 3) + poro(392, 104, Y, 4) + poro(412, 70, A, 1) + `<path d="M416,84 Q426,96 444,102" stroke="#257de0" stroke-width="2" fill="none" stroke-dasharray="4 3"/>` + t(315, '② 틈', '4번이 처지며 아래쪽이 비어 감');
+  h += poro(760, 70, B, 2) + poro(785, 40, G, 3) + poro(715, 104, Y, 4) + poro(800, 96, A, 1, true) + `<path d="M735,82 L790,96" stroke="#257de0" stroke-width="2.5" marker-end="url(#ar2)"/><defs><marker id="ar2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#257de0"/></marker></defs>` + t(630, '③ 치고 나옴', '아껴 둔 기운을 쓰며 빈 쪽으로 추월');
+  document.getElementById('blk').innerHTML = h;
+})();
+// ── 각질별 기운 그래프: 균형 서킷에서 각질마다 2마리씩, 100판 평균
+(function () {
+  const B = 50, sum = STY.map(() => new Array(B).fill(0)), cnt = STY.map(() => new Array(B).fill(0));
+  for (let s = 0; s < 100; s++) {
+    const R = E.rng(s * 31 + 7), en = Array.from({ length: 8 }, (_, i) => ({ name: 'p' + i, apt: R() < .5 ? '직진' : '코너', style: STY[i % 4] }));
+    const race = E.newRace(en, E.makeCourse(1), s * 101 + 3), share = en.map(() => 1 / 8);
+    while (!race.done) { E.step(race, share); race.poros.forEach(p => { if (p.fin !== null) return; const b = Math.min(B - 1, Math.floor(Math.max(0, p.d) / race.total * B)), k = STY.indexOf(p.style); sum[k][b] += p.e; cnt[k][b]++; }); }
+  }
+  const avg = sum.map((r, k) => r.map((v, b) => v / Math.max(1, cnt[k][b])));
+  const W = 900, H = 260, L = 44, Rr = 70, T = 14, Bt = 34, x = b => L + (b + .5) / B * (W - L - Rr), y = v => T + (1 - v / 100) * (H - T - Bt);
+  let g = '';
+  [0, 25, 50, 75, 100].forEach(v => g += `<line x1="${L}" x2="${W - Rr}" y1="${y(v)}" y2="${y(v)}" stroke="#EEF1F4"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" font-size="11.5" fill="#5B6573">${v}</text>`);
+  [0, 25, 50, 75, 100].forEach(p => g += `<text x="${L + p / 100 * (W - L - Rr)}" y="${H - 12}" text-anchor="middle" font-size="11.5" fill="#5B6573">${p}%</text>`);
+  g += `<line x1="${L + .5 * (W - L - Rr)}" x2="${L + .5 * (W - L - Rr)}" y1="${T}" y2="${H - Bt}" stroke="#C9D1DB" stroke-dasharray="4 4"/><text x="${L + .5 * (W - L - Rr) + 6}" y="${H - Bt - 6}" font-size="11.5" fill="#5B6573">1바퀴</text>`;
+  avg.forEach((r, k) => { g += `<path d="${r.map((v, b) => (b ? 'L' : 'M') + x(b).toFixed(1) + ',' + y(v).toFixed(1)).join(' ')}" fill="none" stroke="${SC[k]}" stroke-width="2" stroke-linejoin="round"/>`; });
+  const ends = avg.map((r, k) => ({ k, y: y(r[B - 1]) })).sort((a, b) => a.y - b.y); for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 14) ends[i].y = ends[i - 1].y + 14;
+  ends.forEach(({ k, y: yy }) => g += `<text x="${W - Rr + 8}" y="${yy + 4}" font-size="12" font-weight="800" fill="#3B4453">${STY[k]}</text>`);
+  g += `<line id="ecx" x1="0" x2="0" y1="${T}" y2="${H - Bt}" stroke="#141820" stroke-width="1" opacity="0"/><rect id="ech" x="${L}" y="${T}" width="${W - L - Rr}" height="${H - T - Bt}" fill="transparent"/>`;
+  const el = document.getElementById('ec');
+  el.innerHTML = `<div class="ttl">각질별 남은 기운 — 경주 진행에 따라</div><div class="sub">균형 서킷 · 100판 평균 · 세로 = 남은 기운(0~100), 가로 = 경주 진행</div><div class="legend">${STY.map((s, k) => `<span><i style="background:${SC[k]}"></i>${s}</span>`).join('')}</div><svg viewBox="0 0 ${W} ${H}">${g}</svg>`;
+  const sv = el.querySelector('svg'), ln = el.querySelector('#ecx');
+  el.querySelector('#ech').onmousemove = e => { const r = sv.getBoundingClientRect(), px = (e.clientX - r.left) / r.width * W, b = Math.max(0, Math.min(B - 1, Math.floor((px - L) / (W - L - Rr) * B))); ln.setAttribute('x1', x(b)); ln.setAttribute('x2', x(b)); ln.setAttribute('opacity', .35); showTip(e, `경주 ${Math.round((b + .5) / B * 100)}% 지점<br>` + STY.map((s, k) => `${s} ${Math.round(avg[k][b])}`).join(' · ')); };
+  el.querySelector('#ech').onmouseleave = () => { tip.style.opacity = 0; ln.setAttribute('opacity', 0); };
+})();
+// ── 밸런스 차트
+const CN = SIM.circuits.map(c => c.name);
+bars(document.getElementById('c1'), '서킷별 · 각질별 1등 확률', '포로 한 마리 기준', SIM.circuits.map(c => ({ n: c.name, v: STY.map(s => c.win[s]) })),
   [{ n: '깡총(도주)', c: C.s1 }, { n: '앞장(선행)', c: C.s2 }, { n: '눈치(선입)', c: C.s3 }, { n: '뒷심(추입)', c: C.s4 }], 25, 12.5, '평균 12.5%');
-bars(document.getElementById('c2'), '코스별 · 적성별 1등 확률', '포로 한 마리 기준', CN.map(([k, n]) => ({ n, v: ['직진', '코너'].map(s => SIM.course[k].win[s]) })),
+bars(document.getElementById('c2'), '서킷별 · 적성별 1등 확률', '포로 한 마리 기준', SIM.circuits.map(c => ({ n: c.name, v: ['직진', '코너'].map(s => c.win[s]) })),
   [{ n: '직진형', c: C.s1 }, { n: '코너형', c: C.s2 }], 25, 12.5, '평균 12.5%');
 const pf = x => parseFloat(x);
-bars(document.getElementById('c3'), '간식 타이밍에 따른 결과', '보통 길 · 코너형 깡총 한 마리', Object.entries(SIM.snack).map(([n, v]) => ({ n, v: [pf(v.win), pf(v.top3)] })),
-  [{ n: '1등 확률', c: C.s1 }, { n: '3등 안 확률', c: C.s2 }], 50, 12.5, '평균 1등 확률 12.5%');
-bars(document.getElementById('c4'), '응원을 받은 비율에 따른 결과', '보통 길 · 직진형 눈치 한 마리, 전체 응원 중 이 포로가 받은 비율', Object.entries(SIM.cheer).filter(([n]) => n !== '응원 없음').map(([n, v]) => ({ n, v: [pf(v.win), pf(v.last)] })),
+bars(document.getElementById('c3'), '간식 타이밍에 따른 결과', '균형 서킷 · 직진형 깡총 한 마리 · 간식을 줄 때 남아 있던 기운', Object.entries(SIM.snack).map(([n, v]) => ({ n, v: [pf(v.win), pf(v.top3)] })),
+  [{ n: '1등 확률', c: C.s1 }, { n: '3등 안 확률', c: C.s2 }], 70, 12.5, '평균 1등 확률 12.5%');
+bars(document.getElementById('c4'), '응원을 받은 비율에 따른 결과', '균형 서킷 · 직진형 눈치 한 마리 · 전체 응원 중 이 포로가 받은 비율', Object.entries(SIM.cheer).map(([n, v]) => ({ n, v: [pf(v.win), pf(v.last)] })),
   [{ n: '1등 확률', c: C.s1 }, { n: '꼴찌 확률', c: C.s2 }], 25, 12.5, '평균 12.5%');
+// 통계 카드 · 해석(시뮬레이션 숫자에서 바로 만듦)
+const sc = SIM.circuits, rng2 = a => `${Math.min(...a)}~${Math.max(...a)}`;
+document.getElementById('stat').innerHTML = [
+  [rng2(sc.map(c => c.passes)), '경주당 추월(회)', sc.map(c => `${c.name.replace(' 서킷', '')} ${c.passes}`).join(' · ')],
+  [rng2(sc.map(c => c.leadChanges)), '경주당 선두 교체(회)', sc.map(c => `${c.name.replace(' 서킷', '')} ${c.leadChanges}`).join(' · ')],
+  [rng2(sc.map(c => c.winTime)), '우승 기록(초)', '출전표 60초 + 결과 20초를 더해 한 판 약 3분']
+].map(([v, l, d]) => `<div class="card"><div class="v">${v}</div><div class="l">${l}</div><div class="l" style="margin-top:4px">${d}</div></div>`).join('');
+const best = sc.map(c => { const f = favOf(c); return `${c.name}은 <b>${f.ap[0][0]}형 · ${f.st[0][0]}</b>`; }).join(', ');
+const topW = Math.max(...sc.flatMap(c => Object.entries(c.win).filter(([k]) => k.includes('·')).map(([, v]) => v)));
+document.getElementById('balNote').innerHTML = `<b>읽힌다:</b> ${best}가 1등을 가장 자주 합니다. 길이 넓은 고속 서킷에서는 뒤에서 오는 뒷심도 평균에 가깝지만, 길이 좁은 테크니컬 서킷에서는 앞자리를 잡는 깡총 · 앞장이 크게 앞섭니다. <b>정해지지는 않는다:</b> 가장 유리한 적성 · 각질 조합도 1등 확률은 <b>${topW}%</b> — 4~5판에 1번 정도라, 읽은 사람이 유리하지만 결과는 끝까지 모릅니다.`;
+const sn = SIM.snack, ch = SIM.cheer, sk = Object.keys(sn), ck = Object.keys(ch);
+document.getElementById('actNote').innerHTML = `<b>간식:</b> 기운이 바닥이거나 절반일 때 주면 1등 확률이 ${sn[sk[3]].win} → ${sn[sk[0]].win} · ${sn[sk[1]].win}로 오르지만, 거의 가득일 때 주면 넘쳐서 버려져 ${sn[sk[2]].win} — 안 준 것과 비슷합니다. 이기게 해 주는 아이템이 아니라 몇 %p를 보태는 타이밍 놀이입니다. <b>응원:</b> 응원의 70%를 몰아받아도 1등 확률은 ${ch[ck[0]].win} → ${ch[ck[3]].win}로 거의 그대로지만, 꼴찌 확률은 ${ch[ck[0]].last} → ${ch[ck[3]].last}로 크게 줄어듭니다. 응원은 뒤처진 포로를 구할 뿐 1등을 만들어 주지 않습니다.`;
 </script>
 </body>
 </html>

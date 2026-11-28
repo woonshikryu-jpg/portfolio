@@ -4,9 +4,11 @@
   const P = {
     L: 1000, laps: 2, seg: 8, v0: 24, dt: 0.1,
     apt: 0.02,                      // 적성: 직진형은 직선 +2% · 코너 −2%, 코너형은 반대
-    energy: { cap: 100, start: 100, boost: 0.16, use: 22, charge: 9, cornerCharge: 1.6 },   // 기운: 쓰는 동안 +16% · 초당 22 소모 · 코너에서 초당 9 충전
-    slip: { gap: 14, bonus: 0.035 }, // 슬립스트림: 직선에서 앞 포로 14 안쪽이면 +3.5%
-    slipP: 0.012, slipT: 1.2, slipMult: 0.3, accel: 0.22,   // 미끄러짐: 커브에서 초당 1.2%, 1.2초 동안 속도 30% · 속도 변화는 부드럽게
+    energy: { cap: 100, start: 100, boost: 0.08, burst: 0.14, use: 22, charge: 9, cornerCharge: 1.6 },   // 기운: 쓰는 동안 +8%에 남은 기운만큼 최대 +14% 더 · 초당 22 소모 · 코너에서 초당 9 충전(코너형 ×1.6)
+    slip: { gap: 12, bonus: 0.1, wind: 0.02 }, // 슬립스트림: 직선에서 같은 줄 앞 포로 12 안쪽이면 +10% · 맨 앞은 맞바람 −2%
+    accel: 0.22,                                            // 속도 변화는 부드럽게
+    track: { start: 24, narrow: 10, taper: [20, 90] },       // 길 폭: 출발선만 8마리가 나란히(24), 그 뒤로 서킷마다 3~4마리 폭으로 좁아짐
+    body: { len: 3.4, wid: 2.4, side: 7 },                  // 포로 크기 · 옆으로 비키는 속도(초당)
     cheer: { minRank: 5, rate: 1.2, cap: 1.6 },             // 응원: 5~8위일 때만, 응원 비율만큼 기운 충전(평균 초당 1.2, 몰려도 최대 1.9)
     snack: 100,                                             // 간식: 기운을 가득(100) 충전(최대 100 — 넘치는 만큼은 버려짐)
     form: 0.03, noise: 0.015
@@ -20,9 +22,9 @@
   };
   // ── 서킷: 직선(S 길이) · 코너(C 각도°, 반지름, +왼쪽 −오른쪽). 표시(1)한 두 직선 길이를 풀어 정확히 닫음
   const CIRCUITS = [
-    { key: 'fast', name: '고속 서킷', desc: '긴 직선 둘, 시케인 둘', segs: [['S', 8, 1], ['C', -90, 1.0], ['S', 3, 1], ['C', -30, .8], ['C', 30, .8], ['S', 2], ['C', -90, .9], ['S', 7], ['C', -90, 1.0], ['S', 1.5], ['C', 40, .6], ['C', -40, .6], ['S', 1], ['C', -90, .9]] },
-    { key: 'mid', name: '균형 서킷', desc: '헤어핀 하나, 직선과 코너가 고루', segs: [['S', 6, 1], ['C', -90, .8], ['S', 2.5, 1], ['C', -60, 1.0], ['S', 1.5], ['C', 80, .8], ['C', -150, .6], ['S', 3.5], ['C', -50, 1.3], ['S', 2], ['C', -60, .8], ['S', 2.5], ['C', 70, 1.0], ['C', -100, 1.1]] },
-    { key: 'tech', name: '테크니컬 서킷', desc: '좌우 코너가 쉬지 않고 이어짐', segs: [['S', 4.5, 1], ['C', -100, .55], ['C', 70, .55], ['S', 1, 1], ['C', -90, .55], ['C', -60, .6], ['S', 1.5], ['C', 100, .5], ['C', -120, .55], ['S', 1.2], ['C', -80, .6], ['C', 60, .6], ['C', -90, .6], ['S', 1.4], ['C', -60, .6], ['S', .8], ['C', 40, .7], ['C', -30, .7]] }
+    { key: 'fast', name: '고속 서킷', desc: '긴 직선 둘, 시케인 둘 · 길 폭 넉넉(4마리)', width: 11.5, segs: [['S', 8, 1], ['C', -90, 1.0], ['S', 3, 1], ['C', -30, .8], ['C', 30, .8], ['S', 2], ['C', -90, .9], ['S', 7], ['C', -90, 1.0], ['S', 1.5], ['C', 40, .6], ['C', -40, .6], ['S', 1], ['C', -90, .9]] },
+    { key: 'mid', name: '균형 서킷', desc: '헤어핀 하나, 직선과 코너가 고루 · 길 폭 3~4마리', width: 9.5, segs: [['S', 6, 1], ['C', -90, .8], ['S', 2.5, 1], ['C', -60, 1.0], ['S', 1.5], ['C', 80, .8], ['C', -150, .6], ['S', 3.5], ['C', -50, 1.3], ['S', 2], ['C', -60, .8], ['S', 2.5], ['C', 70, 1.0], ['C', -100, 1.1]] },
+    { key: 'tech', name: '테크니컬 서킷', desc: '좌우 코너가 쉬지 않고 이어짐 · 길 폭 좁음(3마리)', width: 8, segs: [['S', 4.5, 1], ['C', -100, .55], ['C', 70, .55], ['S', 1, 1], ['C', -90, .55], ['C', -60, .6], ['S', 1.5], ['C', 100, .5], ['C', -120, .55], ['S', 1.2], ['C', -80, .6], ['C', 60, .6], ['C', -90, .6], ['S', 1.4], ['C', -60, .6], ['S', .8], ['C', 40, .7], ['C', -30, .7]] }
   ];
   function walk(segs, extra) {
     let x = 0, y = 0, a = 0; const pts = [], kinds = [], sgn = [];
@@ -50,7 +52,7 @@
     const rr = []; for (let k = 0; k < N; k++) if (k === 0 || kinds[k] !== kinds[k - 1]) rr.push({ from: k / N * P.L, k: kinds[k], sgn: sgn[k] });
     rr.forEach((r, i) => r.to = i + 1 < rr.length ? rr[i + 1].from : P.L);
     const longest = Math.max(...rr.filter(r => r.k === 'S').map(r => r.to - r.from));
-    return { key: c.key, name: c.name, desc: c.desc, pts, kinds, sgn, runs: rr, curveRatio: kinds.filter(k => k === 'C').length / N, corners: rr.filter(r => r.k === 'C').length, longest };
+    return { key: c.key, name: c.name, desc: c.desc, width: c.width, pts, kinds, sgn, runs: rr, curveRatio: kinds.filter(k => k === 'C').length / N, corners: rr.filter(r => r.k === 'C').length, longest };
   }
   const BUILT = CIRCUITS.map(buildCircuit);
   function rng(seed) { let s = (Math.imul(seed >>> 0 ^ 0x9E3779B9, 0x85EBCA6B) >>> 0) || 1; const f = () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; for (let k = 0; k < 8; k++) f(); return f; }
@@ -59,9 +61,10 @@
   function newRace(entries, course, seed) {
     const R = rng(seed);
     return { R, course, t: 0, done: false, total: P.L * P.laps, finished: [], passes: 0, leadChanges: 0, lastLead: -1,
-      poros: entries.map((e, i) => ({ i, name: e.name, apt: e.apt, style: e.style, d: -i * 0.4, e: P.energy.start, boosting: false, drafting: false, snacked: false,
-        slip: 0, fin: null, v: 0, nz: 0, form: 1 + (R() * 2 - 1) * P.form, slips: 0, cheerE: 0, snackAt: null, snackGain: 0, rank: i + 1 })) };
+      poros: entries.map((e, i) => ({ i, name: e.name, apt: e.apt, style: e.style, d: 0, y: (i - 3.5) * 2.8, ty: (i - 3.5) * 2.8 * .3, blocked: false, passWait: 0, e: P.energy.start, boosting: false, drafting: false, snacked: false,
+        fin: null, v: 0, nz: 0, form: 1 + (R() * 2 - 1) * P.form, cheerE: 0, snackAt: null, snackGain: 0, rank: i + 1 })) };
   }
+  function halfW(d, course) { const T = P.track, n = course ? course.width : T.narrow, k = Math.max(0, Math.min(1, (d - T.taper[0]) / (T.taper[1] - T.taper[0]))); return (T.start + (n - T.start) * k) / 2; }
   function ranks(race) { return race.poros.slice().sort((a, b) => (a.fin ?? 1e9) - (b.fin ?? 1e9) || b.d - a.d); }
   // cheerShare: 포로별 최근 응원 비율(합 1). 없으면 응원 없음
   function step(race, cheerShare) {
@@ -76,19 +79,32 @@
       let m = p.form * (1 + p.nz * P.noise * 2);
       m *= (p.apt === '직진') === (seg === 'S') ? 1 + P.apt : 1 - P.apt;
       // 기운: 직선에서 각질 전략대로 쓰면 빨라지고, 코너에서 찬다
-      p.boosting = seg === 'S' && p.e > 0 && STRAT[p.style](prog, p.e);
-      if (p.boosting) { m *= 1 + E.boost; p.e = Math.max(0, p.e - E.use * dt); }
+      p.boosting = seg === 'S' && p.e > 0 && (STRAT[p.style](prog, p.e) || (p.chance && p.e > 25));   // 앞이 막혔다가 옆이 열리면 아껴 둔 기운으로 치고 나감
+      if (p.boosting) { m *= 1 + E.boost + E.burst * p.e / E.cap;   // 기운이 많이 남아 있을수록 더 세게 치고 나감
+        p.e = Math.max(0, p.e - E.use * dt); }
       if (seg === 'C') p.e = Math.min(E.cap, p.e + E.charge * (p.apt === '코너' ? E.cornerCharge : 1) * dt);   // 코너형은 코너에서 더 빨리 참
       // 슬립스트림: 직선에서 바로 앞 포로 뒤에 붙으면 빨라짐
-      const k = live.indexOf(p), f = k > 0 ? live[k - 1] : null;
-      p.drafting = seg === 'S' && !!f && f.d - p.d < P.slip.gap && f.d - p.d > 0;
+      let f = null; for (const q of live) { const g = q.d - p.d; if (q !== p && g > 0 && g < P.slip.gap && Math.abs(q.y - p.y) < P.body.wid * 1.3 && (!f || g < f.d - p.d)) f = q; }
+      p.drafting = seg === 'S' && !!f;
       if (p.drafting) m *= 1 + P.slip.bonus;
+      p.headwind = seg === 'S' && p.rank === 1;          // 맨 앞은 바람을 정면으로 맞음
+      if (p.headwind) m *= 1 - P.slip.wind;
       // 응원: 5~8위일 때만 기운 충전
       if (cheerShare && p.rank >= P.cheer.minRank) { const c = Math.min(P.cheer.cap, (cheerShare[p.i] || 0) * race.poros.length) * P.cheer.rate * dt; const add = Math.min(E.cap - p.e, c); p.e += add; p.cheerE += add; }
-      // 미끄러짐: 커브에서 모두 같은 확률, 멈추지 않고 휘청
-      if (p.slip > 0) { p.slip -= dt; m *= P.slipMult; }
-      else if (seg === 'C' && R() < P.slipP * dt) { p.slip = P.slipT; p.slips++; m *= P.slipMult; }
-      const tv = P.v0 * m; p.v = race.t === 0 ? tv * .5 : p.v + (tv - p.v) * P.accel;
+      let tv = P.v0 * m;
+      // 길막: 바로 앞에 겹쳐 달리는 포로가 있으면 빈 쪽으로 비켜 추월, 빈 곳이 없으면 뒤따라감
+      const B = P.body, hw = halfW(p.d, race.course) - B.wid / 2;
+      let fr = null; for (const q of live) { if (q === p) continue; const g = q.d - p.d; if (g > 0 && g < B.len * 1.6 && Math.abs(q.y - p.y) < B.wid) { if (!fr || g < fr.d - p.d) fr = q; } }
+      p.blocked = false; if (!fr) p.chance = false;
+      if (fr && tv > fr.v * .98) {
+        const clear = y => y >= -hw && y <= hw && !live.some(q => q !== p && Math.abs(q.y - y) < B.wid * .95 && q.d - p.d > -B.len * .6 && q.d - p.d < B.len * 1.2);
+        const c1 = p.y + B.wid * 1.05, c2 = p.y - B.wid * 1.05, o1 = clear(c1), o2 = clear(c2);
+        if (o1 || o2) p.ty = o1 && o2 ? (R() < .5 ? c1 : c2) : o1 ? c1 : c2;
+        p.chance = !!(o1 || o2);
+        if (fr.d - p.d < B.len * 1.15 && Math.abs(p.ty - p.y) > .2 ? true : fr.d - p.d < B.len * 1.15) { tv = Math.min(tv, fr.v); p.blocked = true; }
+      }
+      p.ty = Math.max(-hw, Math.min(hw, p.ty)); const dy = p.ty - p.y; p.y += Math.max(-B.side * dt, Math.min(B.side * dt, dy)); p.y = Math.max(-hw, Math.min(hw, p.y));
+      p.v = race.t === 0 ? tv * .5 : p.v + (tv - p.v) * P.accel; if (p.blocked) p.v = Math.min(p.v, tv);
     }
     for (const p of race.poros) {
       if (p.fin !== null) continue;
@@ -112,6 +128,6 @@
     const gain = Math.min(P.snack, P.energy.cap - p.e); p.e += gain; p.snacked = true; p.snackAt = race.t; p.snackGain = gain;
     return { res: gain >= P.snack * .8 ? 'ok' : gain >= P.snack * .4 ? 'half' : 'waste', gain };
   }
-  const api = { P, STRAT, CIRCUITS: BUILT, rng, makeCourse, segAt, newRace, step, ranks, giveSnack };
+  const api = { P, STRAT, halfW, CIRCUITS: BUILT, rng, makeCourse, segAt, newRace, step, ranks, giveSnack };
   if (typeof module !== 'undefined') module.exports = api; else root.PoroEngine = api;
 })(this);
