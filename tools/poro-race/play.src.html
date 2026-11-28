@@ -147,7 +147,8 @@ canvas{width:100%;display:block}
       <canvas id="cv"></canvas>
       <div class="tv-ctl">
         <div class="speed">배속 <button data-s="1" class="on">1배</button><button data-s="2">2배</button><button data-s="4">4배</button></div>
-        <div class="speed cam">카메라 <button data-c="follow" class="on">중계</button><button data-c="mine">내 포로</button><button data-c="wide">전체</button></div>
+        <div class="speed cam">카메라 <button data-c="auto" class="on">🎬 자동 중계</button><button data-c="side">옆</button><button data-c="drone">드론</button><button data-c="front">정면</button><button data-c="close">근접</button></div>
+        <div class="speed tgt">따라갈 포로 <button data-t="lead" class="on">선두</button><button data-t="mine">내 포로</button><span style="font-size:11.5px">· 아래 순위 띠를 누르면 그 포로</span></div>
       </div>
     </div>
     <div class="under">
@@ -222,8 +223,8 @@ function pick(i) {
   $('pickInfo').textContent = `${e.apt}형 · ${e.style}` + (rareSet().has(i) ? ' · 숨은 포로라 1등이면 +3점' : '');
 }
 // ───────── 경주: 경마 중계처럼 ─────────
-let phase = 'pick', countdown = 0, cam = 'follow', camX = 0, camSpan = 170, vt = 0, slow = false;
-let cap = { t: '', until: 0, k: '' }, flags = {}, prevLead = -1, leadAt = 0, spray = [], snow = [], map = null, crowdTile = null;
+let phase = 'pick', countdown = 0, vt = 0, slow = false;
+let cap = { t: '', until: 0, k: '' }, flags = {}, prevLead = -1, leadAt = 0, spray = [], snow = [], map = null;
 function start() {
   crowd[mine] += 1;
   race = E.newRace(entries, course, Math.floor(R() * 1e9));
@@ -232,7 +233,7 @@ function start() {
   $('pickWrap').style.display = 'none'; $('raceWrap').style.display = 'block'; setStep(2);
   const e = entries[mine]; $('meName').innerHTML = `<span class="tok" style="background:${e.color}">${mine + 1}</span>내 포로 · ${e.name} <span class="st" style="margin-left:6px">${e.apt}형 · ${e.style}</span>`;
   $('snackBtn').disabled = false; $('snackBtn').classList.remove('ready');
-  buildMap(); initSnow(); phase = 'gate'; countdown = 3.4; camX = -20; camSpan = 150; vt = 0;
+  buildMap(); initSnow(); phase = 'gate'; countdown = 3.4; vt = 0; dir = { auto: true, angle: 'side', tgt: 'lead', until: 0, cutAt: -9, prio: 0 }; view = { side: { x: 0, span: 150 }, pip: { x: 0, span: 70 } }; syncCamUI();
   caption(`${ctypeName}, 출발 게이트에 포로 8마리가 들어섭니다. 내 포로는 ${mine + 1}번 ${e.name}!`, 3.4, 'gate');
   last = performance.now(); acc = 0; cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
   $('tv').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -242,20 +243,20 @@ function share() {
   return crowd.map((c, i) => (c + (i === mine ? myBoost : 0)) / tot);
 }
 function say(t) { const d = document.createElement('div'); d.textContent = `${race ? race.t.toFixed(1) : '0.0'}초 · ${t}`; $('log').prepend(d); }
-function caption(t, sec = 3, k = '') { cap = { t, until: vt + sec, k }; say(t); }
+function caption(t, sec = 3, k = '', pi = null, ev = null) { cap = { t, until: vt + sec, k }; say(t); if (pi !== null) onEvent(pi, ev); }
 const nm = p => `${p.i + 1}번 ${p.name}`;
 function commentate() {
   const ord = E.ranks(race), a = ord[0], b = ord[1], c = ord[2], tot = race.total, segL = P.L / P.seg;
   if (!flags.open && race.t > 2.5) { flags.open = 1; caption(`${nm(a)}(${a.style}) 좋은 출발! 선두로 나섭니다. 2위 ${b.name}, 3위 ${c.name}`, 3.5); prevLead = a.i; leadAt = race.t; }
-  if (flags.open && a.i !== prevLead && race.t - leadAt > 4 && a.fin === null) { prevLead = a.i; leadAt = race.t; caption(`선두가 바뀝니다! ${nm(a)}가 앞으로 나옵니다`, 2.6); }
+  if (flags.open && a.i !== prevLead && race.t - leadAt > 4 && a.fin === null) { prevLead = a.i; leadAt = race.t; caption(`선두가 바뀝니다! ${nm(a)}가 앞으로 나옵니다`, 2.6, '', a.i, 'lead'); }
   if (!flags.lap && a.d >= P.L) { flags.lap = 1; caption(`1바퀴 통과! 선두 ${a.name}, 2위 ${b.name}, 3위 ${c.name}. 이제 마지막 바퀴`, 3.5); }
   if (!flags.home && a.d >= tot - segL) { flags.home = 1; const closer = ord.slice(1, 5).find(p => p.style === '뒷심'); caption(`마지막 직선! ${a.name} 앞, ${b.name} 따라붙습니다` + (closer ? ` — 바깥에서 뒷심 ${closer.name}!` : ''), 3.2); }
   if (!flags.f200 && a.d >= tot - 200 && flags.home) { flags.f200 = 1; caption(`결승까지 200! ${a.name} · ${b.name} · ${c.name}`, 2.4); }
   race.poros.forEach((p, i) => {
-    if (p.slips > (logged['s' + i] || 0)) { logged['s' + i] = p.slips; if (i === mine || p.rank <= 4) caption(`앗, ${nm(p)} 커브에서 미끄러집니다!`, 2.2); }
-    if (p.tired && !logged['t' + i]) { logged['t' + i] = 1; if (i === mine) caption(`💦 내 포로 ${p.name} 지쳤습니다! 지금 간식을!`, 2.6, 'tired'); else if (p.rank <= 3) caption(`💦 선두권 ${p.name} 지쳤습니다`, 2.2); }
+    if (p.slips > (logged['s' + i] || 0)) { logged['s' + i] = p.slips; if (i === mine || p.rank <= 4) caption(`앗, ${nm(p)} 커브에서 미끄러집니다!`, 2.2, '', i, 'slip'); }
+    if (p.tired && !logged['t' + i]) { logged['t' + i] = 1; if (i === mine) caption(`💦 내 포로 ${p.name} 지쳤습니다! 지금 간식을!`, 2.6, 'tired', i, 'tired'); else if (p.rank <= 3) caption(`💦 선두권 ${p.name} 지쳤습니다`, 2.2); }
     if (p.recovered && !logged['r' + i]) { logged['r' + i] = 1; if (i === mine || p.rank <= 3) caption(`🍪 간식을 먹은 ${p.name}, 다시 힘을 냅니다!`, 2.4); }
-    if (p.dashes > (logged['d' + i] || 0)) { logged['d' + i] = p.dashes; if (i === mine) caption(`📣 응원을 받은 ${p.name}, 바깥에서 질주!`, 2.2); }
+    if (p.dashes > (logged['d' + i] || 0)) { logged['d' + i] = p.dashes; if (i === mine) caption(`📣 응원을 받은 ${p.name}, 바깥에서 질주!`, 2.2, '', i, 'dash'); }
   });
   if (race.finished.length >= 1 && !flags.win) {
     flags.win = 1; const w = race.poros[race.finished[0]];
@@ -292,7 +293,8 @@ function loop(now) {
 // ── 미니맵 경로: 8구간(직선 = 선, 커브 = 호)을 이어 닫힌 고리로
 function buildMap() {
   const nc = course.kinds.filter(k => k === 'C').length, turn = 2 * Math.PI / nc, pts = []; let x = 0, y = 0, a = 0;
-  course.kinds.forEach(k => { for (let s = 0; s < 30; s++) { pts.push([x, y]); if (k === 'C') a += turn / 30; const st = (k === 'C' ? 0.75 : 1) / 30; x += Math.cos(a) * st; y += Math.sin(a) * st; } });
+  const cl = Math.max(.75, turn * .75);   // 커브 반지름이 주로 폭보다 넉넉하게
+  course.kinds.forEach(k => { for (let s = 0; s < 30; s++) { pts.push([x, y]); if (k === 'C') a += turn / 30; const st = (k === 'C' ? cl : 1) / 30; x += Math.cos(a) * st; y += Math.sin(a) * st; } });
   const dx = x - pts[0][0], dy = y - pts[0][1], n = pts.length;
   pts.forEach((p, i) => { p[0] -= dx * i / n; p[1] -= dy * i / n; });
   const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]), mnx = Math.min(...xs), mxx = Math.max(...xs), mny = Math.min(...ys), mxy = Math.max(...ys);
@@ -301,39 +303,75 @@ function buildMap() {
 function mapPt(d, ox, oy, w, h) { const n = map.pts.length, f = ((d % P.L) / P.L) * n, p = map.pts[Math.min(n - 1, Math.floor(f))], s = Math.min(w / map.w, h / map.h); return [ox + (w - map.w * s) / 2 + (p[0] - map.mnx) * s, oy + (h - map.h * s) / 2 + (p[1] - map.mny) * s]; }
 function initSnow() { snow = Array.from({ length: 90 }, () => ({ x: Math.random(), y: Math.random(), r: .6 + Math.random() * 1.8, v: .02 + Math.random() * .05 })); }
 const cv = $('cv'), cx = cv.getContext('2d');
-function fit() { const w = cv.clientWidth || 960, h = Math.round(w * 9 / 16), d = devicePixelRatio || 1; if (cv.width !== Math.round(w * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px'; crowdTile = null; } cx.setTransform(d, 0, 0, d, 0, 0); return [w, h]; }
+function fit() { const w = cv.clientWidth || 960, h = Math.round(w * 9 / 16), d = devicePixelRatio || 1; if (cv.width !== Math.round(w * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px'; crowdTiles = {}; } cx.setTransform(d, 0, 0, d, 0, 0); return [w, h]; }
 addEventListener('resize', () => race && draw(0));
 function hash(n) { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); }
-function makeCrowd(h) {
-  const t = document.createElement('canvas'); t.width = 240; t.height = Math.max(20, Math.round(h)); const g = t.getContext('2d');
+let crowdTiles = {};
+function crowdTile(h) {
+  h = Math.max(20, Math.round(h)); if (crowdTiles[h]) return crowdTiles[h];
+  const t = document.createElement('canvas'); t.width = 240; t.height = h; const g = t.getContext('2d');
   const cols = ['#C8D3E6', '#E8B7A8', '#B7C9A8', '#D9C27A', '#A8B4D9', '#E0A3B9', '#F2F2F2', '#8EA3C2'];
   g.fillStyle = '#5A6680'; g.fillRect(0, 0, t.width, t.height);
   for (let r = 0; r < t.height / 7; r++) { g.fillStyle = 'rgba(0,0,0,.12)'; g.fillRect(0, r * 7 + 6, t.width, 1); for (let c = 0; c < 48; c++) { g.fillStyle = cols[Math.floor(hash(r * 31 + c) * cols.length)]; g.beginPath(); g.arc(c * 5 + 2.5 + (r % 2) * 2, r * 7 + 3, 1.8, 0, 7); g.fill(); } }
-  return t;
+  return (crowdTiles[h] = t);
 }
-function draw(dtw) {
-  const [W, H] = fit(), ord = E.ranks(race), tot = race.total, segL = P.L / P.seg;
-  // 카메라
-  let tx, span;
-  if (phase === 'gate') { tx = 25; span = 150; }
-  else if (cam === 'mine') { tx = race.poros[mine].d - 15; span = 160; }
-  else if (cam === 'wide') { const ds = race.poros.map(p => p.d), mn = Math.min(...ds), mx = Math.max(...ds); tx = (mn + mx) / 2; span = Math.max(220, (mx - mn) * 1.35 + 60); }
-  else { const a = ord[0].d, b = ord[Math.min(3, ord.length - 1)].d; tx = (a + b) / 2 - 4; span = Math.min(380, Math.max(150, (a - b) * 1.7 + 90)); }
-  if (slow) span = Math.min(span, 120);
-  camX += (tx - camX) * Math.min(1, .09 + dtw * 2); camSpan += (span - camSpan) * .05;
-  const sc = W / camSpan, X = d => W * .5 + (d - camX) * sc;
-  const farY = H * .52, nearY = H * .9, laneY = i => farY + (i + .5) / 8 * (nearY - farY) + H * .01, laneS = i => .78 + .42 * i / 7;
+// ── 카메라: 포로마다 4대(옆 · 드론 · 정면 · 근접) + 자동 중계
+const ANG = { side: '옆 카메라', drone: '드론', front: '정면 카메라', close: '근접 카메라' };
+const CAMNO = { side: 1, drone: 2, front: 3, close: 4 };
+let dir = { auto: true, angle: 'side', tgt: 'lead', until: 0, cutAt: -9, lastPi: -1, prio: 0 }, view = { side: { x: 0, span: 160 }, pip: { x: 0, span: 70 } }, flash = 0;
+function tgtIdx(t, ord) { return t === 'lead' ? ord[0].i : t === 'mine' ? mine : t; }
+function cut(angle, tgt, sec, prio = 0) {
+  if (vt < dir.until && prio <= dir.prio) return;
+  if (dir.angle !== angle || dir.tgt !== tgt) { flash = 1; dir.cutAt = vt; }
+  dir.angle = angle; dir.tgt = tgt; dir.until = vt + sec; dir.prio = prio;
+}
+function director(ord) {               // 자동 중계: 이벤트가 있으면 그 포로로 컷, 없으면 정해진 순서로 장면 바꿈
+  if (!dir.auto || phase !== 'run') return;
+  const a = ord[0], tot = race.total, segL = P.L / P.seg;
+  if (race.finished.length) { cut('side', ord[0].i, 99, 9); return; }
+  if (a.d > tot - 230) { const gap = ord[0].d - ord[1].d; cut(gap < 6 ? 'front' : 'side', 'lead', 99, 8); return; }
+  if (vt < dir.until) return;
+  const inCurve = course.kinds[Math.floor((a.d % P.L) / segL)] === 'C';
+  const seq = dir.seq = ((dir.seq || 0) + 1) % 6;
+  const battle = ord.slice(1, 6).reduce((b, p, k) => { const g = ord[k].d - p.d; return g < b.g ? { g, i: p.i } : b; }, { g: 1e9, i: ord[1].i });
+  if (seq === 0) cut('side', 'lead', 5);
+  else if (seq === 1) cut('drone', inCurve ? 'lead' : battle.i, 5);
+  else if (seq === 2) cut('close', battle.i, 3.5);
+  else if (seq === 3) cut('drone', 'mine', 4.5);
+  else if (seq === 4) cut(ord[0].d - ord[1].d < 12 ? 'front' : 'close', 'lead', 3.5);
+  else cut('side', 'mine', 4);
+}
+function onEvent(pi, kind) {           // 해설과 함께 카메라가 그 포로를 잡음
+  if (!dir.auto || phase !== 'run' || race.finished.length) return;
+  if (kind === 'slip') cut('close', pi, 2.6, 3);
+  else if (kind === 'tired' && pi === mine) cut('close', pi, 2.8, 4);
+  else if (kind === 'dash') cut('drone', pi, 2.6, 2);
+  else if (kind === 'lead') cut('front', pi, 3, 2);
+}
+// 미니맵 · 드론 공통: 주로 위 좌표(트랙 단위 u, 직선 1구간 = 1u = 125)
+function trackPt(d) {
+  const n = map.pts.length, f = ((((d % P.L) + P.L) % P.L) / P.L) * n, k = Math.floor(f) % n, k2 = (k + 1) % n, t = f - Math.floor(f);
+  const p = map.pts[k], q = map.pts[k2], x = p[0] + (q[0] - p[0]) * t, y = p[1] + (q[1] - p[1]) * t, hd = Math.atan2(q[1] - p[1], q[0] - p[0]);
+  return [x, y, hd];
+}
+const U = P.L / P.seg, LANE = 2.6 / U, TW = 8 * LANE + 6 / U;     // 레인 폭 · 주로 폭(u)
+function laneOff(i) { return (i + .5) * LANE + 2 / U; }            // 안쪽 난간에서 떨어진 거리
+// ── 옆 카메라(근접 = 더 가깝게)
+function renderSide(W, H, tgt, span, st, ord, dtw, small) {
+  const tot = race.total, segL = P.L / P.seg, tp = race.poros[tgt];
+  let tx = phase === 'gate' ? 25 : tp.d - span * .08;
+  if (!small && dir.angle === 'side' && phase === 'run' && dir.tgt === 'lead') { const a = ord[0].d, b = ord[Math.min(3, ord.length - 1)].d; tx = (a + b) / 2 - 4; span = Math.min(260, Math.max(130, (a - b) * 1.5 + 70)); }
+  if (slow && !small) span = Math.min(span, 120);
+  if (vt - dir.cutAt < .05 && !small) { st.x = tx; st.span = span; }
+  st.x += (tx - st.x) * Math.min(1, .1 + dtw * 2); st.span += (span - st.span) * .08;
+  const camX = st.x, sc = W / st.span, X = d => W * .5 + (d - camX) * sc;
+  const farY = H * .52, nearY = H * .9, laneY = i => farY + (i + .5) / 8 * (nearY - farY) + H * .01, laneS = i => (.95 + .45 * i / 7) * Math.max(1, Math.min(2.2, 150 / st.span));
   const bend = d => { if (d < 0 || d >= tot) return 0; const k = Math.floor(d / segL); if (course.kinds[k % P.seg] !== 'C') return 0; return Math.sin((d - k * segL) / segL * Math.PI); }, BY = (d, f = 1) => -bend(d) * H * .03 * f;
-  // 하늘 · 산
   let g = cx.createLinearGradient(0, 0, 0, H * .5); g.addColorStop(0, '#9CC3E6'); g.addColorStop(1, '#E7F0F8'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
   const par = (k, w) => ((camX * sc * k) % w + w) % w;
-  cx.fillStyle = '#B9CCE0'; cx.beginPath(); cx.moveTo(0, H * .34);
-  for (let x = 0; x <= W + 20; x += 20) { const wx = x + camX * sc * .05; cx.lineTo(x, H * (.22 + .07 * Math.sin(wx / 140) + .04 * Math.sin(wx / 53 + 1))); }
-  cx.lineTo(W, H * .4); cx.lineTo(0, H * .4); cx.fill();
-  cx.fillStyle = '#FFFFFF'; cx.globalAlpha = .55; cx.beginPath(); cx.moveTo(0, H * .36);
-  for (let x = 0; x <= W + 20; x += 20) { const wx = x + camX * sc * .05; cx.lineTo(x, H * (.22 + .07 * Math.sin(wx / 140) + .04 * Math.sin(wx / 53 + 1)) + 6); }
-  cx.lineTo(W, H * .3); cx.lineTo(0, H * .3); cx.fill(); cx.globalAlpha = 1;
-  // 광장 건물 실루엣(먼 곳)
+  const ridge = (x, o) => H * (.22 + .07 * Math.sin((x + camX * sc * .05) / 140) + .04 * Math.sin((x + camX * sc * .05) / 53 + 1)) + o;
+  cx.fillStyle = '#B9CCE0'; cx.beginPath(); cx.moveTo(0, H * .4); for (let x = 0; x <= W + 20; x += 20) cx.lineTo(x, ridge(x, 0)); cx.lineTo(W, H * .4); cx.fill();
+  cx.fillStyle = 'rgba(255,255,255,.55)'; cx.beginPath(); cx.moveTo(0, H * .3); for (let x = 0; x <= W + 20; x += 20) cx.lineTo(x, ridge(x, 6)); cx.lineTo(W, H * .3); cx.fill();
   const bw = 90, o1 = par(.22, bw * 8);
   for (let k = -1; k < W / bw + 2; k++) {
     const id = Math.floor((k * bw + o1) / bw), hgt = H * (.07 + .09 * hash(id)), x = k * bw - (o1 % bw);
@@ -341,39 +379,28 @@ function draw(dtw) {
     cx.beginPath(); cx.moveTo(x + 4, H * .4 - hgt); cx.lineTo(x + bw / 2 - 3, H * .4 - hgt - H * .05 * (.6 + hash(id + 3))); cx.lineTo(x + bw - 10, H * .4 - hgt); cx.fill();
     if (hash(id + 7) > .55) { cx.fillStyle = ['#2E5AAC', '#A33A3A', '#C9A227'][Math.floor(hash(id + 9) * 3)]; cx.fillRect(x + bw / 2 - 6, H * .4 - hgt + 6, 7, H * .045); }
   }
-  // 관중석
-  const gy0 = H * .39, gy1 = farY - H * .035;
-  if (!crowdTile) crowdTile = makeCrowd(gy1 - gy0);
+  const gy0 = H * .39, gy1 = farY - H * .035, ct = crowdTile(gy1 - gy0);
   cx.fillStyle = '#3E4A61'; cx.fillRect(0, gy0 - 6, W, 6);
-  const o2 = par(.6, crowdTile.width); for (let x = -o2; x < W; x += crowdTile.width) cx.drawImage(crowdTile, x, gy0, crowdTile.width, gy1 - gy0);
+  const o2 = par(.6, ct.width); for (let x = -o2; x < W; x += ct.width) cx.drawImage(ct, x, gy0, ct.width, gy1 - gy0);
   cx.fillStyle = '#2C3445'; cx.fillRect(0, gy1, W, H * .012);
-  // 깃발 줄
-  const o3 = par(.6, 70); for (let x = -o3; x < W; x += 70) { cx.fillStyle = ['#2E5AAC', '#A33A3A', '#C9A227', '#2F8F5A'][Math.floor(((x + o3 + camX * sc * .6) / 70) % 4 + 4) % 4]; cx.beginPath(); cx.moveTo(x, gy0 - 6); cx.lineTo(x + 14, gy0 - 6); cx.lineTo(x + 7, gy0 + 8); cx.fill(); }
-  // 주로(눈길) — 구간 색
+  const o3 = par(.6, 70); for (let x = -o3; x < W; x += 70) { cx.fillStyle = ['#2E5AAC', '#A33A3A', '#C9A227', '#2F8F5A'][((Math.round((x + o3 + camX * sc * .6) / 70) % 4) + 4) % 4]; cx.beginPath(); cx.moveTo(x, gy0 - 6); cx.lineTo(x + 14, gy0 - 6); cx.lineTo(x + 7, gy0 + 8); cx.fill(); }
   g = cx.createLinearGradient(0, farY, 0, H); g.addColorStop(0, '#E9EFF5'); g.addColorStop(1, '#FBFDFF'); cx.fillStyle = g; cx.fillRect(0, farY - H * .02, W, H);
-  const dL = camX - camSpan / 2 - 20, dR = camX + camSpan / 2 + 20;
+  const dL = camX - st.span / 2 - 20, dR = camX + st.span / 2 + 20;
   for (let k = Math.floor(dL / segL); k <= Math.ceil(dR / segL); k++) {
     if (k < 0 || k >= P.seg * P.laps) continue;
     const kind = course.kinds[k % P.seg], x0 = X(k * segL), x1 = X((k + 1) * segL);
     if (kind === 'C') { cx.fillStyle = 'rgba(70,150,220,.09)'; cx.fillRect(x0, farY - H * .02, x1 - x0, nearY - farY + H * .06); }
-    // 구간 표지판
-    cx.fillStyle = kind === 'C' ? '#2BA36B' : '#E59A3C'; cx.fillRect(x0 + 6, farY - H * .135, 62, 18);
-    cx.fillStyle = '#fff'; cx.font = '800 11px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText(kind === 'C' ? '커브 구간' : '직선 구간', x0 + 11, farY - H * .135 + 13);
+    if (!small) { cx.fillStyle = kind === 'C' ? '#2BA36B' : '#E59A3C'; cx.fillRect(x0 + 6, farY - H * .135, 62, 18); cx.fillStyle = '#fff'; cx.font = '800 11px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText(kind === 'C' ? '커브 구간' : '직선 구간', x0 + 11, farY - H * .135 + 13); }
   }
-  // 발자국 줄무늬
   cx.strokeStyle = 'rgba(160,180,200,.18)'; cx.lineWidth = 1;
   for (let i = 0; i < 8; i++) { cx.beginPath(); for (let x = 0; x <= W; x += 10) { const d = camX + (x - W * .5) / sc, y = laneY(i) + 10 * laneS(i) + BY(d, .6 + i / 14); x ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.stroke(); }
-  // 거리 기둥(남은 거리)
   for (let d = Math.ceil(dL / 100) * 100; d <= dR; d += 100) {
-    if (d <= 0 || d >= tot) continue; const x = X(d);
-    const by = BY(d, .5); cx.fillStyle = '#C0392B'; cx.fillRect(x - 1.5, farY - H * .05 + by, 3, H * .05);
-    cx.fillStyle = '#fff'; cx.strokeStyle = '#C0392B'; cx.lineWidth = 2; cx.beginPath(); cx.roundRect(x - 26, farY - H * .05 - 17 + by, 52, 18, 4); cx.fill(); cx.stroke();
-    cx.fillStyle = '#C0392B'; cx.font = '900 10.5px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText('남은 ' + (tot - d), x, farY - H * .05 - 4 + by);
+    if (d <= 0 || d >= tot) continue; const x = X(d), by = BY(d, .5);
+    cx.fillStyle = '#C0392B'; cx.fillRect(x - 1.5, farY - H * .05 + by, 3, H * .05);
+    if (!small) { cx.fillStyle = '#fff'; cx.strokeStyle = '#C0392B'; cx.lineWidth = 2; cx.beginPath(); cx.roundRect(x - 26, farY - H * .05 - 17 + by, 52, 18, 4); cx.fill(); cx.stroke(); cx.fillStyle = '#C0392B'; cx.font = '900 10.5px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText('남은 ' + (tot - d), x, farY - H * .05 - 4 + by); }
   }
-  // 안쪽 난간
   cx.strokeStyle = '#FFFFFF'; cx.lineWidth = 4; cx.beginPath(); for (let x = 0; x <= W; x += 8) { const d = camX + (x - W * .5) / sc, y = farY - H * .02 + BY(d, .5); x ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.stroke(); cx.fillStyle = '#9AA8B8';
   for (let d = Math.ceil(dL / 6) * 6; d <= dR; d += 6) cx.fillRect(X(d) - 1, farY - H * .022 + BY(d, .5), 2, H * .02);
-  // 게이트 · 1바퀴 선 · 결승선
   const line = (d, chk, label) => {
     const x = X(d); if (x < -60 || x > W + 60) return;
     if (chk) { for (let y = farY - H * .02, r = 0; y < nearY + H * .04; y += 8, r++) { cx.fillStyle = r % 2 ? '#111' : '#fff'; cx.fillRect(x - 4, y, 4, 8); cx.fillStyle = r % 2 ? '#fff' : '#111'; cx.fillRect(x, y, 4, 8); } }
@@ -383,70 +410,170 @@ function draw(dtw) {
   };
   line(P.L, false, '1바퀴'); line(tot, true, '결승');
   if (phase === 'gate' || race.t < 3) { const x = X(0); cx.fillStyle = 'rgba(60,70,90,.85)'; for (let i = 0; i <= 8; i++) { const y = farY + i / 8 * (nearY - farY); cx.fillRect(x + 4, y - 2, 30, 4); } cx.fillRect(x + 30, farY - H * .03, 6, nearY - farY + H * .05); if (phase === 'gate') { cx.fillStyle = 'rgba(200,40,40,.9)'; cx.fillRect(x + 34, farY - H * .03, 4, nearY - farY + H * .05); } }
-  // 포로(레이서)
-  const idx = race.poros.map((p, i) => i);
-  idx.forEach(i => {
-    const p = race.poros[i], s = laneS(i), x = X(p.d), y = laneY(i) + BY(p.d, .6 + i / 14), mv = p.slip > 0 ? 0 : 1, bob = Math.abs(Math.sin(vt * 13 + i * 1.7)) * 4 * s * mv;
-    if (x < -40 || x > W + 40) return;
-    // 눈 튐
-    if (phase === 'run' && p.fin === null && mv && Math.random() < .6) spray.push({ x: p.d, y, vx: -(.6 + Math.random()), vy: -(.5 + Math.random() * 1.2), a: 1, s });
+  race.poros.forEach((p, i) => {
+    const s = laneS(i), x = X(p.d), y = laneY(i) + BY(p.d, .6 + i / 14), mv = p.slip > 0 ? 0 : 1, bob = Math.abs(Math.sin(vt * 13 + i * 1.7)) * 4 * s * mv;
+    if (x < -60 || x > W + 60) return;
+    if (!small && phase === 'run' && p.fin === null && mv && Math.random() < .6) spray.push({ x: p.d, y, vx: -(.6 + Math.random()), vy: -(.5 + Math.random() * 1.2), a: 1, s });
     cx.fillStyle = 'rgba(60,80,110,.18)'; cx.beginPath(); cx.ellipse(x, y + 12 * s, 17 * s, 4.5 * s, 0, 0, 7); cx.fill();
     if (p.dash > 0) { cx.strokeStyle = 'rgba(37,99,235,.55)'; cx.lineWidth = 2; for (let k = 0; k < 4; k++) { cx.beginPath(); cx.moveTo(x - 22 * s - k * 6, y - 8 * s + k * 5 * s); cx.lineTo(x - 52 * s - k * 6, y - 8 * s + k * 5 * s); cx.stroke(); } }
-    cx.save(); cx.translate(x, y - bob); if (p.slip > 0) cx.rotate(Math.sin(vt * 22) * .6);
-    // 다리
-    cx.fillStyle = '#4A3A30'; const ph = vt * 18 + i; for (let k = 0; k < 2; k++) { const lx = (k ? 6 : -6) * s + Math.sin(ph + k * 3) * 4 * s * mv; cx.beginPath(); cx.ellipse(lx, 9 * s, 3.2 * s, 4 * s, 0, 0, 7); cx.fill(); }
-    // 몸(털뭉치) — 번호 천
-    cx.fillStyle = '#FFFFFF'; cx.beginPath(); cx.ellipse(0, 0, 16 * s, 12 * s, 0, 0, 7); cx.fill();
-    cx.strokeStyle = 'rgba(120,140,170,.45)'; cx.lineWidth = 1.2; cx.stroke();
-    cx.fillStyle = entries[i].color; cx.beginPath(); cx.roundRect(-9 * s, -7 * s, 18 * s, 13 * s, 3 * s); cx.fill();
-    cx.fillStyle = '#fff'; cx.font = `900 ${Math.round(10 * s)}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, 0, 3.5 * s);
-    cx.restore();
-    if (i === mine) { cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.ellipse(x, y + 12 * s, 21 * s, 6 * s, 0, 0, 7); cx.stroke(); cx.fillStyle = '#6C5CE7'; cx.beginPath(); cx.roundRect(x - 20 * s - 52, y - 9, 48, 17, 8); cx.fill(); cx.beginPath(); cx.moveTo(x - 20 * s - 5, y - 4); cx.lineTo(x - 20 * s + 1, y); cx.lineTo(x - 20 * s - 5, y + 4); cx.fill(); cx.fillStyle = '#fff'; cx.font = '900 10.5px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText('내 포로', x - 20 * s - 28, y + 3); }
-    cx.font = '800 12px Noto Sans KR'; cx.textAlign = 'left'; let tg = x + 18 * s;
-    if (p.tired && !p.recovered) { cx.fillText('💦', tg, y - 12 * s); tg += 18; }
-    if (p.slip > 0) { cx.fillStyle = '#0E7A34'; cx.fillText('미끄덩!', tg, y - 12 * s); }
-    if (p.dash > 0) { cx.fillStyle = '#2563EB'; cx.fillText('질주!', tg, y - 12 * s); }
+    runnerSide(x, y - bob, s, i, p, mv);
+    if (i === mine) { cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.ellipse(x, y + 12 * s, 21 * s, 6 * s, 0, 0, 7); cx.stroke(); if (!small) { cx.fillStyle = '#6C5CE7'; cx.beginPath(); cx.roundRect(x - 20 * s - 52, y - 9, 48, 17, 8); cx.fill(); cx.beginPath(); cx.moveTo(x - 20 * s - 5, y - 4); cx.lineTo(x - 20 * s + 1, y); cx.lineTo(x - 20 * s - 5, y + 4); cx.fill(); cx.fillStyle = '#fff'; cx.font = '900 10.5px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText('내 포로', x - 20 * s - 28, y + 3); } }
+    tags(x + 18 * s, y - 12 * s, p);
   });
-  // 눈 튐 파티클
-  spray = spray.filter(q => (q.a -= .04) > 0); spray.forEach(q => { q.x += q.vx * .6; q.y += q.vy; q.vy += .12; cx.fillStyle = `rgba(255,255,255,${q.a})`; cx.beginPath(); cx.arc(X(q.x) - 14 * q.s, q.y + 8 * q.s, 1.6 * q.s, 0, 7); cx.fill(); });
-  if (spray.length > 500) spray.splice(0, spray.length - 500);
-  // 화면 밖 포로 화살표
-  race.poros.forEach((p, i) => { const x = X(p.d); if (x >= -10 && x <= W + 10) return; const left = x < 0, y = laneY(i); cx.fillStyle = entries[i].color; cx.beginPath(); if (left) { cx.moveTo(6, y); cx.lineTo(18, y - 8); cx.lineTo(18, y + 8); } else { cx.moveTo(W - 6, y); cx.lineTo(W - 18, y - 8); cx.lineTo(W - 18, y + 8); } cx.fill(); cx.font = '900 11px Noto Sans KR'; cx.textAlign = left ? 'left' : 'right'; cx.fillStyle = i === mine ? '#6C5CE7' : '#3B4453'; cx.fillText(`${i + 1} ${Math.round(p.d - ord[0].d)}`, left ? 22 : W - 22, y + 4); });
-  // 바깥 난간(앞)
+  if (!small) {
+    spray = spray.filter(q => (q.a -= .04) > 0); spray.forEach(q => { q.x += q.vx * .6; q.y += q.vy; q.vy += .12; cx.fillStyle = `rgba(255,255,255,${q.a})`; cx.beginPath(); cx.arc(X(q.x) - 14 * q.s, q.y + 8 * q.s, 1.6 * q.s, 0, 7); cx.fill(); });
+    if (spray.length > 500) spray.splice(0, spray.length - 500);
+    race.poros.forEach((p, i) => { const x = X(p.d); if (x >= -10 && x <= W + 10) return; const left = x < 0, y = laneY(i); cx.fillStyle = entries[i].color; cx.beginPath(); if (left) { cx.moveTo(6, y); cx.lineTo(18, y - 8); cx.lineTo(18, y + 8); } else { cx.moveTo(W - 6, y); cx.lineTo(W - 18, y - 8); cx.lineTo(W - 18, y + 8); } cx.fill(); cx.font = '900 11px Noto Sans KR'; cx.textAlign = left ? 'left' : 'right'; cx.fillStyle = i === mine ? '#6C5CE7' : '#3B4453'; cx.fillText(`${i + 1} ${Math.round(p.d - ord[0].d)}`, left ? 22 : W - 22, y + 4); });
+  }
   cx.fillStyle = '#FFFFFF'; cx.fillRect(0, nearY + H * .045, W, 5); cx.fillStyle = '#7F8EA3';
   for (let d = Math.ceil(dL / 8) * 8; d <= dR; d += 8) { const x = W * .5 + (d - camX) * sc * 1.15; cx.fillRect(x - 2, nearY + H * .045, 4, H * .06); }
+}
+function runnerSide(x, y, s, i, p, mv) {
+  cx.save(); cx.translate(x, y); if (p.slip > 0) cx.rotate(Math.sin(vt * 22) * .6);
+  cx.fillStyle = '#4A3A30'; const ph = vt * 18 + i; for (let k = 0; k < 2; k++) { const lx = (k ? 6 : -6) * s + Math.sin(ph + k * 3) * 4 * s * mv; cx.beginPath(); cx.ellipse(lx, 9 * s, 3.2 * s, 4 * s, 0, 0, 7); cx.fill(); }
+  cx.fillStyle = '#FFFFFF'; cx.beginPath(); cx.ellipse(0, 0, 16 * s, 12 * s, 0, 0, 7); cx.fill(); cx.strokeStyle = 'rgba(120,140,170,.45)'; cx.lineWidth = 1.2; cx.stroke();
+  cx.fillStyle = entries[i].color; cx.beginPath(); cx.roundRect(-9 * s, -7 * s, 18 * s, 13 * s, 3 * s); cx.fill();
+  cx.fillStyle = '#fff'; cx.font = `900 ${Math.max(8, Math.round(10 * s))}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, 0, 3.5 * s);
+  cx.restore();
+}
+function tags(x, y, p) {
+  cx.font = '800 12px Noto Sans KR'; cx.textAlign = 'left'; let tg = x;
+  if (p.tired && !p.recovered) { cx.fillText('💦', tg, y); tg += 18; }
+  if (p.slip > 0) { cx.fillStyle = '#0E7A34'; cx.fillText('미끄덩!', tg, y); }
+  if (p.dash > 0) { cx.fillStyle = '#2563EB'; cx.fillText('질주!', tg, y); }
+}
+// ── 드론: 위에서 따라가며 내려다봄(진행 방향이 화면 위쪽). 커브가 실제로 휘어 보임
+function renderDrone(W, H, tgt, ord) {
+  const tp = race.poros[tgt], [cxw, cyw, hd] = trackPt(Math.max(0, tp.d)), s = W / (85 / U), rot = -hd - Math.PI / 2;
+  const cs = Math.cos(rot), sn = Math.sin(rot), ox = W * .5, oy = H * .36;
+  const nx0 = Math.cos(hd + Math.PI / 2), ny0 = Math.sin(hd + Math.PI / 2), cxo = cxw + nx0 * TW * .5, cyo = cyw + ny0 * TW * .5;
+  const S = (x, y) => { const dx = (x - cxo) * s, dy = (y - cyo) * s; return [ox + dx * cs - dy * sn, oy + dx * sn + dy * cs]; };
+  cx.fillStyle = '#F3F7FB'; cx.fillRect(0, 0, W, H);
+  // 바깥 눈밭의 나무 · 관중석
+  for (let k = 0; k < 140; k++) { const a = hash(k) * Math.PI * 2, r = .3 + hash(k + 50) * 1.6, tx = map.mnx + map.w / 2 + Math.cos(a) * (map.w / 2 + r), ty = map.mny + map.h / 2 + Math.sin(a) * (map.h / 2 + r); const [x, y] = S(tx, ty); if (x < -30 || x > W + 30 || y < -30 || y > H + 30) continue; cx.fillStyle = 'rgba(40,90,70,.75)'; cx.beginPath(); cx.arc(x, y, 9, 0, 7); cx.fill(); cx.fillStyle = 'rgba(255,255,255,.9)'; cx.beginPath(); cx.arc(x - 2, y - 2, 5, 0, 7); cx.fill(); }
+  const n = map.pts.length, side = (off) => { const out = []; for (let k = 0; k <= n; k++) { const p = map.pts[k % n], q = map.pts[(k + 1) % n], h = Math.atan2(q[1] - p[1], q[0] - p[0]); out.push(S(p[0] + Math.cos(h + Math.PI / 2) * off, p[1] + Math.sin(h + Math.PI / 2) * off)); } return out; };
+  const path = pts => { cx.beginPath(); pts.forEach(([x, y], k) => k ? cx.lineTo(x, y) : cx.moveTo(x, y)); };
+  // 관중석(바깥쪽 띠)
+  cx.strokeStyle = '#7C88A0'; cx.lineWidth = .07 * s; path(side(-.07)); cx.stroke();
+  cx.strokeStyle = 'rgba(255,255,255,.35)'; cx.setLineDash([3, 5]); cx.lineWidth = .07 * s; path(side(-.07)); cx.stroke(); cx.setLineDash([]);
+  // 주로
+  cx.strokeStyle = '#E3EAF2'; cx.lineWidth = TW * s; cx.lineJoin = 'round'; path(side(TW / 2)); cx.stroke();
+  cx.strokeStyle = 'rgba(150,170,195,.28)'; cx.lineWidth = 1; cx.setLineDash([6, 8]); for (let l = 1; l < 8; l++) { path(side(2 / U + l * LANE)); cx.stroke(); } cx.setLineDash([]);
+  cx.fillStyle = '#EAF3EA'; path(side(TW + .01)); cx.fill();   // 안쪽(눈 덮인 잔디)
+  cx.strokeStyle = '#fff'; cx.lineWidth = 3; path(side(0)); cx.stroke(); path(side(TW)); cx.stroke();
+  // 커브 표시 · 결승선 · 거리 기둥
+  const across = (d, chk) => { const [x, y, h] = trackPt(d), nx = Math.cos(h + Math.PI / 2), ny = Math.sin(h + Math.PI / 2); for (let k = 0; k < 10; k++) { const a = S(x + nx * TW * k / 10, y + ny * TW * k / 10), b = S(x + nx * TW * (k + 1) / 10, y + ny * TW * (k + 1) / 10); cx.strokeStyle = chk ? (k % 2 ? '#111' : '#fff') : 'rgba(20,30,40,.4)'; cx.lineWidth = chk ? 7 : 2; cx.beginPath(); cx.moveTo(...a); cx.lineTo(...b); cx.stroke(); } };
+  across(0, true);
+  for (let d = 100; d < P.L; d += 100) { const [x, y, h] = trackPt(d), p = S(x - Math.cos(h + Math.PI / 2) * .03, y - Math.sin(h + Math.PI / 2) * .03); cx.fillStyle = '#C0392B'; cx.beginPath(); cx.arc(p[0], p[1], 4, 0, 7); cx.fill(); }
+  // 포로(위에서 본 모습)
+  const sz = Math.max(8, LANE * s * .5);
+  race.poros.forEach((p, i) => {
+    const [x, y, h] = trackPt(Math.max(0, p.d)), off = TW - laneOff(i), [sx, sy] = S(x + Math.cos(h + Math.PI / 2) * off, y + Math.sin(h + Math.PI / 2) * off);
+    if (sx < -40 || sx > W + 40 || sy < -40 || sy > H + 40) return;
+    const r = h + rot;
+    for (let k = 1; k < 6 && p.slip <= 0 && phase === 'run'; k++) { cx.fillStyle = `rgba(160,180,205,${.3 - k * .05})`; cx.beginPath(); cx.arc(sx - Math.cos(r) * sz * (1 + k * .7), sy - Math.sin(r) * sz * (1 + k * .7), sz * .35, 0, 7); cx.fill(); }
+    if (p.dash > 0) { cx.strokeStyle = 'rgba(37,99,235,.6)'; cx.lineWidth = 3; cx.beginPath(); cx.moveTo(sx - Math.cos(r) * sz * 1.4, sy - Math.sin(r) * sz * 1.4); cx.lineTo(sx - Math.cos(r) * sz * 5, sy - Math.sin(r) * sz * 5); cx.stroke(); }
+    cx.save(); cx.translate(sx, sy); cx.rotate(r + (p.slip > 0 ? Math.sin(vt * 20) * .8 : 0));
+    cx.fillStyle = 'rgba(60,80,110,.2)'; cx.beginPath(); cx.ellipse(2, 3, sz * 1.25, sz, 0, 0, 7); cx.fill();
+    cx.fillStyle = '#fff'; cx.beginPath(); cx.ellipse(0, 0, sz * 1.25, sz, 0, 0, 7); cx.fill(); cx.strokeStyle = 'rgba(120,140,170,.5)'; cx.lineWidth = 1; cx.stroke();
+    cx.fillStyle = entries[i].color; cx.beginPath(); cx.roundRect(-sz * .55, -sz * .55, sz * 1.1, sz * 1.1, 3); cx.fill();
+    cx.restore();
+    cx.fillStyle = '#fff'; cx.font = `900 ${Math.round(sz * .9)}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, sx, sy + sz * .32);
+    if (i === mine) { cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.arc(sx, sy, sz * 1.7, 0, 7); cx.stroke(); }
+    if (i === mine || i === tgt || p.rank <= 3) { cx.font = '800 11px Noto Sans KR'; const t = `${p.rank}위 ${p.name}`, w = cx.measureText(t).width + 12; cx.fillStyle = i === mine ? '#6C5CE7' : 'rgba(12,18,28,.75)'; cx.beginPath(); cx.roundRect(sx + sz * 1.9, sy - 9, w, 18, 9); cx.fill(); cx.fillStyle = '#fff'; cx.textAlign = 'left'; cx.fillText(t, sx + sz * 1.9 + 6, sy + 4); }
+    tags(sx - sz, sy - sz * 1.8, p);
+  });
+  // 그림자 구름(드론 높이감)
+  cx.fillStyle = 'rgba(255,255,255,.18)'; for (let k = 0; k < 3; k++) { cx.beginPath(); cx.ellipse((W * (hash(k + 3) + vt * .01 * (k + 1))) % (W + 200) - 100, H * hash(k + 9), 160, 60, 0, 0, 7); cx.fill(); }
+}
+// ── 정면: 대상 포로 앞에서 뒤를 돌아봄(다가오는 포로들)
+function renderFront(W, H, tgt, ord) {
+  const tp = race.poros[tgt], camD = tp.d + 26, hz = H * .36, f = H * .95, camH = 3.2, tot = race.total, segL = P.L / P.seg;
+  const k0 = Math.floor(Math.max(0, camD - 10) / segL), inC = course.kinds[k0 % P.seg] === 'C', sway = inC ? W * .12 : 0;
+  const LX = i => (i - 3.5) * 2.6, camX = (tgt - 3.5) * 2.6 * .6;
+  const P2 = (lx, z) => [W / 2 + sway * (1 - Math.min(1, 6 / z)) + (lx - camX) * f / z, hz + camH * f / z];
+  let g = cx.createLinearGradient(0, 0, 0, hz); g.addColorStop(0, '#9CC3E6'); g.addColorStop(1, '#E7F0F8'); cx.fillStyle = g; cx.fillRect(0, 0, W, H);
+  cx.fillStyle = '#B9CCE0'; cx.beginPath(); cx.moveTo(0, hz); for (let x = 0; x <= W; x += 20) cx.lineTo(x, hz - H * (.06 + .03 * Math.sin(x / 90))); cx.lineTo(W, hz); cx.fill();
+  cx.fillStyle = '#F4F8FC'; cx.fillRect(0, hz, W, H - hz);
+  // 관중석(왼쪽 안쪽 난간 너머)
+  const [a1x, a1y] = P2(-12, 4), [a2x, a2y] = P2(-12, 260), ct = crowdTile(80);
+  cx.save(); cx.beginPath(); cx.moveTo(-10, a1y - H * .55); cx.lineTo(a2x, a2y - H * .05); cx.lineTo(a2x, a2y); cx.lineTo(-10, a1y); cx.closePath(); cx.clip(); for (let x = -10; x < a2x; x += 240) for (let y = a1y - H * .6; y < a1y; y += 80) cx.drawImage(ct, x, y); cx.restore();
+  // 주로 · 레인 · 난간
+  const edge = (lx) => { cx.beginPath(); for (let z = 3; z < 260; z *= 1.08) { const [x, y] = P2(lx, z); z === 3 ? cx.moveTo(x, y) : cx.lineTo(x, y); } };
+  cx.strokeStyle = 'rgba(150,170,195,.35)'; cx.lineWidth = 1; for (let l = -3; l <= 4; l++) { edge(LX(l) - 1.3); cx.stroke(); }
+  cx.strokeStyle = '#fff'; cx.lineWidth = 5; edge(-12); cx.stroke(); edge(12); cx.stroke();
+  for (let dz = 2; dz < 200; dz += 6) { const z = dz + ((camD % 6) + 6) % 6; [-12, 12].forEach(lx => { const [x, y] = P2(lx, z), h = 1.3 * f / z; cx.fillStyle = '#9AA8B8'; cx.fillRect(x - Math.max(1, 6 / z * 3), y - h, Math.max(2, 12 / z * 3), h); }); }
+  // 결승선이 보이면
+  const fz = camD - tot; if (fz > -200 && fz < 0) {} // 결승선은 앞쪽(카메라 뒤)
+  // 포로들(먼 것부터)
+  const list = race.poros.map((p, i) => ({ p, i, z: camD - p.d })).filter(o => o.z > 3.5 && o.z < 160).sort((a, b) => b.z - a.z);
+  list.forEach(({ p, i, z }) => {
+    const [x, y] = P2(LX(i), z), s = f / z * .12, mv = p.slip > 0 ? 0 : 1, bob = Math.abs(Math.sin(vt * 13 + i)) * 6 * s * mv;
+    cx.fillStyle = 'rgba(60,80,110,.18)'; cx.beginPath(); cx.ellipse(x, y, 16 * s, 4 * s, 0, 0, 7); cx.fill();
+    cx.save(); cx.translate(x, y - 14 * s - bob); if (p.slip > 0) cx.rotate(Math.sin(vt * 22) * .5);
+    cx.fillStyle = '#4A3A30'; for (let k = 0; k < 2; k++) { cx.beginPath(); cx.ellipse((k ? 7 : -7) * s, 11 * s + Math.sin(vt * 18 + k * 3 + i) * 2 * s * mv, 3.5 * s, 4 * s, 0, 0, 7); cx.fill(); }
+    cx.fillStyle = '#fff'; cx.beginPath(); cx.ellipse(0, 0, 15 * s, 14 * s, 0, 0, 7); cx.fill(); cx.strokeStyle = 'rgba(120,140,170,.45)'; cx.lineWidth = 1; cx.stroke();
+    cx.fillStyle = entries[i].color; cx.beginPath(); cx.roundRect(-8 * s, -6 * s, 16 * s, 13 * s, 3 * s); cx.fill();
+    cx.fillStyle = '#fff'; cx.font = `900 ${Math.max(7, Math.round(10 * s))}px Noto Sans KR`; cx.textAlign = 'center'; cx.fillText(i + 1, 0, 3.5 * s);
+    cx.restore();
+    if (i === mine) { cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.ellipse(x, y, 20 * s, 5 * s, 0, 0, 7); cx.stroke(); }
+    if (z < 60 && (i === mine || p.rank <= 3 || i === tgt)) { cx.font = '800 11px Noto Sans KR'; const t = `${p.rank}위 ${p.name}`, w = cx.measureText(t).width + 12; cx.fillStyle = i === mine ? '#6C5CE7' : 'rgba(12,18,28,.75)'; cx.beginPath(); cx.roundRect(x - w / 2, y - 34 * s - 22, w, 18, 9); cx.fill(); cx.fillStyle = '#fff'; cx.textAlign = 'center'; cx.fillText(t, x, y - 34 * s - 9); }
+    tags(x + 16 * s, y - 30 * s, p);
+  });
+  // 눈보라 가까이
+  cx.fillStyle = 'rgba(255,255,255,.6)'; for (let k = 0; k < 40; k++) { const x = (hash(k) * W + vt * 60 * (1 + hash(k + 1))) % W, y = (hash(k + 2) * H + vt * 90) % H; cx.beginPath(); cx.arc(x, y, 1 + hash(k + 3) * 2.5, 0, 7); cx.fill(); }
+}
+function draw(dtw) {
+  const [W, H] = fit(), ord = E.ranks(race), tot = race.total;
+  director(ord);
+  const angle = phase === 'gate' ? 'side' : dir.angle, tgt = phase === 'gate' ? mine : tgtIdx(dir.tgt, ord);
+  if (angle === 'drone') renderDrone(W, H, tgt, ord);
+  else if (angle === 'front') renderFront(W, H, tgt, ord);
+  else renderSide(W, H, tgt, angle === 'close' ? 62 : 160, view.side, ord, dtw, false);
   // 눈 내림
   cx.fillStyle = 'rgba(255,255,255,.85)'; snow.forEach(f => { f.y += f.v * (dtw || 0) * 3; f.x -= (dtw || 0) * .02; if (f.y > 1) { f.y = 0; f.x = Math.random(); } if (f.x < 0) f.x = 1; cx.beginPath(); cx.arc(f.x * W, f.y * H, f.r, 0, 7); cx.fill(); });
-  // ── 중계 그래픽 ──
+  // 컷 전환 번쩍
+  if (flash > 0) { cx.fillStyle = `rgba(255,255,255,${flash * .55})`; cx.fillRect(0, 0, W, H); flash = Math.max(0, flash - (dtw || .016) * 6); }
+  // ── 내 포로 화면 속 화면(PIP)
+  if (phase === 'run' && tgt !== mine && race.poros[mine].fin === null) {
+    const pw = Math.round(W * .27), ph = Math.round(pw * 9 / 16), px = W - pw - 14, py = H - ph - 54;
+    cx.save(); cx.translate(px, py); cx.beginPath(); cx.roundRect(0, 0, pw, ph, 10); cx.clip(); renderSide(pw, ph, mine, 70, view.pip, ord, dtw, true); cx.restore();
+    cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.roundRect(px, py, pw, ph, 10); cx.stroke();
+    cx.fillStyle = '#6C5CE7'; cx.beginPath(); cx.roundRect(px + 8, py + 8, 112, 20, 10); cx.fill(); cx.fillStyle = '#fff'; cx.font = '900 11px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText(`내 포로 · ${race.poros[mine].rank}위 ${entries[mine].name}`, px + 16, py + 22);
+  }
+  // ── 중계 그래픽
   const pill = (x, y, w, h, bg) => { cx.fillStyle = bg; cx.beginPath(); cx.roundRect(x, y, w, h, h / 2); cx.fill(); };
   pill(12, 12, 236, 30, 'rgba(12,18,28,.82)'); cx.fillStyle = '#E5484D'; cx.beginPath(); cx.arc(28, 27, 5, 0, 7); cx.fill();
   cx.fillStyle = '#fff'; cx.font = '900 12.5px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText(`LIVE  포로 경주 ${raceNo}경기 · ${ctypeName}`, 40, 31.5);
+  const camTxt = `CAM ${CAMNO[angle]} · ${ANG[angle]} · ${tgt + 1}번 ${entries[tgt].name}` + (dir.auto ? '  (자동 중계)' : '');
+  cx.font = '800 11.5px Noto Sans KR'; const cw0 = cx.measureText(camTxt).width + 24; pill(12, 48, cw0, 24, 'rgba(12,18,28,.62)'); cx.fillStyle = '#fff'; cx.fillText(camTxt, 24, 64);
   const lead = ord[0], lap = Math.min(2, Math.floor(lead.d / P.L) + 1), left = Math.max(0, Math.round(tot - lead.d));
-  pill(W - 236, 12, 224, 30, 'rgba(12,18,28,.82)'); cx.fillStyle = '#fff'; cx.textAlign = 'right';
+  pill(W - 236, 12, 224, 30, 'rgba(12,18,28,.82)'); cx.fillStyle = '#fff'; cx.textAlign = 'right'; cx.font = '900 12.5px Noto Sans KR';
   const tm = race.t, mm = Math.floor(tm / 60), ss = (tm % 60).toFixed(1).padStart(4, '0');
   cx.fillText(`${mm}:${ss}  ·  ${lap}/2바퀴  ·  남은 ${left}`, W - 24, 31.5);
-  // 미니맵
   const mw = Math.min(170, W * .2), mh = mw * .62, mx = W - mw - 12, my = 50;
   cx.fillStyle = 'rgba(12,18,28,.72)'; cx.beginPath(); cx.roundRect(mx, my, mw, mh, 10); cx.fill();
   cx.strokeStyle = 'rgba(255,255,255,.55)'; cx.lineWidth = 5; cx.beginPath(); map.pts.forEach((p, k) => { const [a, b] = mapPt(k / map.pts.length * P.L, mx + 10, my + 10, mw - 20, mh - 20); k ? cx.lineTo(a, b) : cx.moveTo(a, b); }); cx.closePath(); cx.stroke();
   const [fx, fy] = mapPt(0, mx + 10, my + 10, mw - 20, mh - 20); cx.fillStyle = '#D4A106'; cx.fillRect(fx - 2, fy - 6, 4, 12);
-  race.poros.forEach((p, i) => { const [a, b] = mapPt(p.d, mx + 10, my + 10, mw - 20, mh - 20); cx.fillStyle = entries[i].color; cx.beginPath(); cx.arc(a, b, i === mine ? 5 : 3.6, 0, 7); cx.fill(); if (i === mine) { cx.strokeStyle = '#fff'; cx.lineWidth = 1.5; cx.stroke(); } });
-  // 하단 순위 띠
+  race.poros.forEach((p, i) => { const [a, b] = mapPt(p.d, mx + 10, my + 10, mw - 20, mh - 20); cx.fillStyle = entries[i].color; cx.beginPath(); cx.arc(a, b, i === mine ? 5 : 3.6, 0, 7); cx.fill(); if (i === mine || i === tgt) { cx.strokeStyle = '#fff'; cx.lineWidth = 1.5; cx.stroke(); } });
   const th = 30, ty = H - th - 10, tw = Math.min(W - 24, 640), tx0 = (W - tw) / 2;
   cx.fillStyle = 'rgba(12,18,28,.86)'; cx.beginPath(); cx.roundRect(tx0, ty, tw, th, 8); cx.fill();
   cx.fillStyle = '#D4A106'; cx.font = '900 11px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText('순위', tx0 + 10, ty + 19.5);
-  const cw = (tw - 56) / 8; ord.forEach((p, k) => { const x = tx0 + 46 + k * cw; cx.fillStyle = entries[p.i].color; cx.beginPath(); cx.roundRect(x, ty + 5, cw - 6, th - 10, 4); cx.fill(); if (p.i === mine) { cx.strokeStyle = '#fff'; cx.lineWidth = 2; cx.stroke(); } cx.fillStyle = '#fff'; cx.font = '900 11.5px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText(`${p.i + 1} ${p.name}`, x + (cw - 6) / 2, ty + 19.5); });
-  // 자막
+  const cw = (tw - 56) / 8; tickerHit = [];
+  ord.forEach((p, k) => { const x = tx0 + 46 + k * cw; tickerHit.push([x, ty, cw - 6, th, p.i]); cx.fillStyle = entries[p.i].color; cx.beginPath(); cx.roundRect(x, ty + 5, cw - 6, th - 10, 4); cx.fill(); if (p.i === mine || p.i === tgt) { cx.strokeStyle = p.i === mine ? '#fff' : '#FFC24D'; cx.lineWidth = 2; cx.stroke(); } cx.fillStyle = '#fff'; cx.font = '900 11.5px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText(`${p.i + 1} ${p.name}`, x + (cw - 6) / 2, ty + 19.5); });
   if (cap.t && vt < cap.until) {
     cx.font = '800 15px Noto Sans KR'; const w = Math.min(W - 40, cx.measureText(cap.t).width + 40), x = (W - w) / 2, y = ty - 46;
     cx.fillStyle = cap.k === 'win' ? 'rgba(212,161,6,.95)' : cap.k === 'tired' ? 'rgba(217,119,6,.95)' : 'rgba(255,255,255,.95)'; cx.beginPath(); cx.roundRect(x, y, w, 34, 8); cx.fill();
     cx.fillStyle = cap.k === 'win' || cap.k === 'tired' ? '#fff' : '#141820'; cx.textAlign = 'center'; cx.fillText(cap.t, W / 2, y + 22.5);
   }
-  // 카운트다운 · 슬로
-  if (phase === 'gate') { const n = Math.ceil(countdown - .4); cx.fillStyle = 'rgba(12,18,28,.55)'; cx.beginPath(); cx.arc(W / 2, H * .42, 54, 0, 7); cx.fill(); cx.fillStyle = '#fff'; cx.font = '900 54px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText(n > 0 ? n : '출발!', W / 2, H * .42 + (n > 0 ? 19 : 14)); if (n <= 0) cx.font = '900 30px Noto Sans KR'; }
-  if (slow) { pill(12, 50, 128, 28, 'rgba(212,161,6,.95)'); cx.fillStyle = '#111'; cx.font = '900 12.5px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText('SLOW · 결승선', 26, 68.5); }
-  pill(12, slow ? 84 : 50, 104, 24, 'rgba(12,18,28,.6)'); cx.fillStyle = '#fff'; cx.font = '800 11px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText('🎥 ' + { follow: '중계 카메라', mine: '내 포로 카메라', wide: '전체 카메라' }[cam], 22, (slow ? 84 : 50) + 16);
+  if (phase === 'gate') { const n = Math.ceil(countdown - .4); cx.fillStyle = 'rgba(12,18,28,.55)'; cx.beginPath(); cx.arc(W / 2, H * .42, 54, 0, 7); cx.fill(); cx.fillStyle = '#fff'; cx.font = '900 54px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText(n > 0 ? n : '출발!', W / 2, H * .42 + (n > 0 ? 19 : 14)); }
+  if (slow) { pill(12, 78, 128, 26, 'rgba(212,161,6,.95)'); cx.fillStyle = '#111'; cx.font = '900 12.5px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText('SLOW · 결승선', 26, 95.5); }
 }
+let tickerHit = [];
+cv.addEventListener('click', e => { const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; const h = tickerHit.find(([a, b, w, hh]) => x >= a && x <= a + w && y >= b && y <= b + hh); if (h) setTarget(h[4]); });
+function setTarget(i) { dir.auto = false; dir.tgt = i; flash = 1; dir.cutAt = vt; if (dir.angle === 'side' && false) {} syncCamUI(); }
+function setAngle(a) { if (a === 'auto') { dir.auto = true; dir.until = 0; dir.prio = 0; } else { dir.auto = false; dir.angle = a; flash = 1; dir.cutAt = vt; if (dir.tgt === 'lead' && a !== 'side') dir.tgt = 'lead'; } syncCamUI(); }
+function syncCamUI() { document.querySelectorAll('.cam button').forEach(b => b.classList.toggle('on', dir.auto ? b.dataset.c === 'auto' : b.dataset.c === dir.angle)); document.querySelectorAll('.tgt button').forEach(b => b.classList.toggle('on', String(dir.tgt) === b.dataset.t)); }
 function hud() {
   const p = race.poros[mine], pct = Math.max(0, p.st) / P.stamina * 100;
   $('stBar').querySelector('i').style.width = (p.tired && !p.recovered ? 0 : pct) + '%'; $('stBar').classList.toggle('low', pct < 30 || p.tired);
@@ -454,7 +581,7 @@ function hud() {
   $('snackBtn').classList.toggle('ready', !snackUsed && p.tired && !p.recovered);
   $('cheerCd').style.width = Math.max(0, cheerCd / 3 * 100) + '%'; $('cheerBtn').disabled = p.fin !== null || phase === 'gate';
   const ord = E.ranks(race);
-  $('rankList').innerHTML = ord.map((q, k) => `<li class="${q.i === mine ? 'mine' : ''}"><span class="n">${k + 1}</span><span class="tok" style="background:${entries[q.i].color}">${q.i + 1}</span>${q.name} <span class="st">${q.style}</span>${q.tired && !q.recovered ? ' 💦' : ''}${q.dash > 0 ? ' 📣' : ''}<span class="gap">${k ? (q.d - ord[0].d).toFixed(0) : (q.fin !== null ? '골인' : '선두')}</span></li>`).join('');
+  $('rankList').innerHTML = ord.map((q, k) => `<li data-i="${q.i}" style="cursor:pointer" class="${q.i === mine ? 'mine' : ''}"><span class="n">${k + 1}</span><span class="tok" style="background:${entries[q.i].color}">${q.i + 1}</span>${q.name} <span class="st">${q.style}</span>${q.tired && !q.recovered ? ' 💦' : ''}${q.dash > 0 ? ' 📣' : ''}<span class="gap">${k ? (q.d - ord[0].d).toFixed(0) : (q.fin !== null ? '골인' : '선두')}</span></li>`).join('');
 }
 function cheer() {
   if (!race || race.done || phase !== 'run' || cheerCd > 0 || race.poros[mine].fin !== null) return;
@@ -483,10 +610,12 @@ function finish() {
     $('finList').innerHTML = race.finished.map((i, k) => `<li><b>${k + 1}등</b> <span class="tok" style="background:${entries[i].color};width:20px;height:20px;font-size:10px">${i + 1}</span>${entries[i].name} <span class="st">${entries[i].apt}형 · ${entries[i].style}</span></li>`).join('');
   })();
 }
+$('rankList').onclick = e => { const li = e.target.closest('li'); if (li) setTarget(+li.dataset.i); };
 $('goBtn').onclick = start; $('againBtn').onclick = newCard; $('cheerBtn').onclick = cheer; $('snackBtn').onclick = snack;
 addEventListener('keydown', e => { if (e.key === 'e' || e.key === 'E' || e.key === 'ㄷ') cheer(); if (e.key === 'q' || e.key === 'Q' || e.key === 'ㅂ') snack(); });
 document.querySelectorAll('.speed button[data-s]').forEach(b => b.onclick = () => { speed = +b.dataset.s; document.querySelectorAll('.speed button[data-s]').forEach(x => x.classList.toggle('on', x === b)); });
-document.querySelectorAll('.cam button').forEach(b => b.onclick = () => { cam = b.dataset.c; document.querySelectorAll('.cam button').forEach(x => x.classList.toggle('on', x === b)); });
+document.querySelectorAll('.cam button').forEach(b => b.onclick = () => setAngle(b.dataset.c));
+document.querySelectorAll('.tgt button').forEach(b => b.onclick = () => setTarget(b.dataset.t === 'lead' || b.dataset.t === 'mine' ? b.dataset.t : +b.dataset.t));
 newCard();
 })();
 </script>
