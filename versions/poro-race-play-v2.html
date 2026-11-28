@@ -313,7 +313,7 @@ function start() {
   $('pickWrap').style.display = 'none'; $('raceWrap').style.display = 'block'; setStep(2);
   const e = entries[mine]; $('meName').innerHTML = `<span class="tok" style="background:${e.color}">${mine + 1}</span>내 포로 · ${e.name} <span class="st" style="margin-left:6px">${e.apt}형 · ${e.style}</span>`;
   $('snackBtn').disabled = false; $('snackBtn').classList.remove('ready');
-  buildMap(); initSnow(); phase = 'gate'; countdown = 3.4; vt = 0; dir = { auto: true, angle: 'side', tgt: 'lead', until: 0, cutAt: -9, prio: 0 }; view = { side: { x: 0, span: 150 }, pip: { x: 0, span: 120 } }; syncCamUI();
+  buildMap(); initSnow(); camD = { top: null, front: null }; phase = 'gate'; countdown = 3.4; vt = 0; dir = { auto: true, angle: 'side', tgt: 'lead', until: 0, cutAt: -9, prio: 0 }; view = { side: { x: 0, span: 150 }, pip: { x: 0, span: 120 } }; syncCamUI();
   caption(`${ctypeName}, 출발 게이트에 포로 8마리가 들어섭니다. 내 포로는 ${mine + 1}번 ${e.name}!`, 3.4, 'gate');
   last = performance.now(); acc = 0; cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
   $('tv').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -434,6 +434,16 @@ function trackPt(d) {
   const p = map.pts[k], q = map.pts[k2], x = p[0] + (q[0] - p[0]) * t, y = p[1] + (q[1] - p[1]) * t, hd = Math.atan2(q[1] - p[1], q[0] - p[0]);
   return [x, y, hd];
 }
+function trackPtS(d) {          // 카메라용: 앞뒤 구간을 평균해 방향이 매끄럽게 바뀜
+  let sx = 0, sy = 0, n = 0; for (let k = -12; k <= 12; k += 3) { const [x, y] = trackPt(d + k); sx += x; sy += y; n++; }
+  const [ax, ay] = trackPt(d - 14), [bx, by] = trackPt(d + 14); return [sx / n, sy / n, Math.atan2(by - ay, bx - ax)];
+}
+let camD = { top: null, front: null }, lastDt = .016;
+function camFollow(key, d, dtw) {   // 포로 위치를 그대로 쓰지 않고 부드럽게 뒤따라감(대상이 바뀌어도 미끄러지듯 이동)
+  if (camD[key] === null || vt - dir.cutAt < .05) camD[key] = d;
+  camD[key] += (d - camD[key]) * Math.min(1, (dtw || .016) * 5 * Math.max(1, speed * .8));
+  return camD[key];
+}
 const U = P.L / P.seg, LANE = 2.6 / U, TW = 8 * LANE + 6 / U;     // 레인 폭 · 주로 폭(u)
 function laneOff(i) { return (i + .5) * LANE + 2 / U; }            // 안쪽 난간에서 떨어진 거리
 // ── 옆 카메라(근접 = 더 가깝게)
@@ -524,7 +534,7 @@ function tags(x, y, p) {
 }
 // ── 드론: 위에서 따라가며 내려다봄(진행 방향이 화면 위쪽). 커브가 실제로 휘어 보임
 function renderDrone(W, H, tgt, ord) {
-  const tp = race.poros[tgt], [cxw, cyw, hd] = trackPt(Math.max(0, tp.d)), s = W / (85 / U), rot = -hd - Math.PI / 2;
+  const tp = race.poros[tgt], cd = camFollow('top', Math.max(0, tp.d), lastDt), [cxw, cyw, hd] = trackPtS(cd), s = W / (85 / U), rot = -hd - Math.PI / 2;
   const cs = Math.cos(rot), sn = Math.sin(rot), ox = W * .5, oy = H * .36;
   const nx0 = Math.cos(hd + Math.PI / 2), ny0 = Math.sin(hd + Math.PI / 2), cxo = cxw + nx0 * TW * .5, cyo = cyw + ny0 * TW * .5;
   const S = (x, y) => { const dx = (x - cxo) * s, dy = (y - cyo) * s; return [ox + dx * cs - dy * sn, oy + dx * sn + dy * cs]; };
@@ -550,7 +560,7 @@ function renderDrone(W, H, tgt, ord) {
   race.poros.forEach((p, i) => {
     const [x, y, h] = trackPt(Math.max(0, p.d)), off = TW - laneOff(i), [sx, sy] = S(x + Math.cos(h + Math.PI / 2) * off, y + Math.sin(h + Math.PI / 2) * off);
     if (sx < -40 || sx > W + 40 || sy < -40 || sy > H + 40) return;
-    const r = h + rot;
+    const r = trackPtS(Math.max(0, p.d))[2] + rot;   // 몸 방향도 매끄럽게
     for (let k = 1; k < 6 && p.slip <= 0 && phase === 'run'; k++) { cx.fillStyle = `rgba(160,180,205,${.3 - k * .05})`; cx.beginPath(); cx.arc(sx - Math.cos(r) * sz * (1 + k * .7), sy - Math.sin(r) * sz * (1 + k * .7), sz * .35, 0, 7); cx.fill(); }
     if (p.dash > 0) { cx.strokeStyle = 'rgba(37,99,235,.6)'; cx.lineWidth = 3; cx.beginPath(); cx.moveTo(sx - Math.cos(r) * sz * 1.4, sy - Math.sin(r) * sz * 1.4); cx.lineTo(sx - Math.cos(r) * sz * 5, sy - Math.sin(r) * sz * 5); cx.stroke(); }
     cx.save(); cx.translate(sx, sy); cx.rotate(r + (p.slip > 0 ? Math.sin(vt * 20) * .8 : 0));
@@ -570,13 +580,10 @@ function renderDrone(W, H, tgt, ord) {
 let fcam = null;
 function renderFront(W, H, tgt, ord) {
   const tp = race.poros[tgt], tot = race.total;
+  const wpc = (d, off, z = 0) => { const [x, y, h] = trackPtS(d), nx = Math.cos(h + Math.PI / 2), ny = Math.sin(h + Math.PI / 2); return [(x + nx * off) * U, (y + ny * off) * U, z]; };
   const wp = (d, off, z = 0) => { const [x, y, h] = trackPt(d), nx = Math.cos(h + Math.PI / 2), ny = Math.sin(h + Math.PI / 2); return [(x + nx * off) * U, (y + ny * off) * U, z]; };
-  const mid = TW / 2, base = Math.max(0, tp.d);
-  const C0 = wp(base + 42, TW + 14 / U, 26), T0 = wp(base - 14, mid, 0);
-  if (!fcam || vt - dir.cutAt < .05) fcam = { c: C0, t: T0 };
-  const lerp = (a, b, k) => a.map((v, i) => v + (b[i] - v) * k);
-  fcam.c = lerp(fcam.c, C0, .12); fcam.t = lerp(fcam.t, T0, .12);
-  const C = fcam.c, T = fcam.t, sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]], dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  const mid = TW / 2, base = camFollow('front', Math.max(0, tp.d), lastDt);
+  const C = wpc(base + 42, TW + 14 / U, 26), T = wpc(base - 14, mid, 0), sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]], dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
   const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]], nrm = a => { const l = Math.hypot(...a) || 1; return a.map(v => v / l); };
   const fw = nrm(sub(T, C)), rt = nrm(cross(fw, [0, 0, 1])), up = cross(rt, fw), f = W * .95;
   const proj = p => { const v = sub(p, C), z = dot(v, fw); if (z < 1) return null; return [W / 2 + dot(v, rt) * f / z, H * .5 - dot(v, up) * f / z, z]; };
@@ -630,6 +637,7 @@ function draw(dtw) {
   try { drawFrame(dtw); } finally { race.poros.forEach((p, i) => p.d = real[i]); }
 }
 function drawFrame(dtw) {
+  lastDt = dtw;
   const [W, H] = fit(), ord = E.ranks(race), tot = race.total;
   director(ord);
   const angle = phase === 'gate' ? 'side' : dir.angle, tgt = phase === 'gate' ? mine : tgtIdx(dir.tgt, ord);
