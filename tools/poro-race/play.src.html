@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>포로 경주 · 플레이 프로토타입 · 유운식</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+:root{--bg:#EEF2F6;--ink:#141820;--sub:#5B6573;--line:#DCE2E9;--card:#fff;--g:#14AA48;--gd:#0E7A34;--o:#E07A1F;--cv:#2BA36B;--st:#E59A3C;--me:#6C5CE7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 15px/1.55 'Noto Sans KR',sans-serif}
+button{font:inherit;cursor:pointer}
+.top{position:relative;height:150px;overflow:hidden;background:#0d1b2a}
+.top img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:.55}
+.top .in{position:relative;max-width:1180px;margin:0 auto;padding:26px 24px;color:#fff}
+.top .k{font:800 12px/1 'Noto Sans KR';letter-spacing:.12em;color:#BFE9CF}
+.top h1{margin:8px 0 6px;font:800 34px/1.15 'Hahmlet',serif;text-shadow:0 2px 10px rgba(0,0,0,.5)}
+.top p{margin:0;font-size:14.5px;color:#E7EEF5}
+.top .cr{position:absolute;right:12px;bottom:10px;font-size:11.5px;color:#cfd8e3;background:rgba(0,0,0,.35);padding:3px 9px;border-radius:999px}
+.top .links{position:absolute;right:24px;top:24px;display:flex;gap:8px}
+.top .links a{color:#fff;text-decoration:none;font-weight:700;font-size:13px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:7px 12px;border-radius:999px}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 24px 60px}
+.steps{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.steps span{font-weight:800;font-size:13px;padding:7px 13px;border-radius:999px;background:#fff;color:#9AA4B2;border:1.5px solid var(--line)}
+.steps span.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:0 8px 24px rgba(20,30,50,.06)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:18px;align-items:start}
+h2{margin:0 0 4px;font:800 21px/1.3 'Noto Sans KR'}
+.hint{color:var(--sub);font-size:13.5px;margin:0 0 12px}
+/* 코스 */
+.course{display:flex;gap:3px;margin:6px 0 4px}
+.course i{flex:1;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font:800 11px/1 'Noto Sans KR';color:#fff;font-style:normal}
+.course i.C{background:var(--cv)}.course i.S{background:var(--st)}
+.course i.lap{flex:0 0 2px;background:#1b1f26;height:34px;margin-top:-4px}
+.legend{display:flex;gap:14px;font-size:12.5px;color:var(--sub);margin-bottom:6px;flex-wrap:wrap}
+.legend b{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.ctype{display:inline-block;font-weight:900;padding:4px 10px;border-radius:8px;background:#FFF4CC;margin-left:6px}
+/* 출전표 */
+table.rc{width:100%;border-collapse:separate;border-spacing:0 6px;margin-top:6px}
+.rc th{font-size:12px;color:var(--sub);text-align:left;font-weight:700;padding:0 10px}
+.rc td{background:#F7F9FB;padding:10px;border-top:1.5px solid transparent;border-bottom:1.5px solid transparent;font-weight:700}
+.rc td:first-child{border-left:1.5px solid transparent;border-radius:12px 0 0 12px}.rc td:last-child{border-right:1.5px solid transparent;border-radius:0 12px 12px 0}
+.rc tr.p{cursor:pointer}.rc tr.p:hover td{background:#EEF6F1}
+.rc tr.pick td{background:#EFEBFF;border-color:var(--me)}
+.tok{display:inline-flex;width:28px;height:28px;border-radius:50%;align-items:center;justify-content:center;color:#fff;font:900 13px/1 'Noto Sans KR';box-shadow:inset 0 -3px 0 rgba(0,0,0,.18);vertical-align:middle;margin-right:8px}
+.tag{display:inline-block;font-size:12px;font-weight:800;padding:3px 9px;border-radius:999px}
+.tag.S{background:#FFE9D1;color:#B35F0D}.tag.C{background:#DDF3E8;color:#16794A}
+.tag.st{background:#EEF0F4;color:#3B4453}
+.form5{letter-spacing:.06em;font-variant-numeric:tabular-nums;color:#3B4453}
+.form5 b{color:var(--g)}
+.pickbar{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.big{border:0;border-radius:14px;padding:14px 22px;font-weight:900;font-size:16px;background:var(--ink);color:#fff}
+.big:disabled{opacity:.35;cursor:not-allowed}
+.big.g{background:var(--g)}
+.tipbox{background:#F4F8FC;border:1px dashed #C9D6E3;border-radius:14px;padding:12px 14px;font-size:13.5px;color:#334}
+.tipbox b{color:var(--ink)}
+.tipbox ul{margin:6px 0 0;padding-left:18px}
+/* 경주 */
+#raceWrap{display:none}
+canvas{width:100%;display:block;border-radius:14px;background:#F3F7F4}
+.hud{display:flex;flex-direction:column;gap:12px}
+.me{border:2px solid var(--me)}
+.me .nm{display:flex;align-items:center;font-weight:900;font-size:16px}
+.bar{height:12px;border-radius:999px;background:#ECEFF3;overflow:hidden;margin:6px 0 2px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#26C46A,#14AA48);transition:width .2s}
+.bar.low i{background:linear-gradient(90deg,#F4A021,#E36414)}
+.st{font-size:13px;color:var(--sub)}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.act{border:0;border-radius:14px;padding:13px 8px;font-weight:900;font-size:15px;color:#fff;position:relative;overflow:hidden}
+.act small{display:block;font-weight:700;font-size:11.5px;opacity:.9;margin-top:2px}
+.act.cheer{background:#2563EB}.act.snack{background:#D97706}
+.act:disabled{background:#AEB6C2;cursor:not-allowed}
+.act .cd{position:absolute;left:0;bottom:0;height:4px;background:rgba(255,255,255,.75)}
+.snack.ready{animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,119,6,.6)}50%{box-shadow:0 0 0 8px rgba(217,119,6,0)}}
+.log{font-size:13px;color:#334;max-height:120px;overflow:auto;display:flex;flex-direction:column-reverse;gap:3px}
+.log div{padding:3px 0;border-bottom:1px dashed #E6EAEF}
+.rank{list-style:none;margin:0;padding:0;font-size:13.5px}
+.rank li{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid #F0F2F5}
+.rank li.mine{font-weight:900;color:var(--me)}
+.rank .n{width:22px;font-weight:900;color:var(--sub)}
+.rank .tok{width:20px;height:20px;font-size:10px;margin-right:2px}
+.speed{display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--sub)}
+.speed button{border:1.5px solid var(--line);background:#fff;border-radius:8px;padding:4px 9px;font-weight:800;font-size:12px}
+.speed button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* 결과 */
+#resWrap{display:none}
+.res-top{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.res-big{font:900 44px/1 'Noto Sans KR'}
+.reward{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.reward div{background:#F7F9FB;border-radius:14px;padding:12px 14px}
+.reward b{display:block;font-size:22px;font-weight:900}
+.reward span{font-size:12.5px;color:var(--sub)}
+.why{background:#FFF8E6;border-radius:14px;padding:12px 16px;font-size:14px}
+.why b{color:#8A5A00}
+.fin{list-style:none;margin:8px 0 0;padding:0;columns:2;font-size:14px}
+.fin li{padding:4px 0;break-inside:avoid}
+@media(max-width:900px){.row{grid-template-columns:1fr}.top h1{font-size:26px}.top .links{position:static;margin-top:10px}.reward{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="top"><img src="__IMG__" alt=""><div class="in">
+  <div class="k">숨어 사는 소환사들 · 포로 경주</div>
+  <h1>포로 경주 · 플레이 프로토타입</h1>
+  <p>출전표를 읽고 내 포로 한 마리를 고른 뒤, 응원하고 간식을 주며 지켜보세요. 약 1분 30초.</p>
+  <div class="links"><a href="./">상세 기획서</a><a href="../">제안서로</a></div>
+</div><span class="cr">이미지 출처: Riot Games</span></div>
+
+<div class="wrap">
+  <div class="steps"><span id="s1" class="on">1 출전표 읽기</span><span id="s2">2 경주 · 응원 · 간식</span><span id="s3">3 결과 · 보상</span></div>
+
+  <!-- 1. 출전표 -->
+  <div id="pickWrap" class="row">
+    <div class="card">
+      <h2>출전표 <span id="raceNo" style="color:var(--sub);font-weight:700;font-size:15px"></span></h2>
+      <p class="hint">오늘의 코스 <span id="ctype" class="ctype"></span> · 2바퀴 · 바퀴마다 마지막은 직선</p>
+      <div class="legend"><span><b style="background:var(--cv)"></b>커브: 1~3위가 인코스로 유리 · 미끄러질 수 있음</span><span><b style="background:var(--st)"></b>직선: 4위 아래가 바람을 피해 따라붙음</span></div>
+      <div class="course" id="courseBar"></div>
+      <table class="rc"><thead><tr><th>포로</th><th>적성</th><th>각질</th><th>최근 5경기</th><th style="text-align:right">고른 사람</th></tr></thead><tbody id="rcBody"></tbody></table>
+      <div class="pickbar"><button class="big g" id="goBtn" disabled>내 포로를 골라 주세요</button><span id="pickInfo" class="st"></span></div>
+    </div>
+    <div class="hud">
+      <div class="card tipbox"><b>출전표 읽는 법</b>
+        <ul>
+          <li><b>적성</b> — 직진형은 직선에서, 코너형은 커브에서 빠름(차이는 같음)</li>
+          <li><b>각질</b> — 깡총(도주) · 앞장(선행) · 눈치(선입) · 뒷심(추입)</li>
+          <li>커브가 많으면 앞에서 버티는 <b>깡총 · 앞장</b>, 직선이 많으면 <b>뒷심</b>이 유리</li>
+          <li>깡총은 빨리 지쳐요. <b>지쳤을 때(💦) 간식</b>을 주면 다시 달려요</li>
+          <li>고른 사람이 적은 4마리로 1등을 맞히면 <b>+3점</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 경주 -->
+  <div id="raceWrap" class="row">
+    <div class="card" style="padding:14px">
+      <canvas id="cv"></canvas>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:8px">
+        <div class="speed">배속 <button data-s="1" class="on">1배</button><button data-s="2">2배</button><button data-s="4">4배</button></div>
+        <div class="st" id="clock">0.0초</div>
+      </div>
+    </div>
+    <div class="hud">
+      <div class="card me">
+        <div class="nm" id="meName"></div>
+        <div class="bar" id="stBar"><i style="width:100%"></i></div>
+        <div class="st" id="meState">기운</div>
+        <div class="acts" style="margin-top:12px">
+          <button class="act cheer" id="cheerBtn">응원 📣<small>E 키 · 3초에 한 번</small><span class="cd" id="cheerCd"></span></button>
+          <button class="act snack" id="snackBtn">간식 🍪<small>한 판에 한 번</small></button>
+        </div>
+        <div class="st" id="tipLine" style="margin-top:10px">5~8위일 때 응원이 잘 통해요. 지쳤을 때(💦) 간식!</div>
+      </div>
+      <div class="card"><b style="font-size:14px">실시간 순위</b><ul class="rank" id="rankList"></ul></div>
+      <div class="card"><b style="font-size:14px">중계</b><div class="log" id="log"></div></div>
+    </div>
+  </div>
+
+  <!-- 3. 결과 -->
+  <div id="resWrap" class="card">
+    <div class="res-top"><div class="res-big" id="resRank"></div><div><h2 id="resTitle"></h2><div class="st" id="resSub"></div></div></div>
+    <div class="reward">
+      <div><b id="rwA"></b><span>학회 기여</span></div>
+      <div><b id="rwB"></b><span>포로 경주 포인트</span></div>
+      <div><b id="rwC"></b><span>이번 판 내가 한 일</span></div>
+    </div>
+    <div class="why" id="why"></div>
+    <ul class="fin" id="finList"></ul>
+    <div class="pickbar"><button class="big" id="againBtn">다음 경주 (새 출전표)</button><span class="st">보상 규칙: 1등 5점 · 2~3등 2점 · 4~8등 1점 · 고른 사람이 적은 4마리로 1등이면 +3점 · 하루 20점까지</span></div>
+  </div>
+</div>
+
+<script>
+__ENGINE__
+</script>
+<script>
+(() => {
+const E = PoroEngine, P = E.P;
+const NAMES = ['눈송이', '솜뭉치', '털보', '콩떡', '찹쌀', '몽실', '뭉치', '보송'];
+const COLORS = ['#E5484D', '#F76B15', '#D4A106', '#30A46C', '#12A594', '#0090FF', '#6E56CF', '#D6409F'];
+const STY = ['깡총', '앞장', '눈치', '뒷심'], STYK = { '깡총': '도주', '앞장': '선행', '눈치': '선입', '뒷심': '추입' };
+const COURSES = [[0.3, '직선 많은 길'], [0.5, '보통 길'], [0.7, '커브 많은 길']];
+const $ = id => document.getElementById(id);
+let raceNo = 0, R, course, ctypeName, entries, crowd, mine = null, race, speed = 1, raf, last, acc = 0;
+let myBoost = 0, cheerCd = 0, snackUsed = false, snackRes = null, myCheers = 0, crowdDelay, logged;
+
+function setStep(n) { [1, 2, 3].forEach(k => $('s' + k).classList.toggle('on', k === n)); }
+function newCard() {
+  raceNo++; R = E.rng(Date.now() % 1e9 + raceNo * 977);
+  const [cr, nm] = COURSES[Math.floor(R() * 3)]; course = E.makeCourse(cr, R); ctypeName = nm;
+  // 적성 4 · 4, 각질은 고루(각 2) — 출전표가 읽힐 만하게
+  const apts = ['직진', '직진', '직진', '직진', '코너', '코너', '코너', '코너'].sort(() => R() - .5);
+  const stys = [...STY, ...STY].sort(() => R() - .5);
+  entries = NAMES.map((n, i) => ({ name: n, color: COLORS[i], apt: apts[i], style: stys[i], recent: Array.from({ length: 5 }, () => 1 + Math.floor(R() * 8)) }));
+  // 관객 48명이 고른 포로(인기는 최근 성적과 코스 궁합을 대충 따라감)
+  const w = entries.map(e => { const fit = (cr > .5 ? (e.apt === '코너') : cr < .5 ? (e.apt === '직진') : .5) * 1 + (cr > .5 ? ['깡총', '앞장'].includes(e.style) : cr < .5 ? e.style === '뒷심' : 0) * .8; const avg = e.recent.reduce((a, b) => a + b) / 5; return Math.pow(Math.max(.2, 1 + fit + (4.5 - avg) * .35 + R() * .8), 2.2); });
+  const sw = w.reduce((a, b) => a + b); crowd = w.map(x => Math.max(1, Math.round(x / sw * 48)));
+  mine = null; snackUsed = false; snackRes = null; myCheers = 0; myBoost = 0; cheerCd = 0;
+  $('raceNo').textContent = '· ' + raceNo + '경기'; $('ctype').textContent = ctypeName + ` (커브 ${course.kinds.filter(k => k === 'C').length * 100 / P.seg}%)`;
+  const segs = [...course.kinds, 'LAP', ...course.kinds];
+  $('courseBar').innerHTML = segs.map(k => k === 'LAP' ? '<i class="lap"></i>' : `<i class="${k}">${k === 'C' ? '커브' : '직선'}</i>`).join('');
+  const rare = rareSet();
+  $('rcBody').innerHTML = entries.map((e, i) => `<tr class="p" data-i="${i}"><td><span class="tok" style="background:${e.color}">${i + 1}</span>${e.name}${rare.has(i) ? ' <span class="tag st" title="고른 사람이 적은 4마리">숨은 포로</span>' : ''}</td><td><span class="tag ${e.apt === '직진' ? 'S' : 'C'}">${e.apt}형</span></td><td><span class="tag st">${e.style}</span> <span class="st">${STYK[e.style]}</span></td><td class="form5">${e.recent.map(r => r <= 3 ? `<b>${r}</b>` : r).join(' ')}</td><td style="text-align:right">${crowd[i]}명</td></tr>`).join('');
+  document.querySelectorAll('#rcBody tr').forEach(tr => tr.onclick = () => pick(+tr.dataset.i));
+  $('goBtn').disabled = true; $('goBtn').textContent = '내 포로를 골라 주세요'; $('pickInfo').textContent = '';
+  $('pickWrap').style.display = 'grid'; $('raceWrap').style.display = 'none'; $('resWrap').style.display = 'none'; setStep(1);
+}
+function rareSet() { return new Set(crowd.map((c, i) => [c, i]).sort((a, b) => a[0] - b[0]).slice(0, 4).map(x => x[1])); }
+function pick(i) {
+  mine = i; document.querySelectorAll('#rcBody tr').forEach(tr => tr.classList.toggle('pick', +tr.dataset.i === i));
+  const e = entries[i]; $('goBtn').disabled = false; $('goBtn').textContent = `${e.name}(으)로 응원하기 →`;
+  $('pickInfo').textContent = `${e.apt}형 · ${e.style}` + (rareSet().has(i) ? ' · 숨은 포로라 1등이면 +3점' : '');
+}
+function start() {
+  crowd[mine] += 1;
+  race = E.newRace(entries, course, Math.floor(R() * 1e9));
+  crowdDelay = entries.map(() => 1.5 + R() * 4);    // 각 포로 응원단이 간식을 주기까지 걸리는 시간
+  logged = {}; $('log').innerHTML = '';
+  $('pickWrap').style.display = 'none'; $('raceWrap').style.display = 'grid'; setStep(2);
+  const e = entries[mine]; $('meName').innerHTML = `<span class="tok" style="background:${e.color}">${mine + 1}</span>내 포로 · ${e.name} <span class="st" style="margin-left:6px">${e.apt}형 · ${e.style}</span>`;
+  $('snackBtn').disabled = false; $('snackBtn').classList.remove('ready');
+  say(`${ctypeName}에서 출발! 내 포로는 ${e.name}.`);
+  last = performance.now(); acc = 0; cancelAnimationFrame(raf); raf = requestAnimationFrame(loop);
+}
+function share() {
+  const tot = crowd.reduce((a, b) => a + b) + myBoost;
+  return crowd.map((c, i) => (c + (i === mine ? myBoost : 0)) / tot);
+}
+function say(t) { const d = document.createElement('div'); d.textContent = `${race ? race.t.toFixed(1) : '0.0'}초 · ${t}`; $('log').prepend(d); }
+function loop(now) {
+  const dtw = Math.min(.1, (now - last) / 1000); last = now; acc += dtw * speed;
+  while (acc >= P.dt && !race.done) {
+    acc -= P.dt; E.step(race, share());
+    myBoost = Math.max(0, myBoost - P.dt * 4); if (cheerCd > 0) cheerCd -= P.dt;
+    race.poros.forEach((p, i) => {
+      if (p.tired && !logged['t' + i]) { logged['t' + i] = 1; if (i === mine) say(`💦 ${p.name} 지쳤어요! 지금 간식!`); else if (p.rank <= 3) say(`💦 선두권 ${p.name} 지침`); }
+      if (p.tired && !p.recovered && i !== mine && race.t - p.tiredAt >= crowdDelay[i]) { E.giveSnack(race, i); }
+      if (p.tired && !p.recovered && i === mine && race.t - p.tiredAt >= crowdDelay[i] + 2) { E.giveSnack(race, i); snackRes = snackRes || 'crowd'; say(`🍪 다른 응원단이 ${p.name}에게 간식을 줬어요`); }
+      if (p.slips > (logged['s' + i] || 0)) { logged['s' + i] = p.slips; if (i === mine || p.rank <= 3) say(`🌀 ${p.name} 커브에서 미끄러짐!`); }
+      if (p.dashes > (logged['d' + i] || 0)) { logged['d' + i] = p.dashes; if (i === mine) say(`📣 응원을 받고 ${p.name} 질주!`); }
+    });
+  }
+  draw(); hud();
+  if (race.done) return finish();
+  raf = requestAnimationFrame(loop);
+}
+const cv = $('cv'), cx = cv.getContext('2d');
+function fit() { const w = cv.clientWidth || 760, h = Math.round(w * .62), d = devicePixelRatio || 1; if (cv.width !== Math.round(w * d)) { cv.width = Math.round(w * d); cv.height = Math.round(h * d); cv.style.height = h + 'px'; } cx.setTransform(d, 0, 0, d, 0, 0); return [w, h]; }
+addEventListener('resize', () => race && draw());
+function draw() {
+  const [W, H] = fit(), L = 64, Rr = 18, top = 54, lane = (H - top - 14) / 8, total = race.total;
+  cx.clearRect(0, 0, W, H);
+  // 코스 띠
+  const x0 = L, x1 = W - Rr, segW = (x1 - x0) / (P.seg * P.laps);
+  for (let k = 0; k < P.seg * P.laps; k++) {
+    const kind = course.kinds[k % P.seg]; cx.fillStyle = kind === 'C' ? 'rgba(43,163,107,.13)' : 'rgba(229,154,60,.13)';
+    cx.fillRect(x0 + k * segW, top - 22, segW - 1, H - top + 18);
+    cx.fillStyle = kind === 'C' ? '#2BA36B' : '#E59A3C'; cx.fillRect(x0 + k * segW, top - 22, segW - 1, 16);
+    cx.fillStyle = '#fff'; cx.font = '800 10px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText(kind === 'C' ? '커브' : '직선', x0 + k * segW + segW / 2, top - 10.5);
+  }
+  cx.fillStyle = '#1b1f26'; cx.fillRect(x0 + P.seg * segW - 1.5, top - 26, 3, H - top + 22);
+  cx.font = '800 12px Noto Sans KR'; cx.fillStyle = '#3B4453'; cx.fillText('1바퀴', x0 + P.seg * segW / 2, top - 30); cx.fillText('2바퀴 · 골인 →', x0 + P.seg * segW * 1.5, top - 30);
+  cx.fillStyle = '#111'; for (let y = top - 22; y < H - 4; y += 10) { cx.fillRect(x1 - 1, y, 4, 5); }
+  // 레인
+  race.poros.forEach((p, i) => {
+    const y = top + lane * i + lane / 2 + 2, x = x0 + (x1 - x0) * p.d / total;
+    cx.strokeStyle = 'rgba(0,0,0,.06)'; cx.lineWidth = 1; cx.beginPath(); cx.moveTo(x0, y + lane / 2); cx.lineTo(x1, y + lane / 2); cx.stroke();
+    cx.textAlign = 'right'; cx.fillStyle = i === mine ? '#6C5CE7' : '#3B4453'; cx.font = (i === mine ? '900 ' : '700 ') + '12.5px Noto Sans KR'; cx.fillText(entries[i].name, x0 - 8, y + 4);
+    if (p.dash > 0) { const g = cx.createLinearGradient(x - 50, 0, x, 0); g.addColorStop(0, 'rgba(37,99,235,0)'); g.addColorStop(1, 'rgba(37,99,235,.45)'); cx.fillStyle = g; cx.fillRect(x - 50, y - 8, 50, 16); }
+    const r = Math.min(12, lane * .36); cx.save(); cx.translate(x, y); if (p.slip > 0) cx.rotate((race.t * 12) % (Math.PI * 2));
+    if (i === mine) { cx.beginPath(); cx.arc(0, 0, r + 4, 0, 7); cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.stroke(); }
+    cx.beginPath(); cx.arc(0, 0, r, 0, 7); cx.fillStyle = entries[i].color; cx.fill();
+    cx.fillStyle = '#fff'; cx.font = '900 11px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText(i + 1, 0, 4); cx.restore();
+    cx.font = '800 11.5px Noto Sans KR'; cx.textAlign = 'left';
+    let tagx = x + r + 5;
+    if (p.tired && !p.recovered) { cx.fillText('💦', tagx, y - 6); tagx += 16; }
+    if (p.slip > 0) { cx.fillStyle = '#0E7A34'; cx.fillText('미끄덩!', tagx, y - 6); }
+    if (p.dash > 0) { cx.fillStyle = '#2563EB'; cx.fillText('질주!', tagx, y - 6); }
+    if (p.fin !== null) { cx.fillStyle = '#111'; cx.font = '900 12px Noto Sans KR'; cx.fillText((race.finished.indexOf(i) + 1) + '등', x - 42, y + 4); }
+  });
+}
+function hud() {
+  const p = race.poros[mine], pct = Math.max(0, p.st) / P.stamina * 100;
+  $('stBar').querySelector('i').style.width = (p.tired && !p.recovered ? 0 : pct) + '%'; $('stBar').classList.toggle('low', pct < 30 || p.tired);
+  $('meState').textContent = `${p.rank}위 · ` + (p.fin !== null ? '골인!' : p.tired && !p.recovered ? '💦 지쳤어요 — 지금 간식!' : p.recovered ? '간식 먹고 다시 달리는 중' : `기운 ${Math.round(pct)}`) + (p.rank >= 5 && p.fin === null ? ' · 응원이 통하는 순위' : '');
+  const sb = $('snackBtn'); sb.classList.toggle('ready', !snackUsed && p.tired && !p.recovered);
+  $('cheerCd').style.width = Math.max(0, cheerCd / 3 * 100) + '%'; $('cheerBtn').disabled = p.fin !== null;
+  $('clock').textContent = race.t.toFixed(1) + '초';
+  const ord = E.ranks(race);
+  $('rankList').innerHTML = ord.map((q, k) => `<li class="${q.i === mine ? 'mine' : ''}"><span class="n">${k + 1}</span><span class="tok" style="background:${entries[q.i].color}">${q.i + 1}</span>${q.name}${q.tired && !q.recovered ? ' 💦' : ''}${q.dash > 0 ? ' 📣' : ''}</li>`).join('');
+}
+function cheer() {
+  if (!race || race.done || cheerCd > 0 || race.poros[mine].fin !== null) return;
+  cheerCd = 3; myBoost = Math.min(12, myBoost + 6); myCheers++;
+}
+function snack() {
+  if (!race || snackUsed || race.done) return;
+  snackUsed = true; const r = E.giveSnack(race, mine); $('snackBtn').disabled = true; $('snackBtn').classList.remove('ready');
+  if (r === 'ok') { snackRes = 'ok'; say('🍪 간식 성공! 기운을 되찾았어요'); $('tipLine').textContent = '간식 성공! 지쳤을 때 줘서 효과가 났어요.'; }
+  else if (r === 'used') { snackRes = 'late'; say('🍪 이미 다른 응원단이 간식을 줬어요'); }
+  else { snackRes = 'early'; say('🍪 아직 안 지쳐서 효과가 없었어요'); $('tipLine').textContent = '아직 안 지쳤을 때 줘서 효과가 거의 없었어요. 💦가 뜰 때가 타이밍!'; }
+}
+function finish() {
+  cancelAnimationFrame(raf); setStep(3);
+  const rank = race.finished.indexOf(mine) + 1, rare = rareSet().has(mine);
+  let pts = rank === 1 ? 5 : rank <= 3 ? 2 : 1, bonus = rank === 1 && rare ? 3 : 0;
+  setTimeout(() => {
+    $('raceWrap').style.display = 'none'; $('resWrap').style.display = 'block';
+    $('resRank').textContent = rank + '등'; $('resRank').style.color = rank === 1 ? '#D4A106' : rank <= 3 ? '#14AA48' : '#5B6573';
+    $('resTitle').textContent = `내 포로 ${entries[mine].name} · ${entries[mine].apt}형 · ${entries[mine].style}`;
+    $('resSub').textContent = `${ctypeName} · 우승 기록 ${race.poros[race.finished[0]].fin.toFixed(1)}초`;
+    $('rwA').textContent = '+' + (pts + bonus) + '점'; $('rwB').textContent = '+' + (pts + bonus);
+    $('rwC').textContent = `응원 ${myCheers}번 · ` + ({ ok: '간식 성공', early: '간식 너무 일찍', late: '간식 늦음', crowd: '간식 놓침' }[snackRes] || (entries[mine].style === '뒷심' ? '간식 필요 없음' : '간식 안 줌'));
+    const w = race.poros[race.finished[0]], fav = ctypeName === '커브 많은 길' ? '커브가 많아 인코스를 잡은 깡총 · 앞장과 코너형이 유리한 판이었어요.' : ctypeName === '직선 많은 길' ? '직선이 많아 뒤에서 따라붙는 뒷심과 직진형이 유리한 판이었어요.' : '커브와 직선이 반반이라 적성보다 컨디션과 간식 타이밍이 갈랐어요.';
+    $('why').innerHTML = `<b>이번 판 해설</b> · ${fav} 우승은 ${w.name}(${w.apt}형 · ${w.style}).` + (bonus ? ' <b>숨은 포로로 1등! +3점</b>' : '') + (snackRes === 'early' ? ' 간식은 💦가 뜬 뒤에 줘야 효과가 있어요.' : '');
+    $('finList').innerHTML = race.finished.map((i, k) => `<li><b>${k + 1}등</b> <span class="tok" style="background:${entries[i].color};width:20px;height:20px;font-size:10px">${i + 1}</span>${entries[i].name} <span class="st">${entries[i].apt}형 · ${entries[i].style}</span></li>`).join('');
+  }, 900);
+}
+$('goBtn').onclick = start; $('againBtn').onclick = newCard; $('cheerBtn').onclick = cheer; $('snackBtn').onclick = snack;
+addEventListener('keydown', e => { if (e.key === 'e' || e.key === 'E' || e.key === 'ㄷ') cheer(); if (e.key === 'q' || e.key === 'Q' || e.key === 'ㅂ') snack(); });
+document.querySelectorAll('.speed button').forEach(b => b.onclick = () => { speed = +b.dataset.s; document.querySelectorAll('.speed button').forEach(x => x.classList.toggle('on', x === b)); });
+newCard();
+})();
+</script>
+</body>
+</html>

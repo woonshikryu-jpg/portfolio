@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>포로 경주 · 상세 기획서 · 유운식</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@700;800&family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+:root{--bg:#F2F4F7;--ink:#141820;--sub:#5B6573;--line:#DCE2E9;--g:#14AA48;--s1:#257de0;--s2:#f47230;--s3:#00b894;--s4:#f2a600}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 15.5px/1.7 'Noto Sans KR',sans-serif}
+a{color:inherit}
+.top{position:relative;min-height:230px;overflow:hidden;background:#0d1b2a;color:#fff}
+.top img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:.5}
+.top .in{position:relative;max-width:1080px;margin:0 auto;padding:40px 24px 34px}
+.top .k{font:800 12.5px/1 'Noto Sans KR';letter-spacing:.14em;color:#BFE9CF}
+.top h1{margin:12px 0 8px;font:800 40px/1.2 'Hahmlet',serif;text-shadow:0 2px 12px rgba(0,0,0,.55)}
+.top p{margin:0;max-width:720px;color:#E9EEF4}
+.top .btns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.top .btns a{text-decoration:none;font-weight:800;font-size:14.5px;padding:11px 18px;border-radius:12px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4)}
+.top .btns a.play{background:#14AA48;border-color:#14AA48}
+.top .cr{position:absolute;right:12px;bottom:10px;font-size:11.5px;color:#cfd8e3;background:rgba(0,0,0,.35);padding:3px 9px;border-radius:999px}
+.toc{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.toc .in{max-width:1080px;margin:0 auto;padding:10px 24px;display:flex;gap:6px;overflow:auto}
+.toc a{flex:none;text-decoration:none;font-weight:700;font-size:13px;padding:6px 11px;border-radius:999px;color:var(--sub)}
+.toc a:hover{background:#EEF1F5;color:var(--ink)}
+main{max-width:1080px;margin:0 auto;padding:10px 24px 80px}
+section{padding:46px 0 10px;border-bottom:1px solid var(--line)}
+section:last-child{border:0}
+.no{font:800 13px/1 'Noto Sans KR';letter-spacing:.08em;color:var(--g)}
+h2{margin:8px 0 6px;font:900 28px/1.3 'Noto Sans KR'}
+h2 em{font-style:normal;color:var(--g)}
+.lead{margin:0 0 18px;color:var(--sub);font-size:15px}
+h3{margin:22px 0 8px;font:800 18px/1.4 'Noto Sans KR'}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.card .k{font:800 12px/1 'Noto Sans KR';color:var(--g)}
+.card b.t{display:block;font:900 17px/1.4 'Noto Sans KR';margin:6px 0 4px}
+.card p{margin:0;color:#3B4453;font-size:14.5px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:14.5px}
+th,td{padding:10px 14px;border-bottom:1px solid #EEF1F4;text-align:left;vertical-align:top}
+th{background:#F7F9FB;font-size:13px;color:var(--sub);font-weight:800}
+tr:last-child td{border-bottom:0}
+td b{font-weight:900}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:6px}
+.flow .st{position:relative;background:#fff;border:1px solid var(--line);padding:16px 18px 16px 22px}
+.flow .st:first-child{border-radius:16px 0 0 16px}.flow .st:last-child{border-radius:0 16px 16px 0}
+.flow .st+.st{border-left:0}
+.flow .st .tm{font:900 13px/1 'Noto Sans KR';color:#fff;background:var(--g);display:inline-block;padding:5px 9px;border-radius:8px}
+.flow .st b{display:block;font:900 17px/1.4 'Noto Sans KR';margin:8px 0 4px}
+.flow .st ul{margin:0;padding-left:18px;font-size:14px;color:#3B4453}
+.shot{margin:14px 0 0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px}
+.shot img{width:100%;display:block;border-radius:10px;border:1px solid #EEF1F4}
+.shot figcaption{font-size:13px;color:var(--sub);margin-top:8px}
+.shot figcaption b{color:var(--ink)}
+.note{margin-top:12px;font-size:13.5px;color:var(--sub);background:#F7F9FB;border-left:3px solid var(--g);padding:10px 14px;border-radius:0 10px 10px 0}
+.band{margin-top:16px;background:#14301f;color:#fff;border-radius:16px;padding:18px 22px;font:800 17px/1.6 'Noto Sans KR'}
+.band em{font-style:normal;color:#FFC24D}
+code{font:600 13px/1.5 ui-monospace,Consolas,monospace;background:#F1F3F6;padding:1px 6px;border-radius:6px}
+/* 차트 */
+.chart{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.chart .ttl{font:900 15.5px/1.4 'Noto Sans KR'}
+.chart .sub{font-size:12.5px;color:var(--sub);margin-bottom:10px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#3B4453;margin-bottom:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.grp{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:center;padding:6px 0;border-top:1px solid #F0F2F5}
+.grp:first-of-type{border-top:0}
+.grp .gl{font-size:13px;font-weight:800;color:#3B4453}
+.bars{position:relative;display:flex;flex-direction:column;gap:2px}
+.bar{position:relative;display:flex;align-items:center;height:16px}
+.bar i{display:block;height:100%;border-radius:0 4px 4px 0;min-width:2px}
+.bar span{font:700 11.5px/1 'Noto Sans KR';color:#3B4453;margin-left:6px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar:hover i{filter:brightness(.9)}
+.ref{position:absolute;top:-4px;bottom:-4px;border-left:1.5px dashed #9AA4B2}
+.reflab{font-size:11.5px;color:var(--sub);margin-top:6px}
+#tip{position:fixed;pointer-events:none;background:#141820;color:#fff;font:600 12.5px/1.45 'Noto Sans KR';padding:7px 10px;border-radius:8px;opacity:0;transition:opacity .1s;z-index:20;max-width:240px}
+details{margin-top:8px;font-size:13px}
+details summary{cursor:pointer;color:var(--sub);font-weight:700}
+@media(max-width:860px){.g2,.g3,.g4,.flow{grid-template-columns:1fr}.flow .st{border-radius:16px!important;border-left:1px solid var(--line)!important;margin-bottom:8px}.top h1{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="top"><img src="img/lol/poro-hq.jpg" alt=""><div class="in">
+  <div class="k">숨어 사는 소환사들 · 4-1 포로 경주</div>
+  <h1>포로 경주 상세 기획서</h1>
+  <p>제안서의 포로 경주를 개발자에게 넘길 수 있는 수준으로 정리했습니다. 규칙, 화면 흐름, 수치, 예외 처리, 그리고 수치가 의도대로 움직이는지 <b>4,000판씩 시뮬레이션</b>으로 확인한 결과입니다.</p>
+  <div class="btns"><a class="play" href="play.html">▶ 프로토타입 해 보기 (약 1분 30초)</a><a href="../">← 제안서로 돌아가기</a></div>
+</div><span class="cr">이미지 출처: Riot Games</span></div>
+<nav class="toc"><div class="in"><a href="#goal">1 목표</a><a href="#flow">2 한 판 흐름</a><a href="#ui">3 화면</a><a href="#rule">4 규칙</a><a href="#num">5 수치</a><a href="#bal">6 밸런스 검증</a><a href="#exc">7 예외 처리</a><a href="#data">8 데이터 · 지표</a></div></nav>
+<main>
+
+<section id="goal">
+  <div class="no">1 · 설계 목표</div>
+  <h2>보기만 해도 <em>내가 한 일</em>이 생기는 3분</h2>
+  <p class="lead">영상은 보기만 하고 끝납니다. 포로 경주는 고르고, 응원하고, 간식을 주는 세 번의 선택으로 관객을 참여자로 만듭니다.</p>
+  <div class="g3">
+    <div class="card"><span class="k">읽는 재미</span><b class="t">출전표에 근거가 있다</b><p>적성 · 각질 · 최근 성적과 오늘의 코스를 읽으면 맞힐 확률이 올라갑니다. 하지만 정답은 없습니다.</p></div>
+    <div class="card"><span class="k">손대는 재미</span><b class="t">타이밍이 실력이 된다</b><p>간식은 지쳤을 때 줘야만 효과가 납니다. 응원은 뒤처졌을 때만 통합니다.</p></div>
+    <div class="card"><span class="k">같이 보는 재미</span><b class="t">처음 보는 사람과 한편</b><p>같은 포로를 고른 사람끼리 응원단이 됩니다. 경쟁 상대가 아니라서 부담 없이 말을 걸 수 있습니다.</p></div>
+  </div>
+  <div class="band">지켜야 할 선: <em>응원과 간식이 결과를 정하면 안 된다.</em> 둘 다 확률과 회복만 건드리고, 이긴다는 보장은 주지 않는다. (6장에서 숫자로 확인)</div>
+</section>
+
+<section id="flow">
+  <div class="no">2 · 한 판 흐름</div>
+  <h2>5분마다 열리는 <em>약 3분</em>짜리 한 판</h2>
+  <p class="lead">광장의 포로 서킷에서 5분 간격으로 열립니다. 큐를 기다리는 동안 한 판을 보기에 알맞은 길이입니다.</p>
+  <div class="flow">
+    <div class="st"><span class="tm">60초</span><b>출전표 · 내 포로 고르기</b><ul><li>오늘의 코스(커브 · 직선 배치) 공개</li><li>포로 8마리의 적성 · 각질 · 최근 5경기 · 고른 사람 수</li><li>한 마리를 골라 응원단에 들어감(무료)</li></ul></div>
+    <div class="st"><span class="tm">약 85초</span><b>경주 · 응원 · 간식</b><ul><li>서킷 2바퀴를 포로들이 알아서 달림</li><li>응원: 3초에 한 번, 5~8위일 때만 효과</li><li>간식: 한 판에 한 번, 지쳤을 때만 효과</li></ul></div>
+    <div class="st"><span class="tm">20초</span><b>결과 · 정산</b><ul><li>내 포로 순위에 따라 학회 기여 · 포인트</li><li>숨은 포로로 1등이면 +3점</li><li>광장 게시판 순위표에 반영</li></ul></div>
+  </div>
+</section>
+
+<section id="ui">
+  <div class="no">3 · 화면</div>
+  <h2>세 화면, <em>프로토타입</em> 그대로</h2>
+  <p class="lead">아래 그림은 실제로 동작하는 프로토타입의 화면입니다. 같은 엔진으로 시뮬레이션도 돌렸습니다.</p>
+  <figure class="shot"><img src="img/lol/../poro/ui-1-card.jpg" alt="출전표 화면: 오늘의 코스 띠와 포로 8마리의 적성, 각질, 최근 5경기, 고른 사람 수" loading="lazy"><figcaption><b>① 출전표</b> · 위 띠가 오늘의 코스(초록 커브 · 주황 직선, 2바퀴). 고른 사람이 적은 4마리는 「숨은 포로」 표시. 오른쪽에 읽는 법을 늘 띄워 처음 보는 사람도 고를 수 있게 함.</figcaption></figure>
+  <figure class="shot"><img src="img/lol/../poro/ui-2-race.jpg" alt="경주 화면: 레인별 포로 위치, 내 포로 기운 막대, 응원과 간식 버튼, 실시간 순위" loading="lazy"><figcaption><b>② 경주</b> · 내 포로는 보라 테두리. 지치면 💦가 뜨고 간식 버튼이 깜빡임. 응원 버튼 아래 막대는 3초 대기 시간. 오른쪽에 실시간 순위와 중계(미끄러짐 · 질주 · 지침).</figcaption></figure>
+  <figure class="shot"><img src="img/lol/../poro/ui-3-result.jpg" alt="결과 화면: 내 포로 순위, 학회 기여와 포인트, 이번 판 해설, 전체 순위" loading="lazy"><figcaption><b>③ 결과</b> · 받은 점수와 「이번 판 내가 한 일」(응원 횟수 · 간식 성공 여부), 코스에 따라 왜 그 포로가 이겼는지 한 줄 해설. 다음 판에 출전표를 읽는 눈이 생기게 함.</figcaption></figure>
+</section>
+
+<section id="rule">
+  <div class="no">4 · 규칙</div>
+  <h2>순위를 정하는 <em>다섯 가지</em></h2>
+  <p class="lead">구간마다 아래 다섯 가지가 곱해져 속도가 정해집니다. 출전표에 보이는 것(적성 · 각질 · 코스)이 가장 크게, 보이지 않는 것(컨디션 · 미끄러짐)이 변수로 작용합니다.</p>
+  <table>
+    <tr><th style="width:17%">요소</th><th>규칙</th><th style="width:20%">출전표에</th></tr>
+    <tr><td><b>코스</b></td><td>바퀴당 8구간, 2바퀴. 매 판 <b>직선 많은 길(커브 25%) · 보통 길(50%) · 커브 많은 길(75%)</b> 중 하나. 바퀴마다 마지막 구간은 직선(홈 직선). 기본은 눈길</td><td>보임</td></tr>
+    <tr><td><b>적성</b></td><td>직진형은 직선에서 빠르고 커브에서 느림, 코너형은 그 반대. 빠르고 느린 폭은 같음(±2.5%)</td><td>보임</td></tr>
+    <tr><td><b>각질</b></td><td><b>깡총(도주)</b> 처음부터 앞으로, 빨리 지침 · <b>앞장(선행)</b> 선두 뒤를 따르다 막판에 앞섬 · <b>눈치(선입)</b> 중간에서 버티다 따라붙음 · <b>뒷심(추입)</b> 힘을 아끼다 마지막 직선에서 폭발(커브에서는 덜 폭발)</td><td>보임</td></tr>
+    <tr><td><b>자리</b></td><td><b>인코스</b>: 커브에서 1~3위는 안쪽을 잡아 +4% · <b>바람막이</b>: 직선에서 4위 아래는 앞 포로 뒤에 붙어 +4%. 그래서 커브가 많으면 앞에서 버티는 포로, 직선이 많으면 뒤에서 오는 포로가 유리</td><td>읽는 법으로 안내</td></tr>
+    <tr><td><b>변수</b></td><td><b>미끄러짐</b>: 눈길 커브에서 모든 포로가 같은 확률로 1.2초 멈춤 · <b>컨디션</b>: 판마다 포로별로 ±7%(보이지 않음)</td><td>안 보임</td></tr>
+  </table>
+  <h3>관객이 할 수 있는 것</h3>
+  <table>
+    <tr><th style="width:17%">행동</th><th>규칙</th><th style="width:28%">의도</th></tr>
+    <tr><td><b>내 포로</b></td><td>출전표에서 한 마리를 고름. 무료, 한 판에 한 마리. 고르지 않으면 관전만</td><td>한 마리라 감정 이입이 쉬움</td></tr>
+    <tr><td><b>응원</b></td><td>감정표현 키(E), 3초에 한 번. 최근 3초 응원 비율이 높을수록 <b>5~8위일 때만</b> 1.6초 질주(+22%) 확률이 오름. 질주 뒤 6초는 다시 질주 못 함. 1~4위에서는 효과 없음</td><td>꼴찌를 구하는 응원, 1등을 만드는 응원은 아님</td></tr>
+    <tr><td><b>간식</b></td><td>한 판에 한 번. 내 포로가 <b>지쳤을 때(💦)</b> 주면 기운 25를 되찾고 원래 속도로 달림. 지치기 전에 주면 효과 없음(느려지지는 않음). 포로마다 회복은 한 번만 — 같은 응원단에서 먼저 준 사람이 「간식 성공」</td><td>지켜보다 타이밍을 잡는 손맛</td></tr>
+    <tr><td><b>관전</b></td><td>관람 구역에 서 있으면 내 캐릭터는 두고 카메라만 경주로로. 큐가 잡히면 그대로 떠나고, 고른 포로는 남아 자동 정산</td><td>떠나도 손해 없음</td></tr>
+  </table>
+  <h3>보상</h3>
+  <table>
+    <tr><th style="width:24%">내 포로 순위</th><th>학회 기여 · 포로 경주 포인트</th></tr>
+    <tr><td>1등</td><td class="num"><b>5점</b> · 고른 사람이 가장 적은 4마리 중 하나였다면 <b>+3점</b></td></tr>
+    <tr><td>2~3등</td><td class="num"><b>2점</b></td></tr>
+    <tr><td>4~8등</td><td class="num"><b>1점</b>(참여)</td></tr>
+    <tr><td>하루 상한</td><td>1:1 구역과 합쳐 <b>20점</b>까지. 포인트는 광장 꾸밈과 교환(돈으로 살 수 없고 현금으로 바꿀 수 없음)</td></tr>
+    <tr><td>순위표</td><td>1등을 맞힌 횟수 순 → 같으면 3등 안에 든 횟수 → 참여 판 수. 매주 월요일 초기화, 주간 상위 10%는 학회 기여 20점 추가</td></tr>
+  </table>
+</section>
+
+<section id="num">
+  <div class="no">5 · 수치</div>
+  <h2>개발에 넘기는 <em>기본값</em></h2>
+  <p class="lead">0.1초마다 계산합니다. 아래 값은 6장의 시뮬레이션으로 조정한 결과입니다.</p>
+  <div class="g2">
+    <table>
+      <tr><th>항목</th><th>값</th></tr>
+      <tr><td>바퀴 길이 · 바퀴 수 · 구간</td><td class="num">1,000 · 2바퀴 · 바퀴당 8구간</td></tr>
+      <tr><td>기본 속도</td><td class="num">초당 22 (우승 기록 약 84초)</td></tr>
+      <tr><td>적성</td><td class="num">맞는 구간 ×1.025 · 안 맞는 구간 ×0.975</td></tr>
+      <tr><td>인코스 · 바람막이</td><td class="num">커브 1~3위 ×1.04 · 직선 4~8위 ×1.04</td></tr>
+      <tr><td>미끄러짐</td><td class="num">커브에서 초당 1.2% · 1.2초 정지</td></tr>
+      <tr><td>컨디션 · 순간 흔들림</td><td class="num">판마다 ±7% · 0.1초마다 ±3%</td></tr>
+    </table>
+    <table>
+      <tr><th>각질</th><th class="num">초반 0~35%</th><th class="num">중반 ~75%</th><th class="num">막판</th></tr>
+      <tr><td><b>깡총</b></td><td class="num">×1.10</td><td class="num">×1.00</td><td class="num">×0.96</td></tr>
+      <tr><td><b>앞장</b></td><td class="num">×1.04</td><td class="num">×1.00</td><td class="num">×1.01</td></tr>
+      <tr><td><b>눈치</b></td><td class="num">×0.99</td><td class="num">×1.02</td><td class="num">×1.03</td></tr>
+      <tr><td><b>뒷심</b></td><td class="num">×0.94</td><td class="num">×1.00</td><td class="num">×1.16 (커브 ×0.92 추가)</td></tr>
+    </table>
+  </div>
+  <h3>기운(지침)</h3>
+  <table>
+    <tr><th style="width:24%">항목</th><th>값</th></tr>
+    <tr><td>기운</td><td>100에서 시작. 초당 <code>1.0 × (각질 배수)^7</code>만큼 줄어듦(막판 폭발은 아껴 둔 힘이라 소모 없음). 빨리 달릴수록 훨씬 빨리 지침</td></tr>
+    <tr><td>지침</td><td>0이 되면 💦, 속도 ×0.84. 간식을 받기 전까지 계속</td></tr>
+    <tr><td>간식</td><td>지친 상태에서 받으면 기운 25로 회복, 지침 해제. 포로당 한 판에 한 번</td></tr>
+    <tr><td>결과(시뮬레이션 평균)</td><td>깡총은 거의 매 판 경주 중반 넘어 지침 → 간식이 승부를 가름. 앞장은 절반쯤, 뒷심은 거의 안 지침(대신 초반이 느림)</td></tr>
+  </table>
+</section>
+
+<section id="bal">
+  <div class="no">6 · 밸런스 검증</div>
+  <h2>의도대로 움직이는지, <em>4,000판씩</em> 돌려 봤다</h2>
+  <p class="lead">프로토타입과 같은 엔진으로 코스마다 4,000판을 시뮬레이션했습니다. 포로는 8마리, 한 마리의 평균 1등 확률은 <b>12.5%</b>입니다(점선).</p>
+  <div class="g2">
+    <div class="chart" id="c1"></div>
+    <div class="chart" id="c2"></div>
+  </div>
+  <div class="note"><b>읽힌다:</b> 커브 많은 길에서는 깡총 · 코너형이, 직선 많은 길에서는 뒷심 · 직진형이 1등을 가장 자주 합니다. <b>정해지지는 않는다:</b> 가장 유리한 조합(예: 커브 많은 길의 코너형 깡총)도 1등 확률은 <b>23.6%</b> — 4판에 1번 정도라, 근거를 읽은 사람이 유리하지만 결과는 끝까지 모릅니다.</div>
+  <div class="g2" style="margin-top:14px">
+    <div class="chart" id="c3"></div>
+    <div class="chart" id="c4"></div>
+  </div>
+  <div class="note"><b>간식:</b> 깡총 포로는 지친 순간 바로 간식을 주면 1등 확률이 안 줄 때의 2배 넘게 오르고, 늦을수록 효과가 줄어듭니다 — 타이밍이 실력입니다. <b>응원:</b> 응원의 70%를 몰아받아도 1등 확률은 거의 그대로지만, 꼴찌 확률은 크게 줄어듭니다. 응원은 뒤처진 포로를 구할 뿐 1등을 만들어 주지 않습니다.</div>
+  <details><summary>시뮬레이션 조건 자세히</summary><p>코스마다 4,000판. 포로 8마리의 적성 · 각질은 무작위, 관객 응원 비율도 무작위. 다른 응원단은 지친 뒤 0.5~4초 사이에 간식을 줌. 간식 실험은 보통 길의 코너형 깡총, 응원 실험은 보통 길의 직진형 눈치 한 마리를 두고 조건만 바꿔 각 4,000판. 엔진 코드는 저장소 <code>tools/poro-race/engine.js</code>.</p></details>
+</section>
+
+<section id="exc">
+  <div class="no">7 · 예외 처리</div>
+  <h2>경주 밖에서 생기는 <em>일들</em></h2>
+  <table>
+    <tr><th style="width:30%">상황</th><th>처리</th></tr>
+    <tr><td>경주 중 큐가 잡힘</td><td>바로 떠남. 고른 포로는 남아 결과가 나오면 자동 정산, 게임이 끝난 뒤 알림. 간식은 다른 응원단이 줌</td></tr>
+    <tr><td>경주 중 접속이 끊김</td><td>위와 같음. 경주는 서버에서 계산하므로 결과에 영향 없음</td></tr>
+    <tr><td>출전표 60초 안에 안 고름</td><td>관전만. 보상 없음(참여 1점도 없음)</td></tr>
+    <tr><td>경주 중에 광장에 들어옴</td><td>관전만 가능, 다음 판 출전표부터 참여</td></tr>
+    <tr><td>같은 포로의 응원단 여럿이 간식</td><td>포로당 회복은 한 번. 지친 뒤 가장 먼저 준 사람에게 「간식 성공」, 늦게 준 사람에게는 「이미 먹었어요」 안내</td></tr>
+    <tr><td>지치기 전에 간식</td><td>효과 없음, 이번 판 간식은 쓴 것으로 처리. 「아직 안 지쳤어요 — 💦가 뜰 때가 타이밍」 안내</td></tr>
+    <tr><td>동시 골인</td><td>0.1초 단위 기록. 같으면 공동 순위, 보상은 높은 순위 기준</td></tr>
+    <tr><td>응원 매크로</td><td>3초 대기는 서버에서 판정. 대기 중 입력은 무시. 응원은 비율로 계산해 사람이 많아도 효과 크기는 같음</td></tr>
+    <tr><td>광장 인원이 적음(10명 아래)</td><td>응원이 비율이라 효과는 그대로. 숨은 포로 +3점은 4마리가 동률이면 고른 수가 0명인 포로만 해당</td></tr>
+    <tr><td>하루 20점 초과</td><td>점수는 0, 포인트는 그대로 쌓임 — 계속 보러 올 이유는 남김</td></tr>
+  </table>
+</section>
+
+<section id="data">
+  <div class="no">8 · 데이터 · 지표</div>
+  <h2>만들 때 필요한 것, 출시 뒤 <em>볼 것</em></h2>
+  <div class="g2">
+    <table>
+      <tr><th>데이터</th><th>필드</th></tr>
+      <tr><td><b>포로</b></td><td>id · 이름 · 털 색 · 적성 · 각질 · 최근 5경기</td></tr>
+      <tr><td><b>경주</b></td><td>경주 id · 시작 시각 · 코스(16구간 배열) · 포로 8마리 · 컨디션 값 · 결과 순위 · 기록</td></tr>
+      <tr><td><b>참여</b></td><td>유저 id · 경주 id · 고른 포로 · 응원 횟수 · 간식 시각 · 간식 결과 · 받은 점수</td></tr>
+    </table>
+    <table>
+      <tr><th>지표</th><th>보는 이유 · 목표</th></tr>
+      <tr><td>광장 인원 중 참여율</td><td>보기만 하던 사람이 고르는가</td></tr>
+      <tr><td>간식 성공률</td><td>타이밍이 너무 쉽거나 어렵지 않은가</td></tr>
+      <tr><td>각질별 1등 비율</td><td>6장의 예상과 같은가(한 각질이 25%를 넘으면 조정)</td></tr>
+      <tr><td>숨은 포로 선택 비율</td><td>출전표를 읽고 고르는가, 인기만 따라가는가</td></tr>
+      <tr><td>큐 대기 중 이탈 감소</td><td>대기 시간을 즐겁게 바꿨는가(제안서 5-2 지표와 연결)</td></tr>
+    </table>
+  </div>
+</section>
+</main>
+<div id="tip"></div>
+<script>
+const SIM = {"course": {"0.3": {"win": {"앞장": 11, "직진": 18.6, "직진·앞장": 17.2, "깡총": 10.6, "코너": 6.3, "코너·깡총": 4.6, "눈치": 11.3, "코너·눈치": 6, "코너·앞장": 4.8, "직진·깡총": 16.3, "뒷심": 17.1, "직진·뒷심": 24.2, "코너·뒷심": 9.9, "직진·눈치": 16.7}, "winTime": 83.9, "tiredAt": 76.6, "tiredShare": 34, "slipsPerRace": 2.1, "dashesPerRace": 13}, "0.5": {"win": {"깡총": 14.8, "직진": 12.5, "직진·깡총": 15.1, "뒷심": 9.6, "직진·뒷심": 9.5, "앞장": 14.2, "직진·앞장": 13.6, "눈치": 11.5, "직진·눈치": 11.8, "코너": 12.5, "코너·눈치": 11.3, "코너·깡총": 14.5, "코너·앞장": 14.7, "코너·뒷심": 9.6}, "winTime": 84, "tiredAt": 77.6, "tiredShare": 36, "slipsPerRace": 4.24, "dashesPerRace": 13.1}, "0.7": {"win": {"눈치": 11.1, "직진": 6.7, "직진·눈치": 5, "코너": 18.3, "코너·눈치": 17.2, "깡총": 17.2, "직진·깡총": 10.7, "코너·깡총": 23.6, "뒷심": 6.4, "직진·뒷심": 2.4, "앞장": 15.4, "코너·앞장": 22.2, "직진·앞장": 8.6, "코너·뒷심": 10.2}, "winTime": 83.4, "tiredAt": 79.5, "tiredShare": 39, "slipsPerRace": 6.37, "dashesPerRace": 13.17}}, "snack": {"바로(0.3초)": {"win": "16.8%", "top3": "40.6%"}, "늦게(4초)": {"win": "13.1%", "top3": "36.2%"}, "아주 늦게(10초)": {"win": "8.0%", "top3": "28.5%"}, "안 줌": {"win": "7.3%", "top3": "23.5%"}}, "cheer": {"응원 없음": {"win": "12.8%", "top3": "39.0%", "last": "12.8%"}, "0%": {"win": "11.6%", "top3": "36.7%", "last": "19.7%"}, "12.5%(고르게)": {"win": "12.8%", "top3": "40.3%", "last": "11.4%"}, "35%": {"win": "12.9%", "top3": "43.3%", "last": "7.8%"}, "70%(몰빵)": {"win": "13.9%", "top3": "44.6%", "last": "6.6%"}}};
+const C = { s1: '#257de0', s2: '#f47230', s3: '#00b894', s4: '#f2a600' };
+const tip = document.getElementById('tip');
+function bars(el, title, sub, groups, series, max, ref, refLab) {
+  let h = `<div class="ttl">${title}</div><div class="sub">${sub}</div>`;
+  if (series.length > 1) h += '<div class="legend">' + series.map(s => `<span><i style="background:${s.c}"></i>${s.n}</span>`).join('') + '</div>';
+  h += groups.map(g => `<div class="grp"><div class="gl">${g.n}</div><div class="bars">${ref != null ? `<span class="ref" style="left:calc(${ref / max * 100}% * .86)"></span>` : ''}` +
+    series.map((s, k) => { const v = g.v[k]; return `<div class="bar" data-t="${g.n} · ${s.n}: ${v}%"><i style="width:calc(${v / max * 100}% * .86);background:${s.c}"></i><span>${v}%</span></div>`; }).join('') + '</div></div>').join('');
+  if (refLab) h += `<div class="reflab">┆ 점선 = ${refLab}</div>`;
+  el.innerHTML = h;
+  el.querySelectorAll('.bar').forEach(b => { b.onmousemove = e => { tip.textContent = b.dataset.t; tip.style.opacity = 1; tip.style.left = e.clientX + 12 + 'px'; tip.style.top = e.clientY + 12 + 'px'; }; b.onmouseleave = () => tip.style.opacity = 0; });
+}
+const CN = [['0.3', '직선 많은 길'], ['0.5', '보통 길'], ['0.7', '커브 많은 길']];
+bars(document.getElementById('c1'), '코스별 · 각질별 1등 확률', '포로 한 마리 기준', CN.map(([k, n]) => ({ n, v: ['깡총', '앞장', '눈치', '뒷심'].map(s => SIM.course[k].win[s]) })),
+  [{ n: '깡총(도주)', c: C.s1 }, { n: '앞장(선행)', c: C.s2 }, { n: '눈치(선입)', c: C.s3 }, { n: '뒷심(추입)', c: C.s4 }], 25, 12.5, '평균 12.5%');
+bars(document.getElementById('c2'), '코스별 · 적성별 1등 확률', '포로 한 마리 기준', CN.map(([k, n]) => ({ n, v: ['직진', '코너'].map(s => SIM.course[k].win[s]) })),
+  [{ n: '직진형', c: C.s1 }, { n: '코너형', c: C.s2 }], 25, 12.5, '평균 12.5%');
+const pf = x => parseFloat(x);
+bars(document.getElementById('c3'), '간식 타이밍에 따른 결과', '보통 길 · 코너형 깡총 한 마리', Object.entries(SIM.snack).map(([n, v]) => ({ n, v: [pf(v.win), pf(v.top3)] })),
+  [{ n: '1등 확률', c: C.s1 }, { n: '3등 안 확률', c: C.s2 }], 50, 12.5, '평균 1등 확률 12.5%');
+bars(document.getElementById('c4'), '응원을 받은 비율에 따른 결과', '보통 길 · 직진형 눈치 한 마리, 전체 응원 중 이 포로가 받은 비율', Object.entries(SIM.cheer).filter(([n]) => n !== '응원 없음').map(([n, v]) => ({ n, v: [pf(v.win), pf(v.last)] })),
+  [{ n: '1등 확률', c: C.s1 }, { n: '꼴찌 확률', c: C.s2 }], 25, 12.5, '평균 12.5%');
+</script>
+</body>
+</html>
