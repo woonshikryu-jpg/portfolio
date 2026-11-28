@@ -194,7 +194,7 @@ canvas{width:100%;display:block}
       '뒷심': [[0, .35, 0.94], [.35, .75, 1.00], [.75, 1.01, 1.16]]
     },
     stamina: 100, drain: 1.0, drainPow: 7, tiredMult: 0.84, snack: 25,
-    slipP: 0.012, slipT: 1.2,      // 미끄러짐: 커브에서 초당 1.2%, 1.2초 멈춤
+    slipP: 0.012, slipT: 1.2, slipMult: 0.3, accel: 0.22,   // 미끄러짐: 커브에서 초당 1.2%, 1.2초 동안 속도 30%(멈추지 않고 휘청) · 속도 변화는 부드럽게
     inside: 0.04, draft: 0.04, closerCurve: 0.92,   // 커브 인코스(1~3위 +4%) · 직선 바람막이(4위 아래 +4%) · 뒷심 막판 폭발은 커브에서 약함
     cheer: { minRank: 5, base: 0.045, cap: 2, mult: 1.22, t: 1.6, cd: 6 },
     form: 0.07, noise: 0.03
@@ -214,7 +214,7 @@ canvas{width:100%;display:block}
     return {
       R, course, t: 0, done: false, total: P.L * P.laps, finished: [],
       poros: entries.map((e, i) => ({ i, name: e.name, apt: e.apt, style: e.style, d: 0, st: P.stamina, tired: false, recovered: false,
-        slip: 0, dash: 0, cd: 0, fin: null, form: 1 + (R() * 2 - 1) * P.form, cheer: 0, tiredAt: null, snackOk: null, slips: 0, dashes: 0 }))
+        slip: 0, dash: 0, cd: 0, fin: null, v: 0, nz: 0, form: 1 + (R() * 2 - 1) * P.form, cheer: 0, tiredAt: null, snackOk: null, slips: 0, dashes: 0 }))
     };
   }
   function ranks(race) { return race.poros.slice().sort((a, b) => (a.fin ?? 1e9) - (b.fin ?? 1e9) || b.d - a.d); }
@@ -226,7 +226,8 @@ canvas{width:100%;display:block}
     for (const p of race.poros) {
       if (p.fin !== null) continue;
       const prog = p.d / race.total, seg = segAt(race.course, p.d);
-      let m = styleMult(p.style, prog) * p.form * (1 + (R() * 2 - 1) * P.noise);
+      p.nz += ((R() * 2 - 1) - p.nz) * .15;                       // 흔들림도 부드럽게(갑자기 튀지 않음)
+      let m = styleMult(p.style, prog) * p.form * (1 + p.nz * P.noise * 2);
       m *= (p.apt === '직진') === (seg === 'S') ? 1 + P.apt : 1 - P.apt;
       if (p.style === '뒷심' && prog >= .75 && seg === 'C') m *= P.closerCurve;   // 뒷심의 막판 폭발은 직선에서
       if (seg === 'C' && p.rank <= 3) m *= 1 + P.inside;          // 커브: 앞쪽 포로가 인코스를 잡아 유리
@@ -240,9 +241,10 @@ canvas{width:100%;display:block}
       }
       if (p.dash > 0) { m *= P.cheer.mult; p.dash -= dt; }
       // 미끄러짐: 커브에서 모두 같은 확률
-      if (p.slip > 0) { p.slip -= dt; m = 0; }
-      else if (seg === 'C' && R() < P.slipP * dt) { p.slip = P.slipT; p.slips++; m = 0; }
-      want[p.i] = P.v0 * m;
+      if (p.slip > 0) { p.slip -= dt; m *= P.slipMult; }
+      else if (seg === 'C' && R() < P.slipP * dt) { p.slip = P.slipT; p.slips++; m *= P.slipMult; }
+      const tv = P.v0 * m; p.v = race.t === 0 ? tv * .5 : p.v + (tv - p.v) * P.accel;   // 가속 · 감속을 부드럽게
+      want[p.i] = p.v;
       // 스태미나
       if (!p.tired) { p.st -= P.drain * Math.pow(prog < .75 ? styleMult(p.style, prog) : 1, P.drainPow) * (p.dash > 0 ? 1.5 : 1) * dt; if (p.st <= 0) { p.tired = true; p.tiredAt = race.t; } }
     }
@@ -455,7 +457,7 @@ function laneOff(i) { return (i + .5) * LANE + 2 / U; }            // 안쪽 난
 function renderSide(W, H, tgt, span, st, ord, dtw, small) {
   const tot = race.total, segL = P.L / P.seg, tp = race.poros[tgt];
   let tx = phase === 'gate' ? 25 : tp.d - span * .08;
-  if (!small && dir.angle === 'side' && phase === 'run' && dir.tgt === 'lead') { const a = ord[0].d, b = ord[Math.min(3, ord.length - 1)].d; tx = (a + b) / 2 - 4; span = Math.min(260, Math.max(130, (a - b) * 1.5 + 70)); }
+  if (!small && dir.angle === 'side' && phase === 'run' && dir.tgt === 'lead') { const a = ord[0].d, b = ord[Math.min(3, ord.length - 1)].d; tx = (a + b) / 2 - 4; span = Math.min(190, Math.max(92, (a - b) * 1.3 + 55)); }
   if (slow && !small) span = Math.min(span, 120);
   if (vt - dir.cutAt < .05 && !small) { st.x = tx; st.span = span; }
   st.x += (tx - st.x) * Math.min(1, .1 + dtw * 2); st.span += (span - st.span) * .08;
@@ -489,6 +491,7 @@ function renderSide(W, H, tgt, span, st, ord, dtw, small) {
     if (kind === 'C') { cx.fillStyle = 'rgba(70,150,220,.09)'; cx.fillRect(x0, farY - H * .02, x1 - x0, nearY - farY + H * .06); }
     if (!small) { cx.fillStyle = kind === 'C' ? '#2BA36B' : '#E59A3C'; cx.fillRect(x0 + 6, farY - H * .135, 62, 18); cx.fillStyle = '#fff'; cx.font = '800 11px Noto Sans KR'; cx.textAlign = 'left'; cx.fillText(kind === 'C' ? '커브 구간' : '직선 구간', x0 + 11, farY - H * .135 + 13); }
   }
+  for (let d = Math.floor(dL / 3) * 3; d <= dR; d += 3) { for (let k = 0; k < 3; k++) { const h1 = hash(d * 7.1 + k * 13), yy = farY + h1 * (nearY - farY + H * .05), x = X(d + hash(d + k) * 3); cx.fillStyle = `rgba(150,170,195,${.18 + hash(d + k * 3) * .2})`; cx.fillRect(x, yy, 3 + h1 * 5, 1.6); } }
   cx.strokeStyle = 'rgba(160,180,200,.18)'; cx.lineWidth = 1;
   for (let i = 0; i < 8; i++) { cx.beginPath(); for (let x = 0; x <= W; x += 10) { const d = camX + (x - W * .5) / sc, y = laneY(i) + 10 * laneS(i) + BY(d, .6 + i / 14); x ? cx.lineTo(x, y) : cx.moveTo(x, y); } cx.stroke(); }
   for (let d = Math.ceil(dL / 100) * 100; d <= dR; d += 100) {
@@ -513,6 +516,7 @@ function renderSide(W, H, tgt, span, st, ord, dtw, small) {
     if (x < -60 || x > W + 60) return;
     if (!small && phase === 'run' && p.fin === null && mv && Math.random() < .6) spray.push({ x: p.d, y, vx: -(.6 + Math.random()), vy: -(.5 + Math.random() * 1.2), a: 1, s });
     cx.fillStyle = 'rgba(60,80,110,.18)'; cx.beginPath(); cx.ellipse(x, y + 12 * s, 17 * s, 4.5 * s, 0, 0, 7); cx.fill();
+    if (phase === 'run' && p.fin === null && mv) { cx.strokeStyle = 'rgba(170,190,215,.55)'; cx.lineWidth = 1.5; for (let k = 0; k < 3; k++) { const ly = y - 6 * s + k * 6 * s, ln = (14 + hash(i * 9 + k + Math.floor(vt * 8)) * 16) * s; cx.beginPath(); cx.moveTo(x - 20 * s, ly); cx.lineTo(x - 20 * s - ln, ly); cx.stroke(); } }
     if (p.dash > 0) { cx.strokeStyle = 'rgba(37,99,235,.55)'; cx.lineWidth = 2; for (let k = 0; k < 4; k++) { cx.beginPath(); cx.moveTo(x - 22 * s - k * 6, y - 8 * s + k * 5 * s); cx.lineTo(x - 52 * s - k * 6, y - 8 * s + k * 5 * s); cx.stroke(); } }
     runnerSide(x, y - bob, s, i, p, mv);
     if (i === mine) { cx.strokeStyle = '#6C5CE7'; cx.lineWidth = 3; cx.beginPath(); cx.ellipse(x, y + 12 * s, 21 * s, 6 * s, 0, 0, 7); cx.stroke(); if (!small) { cx.fillStyle = '#6C5CE7'; cx.beginPath(); cx.roundRect(x - 20 * s - 52, y - 9, 48, 17, 8); cx.fill(); cx.beginPath(); cx.moveTo(x - 20 * s - 5, y - 4); cx.lineTo(x - 20 * s + 1, y); cx.lineTo(x - 20 * s - 5, y + 4); cx.fill(); cx.fillStyle = '#fff'; cx.font = '900 10.5px Noto Sans KR'; cx.textAlign = 'center'; cx.fillText('내 포로', x - 20 * s - 28, y + 3); } }
@@ -542,7 +546,7 @@ function tags(x, y, p) {
 }
 // ── 드론: 위에서 따라가며 내려다봄(진행 방향이 화면 위쪽). 커브가 실제로 휘어 보임
 function renderDrone(W, H, tgt, ord) {
-  const tp = race.poros[tgt], cd = camFollow('top', Math.max(0, tp.d), lastDt), [cxw, cyw, hd] = trackPtS(cd), s = W / (85 / U), rot = -hd - Math.PI / 2;
+  const tp = race.poros[tgt], cd = camFollow('top', Math.max(0, tp.d), lastDt), [cxw, cyw, hd] = trackPtS(cd), s = W / (58 / U), rot = -hd - Math.PI / 2;
   const cs = Math.cos(rot), sn = Math.sin(rot), ox = W * .5, oy = H * .36;
   const nx0 = Math.cos(hd + Math.PI / 2), ny0 = Math.sin(hd + Math.PI / 2), cxo = cxw + nx0 * TW * .5, cyo = cyw + ny0 * TW * .5;
   const S = (x, y) => { const dx = (x - cxo) * s, dy = (y - cyo) * s; return [ox + dx * cs - dy * sn, oy + dx * sn + dy * cs]; };
@@ -602,7 +606,7 @@ function renderFront(W, H, tgt, ord) {
   const ds = []; for (let d = base + 26; d > base - 170; d -= 2.5) ds.push(d);
   ds.reverse();   // 먼 곳(뒤쪽)부터
   const quad = (a, b, c, d, fill) => { if (!a || !b || !c || !d) return; cx.fillStyle = fill; cx.beginPath(); cx.moveTo(a[0], a[1]); cx.lineTo(b[0], b[1]); cx.lineTo(c[0], c[1]); cx.lineTo(d[0], d[1]); cx.closePath(); cx.fill(); };
-  const segL = P.L / P.seg, ct = crowdTile(90);
+  const segL = P.L / P.seg;
   for (let k = 0; k < ds.length - 1; k++) {
     const d0 = ds[k], d1 = ds[k + 1]; if (d1 < -20) continue;
     const kind = course.kinds[Math.floor((((d0 % P.L) + P.L) % P.L) / segL)];
@@ -646,7 +650,7 @@ function drawFrame(dtw) {
   const angle = phase === 'gate' ? 'side' : dir.angle, tgt = phase === 'gate' ? mine : tgtIdx(dir.tgt, ord);
   if (angle === 'drone') renderDrone(W, H, tgt, ord);
   else if (angle === 'front') renderFront(W, H, tgt, ord);
-  else renderSide(W, H, tgt, angle === 'close' ? 62 : 160, view.side, ord, dtw, false);
+  else renderSide(W, H, tgt, angle === 'close' ? 52 : 100, view.side, ord, dtw, false);
   // 눈 내림
   cx.fillStyle = 'rgba(255,255,255,.85)'; snow.forEach(f => { f.y += f.v * (dtw || 0) * 3; f.x -= (dtw || 0) * .02; if (f.y > 1) { f.y = 0; f.x = Math.random(); } if (f.x < 0) f.x = 1; cx.beginPath(); cx.arc(f.x * W, f.y * H, f.r, 0, 7); cx.fill(); });
   // 컷 전환 번쩍

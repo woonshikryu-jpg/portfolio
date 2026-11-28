@@ -10,7 +10,7 @@
       '뒷심': [[0, .35, 0.94], [.35, .75, 1.00], [.75, 1.01, 1.16]]
     },
     stamina: 100, drain: 1.0, drainPow: 7, tiredMult: 0.84, snack: 25,
-    slipP: 0.012, slipT: 1.2,      // 미끄러짐: 커브에서 초당 1.2%, 1.2초 멈춤
+    slipP: 0.012, slipT: 1.2, slipMult: 0.3, accel: 0.22,   // 미끄러짐: 커브에서 초당 1.2%, 1.2초 동안 속도 30%(멈추지 않고 휘청) · 속도 변화는 부드럽게
     inside: 0.04, draft: 0.04, closerCurve: 0.92,   // 커브 인코스(1~3위 +4%) · 직선 바람막이(4위 아래 +4%) · 뒷심 막판 폭발은 커브에서 약함
     cheer: { minRank: 5, base: 0.045, cap: 2, mult: 1.22, t: 1.6, cd: 6 },
     form: 0.07, noise: 0.03
@@ -30,7 +30,7 @@
     return {
       R, course, t: 0, done: false, total: P.L * P.laps, finished: [],
       poros: entries.map((e, i) => ({ i, name: e.name, apt: e.apt, style: e.style, d: 0, st: P.stamina, tired: false, recovered: false,
-        slip: 0, dash: 0, cd: 0, fin: null, form: 1 + (R() * 2 - 1) * P.form, cheer: 0, tiredAt: null, snackOk: null, slips: 0, dashes: 0 }))
+        slip: 0, dash: 0, cd: 0, fin: null, v: 0, nz: 0, form: 1 + (R() * 2 - 1) * P.form, cheer: 0, tiredAt: null, snackOk: null, slips: 0, dashes: 0 }))
     };
   }
   function ranks(race) { return race.poros.slice().sort((a, b) => (a.fin ?? 1e9) - (b.fin ?? 1e9) || b.d - a.d); }
@@ -42,7 +42,8 @@
     for (const p of race.poros) {
       if (p.fin !== null) continue;
       const prog = p.d / race.total, seg = segAt(race.course, p.d);
-      let m = styleMult(p.style, prog) * p.form * (1 + (R() * 2 - 1) * P.noise);
+      p.nz += ((R() * 2 - 1) - p.nz) * .15;                       // 흔들림도 부드럽게(갑자기 튀지 않음)
+      let m = styleMult(p.style, prog) * p.form * (1 + p.nz * P.noise * 2);
       m *= (p.apt === '직진') === (seg === 'S') ? 1 + P.apt : 1 - P.apt;
       if (p.style === '뒷심' && prog >= .75 && seg === 'C') m *= P.closerCurve;   // 뒷심의 막판 폭발은 직선에서
       if (seg === 'C' && p.rank <= 3) m *= 1 + P.inside;          // 커브: 앞쪽 포로가 인코스를 잡아 유리
@@ -56,9 +57,10 @@
       }
       if (p.dash > 0) { m *= P.cheer.mult; p.dash -= dt; }
       // 미끄러짐: 커브에서 모두 같은 확률
-      if (p.slip > 0) { p.slip -= dt; m = 0; }
-      else if (seg === 'C' && R() < P.slipP * dt) { p.slip = P.slipT; p.slips++; m = 0; }
-      want[p.i] = P.v0 * m;
+      if (p.slip > 0) { p.slip -= dt; m *= P.slipMult; }
+      else if (seg === 'C' && R() < P.slipP * dt) { p.slip = P.slipT; p.slips++; m *= P.slipMult; }
+      const tv = P.v0 * m; p.v = race.t === 0 ? tv * .5 : p.v + (tv - p.v) * P.accel;   // 가속 · 감속을 부드럽게
+      want[p.i] = p.v;
       // 스태미나
       if (!p.tired) { p.st -= P.drain * Math.pow(prog < .75 ? styleMult(p.style, prog) : 1, P.drainPow) * (p.dash > 0 ? 1.5 : 1) * dt; if (p.st <= 0) { p.tired = true; p.tiredAt = race.t; } }
     }
