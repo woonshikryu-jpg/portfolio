@@ -570,7 +570,8 @@ function renderSide(W, H, tgt, span, st, ord, dtw, small) {
 }
 // 캐릭터 그림(사용자가 올린 공식 포로 그림, 배경 지운 PNG). 없으면 기본 러너
 const SPR = {}, SPRSRC = { side: ['frel-lor-212-removebg-preview.png', [55, 90, 448, 431], true], top: ['frel-lor-212-removebg-preview.png', [55, 90, 448, 431], true], front: ['%EC%84%A4%EC%9B%90_%EC%95%84%EC%B9%B4%EB%8D%B0%EB%AF%B8_%ED%8F%AC%EB%A1%9C_%EB%A0%88%EC%9D%B4%EC%8A%A4-removebg-preview.png', [208, 150, 422, 339], false] };
-Object.entries(SPRSRC).forEach(([k, [f, box, flip]]) => { const im = new Image(); im.onload = () => SPR[k] = { im, box, flip }; im.src = '../../versions/img/lol/../poro/' + f; });
+const USE_SPRITES = false;   // 정지 그림은 다리가 움직이지 않아 어색해서 끔 — 기본 러너(종종걸음 애니메이션) 사용
+if (USE_SPRITES) Object.entries(SPRSRC).forEach(([k, [f, box, flip]]) => { const im = new Image(); im.onload = () => SPR[k] = { im, box, flip }; im.src = '../../versions/img/lol/../poro/' + f; });
 function spriteAt(k, w, gy, ph, col, num, s) {   // 발 위치(gy) 기준, 종종걸음에 맞춰 들썩이고 눌렸다 펴짐. 번호는 머리 위 배지
   const { im, box, flip } = SPR[k], bw = box[2] - box[0], bh = box[3] - box[1], h = w * bh / bw, sq = 1 + Math.sin(ph * 2) * .05;
   cx.save(); cx.translate(0, gy); cx.scale((flip ? -1 : 1) / Math.sqrt(sq), sq); cx.drawImage(im, box[0], box[1], bw, bh, -w / 2, -h, w, h); cx.restore();
