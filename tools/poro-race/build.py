@@ -10,7 +10,7 @@ for src, name in [('play.src.html', 'play'), ('spec.src.html', 'spec')]:
     s = open(path, encoding='utf-8').read().replace('__ENGINE__', eng)
     import json
     sim = json.load(open('tools/poro-race/sim-result.json', encoding='utf-8'))
-    best = max(v for k, v in sim['course']['0.7']['win'].items() if '·' in k)
+    best = max(v for c in sim['circuits'] for k, v in c['win'].items() if '·' in k)
     s = s.replace('__SIM__', json.dumps(sim, ensure_ascii=False)).replace('__BEST__', '%.1f%%' % best)
     open('versions/poro-race-%s-v%s.html' % (name, v), 'w', encoding='utf-8').write(s.replace('__IMG__', 'img/lol/poro-hq.jpg').replace('__IMGDIR__', 'img/lol/'))
     out = 'hidden-summoners/poro-race/' + ('play.html' if name == 'play' else 'index.html')
